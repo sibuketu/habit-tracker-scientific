@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import BottomNavigation from "@/components/layout/BottomNavigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IF-THEN Habit Chain",
-  description: "習慣化をゲーム感覚で支援するアプリ",
+  title: "IF-THEN Habit Chain Speedrun",
+  description: "習慣化を分析とスピードランで攻略するゲーム感覚の継続支援アプリ",
 };
 
 export default function RootLayout({
@@ -26,17 +25,9 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900 text-white`}
       >
-        <div className="min-h-screen bg-gray-50 max-w-md mx-auto shadow-2xl relative">
-          {/* Main Content */}
-          <main className="pb-20">
-            {children}
-          </main>
-          
-          {/* Bottom Navigation - Always visible and fixed */}
-          <BottomNavigation />
-        </div>
+        {children}
       </body>
     </html>
   );

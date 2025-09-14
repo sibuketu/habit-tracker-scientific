@@ -1,9 +1,10 @@
-[build]
-  command = "npm run build"
+　　[build]
+  command = "npm run export"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "18"
+  NPM_FLAGS = "--version"
 
 [[redirects]]
   from = "/*"

@@ -1,12 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import { useRecordsStore } from '@/store';
+import React, { useState } from 'react';
+import { Calendar, Clock, Heart, Star, Plus, Gift, CheckCircle } from 'lucide-react';
 import { MoodLevel } from '@/types';
-import { Gift } from 'lucide-react';
 
-const RecordScreen = () => {
-  const { addSimpleRecord } = useRecordsStore();
+interface SimpleRecord {
+  id: string;
+  action: string;
+  predictedMood: MoodLevel;
+  actualMood: MoodLevel;
+  notes: string;
+  rewardClaimed: boolean;
+  createdAt: string;
+}
+
+export default function RecordScreen() {
+  const [records, setRecords] = useState<SimpleRecord[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({
     action: '',
@@ -18,18 +27,17 @@ const RecordScreen = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const newRecord = {
+    const newRecord: SimpleRecord = {
       id: Date.now().toString(),
-      user_id: 'current-user', // 実際の実装では認証されたユーザーID
       action: formData.action,
-      predicted_mood: formData.predictedMood,
-      actual_mood: formData.actualMood,
+      predictedMood: formData.predictedMood,
+      actualMood: formData.actualMood,
       notes: formData.notes,
-      reward_claimed: false,
-      created_at: new Date().toISOString(),
+      rewardClaimed: false,
+      createdAt: new Date().toISOString(),
     };
 
-    addSimpleRecord(newRecord);
+    setRecords(prev => [newRecord, ...prev]);
     
     // フォームリセット
     setFormData({
@@ -41,161 +49,233 @@ const RecordScreen = () => {
     setIsAdding(false);
   };
 
-  const handleRewardClaim = () => {
+  const handleRewardClaim = (recordId: string) => {
+    setRecords(prev => 
+      prev.map(record => 
+        record.id === recordId 
+          ? { ...record, rewardClaimed: true }
+          : record
+      )
+    );
+    
     // ご褒美獲得演出
-    console.log('Reward claimed!');
+    console.log('Reward claimed!', recordId);
+  };
+
+  const getMoodIcon = (mood: MoodLevel) => {
+    const icons = ['😢', '😕', '😐', '😊', '😄'];
+    return icons[mood - 1];
+  };
+
+  const getMoodColor = (mood: MoodLevel) => {
+    const colors = ['text-red-400', 'text-orange-400', 'text-yellow-400', 'text-green-400', 'text-blue-400'];
+    return colors[mood - 1];
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ja-JP', {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   };
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">記録</h1>
-        <p className="text-gray-600 mt-1">タイムアタック外のシンプル記録</p>
+    <div className="min-h-screen bg-gray-900 text-white p-6 pb-6">
+      {/* ヘッダー */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">**記録**</h1>
+        <p className="text-gray-400">タイムアタック外のシンプル記録や不定期習慣を記録</p>
       </div>
 
-      {/* 自然な案内 */}
-      {!isAdding && (
-        <div className="text-center py-8">
-          <div className="text-6xl mb-4">📝</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">記録を追加</h3>
-          <p className="text-gray-600 mb-4">タイムアタック外のシンプルな記録を残しましょう</p>
-          <button
-            onClick={() => setIsAdding(true)}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
-          >
-            記録を追加
-          </button>
-        </div>
-      )}
+      {/* ルール説明 */}
+      <div className="bg-blue-900 bg-opacity-30 border border-blue-500 rounded-lg p-4 mb-6">
+        <h3 className="text-lg font-semibold text-blue-400 mb-2">**記録ルール**</h3>
+        <ul className="text-sm text-gray-300 space-y-1">
+          <li>• 前日の分は不可 → 記録自体を習慣化</li>
+          <li>• 予測気分・結果気分の入力</li>
+          <li>• 感想も任意で入力</li>
+          <li>• 記述タイプの場合は「獲得ボタン」で演出発動</li>
+        </ul>
+      </div>
 
-      {/* Add Record Form */}
+      {/* 記録追加ボタン */}
+      <div className="mb-6">
+        <button
+          onClick={() => setIsAdding(true)}
+          className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center space-x-2"
+        >
+          <Plus size={20} />
+          <span>**新しい記録を追加**</span>
+        </button>
+      </div>
+
+      {/* 記録追加フォーム */}
       {isAdding && (
-        <div className="bg-white rounded-lg p-6 shadow-sm border">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">記録を追加</h2>
-          
+        <div className="bg-gray-800 rounded-lg p-6 mb-6">
+          <h3 className="text-xl font-semibold mb-4">**記録を追加**</h3>
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Action */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                行動内容
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                **行動内容**
               </label>
               <input
                 type="text"
                 value={formData.action}
-                onChange={(e) => setFormData({ ...formData, action: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="例: 読書、散歩、瞑想など"
+                onChange={(e) => setFormData(prev => ({ ...prev, action: e.target.value }))}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="例: 散歩、読書、瞑想など"
                 required
               />
             </div>
 
-            {/* Predicted Mood */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                予測気分
-              </label>
-              <div className="flex space-x-2">
-                {[1, 2, 3, 4, 5].map((level) => (
-                  <button
-                    key={level}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, predictedMood: level as MoodLevel })}
-                    className={`w-10 h-10 rounded-full border-2 flex items-center justify-center font-medium ${
-                      formData.predictedMood === level
-                        ? 'border-blue-500 bg-blue-50 text-blue-600'
-                        : 'border-gray-300 text-gray-600 hover:border-gray-400'
-                    }`}
-                  >
-                    {level}
-                  </button>
-                ))}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  **予測気分**
+                </label>
+                <div className="flex space-x-2">
+                  {[1, 2, 3, 4, 5].map((mood) => (
+                    <button
+                      key={mood}
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, predictedMood: mood as MoodLevel }))}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-lg transition-colors ${
+                        formData.predictedMood === mood
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                      }`}
+                    >
+                      {getMoodIcon(mood as MoodLevel)}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>悪い</span>
-                <span>良い</span>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  **結果気分**
+                </label>
+                <div className="flex space-x-2">
+                  {[1, 2, 3, 4, 5].map((mood) => (
+                    <button
+                      key={mood}
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, actualMood: mood as MoodLevel }))}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-lg transition-colors ${
+                        formData.actualMood === mood
+                          ? 'bg-green-600 text-white'
+                          : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                      }`}
+                    >
+                      {getMoodIcon(mood as MoodLevel)}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Actual Mood */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                結果気分
-              </label>
-              <div className="flex space-x-2">
-                {[1, 2, 3, 4, 5].map((level) => (
-                  <button
-                    key={level}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, actualMood: level as MoodLevel })}
-                    className={`w-10 h-10 rounded-full border-2 flex items-center justify-center font-medium ${
-                      formData.actualMood === level
-                        ? 'border-green-500 bg-green-50 text-green-600'
-                        : 'border-gray-300 text-gray-600 hover:border-gray-400'
-                    }`}
-                  >
-                    {level}
-                  </button>
-                ))}
-              </div>
-              <div className="flex justify-between text-xs text-gray-500 mt-1">
-                <span>悪い</span>
-                <span>良い</span>
-              </div>
-            </div>
-
-            {/* Notes */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                感想（任意）
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                **感想（任意）**
               </label>
               <textarea
                 value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows={3}
-                placeholder="今日の感想や気づきを記録..."
+                placeholder="実行後の感想や気づきを記録..."
               />
             </div>
 
-            {/* Form Actions */}
-            <div className="flex space-x-3">
+            <div className="flex space-x-4">
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              >
+                **記録を保存**
+              </button>
               <button
                 type="button"
                 onClick={() => setIsAdding(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors"
               >
                 キャンセル
-              </button>
-              <button
-                type="submit"
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                記録する
               </button>
             </div>
           </form>
         </div>
       )}
 
-      {/* Reward Claim Button */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="font-medium text-yellow-800">ご褒美が獲得できました！</h3>
-            <p className="text-sm text-yellow-700">記録10日連続達成</p>
+      {/* 記録リスト */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">**記録履歴**</h2>
+        
+        {records.length === 0 ? (
+          <div className="bg-gray-800 rounded-lg p-8 text-center">
+            <Calendar className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+            <p className="text-gray-400">まだ記録がありません</p>
+            <p className="text-sm text-gray-500 mt-2">最初の記録を追加してみましょう</p>
           </div>
-          <button
-            onClick={handleRewardClaim}
-            className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors flex items-center"
-          >
-            <Gift size={16} className="mr-1" />
-            獲得
-          </button>
-        </div>
+        ) : (
+          <div className="space-y-3">
+            {records.map((record) => (
+              <div key={record.id} className="bg-gray-800 rounded-lg p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
+                      <h3 className="text-lg font-semibold">{record.action}</h3>
+                      <span className="text-sm text-gray-400">
+                        {formatDate(record.createdAt)}
+                      </span>
+                    </div>
+                    
+                    <div className="flex items-center space-x-6 mb-3">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-400">予測:</span>
+                        <span className={`text-lg ${getMoodColor(record.predictedMood)}`}>
+                          {getMoodIcon(record.predictedMood)} {record.predictedMood}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-sm text-gray-400">結果:</span>
+                        <span className={`text-lg ${getMoodColor(record.actualMood)}`}>
+                          {getMoodIcon(record.actualMood)} {record.actualMood}
+                        </span>
+                      </div>
+                    </div>
+
+                    {record.notes && (
+                      <div className="bg-gray-700 rounded-lg p-3 mb-3">
+                        <p className="text-sm text-gray-300">{record.notes}</p>
+                      </div>
+                    )}
+
+                    <div className="flex items-center space-x-2">
+                      {record.rewardClaimed ? (
+                        <div className="flex items-center space-x-2 text-green-400">
+                          <CheckCircle size={16} />
+                          <span className="text-sm font-medium">**ご褒美獲得済み**</span>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => handleRewardClaim(record.id)}
+                          className="bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-yellow-700 transition-colors flex items-center space-x-2"
+                        >
+                          <Gift size={16} />
+                          <span>**ご褒美獲得**</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default RecordScreen;
+}

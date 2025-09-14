@@ -22,7 +22,8 @@ export interface Habit {
   id: string;
   user_id: string;
   if_condition: string;
-  then_action: string;
+  then_action: string; // 後方互換性のため残す
+  then_actions: string[]; // 複数のThen行動をサポート
   target_duration_seconds: number;
   version: string;
   is_active: boolean;
@@ -158,7 +159,7 @@ export interface ResultSummary {
 }
 
 // Navigation Types
-export type MainTab = 'home' | 'record' | 'habit-setting' | 'time-attack' | 'my-routine';
+export type MainTab = 'home' | 'record' | 'habit-setting' | 'time-attack' | 'my-routine' | 'knowledge-comparison' | 'gift-donation';
 
 // Mood Types
 export type MoodLevel = 1 | 2 | 3 | 4 | 5;
@@ -167,7 +168,7 @@ export type MoodLevel = 1 | 2 | 3 | 4 | 5;
 export type ColorTheme = 'blue' | 'green' | 'purple' | 'orange' | 'red';
 
 // MiniApp Types
-export type MiniAppType = 'community' | 'diary' | 'block' | 'analytics';
+export type MiniAppType = 'community' | 'diary' | 'block' | 'analytics' | 'extended_record' | 'time_attack_chain';
 
 export interface MiniApp {
   id: string;
@@ -176,4 +177,45 @@ export interface MiniApp {
   description: string;
   icon: string;
   isEnabled: boolean;
+  isUnlocked: boolean;
+  unlockConditions?: {
+    type: 'streak_days' | 'total_records' | 'premium_user';
+    value: number;
+  };
+  concept?: string;
+  activationMethod?: string;
+}
+
+export interface ExtendedRecord {
+  id: string;
+  user_id: string;
+  habit_id?: string;
+  action: string;
+  record_type: 'simple' | 'time_attack' | 'score_attack';
+  target_duration?: number;
+  actual_duration?: number;
+  score?: number;
+  predicted_mood?: number;
+  actual_mood?: number;
+  difficulty?: number;
+  notes?: string;
+  tags?: string[];
+  location?: string;
+  weather?: string;
+  energy_level?: number;
+  created_at: string;
+}
+
+export interface TimeAttackChain {
+  id: string;
+  user_id: string;
+  habit_id: string;
+  chain_name: string;
+  description?: string;
+  target_times: number[]; // 目標時間の配列（秒）
+  best_times: number[]; // ベストタイムの配列（秒）
+  attempts: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }

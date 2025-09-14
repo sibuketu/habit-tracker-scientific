@@ -8,7 +8,10 @@ import {
   TimeAttackState, 
   MainTab,
   ColorTheme,
-  MoodLevel 
+  MoodLevel,
+  MiniApp,
+  ExtendedRecord,
+  TimeAttackChain
 } from '@/types';
 
 // User Store
@@ -236,3 +239,154 @@ export const useRewardsStore = create<RewardsStore>((set, get) => ({
     // 実装は後で追加
   },
 }));
+
+// MiniApp Store
+interface MiniAppStore {
+  miniApps: MiniApp[];
+  enabledMiniApps: MiniApp[];
+  extendedRecords: ExtendedRecord[];
+  timeAttackChains: TimeAttackChain[];
+  setMiniApps: (miniApps: MiniApp[]) => void;
+  toggleMiniApp: (id: string) => void;
+  unlockMiniApp: (id: string) => void;
+  addExtendedRecord: (record: ExtendedRecord) => void;
+  updateExtendedRecord: (id: string, updates: Partial<ExtendedRecord>) => void;
+  addTimeAttackChain: (chain: TimeAttackChain) => void;
+  updateTimeAttackChain: (id: string, updates: Partial<TimeAttackChain>) => void;
+  checkUnlockConditions: () => void;
+}
+
+export const useMiniAppStore = create<MiniAppStore>()(
+  persist(
+    (set, get) => ({
+      miniApps: [
+        {
+          id: 'extended_record',
+          type: 'extended_record',
+          name: '拡張記録',
+          description: 'より詳細な記録と分析',
+          icon: '📊',
+          isEnabled: true,
+          isUnlocked: true,
+          concept: '記録をより詳細に分析し、パフォーマンスを向上させる',
+          activationMethod: '記録画面からアクセス'
+        },
+        {
+          id: 'time_attack_chain',
+          type: 'time_attack_chain',
+          name: 'タイムアタックチェーン',
+          description: '連続したタイムアタック記録',
+          icon: '⏱️',
+          isEnabled: true,
+          isUnlocked: true,
+          concept: '複数のタイムアタックを連続して実行',
+          activationMethod: 'タイムアタック画面からアクセス'
+        },
+        {
+          id: 'community',
+          type: 'community',
+          name: 'コミュニティ',
+          description: '他のユーザーとの記録共有',
+          icon: '👥',
+          isEnabled: false,
+          isUnlocked: false,
+          unlockConditions: {
+            type: 'total_records',
+            value: 50
+          },
+          concept: '他のユーザーと記録を共有し、モチベーションを向上',
+          activationMethod: 'ホーム画面のコミュニティカードからアクセス'
+        },
+        {
+          id: 'analytics',
+          type: 'analytics',
+          name: '詳細分析',
+          description: '高度な統計と分析機能',
+          icon: '📈',
+          isEnabled: false,
+          isUnlocked: false,
+          unlockConditions: {
+            type: 'streak_days',
+            value: 30
+          },
+          concept: '習慣のパフォーマンスを詳細に分析',
+          activationMethod: '分析画面からアクセス'
+        }
+      ],
+      enabledMiniApps: [],
+      extendedRecords: [],
+      timeAttackChains: [],
+      setMiniApps: (miniApps) => set({ 
+        miniApps,
+        enabledMiniApps: miniApps.filter(app => app.isEnabled && app.isUnlocked)
+      }),
+      toggleMiniApp: (id) => set((state) => {
+        const updatedMiniApps = state.miniApps.map(app => 
+          app.id === id ? { ...app, isEnabled: !app.isEnabled } : app
+        );
+        return {
+          miniApps: updatedMiniApps,
+          enabledMiniApps: updatedMiniApps.filter(app => app.isEnabled && app.isUnlocked)
+        };
+      }),
+      unlockMiniApp: (id) => set((state) => {
+        const updatedMiniApps = state.miniApps.map(app => 
+          app.id === id ? { ...app, isUnlocked: true } : app
+        );
+        return {
+          miniApps: updatedMiniApps,
+          enabledMiniApps: updatedMiniApps.filter(app => app.isEnabled && app.isUnlocked)
+        };
+      }),
+      addExtendedRecord: (record) => set((state) => ({
+        extendedRecords: [...state.extendedRecords, record]
+      })),
+      updateExtendedRecord: (id, updates) => set((state) => ({
+        extendedRecords: state.extendedRecords.map(r => 
+          r.id === id ? { ...r, ...updates } : r
+        )
+      })),
+      addTimeAttackChain: (chain) => set((state) => ({
+        timeAttackChains: [...state.timeAttackChains, chain]
+      })),
+      updateTimeAttackChain: (id, updates) => set((state) => ({
+        timeAttackChains: state.timeAttackChains.map(c => 
+          c.id === id ? { ...c, ...updates } : c
+        )
+      })),
+      checkUnlockConditions: () => {
+        const { habits } = get() as any; // 他のストアからデータを取得
+        const { miniApps } = get();
+        
+        // アンロック条件をチェック
+        miniApps.forEach(app => {
+          if (!app.isUnlocked && app.unlockConditions) {
+            let shouldUnlock = false;
+            
+            switch (app.unlockConditions.type) {
+              case 'total_records':
+                // 総記録数をチェック
+                shouldUnlock = true; // 仮の実装
+                break;
+              case 'streak_days':
+                // 連続日数をチェック
+                shouldUnlock = true; // 仮の実装
+                break;
+              case 'premium_user':
+                // プレミアムユーザーかチェック
+                shouldUnlock = true; // 仮の実装
+                break;
+            }
+            
+            if (shouldUnlock) {
+              get().unlockMiniApp(app.id);
+            }
+          }
+        });
+      },
+    }),
+    {
+      name: 'miniapp-store',
+    }
+  )
+);

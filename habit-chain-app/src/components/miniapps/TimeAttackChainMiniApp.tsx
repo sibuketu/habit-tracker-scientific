@@ -441,3 +441,4 @@ export default function TimeAttackChainMiniApp({ onClose, habitId }: TimeAttackC
     </div>
   );
 }
+

@@ -4,7 +4,7 @@ import { useTranslation } from '../../hooks/useTranslation';
 
 // 型定義
 type DayOfWeek = 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
-type ColorType = 'green' | 'orange' | 'blue' | 'yellow' | 'purple' | 'pink' | 'red' | 'indigo';
+type ColorType = 'existing' | 'new' | 'fun' | 'work' | 'study' | 'exercise' | 'custom1' | 'custom2' | 'custom3' | 'custom4';
 type RoutineItem = {
   text: string;
   color: ColorType;
@@ -24,13 +24,27 @@ type DragState = {
   draggedTo: { day: DayOfWeek; timeIndex: number } | null;
 };
 
+// 改善されたカラーパレット（要件定義に基づく）
+const COLOR_PALETTE = {
+  existing: { bg: '#1E88E5', text: '#FFFFFF', name: '既存の習慣' }, // 濃い青 - Google Material Design Blue 600
+  new: { bg: '#4CAF50', text: '#FFFFFF', name: '新しい習慣' }, // 鮮やかな緑 - Google Material Design Green 500
+  fun: { bg: '#FFB300', text: '#000000', name: '楽しみ' }, // 明るいオレンジ - Google Material Design Amber 600
+  work: { bg: '#757575', text: '#FFFFFF', name: '仕事' }, // 落ち着いたグレー - Google Material Design Grey 600
+  study: { bg: '#9C27B0', text: '#FFFFFF', name: '学習' }, // 紫 - Google Material Design Purple 500
+  exercise: { bg: '#E53935', text: '#FFFFFF', name: '運動' }, // 赤 - Google Material Design Red 600
+  custom1: { bg: '#00BCD4', text: '#000000', name: 'カスタム1' }, // シアン - Google Material Design Cyan 500
+  custom2: { bg: '#CDDC39', text: '#000000', name: 'カスタム2' }, // ライムグリーン - Google Material Design Lime 500
+  custom3: { bg: '#FF7043', text: '#FFFFFF', name: 'カスタム3' }, // ディープオレンジ - Google Material Design Deep Orange 400
+  custom4: { bg: '#3F51B5', text: '#FFFFFF', name: 'カスタム4' }, // インディゴ - Google Material Design Indigo 500
+};
+
 // 型ガード関数
 const isDayOfWeek = (day: string): day is DayOfWeek => {
   return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].includes(day);
 };
 
 const isColorType = (color: string): color is ColorType => {
-  return ['green', 'orange', 'blue', 'yellow', 'purple', 'pink', 'red', 'indigo'].includes(color);
+  return Object.keys(COLOR_PALETTE).includes(color);
 };
 
 const WeeklyRoutineSchedule = () => {

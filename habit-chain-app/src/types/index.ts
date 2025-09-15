@@ -159,7 +159,7 @@ export interface ResultSummary {
 }
 
 // Navigation Types
-export type MainTab = 'home' | 'record' | 'habit-setting' | 'time-attack' | 'my-routine' | 'knowledge-comparison' | 'gift-donation';
+export type MainTab = 'home' | 'record' | 'result' | 'settings' | 'gift';
 
 // Mood Types
 export type MoodLevel = 1 | 2 | 3 | 4 | 5;
@@ -168,7 +168,7 @@ export type MoodLevel = 1 | 2 | 3 | 4 | 5;
 export type ColorTheme = 'blue' | 'green' | 'purple' | 'orange' | 'red';
 
 // MiniApp Types
-export type MiniAppType = 'community' | 'diary' | 'block' | 'analytics' | 'extended_record' | 'time_attack_chain';
+export type MiniAppType = 'speedrun' | 'diary' | 'community' | 'analytics';
 
 export interface MiniApp {
   id: string;
@@ -176,14 +176,14 @@ export interface MiniApp {
   name: string;
   description: string;
   icon: string;
-  isEnabled: boolean;
+  isActive: boolean; // 1個だけアクティブ（御三家選ぶ感）
   isUnlocked: boolean;
-  unlockConditions?: {
-    type: 'streak_days' | 'total_records' | 'premium_user';
-    value: number;
+  unlockConditions: {
+    type: 'streak_days';
+    value: 60; // 60日固定
   };
-  concept?: string;
-  activationMethod?: string;
+  concept: string;
+  activationMethod: string;
 }
 
 export interface ExtendedRecord {

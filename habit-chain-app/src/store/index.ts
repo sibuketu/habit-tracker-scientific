@@ -247,7 +247,7 @@ interface MiniAppStore {
   extendedRecords: ExtendedRecord[];
   timeAttackChains: TimeAttackChain[];
   setMiniApps: (miniApps: MiniApp[]) => void;
-  toggleMiniApp: (id: string) => void;
+  toggleMiniApp: (id: string) => void; // 1個だけアクティブにする（御三家選ぶ感）
   unlockMiniApp: (id: string) => void;
   addExtendedRecord: (record: ExtendedRecord) => void;
   updateExtendedRecord: (id: string, updates: Partial<ExtendedRecord>) => void;
@@ -261,26 +261,34 @@ export const useMiniAppStore = create<MiniAppStore>()(
     (set, get) => ({
       miniApps: [
         {
-          id: 'extended_record',
-          type: 'extended_record',
-          name: '拡張記録',
-          description: 'より詳細な記録と分析',
-          icon: '📊',
-          isEnabled: true,
+          id: 'speedrun',
+          type: 'speedrun',
+          name: '習慣スピードラン',
+          description: 'If-Then習慣のスピードラン機能',
+          icon: '⚡',
+          isActive: true, // 初期状態でアクティブ
           isUnlocked: true,
-          concept: '記録をより詳細に分析し、パフォーマンスを向上させる',
-          activationMethod: '記録画面からアクセス'
+          unlockConditions: {
+            type: 'streak_days',
+            value: 60
+          },
+          concept: '習慣をスピードラン形式で実行し、タイムを競う',
+          activationMethod: 'If-Then習慣の一部として統合'
         },
         {
-          id: 'time_attack_chain',
-          type: 'time_attack_chain',
-          name: 'タイムアタックチェーン',
-          description: '連続したタイムアタック記録',
-          icon: '⏱️',
-          isEnabled: true,
-          isUnlocked: true,
-          concept: '複数のタイムアタックを連続して実行',
-          activationMethod: 'タイムアタック画面からアクセス'
+          id: 'diary',
+          type: 'diary',
+          name: '日記',
+          description: '成功・失敗・反省・感謝の記録',
+          icon: '📖',
+          isActive: false,
+          isUnlocked: false,
+          unlockConditions: {
+            type: 'streak_days',
+            value: 60
+          },
+          concept: '習慣の振り返りと内省を深める日記機能',
+          activationMethod: '記録画面からアクセス'
         },
         {
           id: 'community',
@@ -288,11 +296,11 @@ export const useMiniAppStore = create<MiniAppStore>()(
           name: 'コミュニティ',
           description: '他のユーザーとの記録共有',
           icon: '👥',
-          isEnabled: false,
+          isActive: false,
           isUnlocked: false,
           unlockConditions: {
-            type: 'total_records',
-            value: 50
+            type: 'streak_days',
+            value: 60
           },
           concept: '他のユーザーと記録を共有し、モチベーションを向上',
           activationMethod: 'ホーム画面のコミュニティカードからアクセス'
@@ -303,7 +311,7 @@ export const useMiniAppStore = create<MiniAppStore>()(
           name: '詳細分析',
           description: '高度な統計と分析機能',
           icon: '📈',
-          isEnabled: false,
+          isActive: false,
           isUnlocked: false,
           unlockConditions: {
             type: 'streak_days',
@@ -313,20 +321,38 @@ export const useMiniAppStore = create<MiniAppStore>()(
           activationMethod: '分析画面からアクセス'
         }
       ],
-      enabledMiniApps: [],
+      enabledMiniApps: [
+        {
+          id: 'speedrun',
+          type: 'speedrun',
+          name: '習慣スピードラン',
+          description: 'If-Then習慣のスピードラン機能',
+          icon: '⚡',
+          isActive: true,
+          isUnlocked: true,
+          unlockConditions: {
+            type: 'streak_days',
+            value: 60
+          },
+          concept: '習慣をスピードラン形式で実行し、タイムを競う',
+          activationMethod: 'If-Then習慣の一部として統合'
+        }
+      ],
       extendedRecords: [],
       timeAttackChains: [],
       setMiniApps: (miniApps) => set({ 
         miniApps,
-        enabledMiniApps: miniApps.filter(app => app.isEnabled && app.isUnlocked)
+        enabledMiniApps: miniApps.filter(app => app.isActive && app.isUnlocked)
       }),
       toggleMiniApp: (id) => set((state) => {
-        const updatedMiniApps = state.miniApps.map(app => 
-          app.id === id ? { ...app, isEnabled: !app.isEnabled } : app
-        );
+        // 御三家選ぶ感：1個だけアクティブにする
+        const updatedMiniApps = state.miniApps.map(app => ({
+          ...app,
+          isActive: app.id === id ? true : false
+        }));
         return {
           miniApps: updatedMiniApps,
-          enabledMiniApps: updatedMiniApps.filter(app => app.isEnabled && app.isUnlocked)
+          enabledMiniApps: updatedMiniApps.filter(app => app.isActive && app.isUnlocked)
         };
       }),
       unlockMiniApp: (id) => set((state) => {
@@ -335,7 +361,7 @@ export const useMiniAppStore = create<MiniAppStore>()(
         );
         return {
           miniApps: updatedMiniApps,
-          enabledMiniApps: updatedMiniApps.filter(app => app.isEnabled && app.isUnlocked)
+          enabledMiniApps: updatedMiniApps.filter(app => app.isActive && app.isUnlocked)
         };
       }),
       addExtendedRecord: (record) => set((state) => ({

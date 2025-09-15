@@ -3,10 +3,9 @@
 import { 
   Home, 
   BookOpen, 
+  BarChart3, 
   Settings, 
-  Timer, 
-  Calendar,
-  Lightbulb
+  Gift
 } from 'lucide-react';
 import { useNavigationStore } from '@/store';
 import { MainTab } from '@/types';
@@ -15,33 +14,28 @@ import { useTranslation } from '../../hooks/useTranslation';
 const getNavigationItems = (t: any) => [
   {
     id: 'home' as MainTab,
-    label: t.nav.home,
+    label: 'ホーム',
     icon: Home,
   },
   {
     id: 'record' as MainTab,
-    label: t.nav.record,
+    label: '記録',
     icon: BookOpen,
   },
   {
-    id: 'habit-setting' as MainTab,
-    label: t.nav.settings,
+    id: 'result' as MainTab,
+    label: 'リザルト',
+    icon: BarChart3,
+  },
+  {
+    id: 'settings' as MainTab,
+    label: '設定',
     icon: Settings,
   },
   {
-    id: 'time-attack' as MainTab,
-    label: t.nav.timeAttack,
-    icon: Timer,
-  },
-  {
-    id: 'my-routine' as MainTab,
-    label: t.nav.routine,
-    icon: Calendar,
-  },
-  {
-    id: 'knowledge-comparison' as MainTab,
-    label: '知識対比',
-    icon: Lightbulb,
+    id: 'gift' as MainTab,
+    label: 'Gift',
+    icon: Gift,
   },
 ];
 

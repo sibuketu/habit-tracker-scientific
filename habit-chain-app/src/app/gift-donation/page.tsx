@@ -10,3 +10,4 @@ const GiftDonationScreen = dynamic(
 export default function GiftDonationPage() {
   return <GiftDonationScreen />;
 }
+

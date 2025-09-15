@@ -1,19 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Award, Trophy, Star, Gift, Calendar, Target, Clock } from 'lucide-react';
-import RewardModal from './RewardModal';
-
-interface Reward {
-  id: string;
-  type: 'streak' | 'pb' | 'record' | 'custom';
-  title: string;
-  description: string;
-  icon: string;
-  isClaimed: boolean;
-  claimedAt?: string;
-  nextRewardDate?: string;
-}
+import React, { useState } from 'react';
+import { 
+  Gift, 
+  Star, 
+  Trophy, 
+  Target, 
+  Clock, 
+  Plus,
+  X,
+  CheckCircle,
+  AlertCircle,
+  Settings
+} from 'lucide-react';
 
 interface RewardSystemProps {
   streakDays: number;
@@ -22,251 +21,351 @@ interface RewardSystemProps {
   onRewardClaimed: (rewardId: string) => void;
 }
 
-export default function RewardSystem({ streakDays, pbCount, recordCount, onRewardClaimed }: RewardSystemProps) {
-  const [rewards, setRewards] = useState<Reward[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [pendingRewards, setPendingRewards] = useState<Reward[]>([]);
+interface CustomReward {
+  id: string;
+  title: string;
+  description: string;
+  condition: {
+    type: 'streak_days' | 'pb_update' | 'record_count' | 'custom';
+    value: number;
+    description: string;
+  };
+  reward: string;
+  isClaimed: boolean;
+  claimedAt?: string;
+  isActive: boolean;
+}
 
-  // ご褒美テンプレート
-  const rewardTemplates = [
-    // 連続日数
-    { type: 'streak' as const, days: 10, title: '連続10日達成！', description: '素晴らしい継続力です！' },
-    { type: 'streak' as const, days: 20, title: '連続20日達成！', description: '習慣が定着してきました！' },
-    { type: 'streak' as const, days: 30, title: '連続30日達成！', description: '完璧な習慣化です！' },
-    { type: 'streak' as const, days: 50, title: '連続50日達成！', description: '驚異的な継続力！' },
-    { type: 'streak' as const, days: 100, title: '連続100日達成！', description: '伝説の継続者！' },
-    
-    // PB更新
-    { type: 'pb' as const, title: 'PB更新！', description: '新しい自己ベストを記録しました！' },
-    
-    // 記録連続
-    { type: 'record' as const, days: 7, title: '記録7日連続！', description: '毎日の記録が習慣化されました！' },
-    { type: 'record' as const, days: 14, title: '記録14日連続！', description: '記録の達人です！' },
-    { type: 'record' as const, days: 30, title: '記録30日連続！', description: '記録のマスター！' },
-  ];
-
-  // ご褒美条件チェック
-  useEffect(() => {
-    const newRewards: Reward[] = [];
-    
-    // 連続日数チェック
-    rewardTemplates
-      .filter(template => template.type === 'streak')
-      .forEach(template => {
-        if (streakDays >= template.days! && !rewards.some(r => r.title === template.title)) {
-          newRewards.push({
-            id: `streak-${template.days}`,
-            type: 'streak',
-            title: template.title,
-            description: template.description,
-            icon: '🏆',
-            isClaimed: false,
-          });
-        }
-      });
-
-    // PB更新チェック
-    if (pbCount > 0 && !rewards.some(r => r.type === 'pb' && !r.isClaimed)) {
-      newRewards.push({
-        id: `pb-${Date.now()}`,
-        type: 'pb',
-        title: 'PB更新！',
-        description: '新しい自己ベストを記録しました！',
-        icon: '⭐',
-        isClaimed: false,
-      });
+const RewardSystem: React.FC<RewardSystemProps> = ({
+  streakDays,
+  pbCount,
+  recordCount,
+  onRewardClaimed
+}) => {
+  const [showCustomRewardModal, setShowCustomRewardModal] = useState(false);
+  const [customRewards, setCustomRewards] = useState<CustomReward[]>([
+    {
+      id: '1',
+      title: 'ゲーム時間延長',
+      description: '30分間ゲームを楽しむ',
+      condition: {
+        type: 'streak_days',
+        value: 7,
+        description: '7日連続達成'
+      },
+      reward: 'ゲーム時間を30分増やす',
+      isClaimed: false,
+      isActive: true
+    },
+    {
+      id: '2',
+      title: 'スイーツ購入',
+      description: '好きなスイーツを買う',
+      condition: {
+        type: 'pb_update',
+        value: 1,
+        description: 'PB更新'
+      },
+      reward: 'スイーツを300円以内で買う',
+      isClaimed: false,
+      isActive: true
     }
+  ]);
 
-    // 記録連続チェック
-    rewardTemplates
-      .filter(template => template.type === 'record')
-      .forEach(template => {
-        if (recordCount >= template.days! && !rewards.some(r => r.title === template.title)) {
-          newRewards.push({
-            id: `record-${template.days}`,
-            type: 'record',
-            title: template.title,
-            description: template.description,
-            icon: '📝',
-            isClaimed: false,
-          });
-        }
-      });
+  const [newReward, setNewReward] = useState({
+    title: '',
+    description: '',
+    conditionType: 'streak_days' as 'streak_days' | 'pb_update' | 'record_count' | 'custom',
+    conditionValue: 1,
+    reward: ''
+  });
 
-    if (newRewards.length > 0) {
-      setPendingRewards(newRewards);
-      setShowModal(true);
+  const checkRewardEligibility = (reward: CustomReward) => {
+    switch (reward.condition.type) {
+      case 'streak_days':
+        return streakDays >= reward.condition.value;
+      case 'pb_update':
+        return pbCount >= reward.condition.value;
+      case 'record_count':
+        return recordCount >= reward.condition.value;
+      default:
+        return false;
     }
-  }, [streakDays, pbCount, recordCount]);
+  };
 
-  const handleClaim = (rewardId: string) => {
-    setRewards(prev => prev.map(reward => 
+  const claimReward = (rewardId: string) => {
+    setCustomRewards(prev => prev.map(reward => 
       reward.id === rewardId 
         ? { ...reward, isClaimed: true, claimedAt: new Date().toISOString() }
         : reward
     ));
-    
     onRewardClaimed(rewardId);
   };
 
-  const handleModalClose = () => {
-    setShowModal(false);
-    setPendingRewards([]);
-  };
-
-  const getRewardIcon = (type: string) => {
-    switch (type) {
-      case 'streak':
-        return <Trophy className="w-6 h-6 text-yellow-400" />;
-      case 'pb':
-        return <Star className="w-6 h-6 text-blue-400" />;
-      case 'record':
-        return <Award className="w-6 h-6 text-green-400" />;
-      default:
-        return <Gift className="w-6 h-6 text-purple-400" />;
+  const addCustomReward = () => {
+    if (newReward.title && newReward.reward) {
+      const reward: CustomReward = {
+        id: Date.now().toString(),
+        title: newReward.title,
+        description: newReward.description,
+        condition: {
+          type: newReward.conditionType,
+          value: newReward.conditionValue,
+          description: getConditionDescription(newReward.conditionType, newReward.conditionValue)
+        },
+        reward: newReward.reward,
+        isClaimed: false,
+        isActive: true
+      };
+      
+      setCustomRewards(prev => [...prev, reward]);
+      setNewReward({
+        title: '',
+        description: '',
+        conditionType: 'streak_days',
+        conditionValue: 1,
+        reward: ''
+      });
+      setShowCustomRewardModal(false);
     }
   };
 
-  const getNextReward = (type: string) => {
+  const getConditionDescription = (type: string, value: number) => {
     switch (type) {
-      case 'streak':
-        if (streakDays < 10) return '連続10日';
-        if (streakDays < 20) return '連続20日';
-        if (streakDays < 30) return '連続30日';
-        if (streakDays < 50) return '連続50日';
-        if (streakDays < 100) return '連続100日';
-        return '全て達成済み';
-      case 'record':
-        if (recordCount < 7) return '記録7日連続';
-        if (recordCount < 14) return '記録14日連続';
-        if (recordCount < 30) return '記録30日連続';
-        return '全て達成済み';
+      case 'streak_days':
+        return `${value}日連続達成`;
+      case 'pb_update':
+        return 'PB更新';
+      case 'record_count':
+        return `${value}回記録`;
       default:
-        return '次のご褒美';
+        return 'カスタム条件';
+    }
+  };
+
+  const getConditionIcon = (type: string) => {
+    switch (type) {
+      case 'streak_days':
+        return <Clock className="text-blue-400" size={16} />;
+      case 'pb_update':
+        return <Trophy className="text-yellow-400" size={16} />;
+      case 'record_count':
+        return <Target className="text-green-400" size={16} />;
+      default:
+        return <Star className="text-purple-400" size={16} />;
     }
   };
 
   return (
-    <div className="space-y-6">
-      {/* ご褒美システムヘッダー */}
-      <div className="bg-gray-800 rounded-lg p-6">
-        <h2 className="text-2xl font-bold mb-4">**ご褒美システム**</h2>
-        <p className="text-gray-400 mb-6">
-          達成条件を満たしたら必ずモーダル演出。同時達成はキューで順次表示。
-        </p>
+    <div className="bg-gray-800 rounded-xl p-4">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-bold text-white tracking-wide flex items-center space-x-2">
+          <Gift className="text-yellow-400" size={20} />
+          <span>ご褒美システム</span>
+        </h2>
+        <button
+          onClick={() => setShowCustomRewardModal(true)}
+          className="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center hover:bg-blue-700 transition-colors"
+        >
+          <Plus size={16} />
+        </button>
+      </div>
 
-        {/* 現在の進捗 */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-gray-700 rounded-lg p-4 text-center">
-            <Trophy className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-yellow-400">{streakDays}日</div>
-            <div className="text-sm text-gray-400">連続日数</div>
-            <div className="text-xs text-gray-500 mt-1">
-              次: {getNextReward('streak')}
-            </div>
-          </div>
-
-          <div className="bg-gray-700 rounded-lg p-4 text-center">
-            <Star className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-blue-400">{pbCount}回</div>
-            <div className="text-sm text-gray-400">PB更新</div>
-            <div className="text-xs text-gray-500 mt-1">
-              次: 新しいPB
-            </div>
-          </div>
-
-          <div className="bg-gray-700 rounded-lg p-4 text-center">
-            <Award className="w-8 h-8 text-green-400 mx-auto mb-2" />
-            <div className="text-2xl font-bold text-green-400">{recordCount}日</div>
-            <div className="text-sm text-gray-400">記録連続</div>
-            <div className="text-xs text-gray-500 mt-1">
-              次: {getNextReward('record')}
-            </div>
-          </div>
+      {/* 現在の統計 */}
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        <div className="bg-gray-700 rounded-lg p-3 text-center">
+          <div className="text-lg font-bold text-blue-400">{streakDays}</div>
+          <div className="text-xs text-gray-400">連続日数</div>
+        </div>
+        <div className="bg-gray-700 rounded-lg p-3 text-center">
+          <div className="text-lg font-bold text-yellow-400">{pbCount}</div>
+          <div className="text-xs text-gray-400">PB更新</div>
+        </div>
+        <div className="bg-gray-700 rounded-lg p-3 text-center">
+          <div className="text-lg font-bold text-green-400">{recordCount}</div>
+          <div className="text-xs text-gray-400">記録回数</div>
         </div>
       </div>
 
-      {/* ご褒美テンプレート */}
-      <div className="bg-gray-800 rounded-lg p-6">
-        <h3 className="text-xl font-semibold mb-4">**ご褒美テンプレート**</h3>
-        
-        <div className="space-y-4">
-          {/* 連続日数 */}
-          <div>
-            <h4 className="text-lg font-semibold text-yellow-400 mb-3 flex items-center space-x-2">
-              <Trophy className="w-5 h-5" />
-              <span>連続日数</span>
-            </h4>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-              {[10, 20, 30, 50, 100].map(days => (
-                <div
-                  key={days}
-                  className={`p-3 rounded-lg text-center ${
-                    streakDays >= days
-                      ? 'bg-yellow-600 text-white'
-                      : 'bg-gray-700 text-gray-400'
-                  }`}
-                >
-                  <div className="font-bold">{days}日</div>
-                  <div className="text-xs">
-                    {streakDays >= days ? '達成済み' : '未達成'}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* カスタムご褒美一覧 */}
+      <div className="space-y-3">
+        <h3 className="text-sm font-medium text-gray-300">あなたのご褒美</h3>
+        {customRewards.map((reward) => {
+          const isEligible = checkRewardEligibility(reward);
+          const canClaim = isEligible && !reward.isClaimed && reward.isActive;
 
-          {/* PB更新 */}
-          <div>
-            <h4 className="text-lg font-semibold text-blue-400 mb-3 flex items-center space-x-2">
-              <Star className="w-5 h-5" />
-              <span>PB更新</span>
-            </h4>
-            <div className="bg-gray-700 rounded-lg p-4">
+          return (
+            <div
+              key={reward.id}
+              className={`p-3 rounded-lg border transition-all ${
+                reward.isClaimed
+                  ? 'bg-green-900 border-green-500 opacity-75'
+                  : canClaim
+                  ? 'bg-blue-900 border-blue-500'
+                  : 'bg-gray-700 border-gray-600'
+              }`}
+            >
               <div className="flex items-center justify-between">
-                <span>自己ベスト更新</span>
-                <span className="text-blue-400 font-semibold">
-                  {pbCount > 0 ? '達成済み' : '未達成'}
-                </span>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-1">
+                    <h4 className="text-white font-medium text-sm">{reward.title}</h4>
+                    {getConditionIcon(reward.condition.type)}
+                  </div>
+                  <p className="text-gray-300 text-xs mb-1">{reward.description}</p>
+                  <div className="flex items-center space-x-2 text-xs">
+                    <span className="text-gray-400">条件:</span>
+                    <span className={`${
+                      isEligible ? 'text-green-400' : 'text-gray-400'
+                    }`}>
+                      {reward.condition.description}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-xs mt-1">
+                    <span className="text-gray-400">ご褒美:</span>
+                    <span className="text-yellow-400">{reward.reward}</span>
+                  </div>
+                  {reward.isClaimed && reward.claimedAt && (
+                    <div className="text-xs text-green-400 mt-1">
+                      獲得済み: {new Date(reward.claimedAt).toLocaleDateString()}
+                    </div>
+                  )}
+                </div>
+                
+                <div className="ml-3">
+                  {reward.isClaimed ? (
+                    <CheckCircle className="text-green-400" size={20} />
+                  ) : canClaim ? (
+                    <button
+                      onClick={() => claimReward(reward.id)}
+                      className="w-8 h-8 bg-green-600 text-white rounded-lg flex items-center justify-center hover:bg-green-700 transition-colors"
+                    >
+                      <Gift size={16} />
+                    </button>
+                  ) : (
+                    <div className="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center">
+                      <AlertCircle className="text-gray-400" size={16} />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          );
+        })}
+      </div>
 
-          {/* 記録連続 */}
-          <div>
-            <h4 className="text-lg font-semibold text-green-400 mb-3 flex items-center space-x-2">
-              <Award className="w-5 h-5" />
-              <span>記録連続</span>
-            </h4>
-            <div className="grid grid-cols-3 gap-2">
-              {[7, 14, 30].map(days => (
-                <div
-                  key={days}
-                  className={`p-3 rounded-lg text-center ${
-                    recordCount >= days
-                      ? 'bg-green-600 text-white'
-                      : 'bg-gray-700 text-gray-400'
-                  }`}
+      {/* カスタムご褒美追加モーダル */}
+      {showCustomRewardModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-white">新しいご褒美を追加</h3>
+              <button
+                onClick={() => setShowCustomRewardModal(false)}
+                className="w-8 h-8 bg-gray-600 text-white rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">タイトル</label>
+                <input
+                  type="text"
+                  value={newReward.title}
+                  onChange={(e) => setNewReward(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="例: ゲーム時間延長"
+                  className="w-full p-3 bg-gray-700 rounded-lg text-white placeholder-gray-400 border border-gray-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">説明</label>
+                <input
+                  type="text"
+                  value={newReward.description}
+                  onChange={(e) => setNewReward(prev => ({ ...prev, description: e.target.value }))}
+                  placeholder="例: 30分間ゲームを楽しむ"
+                  className="w-full p-3 bg-gray-700 rounded-lg text-white placeholder-gray-400 border border-gray-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">達成条件</label>
+                <select
+                  value={newReward.conditionType}
+                  onChange={(e) => setNewReward(prev => ({ 
+                    ...prev, 
+                    conditionType: e.target.value as 'streak_days' | 'pb_update' | 'record_count' | 'custom' 
+                  }))}
+                  className="w-full p-3 bg-gray-700 rounded-lg text-white border border-gray-600 mb-2"
                 >
-                  <div className="font-bold">{days}日</div>
-                  <div className="text-xs">
-                    {recordCount >= days ? '達成済み' : '未達成'}
-                  </div>
-                </div>
-              ))}
+                  <option value="streak_days">連続日数</option>
+                  <option value="pb_update">PB更新</option>
+                  <option value="record_count">記録回数</option>
+                  <option value="custom">カスタム</option>
+                </select>
+                
+                {(newReward.conditionType === 'streak_days' || newReward.conditionType === 'record_count') && (
+                  <input
+                    type="number"
+                    value={newReward.conditionValue}
+                    onChange={(e) => setNewReward(prev => ({ ...prev, conditionValue: parseInt(e.target.value) || 1 }))}
+                    placeholder="数値"
+                    className="w-full p-3 bg-gray-700 rounded-lg text-white placeholder-gray-400 border border-gray-600"
+                  />
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">ご褒美の内容</label>
+                <input
+                  type="text"
+                  value={newReward.reward}
+                  onChange={(e) => setNewReward(prev => ({ ...prev, reward: e.target.value }))}
+                  placeholder="例: ゲーム時間を30分増やす"
+                  className="w-full p-3 bg-gray-700 rounded-lg text-white placeholder-gray-400 border border-gray-600"
+                />
+                <p className="text-gray-400 text-xs mt-1">
+                  具体的で実行可能なご褒美を設定してください
+                </p>
+              </div>
+            </div>
+
+            <div className="flex space-x-3 mt-6">
+              <button
+                onClick={() => setShowCustomRewardModal(false)}
+                className="flex-1 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                キャンセル
+              </button>
+              <button
+                onClick={addCustomReward}
+                className="flex-1 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                追加
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* ご褒美モーダル */}
-      <RewardModal
-        rewards={pendingRewards}
-        isOpen={showModal}
-        onClose={handleModalClose}
-        onClaim={handleClaim}
-      />
+      {/* ヒント */}
+      <div className="mt-4 p-3 bg-blue-900 bg-opacity-30 border border-blue-500 rounded-lg">
+        <div className="flex items-start space-x-2">
+          <AlertCircle className="text-blue-400 mt-0.5" size={16} />
+          <div className="text-xs text-gray-300">
+            <p className="font-medium mb-1">ご褒美設定のコツ:</p>
+            <ul className="space-y-1 text-gray-400">
+              <li>• 具体的で実行可能なご褒美にしましょう</li>
+              <li>• 金額や時間には上限を設けましょう</li>
+              <li>• 達成条件は段階的に設定しましょう</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
+export default RewardSystem;

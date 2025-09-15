@@ -420,3 +420,4 @@ export default function ExtendedRecordMiniApp({ onClose, habitId, initialAction 
     </div>
   );
 }
+

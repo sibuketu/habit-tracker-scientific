@@ -25,11 +25,11 @@ interface MiniNutrientGaugeProps {
   nutrientKey?: string; // 栄養素キー（例: 'protein', 'iron', 'magnesium'）
 }
 
-export default function MiniNutrientGauge({ 
-  label, 
+export default function MiniNutrientGauge({
+  label,
   currentDailyTotal = 0, // Layer 1: 今日すでに確定した摂取量
   previewAmount = 0, // Layer 2: 今選択している食材の増加分
-  target, 
+  target,
   color,
   unit = '',
   logic,
@@ -79,21 +79,21 @@ export default function MiniNutrientGauge({
       return [];
     }
   }, [inferredNutrientKey, userProfile, sortOrder]);
-  
+
   const totalValue = currentDailyTotal + previewAmount;
   const basePercent = target > 0 ? Math.min((currentDailyTotal / target) * 100, 100) : 0;
   const previewPercent = target > 0 ? Math.min((previewAmount / target) * 100, 100) : 0;
   const totalPercent = target > 0 ? Math.min((totalValue / target) * 100, 200) : 0; // 200%まで表示可能
-  
+
   const displayValue = totalValue.toFixed(1);
   const displayTarget = target.toFixed(1);
   const isLow = totalValue < target * 0.5; // 目標の50%未満を「低い」と判定
-  
+
   // 自動ヒント生成（不足時）
   const autoHint = useMemo(() => {
     if (hint) return hint; // 既にhintがある場合はそれを使用
     if (impactFactors.length > 0) return null; // impactFactorsがある場合はモーダルで表示
-    
+
     // 不足時の自動ヒント生成
     if (totalValue < target * 0.8) {
       const deficit = target - totalValue;
@@ -119,14 +119,14 @@ export default function MiniNutrientGauge({
     }
     return null;
   }, [hint, impactFactors.length, totalValue, target, unit, inferredNutrientKey]);
-  
+
   // 4ゾーンのグラデーション色を生成する関数
   const getZoneGradient = (percent: number, isPastFood: boolean): string => {
     // 過去に追加した食品は黒色
     if (isPastFood) {
       return '#1f2937'; // 黒色
     }
-    
+
     // 4ゾーンのグラデーション（段階的に色が変わる）
     // 0-50%: 赤系、50-100%: オレンジ系、100-120%: 緑系、120%以上: 紫系
     if (percent < 50) {
@@ -146,16 +146,16 @@ export default function MiniNutrientGauge({
       return '#a855f7';
     }
   };
-  
+
   const isPastFood = currentDailyTotal > 0; // 過去に追加した食品かどうか
-  
+
   // Logic Armor: ロジックがある場合はコンソールに出力（将来はツールチップで表示）
   useEffect(() => {
     if (logic && import.meta.env.DEV) {
       console.log(`[Logic Armor] ${label}: ${logic}`);
     }
   }, [label, logic]);
-  
+
   // 栄養素説明を取得
   const nutrientExplanation = useMemo(() => {
     if (!inferredNutrientKey || !userProfile) return null;
@@ -185,7 +185,7 @@ export default function MiniNutrientGauge({
     // 常にモーダルを表示（影響要因がある場合は影響要因モーダル、ない場合は「なぜこの数値なのか」説明モーダル）
     setShowModal(true);
   };
-  
+
   // ゲージ全体のクリックハンドラ（ロジック表示用）
   const handleGaugeClick = (e: React.MouseEvent) => {
     // ツールチップのクリックイベントを防ぐ
@@ -202,13 +202,13 @@ export default function MiniNutrientGauge({
       alert(`${label}の目標値の根拠:\n\n${logic}`);
     }
   };
-  
+
   return (
-    <div 
-      style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        gap: '4px', 
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px',
         position: 'relative',
         cursor: logic ? 'pointer' : 'default',
         userSelect: 'none',
@@ -222,7 +222,7 @@ export default function MiniNutrientGauge({
             {displayValue} / {displayTarget} {unit}
           </span>
           {/* ヒントアイコン（ツールチップ表示） - 全てのゲージに常に表示 */}
-          <span 
+          <span
             style={{ fontSize: '12px', cursor: 'pointer', position: 'relative', zIndex: 10 }}
             onClick={(e) => {
               e.preventDefault();
@@ -257,7 +257,7 @@ export default function MiniNutrientGauge({
                 padding: '6px 8px',
                 borderRadius: '4px',
                 fontSize: '10px',
-                zIndex: 1000,
+                zIndex: 10005,
                 pointerEvents: 'none',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
                 maxWidth: '300px',
@@ -268,7 +268,7 @@ export default function MiniNutrientGauge({
             )}
           </span>
           {showLowIsOk && isLow && (
-            <span 
+            <span
               style={{ fontSize: '12px', cursor: 'pointer', position: 'relative' }}
               onClick={handleIconClick}
               onMouseEnter={(e) => {
@@ -290,7 +290,7 @@ export default function MiniNutrientGauge({
                   borderRadius: '4px',
                   fontSize: '10px',
                   whiteSpace: 'nowrap',
-                  zIndex: 1000,
+                  zIndex: 10005,
                   pointerEvents: 'none',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
                 }}>
@@ -302,44 +302,44 @@ export default function MiniNutrientGauge({
         </div>
       </div>
       {/* Stacked Gauge with 4-Zone Colors */}
-      <div style={{ 
-        height: '10px', 
-        borderRadius: '9999px', 
-        overflow: 'hidden', 
+      <div style={{
+        height: '10px',
+        borderRadius: '9999px',
+        overflow: 'hidden',
         position: 'relative',
         width: '100%',
         backgroundColor: '#e5e7eb', // 背景色（グレー）
       }}>
         {/* Layer 1: Base (currentDailyTotal) - 過去に追加した食品は黒色、それ以外は4ゾーングラデーション */}
         {basePercent > 0 && (
-          <div 
-            style={{ 
+          <div
+            style={{
               position: 'absolute',
               left: 0,
-              width: `${Math.min(basePercent, 200)}%`, 
+              width: `${Math.min(basePercent, 200)}%`,
               background: isPastFood ? '#1f2937' : getZoneGradient(basePercent, false),
               height: '100%',
               borderRadius: '9999px',
               transition: 'width 0.3s ease',
               zIndex: 2
-            }} 
+            }}
           />
         )}
-        
+
         {/* Layer 2: Preview (previewAmount) - 4ゾーングラデーション */}
         {previewPercent > 0 && (
-          <div 
-            style={{ 
+          <div
+            style={{
               position: 'absolute',
               left: `${Math.min(basePercent, 200)}%`,
-              width: `${Math.min(previewPercent, Math.max(0, 200 - Math.min(basePercent, 200)))}%`, 
+              width: `${Math.min(previewPercent, Math.max(0, 200 - Math.min(basePercent, 200)))}%`,
               background: getZoneGradient(totalPercent, false), // プレビューは常に4ゾーングラデーション
               height: '100%',
               borderRadius: '9999px',
               transition: 'width 0.3s ease',
               zIndex: 2,
               borderLeft: basePercent > 0 ? '1px solid rgba(255,255,255,0.3)' : 'none'
-            }} 
+            }}
           />
         )}
       </div>
@@ -357,7 +357,7 @@ export default function MiniNutrientGauge({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            zIndex: 10000,
+            zIndex: 10010,
             padding: '16px'
           }}
           onClick={() => setShowModal(false)}
@@ -510,68 +510,68 @@ export default function MiniNutrientGauge({
                   ) : (
                     /* 詳細表示：全ての要因を表示 */
                     impactFactors.map((factor, index) => (
-                    <div
-                      key={factor.id}
-                      style={{
-                        padding: '12px',
-                        backgroundColor: '#f9fafb',
-                        borderRadius: '8px',
-                        border: '1px solid #e5e7eb'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                        {/* ナンバリング */}
-                        <div
-                          style={{
-                            minWidth: '24px',
-                            height: '24px',
-                            borderRadius: '50%',
-                            backgroundColor: '#1f2937',
-                            color: 'white',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '12px',
-                            fontWeight: '600',
-                            flexShrink: 0
-                          }}
-                        >
-                          {index + 1}
-                        </div>
-
-                        {/* 内容 */}
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                            <span style={{ fontSize: '14px', fontWeight: '600', color: '#1f2937' }}>
-                              {factor.factor}
-                            </span>
-                            <span
-                              style={{
-                                fontSize: '12px',
-                                padding: '2px 8px',
-                                borderRadius: '4px',
-                                backgroundColor: '#e5e7eb',
-                                color: '#78716c'
-                              }}
-                            >
-                              {getCategoryName(factor.category)}
-                            </span>
-                          </div>
-                          <div style={{ fontSize: '13px', color: '#78716c', marginBottom: '4px' }}>
-                            {factor.reason}
-                          </div>
+                      <div
+                        key={factor.id}
+                        style={{
+                          padding: '12px',
+                          backgroundColor: '#f9fafb',
+                          borderRadius: '8px',
+                          border: '1px solid #e5e7eb'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                          {/* ナンバリング */}
                           <div
                             style={{
-                              fontSize: '14px',
+                              minWidth: '24px',
+                              height: '24px',
+                              borderRadius: '50%',
+                              backgroundColor: '#1f2937',
+                              color: 'white',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '12px',
                               fontWeight: '600',
-                              color: factor.impact > 0 ? '#22c55e' : factor.impact < 0 ? '#ef4444' : '#78716c'
+                              flexShrink: 0
                             }}
                           >
-                            {factor.impactText}の変化
+                            {index + 1}
+                          </div>
+
+                          {/* 内容 */}
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                              <span style={{ fontSize: '14px', fontWeight: '600', color: '#1f2937' }}>
+                                {factor.factor}
+                              </span>
+                              <span
+                                style={{
+                                  fontSize: '12px',
+                                  padding: '2px 8px',
+                                  borderRadius: '4px',
+                                  backgroundColor: '#e5e7eb',
+                                  color: '#78716c'
+                                }}
+                              >
+                                {getCategoryName(factor.category)}
+                              </span>
+                            </div>
+                            <div style={{ fontSize: '13px', color: '#78716c', marginBottom: '4px' }}>
+                              {factor.reason}
+                            </div>
+                            <div
+                              style={{
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                color: factor.impact > 0 ? '#22c55e' : factor.impact < 0 ? '#ef4444' : '#78716c'
+                              }}
+                            >
+                              {factor.impactText}の変化
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
                     ))
                   )}
                 </div>

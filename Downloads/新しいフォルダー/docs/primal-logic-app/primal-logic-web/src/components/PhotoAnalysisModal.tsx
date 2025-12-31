@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { FoodItem } from '../types';
 import { refineFoodAnalysis } from '../services/aiService';
+import MiniNutrientGauge from './MiniNutrientGauge';
 
 // 目標値の型定義（簡易的）
 interface NutrientTarget {
@@ -148,21 +149,23 @@ export default function PhotoAnalysisModal({
                         />
 
                         {/* リアルタイム栄養素ゲージ */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                            <div>
-                                <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '0.25rem' }}>タンパク質</div>
-                                <div style={{ height: '8px', background: '#374151', borderRadius: '4px', overflow: 'hidden' }}>
-                                    <div style={{ width: `${Math.min(100, (p / pTarget) * 100)}%`, height: '100%', background: '#3b82f6', transition: 'width 0.3s' }} />
-                                </div>
-                                <div style={{ textAlign: 'right', fontSize: '14px', fontWeight: 'bold', color: '#60a5fa' }}>{Math.round(p)}g</div>
-                            </div>
-                            <div>
-                                <div style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '0.25rem' }}>脂質</div>
-                                <div style={{ height: '8px', background: '#374151', borderRadius: '4px', overflow: 'hidden' }}>
-                                    <div style={{ width: `${Math.min(100, (f / fTarget) * 100)}%`, height: '100%', background: '#dc2626', transition: 'width 0.3s' }} />
-                                </div>
-                                <div style={{ textAlign: 'right', fontSize: '14px', fontWeight: 'bold', color: '#f87171' }}>{Math.round(f)}g</div>
-                            </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1rem' }}>
+                            <MiniNutrientGauge
+                                label="タンパク質"
+                                currentDailyTotal={0}
+                                previewAmount={p}
+                                target={pTarget}
+                                unit="g"
+                                color="#ef4444"
+                            />
+                            <MiniNutrientGauge
+                                label="脂質"
+                                currentDailyTotal={0}
+                                previewAmount={f}
+                                target={fTarget}
+                                unit="g"
+                                color="#eab308"
+                            />
                         </div>
                     </div>
 

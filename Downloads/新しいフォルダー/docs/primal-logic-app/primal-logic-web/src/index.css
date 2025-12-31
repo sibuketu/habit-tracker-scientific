@@ -15,7 +15,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  
+
   /* フォントサイズのデフォルト値 */
   --app-font-size: 16px;
 
@@ -25,17 +25,18 @@
   --color-bg-secondary: #F5F5F4;
   --color-bg-tertiary: #E7E5E4;
   --color-text-primary: #1C1917;
-  --color-text-secondary: #78716C;
-  --color-text-tertiary: #A8A29E;
+  --color-text-secondary: #57534E;
+  /* Darker Stone-500 for better readability */
+  --color-text-tertiary: #78716C;
   --color-border: #E7E5E4;
   --color-border-subtle: #F5F5F4;
-  
+
   /* Accent Colors - Premium Red/Brown */
   --color-accent: #C41E3A;
   --color-accent-hover: #A0172F;
   --color-accent-secondary: #8B4513;
   --color-accent-tertiary: #D4AF37;
-  
+
   /* Semantic Colors - Natural */
   --color-success: #10B981;
   --color-success-light: #D1FAE5;
@@ -55,18 +56,20 @@
   --color-bg-primary: #1C1917;
   --color-bg-secondary: #292524;
   --color-bg-tertiary: #44403C;
-  --color-text-primary: #FAFAF9;
-  --color-text-secondary: #A8A29E;
-  --color-text-tertiary: #78716C;
+  --color-text-primary: #FFFFFF;
+  /* Pure White for max contrast */
+  --color-text-secondary: #D6D3D1;
+  /* Lighter Stone-300 for better readability */
+  --color-text-tertiary: #A8A29E;
   --color-border: #44403C;
   --color-border-subtle: #292524;
-  
+
   /* Accent Colors - Premium Red/Brown (Dark Mode) */
   --color-accent: #E63950;
   --color-accent-hover: #F87171;
   --color-accent-secondary: #A78B5F;
   --color-accent-tertiary: #FCD34D;
-  
+
   /* Semantic Colors - Natural (Dark Mode) */
   --color-success: #34D399;
   --color-success-light: #065F46;
@@ -129,7 +132,12 @@ body {
   font-size: var(--app-font-size);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
 }
 
@@ -144,6 +152,8 @@ button {
   transition: all 0.2s;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
 }

@@ -222,7 +222,7 @@ export default function AISpeedDial({
             });
           }
 
-          let foodItem: FoodItem = {
+          const foodItem: FoodItem = {
             item: result.foodName,
             amount: result.estimatedWeight,
             unit: 'g' as const,
@@ -1699,7 +1699,7 @@ export default function AISpeedDial({
                       const foodResults = searchFoods(food.name);
                       const foodData = foodResults.length > 0 ? foodResults[0] : null;
                       
-                      let foodItem: FoodItem = {
+                      const foodItem: FoodItem = {
                         item: food.name,
                         amount: food.amount,
                         unit: food.unit,

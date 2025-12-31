@@ -3,8 +3,8 @@ interface Window {
     webkitSpeechRecognition: any;
 }
 
-declare var SpeechRecognition: any;
-declare var webkitSpeechRecognition: any;
+declare let SpeechRecognition: any;
+declare let webkitSpeechRecognition: any;
 
 declare class BarcodeDetector {
     constructor(options?: { formats: string[] });

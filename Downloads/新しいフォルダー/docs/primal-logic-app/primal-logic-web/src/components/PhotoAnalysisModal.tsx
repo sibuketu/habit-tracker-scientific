@@ -23,7 +23,7 @@ interface PhotoAnalysisModalProps {
     dynamicTargets: {
         protein: NutrientTarget;
         fat: NutrientTarget;
-        carbs: NutrientTarget;
+        carbs?: NutrientTarget;
     };
 }
 

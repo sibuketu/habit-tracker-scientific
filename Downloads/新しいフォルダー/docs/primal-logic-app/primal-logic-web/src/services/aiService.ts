@@ -81,7 +81,7 @@ function parseStructuredResponse(text: string): AIResponse {
   const verificationMatch = text.match(/<verification>([\s\S]*?)<\/verification>/i);
   if (verificationMatch && verificationMatch[1]) {
     const verificationText = verificationMatch[1].trim();
-    
+
     // 検証計画を抽出
     const planMatch = verificationText.match(/<plan>([\s\S]*?)<\/plan>/i);
     if (planMatch && planMatch[1]) {
@@ -102,7 +102,7 @@ function parseStructuredResponse(text: string): AIResponse {
       const executionText = executionMatch[1].trim();
       const qaPairs = executionText.split(/Q:|A:/i).filter(item => item.trim().length > 0);
       const execution: Array<{ question: string; answer: string }> = [];
-      
+
       for (let i = 0; i < qaPairs.length; i += 2) {
         if (qaPairs[i] && qaPairs[i + 1]) {
           execution.push({
@@ -111,7 +111,7 @@ function parseStructuredResponse(text: string): AIResponse {
           });
         }
       }
-      
+
       if (response.verification) {
         response.verification.execution = execution;
       }
@@ -129,7 +129,7 @@ function parseStructuredResponse(text: string): AIResponse {
   if (citationsMatch && citationsMatch[1]) {
     const citationsText = citationsMatch[1].trim();
     const citationItems: Array<{ sentence: string; source: string; confidence: number }> = [];
-    
+
     // 各引用を抽出（形式: sentence|source|confidence）
     const citationLines = citationsText.split('\n').filter(line => line.trim().length > 0);
     for (const line of citationLines) {
@@ -142,7 +142,7 @@ function parseStructuredResponse(text: string): AIResponse {
         });
       }
     }
-    
+
     if (citationItems.length > 0) {
       response.citations = citationItems;
     }
@@ -153,7 +153,7 @@ function parseStructuredResponse(text: string): AIResponse {
   if (todosMatch && todosMatch[1]) {
     const todosText = todosMatch[1].trim();
     const todoItems: TodoItem[] = [];
-    
+
     // 各Todoを抽出（形式: title|description|action_type|action_params）
     const todoLines = todosText.split('\n').filter(line => line.trim().length > 0);
     for (const line of todoLines) {
@@ -168,7 +168,7 @@ function parseStructuredResponse(text: string): AIResponse {
           actionParams: parts[3] ? JSON.parse(parts[3]) : undefined,
           isCompleted: false,
         };
-        
+
         // 後方互換性のため、actionも設定
         if (parts[2]) {
           todo.action = {
@@ -176,11 +176,11 @@ function parseStructuredResponse(text: string): AIResponse {
             params: parts[3] ? JSON.parse(parts[3]) : undefined,
           };
         }
-        
+
         todoItems.push(todo);
       }
     }
-    
+
     if (todoItems.length > 0) {
       response.todos = todoItems;
     }
@@ -319,7 +319,7 @@ export async function chatWithAI(
 `;
 
     // 症状と対処法のデータベース
-    const remedyContext = REMEDY_LOGIC.map(remedy => 
+    const remedyContext = REMEDY_LOGIC.map(remedy =>
       `症状: ${remedy.symptom}\n論理: ${remedy.logic}\n対処法: ${remedy.remedies.join(', ')}`
     ).join('\n\n');
 
@@ -335,9 +335,9 @@ export async function chatWithAI(
     // 会話履歴をコンテキストとして含める
     const historyContext = chatHistory.length > 0
       ? `\n【これまでの会話履歴】\n${chatHistory
-          .slice(-5) // 直近5件のみ
-          .map(msg => `${msg.role === 'user' ? 'ユーザー' : 'アシスタント'}: ${msg.content}`)
-          .join('\n')}\n`
+        .slice(-5) // 直近5件のみ
+        .map(msg => `${msg.role === 'user' ? 'ユーザー' : 'アシスタント'}: ${msg.content}`)
+        .join('\n')}\n`
       : '';
 
     // 構造化プロンプト（XML形式）とCoT言語分離を適用
@@ -499,7 +499,7 @@ ${historyContext}
 
     // XML構造化レスポンスをパース
     const parsedResponse = parseStructuredResponse(text);
-    
+
     if (import.meta.env.DEV) {
       if (parsedResponse.thinking) {
         console.log('思考プロセスを抽出しました');
@@ -535,9 +535,9 @@ ${historyContext}
     if (parsedResponse.answer && parsedResponse.answer.length > 0) {
       if (import.meta.env.DEV) {
         console.log('XML構造から回答を抽出しました');
-      if (parsedResponse.todos && parsedResponse.todos.length > 0 && import.meta.env.DEV) {
-        console.log('Todoを抽出しました:', parsedResponse.todos.length);
-      }
+        if (parsedResponse.todos && parsedResponse.todos.length > 0 && import.meta.env.DEV) {
+          console.log('Todoを抽出しました:', parsedResponse.todos.length);
+        }
       }
       // <thinking>タグやその他のタグを削除して返す
       const cleanAnswer = parsedResponse.answer
@@ -581,7 +581,7 @@ export async function chatWithAIStructured(
   enableCitations: boolean = true,
   aiMode: 'purist' | 'realist' = 'purist',
   diaryAndFoodData?: { logs: Array<{ date: string; diary?: string; foods: string[] }> }, // Detective AI用データ
-  userProfile?: { height?: number; weight?: number; age?: number; gender?: 'male' | 'female'; [key: string]: unknown } // ユーザープロファイル
+  userProfile?: { height?: number; weight?: number; age?: number; gender?: 'male' | 'female';[key: string]: unknown } // ユーザープロファイル
 ): Promise<ChatAIResponse> {
   if (import.meta.env.DEV) {
     console.log('chatWithAIStructured called with message:', userMessage);
@@ -634,14 +634,14 @@ ${userProfile.daysOnCarnivore ? `- カーニボア開始からの日数: ${userP
 **データ期間**: 過去${diaryAndFoodData.logs.length}日分のデータを分析します。
 
 ${diaryAndFoodData.logs.map((log, idx) => {
-  const date = new Date(log.date);
-  const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
-  const foods = log.foods.join('、');
-  const diary = log.diary || '（日記なし）';
-  return `【${dateStr}】
+      const date = new Date(log.date);
+      const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
+      const foods = log.foods.join('、');
+      const diary = log.diary || '（日記なし）';
+      return `【${dateStr}】
 食べたもの: ${foods || '（記録なし）'}
 日記: ${diary}`;
-}).join('\n\n')}
+    }).join('\n\n')}
 
 【分析のポイント】
 - 特定の食品を食べた後、24-48時間以内に症状や体調不良が記録されているか確認
@@ -943,7 +943,9 @@ export async function analyzeFoodImage(imageFile: File | Blob): Promise<{
 - 一般的な食品データベース（USDA FoodData Centralなど）の値を参考にする
 - カーニボアダイエットで重要な栄養素（タンパク質、脂質、ナトリウム、マグネシウム、ビタミンB12、オメガ3/6比率など）を優先的に含める
 - 可能な限り多くの栄養素を含める（特にビタミンB群、ミネラル、アミノ酸）
-- 写真から判断しにくい場合（調理油の使用有無、ソースの中身、肉の具体的な部位など）は必ずfollowupQuestionsに質問を追加してください。`;
+- 写真から判断しにくい場合（調理油の使用有無、ソースの中身、肉の具体的な部位、隠し味、付け合わせの下にあるものなど）は必ずfollowupQuestionsに質問を追加してください。
+- 質問は「バターや油を使いましたか？」だけでなく、文脈に合わせて多様に生成してください（例：「このソースは自家製ですか？砂糖は入っていますか？」「肉の部位はバラ肉ですか、ロースですか？」「卵はLサイズですか？」「衣に小麦粉を使っていますか？」など）。
+- 質問は最大3つまでとしてください。`;
 
     const result = await model.generateContent([
       prompt,
@@ -978,7 +980,7 @@ export async function analyzeFoodImage(imageFile: File | Blob): Promise<{
     // JSONパースに失敗した場合、テキストから情報を抽出
     const extractedFoodName = extractFoodName(text);
     const extractedWeight = extractWeight(text);
-    
+
     return {
       foodName: extractedFoodName,
       estimatedWeight: Math.round(extractedWeight / 10) * 10, // 10g単位で丸める
@@ -1003,19 +1005,19 @@ export async function refineFoodAnalysis(
   originalResult: { foodName: string; estimatedWeight: number; type?: string },
   userAnswers: Record<string, string>
 ): Promise<{
-    foodName: string;
-    estimatedWeight: number;
-    type?: 'animal' | 'plant' | 'trash' | 'ruminant' | 'dairy';
-    nutrients: Record<string, number>;
+  foodName: string;
+  estimatedWeight: number;
+  type?: 'animal' | 'plant' | 'trash' | 'ruminant' | 'dairy';
+  nutrients: Record<string, number>;
 }> {
-    if (!isGeminiAvailable()) {
-      throw new Error('Gemini APIキーが設定されていません。');
-    }
+  if (!isGeminiAvailable()) {
+    throw new Error('Gemini APIキーが設定されていません。');
+  }
 
-    try {
-      const model = genAI!.getGenerativeModel({ model: 'gemini-2.5-flash' });
-      
-      const prompt = `以下の食品情報と、ユーザーからの追加情報（回答）に基づいて、最終的な栄養素データを計算してください。
+  try {
+    const model = genAI!.getGenerativeModel({ model: 'gemini-2.5-flash' });
+
+    const prompt = `以下の食品情報と、ユーザーからの追加情報（回答）に基づいて、最終的な栄養素データを計算してください。
       特に、ユーザーが回答した「追加の油（バター、ラード）」や「実際の量」、「具体的な部位」を反映させてください。
 
 元データ:
@@ -1050,27 +1052,27 @@ ${Object.entries(userAnswers).map(([q, a]) => `- 質問: "${q}" -> 回答: "${a}
 - ユーザーが「バターを10g使った」と言った場合、脂質を適切に増やしてください（バターは脂質約80%）。
 - ユーザーが重量を訂正した場合（例：「もっと多い、400gくらい」）、その重量をベースに計算してください（ただしJSONのnutrientsは常に100gあたり）。`;
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const text = response.text();
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
 
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-          const parsed = JSON.parse(jsonMatch[0]);
-          return {
-              foodName: parsed.foodName,
-              estimatedWeight: parsed.estimatedWeight,
-              type: parsed.type || 'animal',
-              nutrients: parsed.nutrients || {}
-          };
-      }
-      
-      throw new Error('再計算結果のパースに失敗しました');
-
-    } catch (error) {
-        logError(error, { component: 'aiService', action: 'refineFoodAnalysis' });
-        throw new Error('再計算に失敗しました。');
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      return {
+        foodName: parsed.foodName,
+        estimatedWeight: parsed.estimatedWeight,
+        type: parsed.type || 'animal',
+        nutrients: parsed.nutrients || {}
+      };
     }
+
+    throw new Error('再計算結果のパースに失敗しました');
+
+  } catch (error) {
+    logError(error, { component: 'aiService', action: 'refineFoodAnalysis' });
+    throw new Error('再計算に失敗しました。');
+  }
 }
 
 /**

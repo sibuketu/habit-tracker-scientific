@@ -102,6 +102,8 @@
 .input-screen-button-row {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
+  /* Ensure buttons wrap on small screens */
 }
 
 .input-screen-level-button {
@@ -114,6 +116,7 @@
   color: var(--color-text-primary);
   cursor: pointer;
   transition: all 0.2s;
+  min-width: 80px;
 }
 
 .input-screen-level-button:hover {
@@ -131,6 +134,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .input-screen-solar-charge-input {
@@ -148,6 +152,8 @@
 .input-screen-weather-buttons {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
+  /* Ensure weather buttons wrap */
 }
 
 .input-screen-weather-button {
@@ -333,3 +339,28 @@
   transition: color 0.3s ease;
 }
 
+/* Mobile Responsive Adjustments */
+@media (max-width: 480px) {
+  .input-screen-title {
+    font-size: 24px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .input-screen-section {
+    padding: 15px;
+  }
+
+  .input-screen-amount-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .input-screen-amount-input-group {
+    width: 100%;
+  }
+
+  .input-screen-unit-select {
+    flex: 1;
+  }
+}

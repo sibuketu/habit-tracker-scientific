@@ -17,6 +17,11 @@ export interface DailyLogRow {
     sun_minutes: number;
     activity_level: 'high' | 'moderate' | 'low';
     stress_level?: 'low' | 'medium' | 'high';
+    bowel_movement?: {
+      status: 'normal' | 'constipated' | 'loose' | 'watery';
+      bristol_scale?: number;
+      notes?: string;
+    };
   };
   fuel: Array<{
     item: string;

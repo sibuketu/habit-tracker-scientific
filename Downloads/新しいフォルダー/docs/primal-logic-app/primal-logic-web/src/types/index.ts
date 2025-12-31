@@ -65,28 +65,28 @@ export interface UserProfile {
   weight?: number; // 体重（kg）- 推奨
   age?: number; // 年齢（推奨）- 栄養素の必要量に影響
   activityLevel?: 'sedentary' | 'moderate' | 'active'; // 活動量（推奨）- 栄養素の必要量に影響
-  
+
   // 設定項目
   goal: UserGoal;
   dairyTolerance?: boolean; // 乳糖耐性（任意）
   metabolicStatus: MetabolicStatus;
   mode?: DietMode;
-  
+
   // 女性特有の条件（栄養素の必要量に影響）
   isPregnant?: boolean; // 妊娠中
   isBreastfeeding?: boolean; // 授乳中
   isPostMenopause?: boolean; // 閉経後（女性の場合、鉄分の必要量が変わる）
-  
+
   // ストレスレベル（マグネシウムの必要量に影響）
   stressLevel?: 'low' | 'moderate' | 'high'; // ストレスレベル
-  
+
   // 追加の栄養素変動要因（優先順位: 推奨）
   sleepHours?: number; // 睡眠時間（時間/日）- マグネシウム・コルチゾールに影響
   exerciseIntensity?: 'none' | 'light' | 'moderate' | 'intense'; // 運動強度 - タンパク質・脂質・マグネシウムに影響
   exerciseFrequency?: 'none' | '1-2' | '3-4' | '5+'; // 運動頻度（週回数）
   thyroidFunction?: 'normal' | 'hypothyroid' | 'hyperthyroid'; // 甲状腺機能 - ヨウ素・セレンに影響
   sunExposureFrequency?: 'none' | 'rare' | 'occasional' | 'daily'; // 日光暴露頻度 - ビタミンD合成に影響
-  
+
   // 追加の栄養素変動要因（優先順位: 任意）
   digestiveIssues?: boolean; // 消化器系の問題 - タンパク質・脂質の吸収に影響
   inflammationLevel?: 'low' | 'moderate' | 'high'; // 炎症レベル - オメガ3/6比率に影響
@@ -97,7 +97,7 @@ export interface UserProfile {
   alcoholFrequency?: 'none' | 'rare' | 'weekly' | 'daily'; // アルコール摂取頻度 - マグネシウム・ビタミンB群に影響
   caffeineIntake?: 'none' | 'low' | 'moderate' | 'high'; // カフェイン摂取量 - マグネシウム・ストレスレベルに影響
   chronicDiseases?: string[]; // 慢性疾患のリスト - 各栄養素の必要量に影響
-  
+
   // さらに追加の栄養素変動要因（余計なくらい大量に）
   bodyFatPercentage?: number; // 体脂肪率（%） - タンパク質必要量に影響
   muscleMass?: number; // 筋肉量（kg） - タンパク質必要量に影響
@@ -212,10 +212,10 @@ export interface UserProfile {
   epaLevel?: 'low' | 'normal' | 'high'; // EPAレベル - オメガ3に影響
   arachidonicAcid?: 'low' | 'normal' | 'high'; // アラキドン酸レベル - オメガ6に影響
   linoleicAcid?: 'low' | 'normal' | 'high'; // リノール酸レベル - オメガ6に影響
-  
+
   // 言語設定
   language?: 'ja' | 'en' | 'fr' | 'de'; // 言語設定
-  
+
   // カーニボア歴（Gemini提案：導入期判定用）
   daysOnCarnivore?: number; // カーニボア開始からの日数
   carnivoreStartDate?: string; // ISO date string (YYYY-MM-DD)
@@ -235,6 +235,11 @@ export interface DailyStatus {
   sunMinutes: number;
   activityLevel: 'high' | 'low' | 'moderate';
   stressLevel?: 'low' | 'medium' | 'high';
+  bowelMovement?: {
+    status: 'normal' | 'constipated' | 'loose' | 'watery';
+    bristolScale?: number; // 1-7 (オプション)
+    notes?: string; // メモ（オプション）
+  };
 }
 
 /**
@@ -363,47 +368,47 @@ export interface CalculatedMetrics {
   vitaminATotal?: number; // IU
   vitaminDTotal?: number; // IU
   vitaminK2Total?: number; // μg (MK-4)
-    omega3Total?: number; // g
-    omega6Total?: number; // g
-    cholineTotal?: number; // mg
-    potassiumTotal?: number; // mg
-    iodineTotal?: number; // μg
-    // 比率（カーニボア重要）
-    calciumPhosphorusRatio?: number; // カルシウム:リン比率（推奨: 1:1以上）
-    // グリシン:メチオニン比（カーニボア重要：長寿の視点）
-    glycineTotal?: number; // g（コラーゲン、皮、骨、軟骨由来）
-    methionineTotal?: number; // g（筋肉由来）
-    glycineMethionineRatio?: number; // 比率（推奨: 1:1以上）
-    // 抗栄養素（カーニボア重要：植物性食品の避けるべき理由）
-    phytatesTotal?: number; // mg（フィチン酸）
-    polyphenolsTotal?: number; // mg（ポリフェノール）
-    flavonoidsTotal?: number; // mg（フラボノイド）
-    anthocyaninsTotal?: number; // mg（アントシアニン、フラボノイドの一種、色素成分）
-    oxalatesTotal?: number; // mg（シュウ酸）
-    lectinsTotal?: number; // mg（レクチン）
-    saponinsTotal?: number; // mg（サポニン）
-    goitrogensTotal?: number; // mg（ゴイトロゲン）
-    tanninsTotal?: number; // mg（タンニン）
-    trypsinInhibitorsTotal?: number; // mg（トリプシン阻害物質）
-    proteaseInhibitorsTotal?: number; // mg（プロテアーゼ阻害物質）
-    cyanogenicGlycosidesTotal?: number; // mg（シアノグリコシド）
-    solanineTotal?: number; // mg（ソラニン、ナス科）
-    chaconineTotal?: number; // mg（チャコニン、ナス科）
-    // その他のミネラル（余計なくらい大量に）
-    chromiumTotal?: number; // μg（クロム）
-    molybdenumTotal?: number; // μg（モリブデン）
-    fluorideTotal?: number; // mg（フッ素）
-    chlorideTotal?: number; // mg（塩素）
-    boronTotal?: number; // mg（ホウ素）
-    nickelTotal?: number; // mg（ニッケル）
-    siliconTotal?: number; // mg（ケイ素）
-    vanadiumTotal?: number; // μg（バナジウム）
-    // 植物性タンパク質・植物油（Avoid Zone用）
-    plantProteinTotal?: number; // g（植物性タンパク質）
-    vegetableOilTotal?: number; // g（植物油）
-    // 違反検出
-    hasViolation?: boolean; // カーニボア違反があるかどうか
-    violationTypes?: string[]; // 違反の種類（例: ['plant_food', 'high_carbs']）
+  omega3Total?: number; // g
+  omega6Total?: number; // g
+  cholineTotal?: number; // mg
+  potassiumTotal?: number; // mg
+  iodineTotal?: number; // μg
+  // 比率（カーニボア重要）
+  calciumPhosphorusRatio?: number; // カルシウム:リン比率（推奨: 1:1以上）
+  // グリシン:メチオニン比（カーニボア重要：長寿の視点）
+  glycineTotal?: number; // g（コラーゲン、皮、骨、軟骨由来）
+  methionineTotal?: number; // g（筋肉由来）
+  glycineMethionineRatio?: number; // 比率（推奨: 1:1以上）
+  // 抗栄養素（カーニボア重要：植物性食品の避けるべき理由）
+  phytatesTotal?: number; // mg（フィチン酸）
+  polyphenolsTotal?: number; // mg（ポリフェノール）
+  flavonoidsTotal?: number; // mg（フラボノイド）
+  anthocyaninsTotal?: number; // mg（アントシアニン、フラボノイドの一種、色素成分）
+  oxalatesTotal?: number; // mg（シュウ酸）
+  lectinsTotal?: number; // mg（レクチン）
+  saponinsTotal?: number; // mg（サポニン）
+  goitrogensTotal?: number; // mg（ゴイトロゲン）
+  tanninsTotal?: number; // mg（タンニン）
+  trypsinInhibitorsTotal?: number; // mg（トリプシン阻害物質）
+  proteaseInhibitorsTotal?: number; // mg（プロテアーゼ阻害物質）
+  cyanogenicGlycosidesTotal?: number; // mg（シアノグリコシド）
+  solanineTotal?: number; // mg（ソラニン、ナス科）
+  chaconineTotal?: number; // mg（チャコニン、ナス科）
+  // その他のミネラル（余計なくらい大量に）
+  chromiumTotal?: number; // μg（クロム）
+  molybdenumTotal?: number; // μg（モリブデン）
+  fluorideTotal?: number; // mg（フッ素）
+  chlorideTotal?: number; // mg（塩素）
+  boronTotal?: number; // mg（ホウ素）
+  nickelTotal?: number; // mg（ニッケル）
+  siliconTotal?: number; // mg（ケイ素）
+  vanadiumTotal?: number; // μg（バナジウム）
+  // 植物性タンパク質・植物油（Avoid Zone用）
+  plantProteinTotal?: number; // g（植物性タンパク質）
+  vegetableOilTotal?: number; // g（植物油）
+  // 違反検出
+  hasViolation?: boolean; // カーニボア違反があるかどうか
+  violationTypes?: string[]; // 違反の種類（例: ['plant_food', 'high_carbs']）
 }
 
 /**

@@ -34,6 +34,11 @@ export default function InputScreen() {
   const [diary, setDiary] = useState(dailyLog?.diary || '');
   const [weight, setWeight] = useState<string>(dailyLog?.weight?.toString() || '');
   const [bodyFatPercentage, setBodyFatPercentage] = useState<string>(dailyLog?.bodyFatPercentage?.toString() || '');
+  const [bowelMovement, setBowelMovement] = useState<{
+    status: 'normal' | 'constipated' | 'loose' | 'watery';
+    bristolScale?: number;
+    notes?: string;
+  }>(dailyLog?.status.bowelMovement || { status: 'normal' });
 
   // dailyLogが変更されたら日記・体重・睡眠時間も更新
   useEffect(() => {
@@ -49,7 +54,10 @@ export default function InputScreen() {
     if (dailyLog?.status.sleepHours !== undefined) {
       setSleepHours(dailyLog.status.sleepHours.toString());
     }
-  }, [dailyLog?.diary, dailyLog?.weight, dailyLog?.bodyFatPercentage, dailyLog?.status.sleepHours]);
+    if (dailyLog?.status.bowelMovement) {
+      setBowelMovement(dailyLog.status.bowelMovement);
+    }
+  }, [dailyLog?.diary, dailyLog?.weight, dailyLog?.bodyFatPercentage, dailyLog?.status.sleepHours, dailyLog?.status.bowelMovement]);
 
   const [foodInput, setFoodInput] = useState('');
   const [foodAmount, setFoodAmount] = useState('300'); // カーニボアサイズのデフォルト（300g）
@@ -276,6 +284,7 @@ export default function InputScreen() {
       sleepHours: sleepHours ? Number(sleepHours) : undefined,
       sunMinutes,
       activityLevel,
+      bowelMovement,
     });
     // アラートを削除
   };
@@ -636,6 +645,39 @@ export default function InputScreen() {
                 )}
               </div>
             )}
+          </div>
+
+          <div className="input-screen-input-group">
+            <label className="input-screen-label">排泄記録 (Bio-Tuner):</label>
+            <div className="input-screen-button-row">
+              <button
+                className={`input-screen-level-button ${bowelMovement.status === 'normal' ? 'active' : ''}`}
+                onClick={() => setBowelMovement({ ...bowelMovement, status: 'normal' })}
+              >
+                正常
+              </button>
+              <button
+                className={`input-screen-level-button ${bowelMovement.status === 'constipated' ? 'active' : ''}`}
+                onClick={() => setBowelMovement({ ...bowelMovement, status: 'constipated' })}
+              >
+                硬い
+              </button>
+              <button
+                className={`input-screen-level-button ${bowelMovement.status === 'loose' ? 'active' : ''}`}
+                onClick={() => setBowelMovement({ ...bowelMovement, status: 'loose' })}
+              >
+                緩い
+              </button>
+              <button
+                className={`input-screen-level-button ${bowelMovement.status === 'watery' ? 'active' : ''}`}
+                onClick={() => setBowelMovement({ ...bowelMovement, status: 'watery' })}
+              >
+                水状
+              </button>
+            </div>
+            <div className="input-screen-slider-hint">
+              排泄状態に応じて翌日の脂質目標を自動調整します
+            </div>
           </div>
 
           <div className="input-screen-input-group">

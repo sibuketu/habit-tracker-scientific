@@ -44,6 +44,11 @@ export async function saveDailyLog(log: DailyLog): Promise<void> {
           sun_minutes: log.status.sunMinutes,
           activity_level: log.status.activityLevel,
           stress_level: log.status.stressLevel,
+          bowel_movement: log.status.bowelMovement ? {
+            status: log.status.bowelMovement.status,
+            bristol_scale: log.status.bowelMovement.bristolScale,
+            notes: log.status.bowelMovement.notes,
+          } : undefined,
         },
         fuel: log.fuel.map(f => ({
           item: f.item,
@@ -68,8 +73,8 @@ export async function saveDailyLog(log: DailyLog): Promise<void> {
           protein_requirement: log.calculatedMetrics.proteinRequirement,
           fat_total: log.calculatedMetrics.fatTotal,
           ...Object.fromEntries(
-            Object.entries(log.calculatedMetrics).filter(([key]) => 
-              !['netCarbs', 'effectiveVitC', 'vitCRequirement', 'effectiveVitK', 
+            Object.entries(log.calculatedMetrics).filter(([key]) =>
+              !['netCarbs', 'effectiveVitC', 'vitCRequirement', 'effectiveVitK',
                 'effectiveIron', 'ironRequirement', 'effectiveZinc', 'fiberTotal',
                 'sodiumTotal', 'magnesiumTotal', 'effectiveProtein', 'proteinTotal',
                 'proteinRequirement', 'fatTotal'].includes(key)
@@ -138,9 +143,9 @@ async function saveToLocalStorage(log: DailyLog): Promise<void> {
         logs = [];
       }
     }
-    
+
     const existingIndex = logs.findIndex((l) => l.date === log.date);
-    
+
     if (existingIndex >= 0) {
       logs[existingIndex] = log;
     } else {
@@ -148,7 +153,7 @@ async function saveToLocalStorage(log: DailyLog): Promise<void> {
     }
 
     localStorage.setItem(STORAGE_KEYS.DAILY_LOGS, JSON.stringify(logs));
-    
+
     // デバッグモードがONの場合、キャッシュをクリアして次回のgetDailyLogs()で再生成されるようにする
     // ただし、今日のログは実際のデータを優先する
     cachedDebugData = null;
@@ -240,7 +245,7 @@ export async function getDailyLogs(): Promise<DailyLog[]> {
     }
     return cachedDebugData;
   }
-  
+
   // デバッグモードがOFFの場合はキャッシュをクリア
   cachedDebugData = null;
 
@@ -299,6 +304,11 @@ function convertLogRowToDailyLog(row: DailyLogRow): DailyLog {
       sunMinutes: row.status.sun_minutes,
       activityLevel: row.status.activity_level,
       stressLevel: row.status.stress_level,
+      bowelMovement: row.status.bowel_movement ? {
+        status: row.status.bowel_movement.status,
+        bristolScale: row.status.bowel_movement.bristol_scale,
+        notes: row.status.bowel_movement.notes,
+      } : undefined,
     },
     fuel: row.fuel.map(f => ({
       item: f.item,
@@ -346,20 +356,20 @@ function convertLogRowToDailyLog(row: DailyLogRow): DailyLog {
  */
 export async function getTodayLog(): Promise<DailyLog | null> {
   const today = new Date().toISOString().split('T')[0];
-  
+
   // まず実際のデータを取得（デバッグモードに関係なく）
   const actualLog = await getDailyLogByDate(today);
-  
+
   // デバッグモードチェック
   const debugMode = localStorage.getItem('settings_debug_mode');
   const isDebugMode = debugMode === 'true' || (debugMode !== null && JSON.parse(debugMode) === true);
-  
+
   if (isDebugMode && !actualLog) {
     // デバッグモードで実際のデータがない場合のみ、デバッグデータから今日のログを取得
     const allLogs = await getDailyLogs(); // getDailyLogs()がデバッグデータを返す
     return allLogs.find(log => log.date === today) || null;
   }
-  
+
   // 実際のデータがある場合はそれを返す（デバッグモードでも）
   return actualLog;
 }
@@ -376,11 +386,11 @@ export async function deleteDailyLog(date: string): Promise<void> {
       // デバッグモードの場合はキャッシュをクリア
       clearDebugDataCache();
     }
-    
+
     // 実際のデータから削除
     const logs = await getDailyLogs();
     const filtered = logs.filter((log) => log.date !== date);
-    
+
     // Supabaseが利用可能な場合
     const userId = getUserId();
     if (isSupabaseAvailable() && supabase) {
@@ -390,7 +400,7 @@ export async function deleteDailyLog(date: string): Promise<void> {
           .delete()
           .eq('user_id', userId)
           .eq('date', date);
-        
+
         if (error) {
           logError(error, { component: 'storage', action: 'deleteDailyLog', step: 'supabase' });
         }
@@ -398,7 +408,7 @@ export async function deleteDailyLog(date: string): Promise<void> {
         logError(error, { component: 'storage', action: 'deleteDailyLog', step: 'supabase-fallback' });
       }
     }
-    
+
     // localStorageにも保存
     localStorage.setItem(STORAGE_KEYS.DAILY_LOGS, JSON.stringify(filtered));
   } catch (error) {
@@ -644,14 +654,14 @@ export async function exportAllData(): Promise<string> {
   try {
     const logs = await getDailyLogs();
     const profile = await getUserProfile();
-    
+
     const exportData = {
       version: '1.0',
       exportDate: new Date().toISOString(),
       dailyLogs: logs,
       userProfile: profile,
     };
-    
+
     return JSON.stringify(exportData, null, 2);
   } catch (error) {
     logError(error, { component: 'storage', action: 'exportAllData' });
@@ -665,26 +675,26 @@ export async function exportAllData(): Promise<string> {
 export async function importAllData(jsonData: string): Promise<void> {
   try {
     const data = JSON.parse(jsonData);
-    
+
     if (!data.version || !data.dailyLogs || !Array.isArray(data.dailyLogs)) {
       throw new Error('無効なデータ形式です。');
     }
-    
+
     // 既存データをバックアップ（オプション）
     const backup = await exportAllData();
     localStorage.setItem('primal_logic_backup_' + Date.now(), backup);
-    
+
     // データをインポート
     if (data.dailyLogs && data.dailyLogs.length > 0) {
       for (const log of data.dailyLogs) {
         await saveDailyLog(log);
       }
     }
-    
+
     if (data.userProfile) {
       await saveUserProfile(data.userProfile);
     }
-    
+
   } catch (error) {
     logError(error, { component: 'storage', action: 'importAllData' });
     throw new Error('データのインポートに失敗しました。' + (error instanceof Error ? error.message : ''));

@@ -53,7 +53,7 @@ function AppContent() {
     // 初回起動時の画面決定
     const consentAccepted = localStorage.getItem('primal_logic_consent_accepted');
     const onboardingCompleted = localStorage.getItem('primal_logic_onboarding_completed');
-    
+
     if (!consentAccepted) {
       return 'consent';
     }
@@ -137,7 +137,7 @@ function AppContent() {
 
   // 画面遷移イベントをリッスン（ProfileScreenからUI設定画面への遷移など）
   useEffect(() => {
-      const handleNavigate = (event: CustomEvent<string>) => {
+    const handleNavigate = (event: CustomEvent<string>) => {
       const screen = event.detail as Screen;
       if (['home', 'profile', 'history', 'labs', 'settings', 'userSettings', 'streakTracker', 'customFood', 'community', 'diary', 'stats', 'auth', 'privacy', 'terms', 'dataExport', 'dataImport', 'dataDelete', 'feedback', 'consent', 'onboarding', 'language', 'salt', 'carbTarget', 'nutrientCustom', 'gift', 'shop', 'recipe', 'healthDevice'].includes(screen)) {
         setCurrentScreen(screen);
@@ -200,7 +200,7 @@ function AppContent() {
           </button>
         </div>
       )}
-      
+
       {/* ローディングインジケーター */}
       {isLoading && (
         <div
@@ -223,7 +223,7 @@ function AppContent() {
           <span>処理中...</span>
         </div>
       )}
-      
+
       <div className="app-container" key={languageChangeKey}>
         {/* Main Content */}
         <div className="app-content">
@@ -241,7 +241,7 @@ function AppContent() {
             />
           )}
           {currentScreen === 'home' && (
-            <HomeScreen 
+            <HomeScreen
               onOpenFatTabReady={handleOpenFatTabReady}
               onAddFoodReady={handleAddFoodReady}
             />
@@ -265,8 +265,8 @@ function AppContent() {
             </Suspense>
           )}
           {currentScreen === 'customFood' && (
-            <CustomFoodScreen 
-              onClose={() => setCurrentScreen('home')} 
+            <CustomFoodScreen
+              onClose={() => setCurrentScreen('home')}
               onSave={() => {
                 // 保存後にホーム画面に戻る
                 setCurrentScreen('home');
@@ -404,7 +404,7 @@ function AppContent() {
         </nav>
       </div>
       {getFeatureDisplaySettings().aiSpeedDial && (
-        <AISpeedDial 
+        <AISpeedDial
           onOpenFatTab={openFatTabCallback || undefined}
           onAddFood={addFoodCallback || undefined}
         />
@@ -422,6 +422,3 @@ export default function App() {
     </AppProvider>
   );
 }
-   
-    
- 

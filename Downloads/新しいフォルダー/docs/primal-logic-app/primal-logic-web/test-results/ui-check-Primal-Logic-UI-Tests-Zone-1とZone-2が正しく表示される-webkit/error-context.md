@@ -1,0 +1,64 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]: "Zone 1: Survival (生存領域)"
+        - generic [ref=e9]:
+          - generic [ref=e10]:
+            - generic [ref=e11]:
+              - img [ref=e12]
+              - generic [ref=e15]:
+                - generic [ref=e16]: "0"
+                - generic [ref=e17]: mg
+            - generic [ref=e18]: ナトリウム
+            - generic [ref=e19]: 0 / 5000
+          - generic [ref=e20]:
+            - generic [ref=e21]:
+              - img [ref=e22]
+              - generic [ref=e25]:
+                - generic [ref=e26]: "0"
+                - generic [ref=e27]: mg
+            - generic [ref=e28]: カリウム
+            - generic [ref=e29]: 0 / 3500
+          - generic [ref=e30]:
+            - generic [ref=e31]:
+              - img [ref=e32]
+              - generic [ref=e35]:
+                - generic [ref=e36]: "0"
+                - generic [ref=e37]: mg
+            - generic [ref=e38]: マグネシウム
+            - generic [ref=e39]: 0 / 400
+      - generic [ref=e40]:
+        - generic [ref=e41]: "Zone 2: Fuel & Construction (燃料と構築)"
+        - generic [ref=e42]:
+          - generic [ref=e44]:
+            - generic [ref=e45]: タンパク質（有効）
+            - generic [ref=e46]: 0.0 / 110.0 g
+          - generic [ref=e50]:
+            - generic [ref=e51]: 脂質
+            - generic [ref=e52]: 0.0 / 150.0 g
+          - generic [ref=e55]:
+            - generic [ref=e56]: "脂質:タンパク質比率: 0.00:1 ⚠️"
+            - generic [ref=e57]: "目標: 1:1以上"
+      - generic [ref=e59]:
+        - button "+ 食品を追加" [ref=e60] [cursor=pointer]
+        - button "⭐ いつもの" [ref=e61] [cursor=pointer]
+        - button "📋 履歴" [ref=e62] [cursor=pointer]
+    - generic [ref=e63]:
+      - button "🏠 ホーム" [ref=e64] [cursor=pointer]:
+        - generic [ref=e65]: 🏠
+        - generic [ref=e66]: ホーム
+      - button "📊 履歴" [ref=e67] [cursor=pointer]:
+        - generic [ref=e68]: 📊
+        - generic [ref=e69]: 履歴
+      - button "🧪 その他" [ref=e70] [cursor=pointer]:
+        - generic [ref=e71]: 🧪
+        - generic [ref=e72]: その他
+      - button "👤 プロファイル" [ref=e73] [cursor=pointer]:
+        - generic [ref=e74]: 👤
+        - generic [ref=e75]: プロファイル
+  - button "✨" [ref=e77] [cursor=pointer]
+```

@@ -1,0 +1,149 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: #213547;
+  background-color: #ffffff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* フォントサイズのデフォルト値 */
+  --app-font-size: 16px;
+
+  /* Light Theme Colors - Natural Premium Palette */
+  --color-bg-root: #FAFAF9;
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #F5F5F4;
+  --color-bg-tertiary: #E7E5E4;
+  --color-text-primary: #1C1917;
+  --color-text-secondary: #78716C;
+  --color-text-tertiary: #A8A29E;
+  --color-border: #E7E5E4;
+  --color-border-subtle: #F5F5F4;
+  
+  /* Accent Colors - Premium Red/Brown */
+  --color-accent: #C41E3A;
+  --color-accent-hover: #A0172F;
+  --color-accent-secondary: #8B4513;
+  --color-accent-tertiary: #D4AF37;
+  
+  /* Semantic Colors - Natural */
+  --color-success: #10B981;
+  --color-success-light: #D1FAE5;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FEF3C7;
+  --color-error: #EF4444;
+  --color-error-light: #FEE2E2;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  color: #ffffff;
+  background-color: #000000;
+
+  /* Dark Theme Colors - Natural Premium Palette */
+  --color-bg-root: #0A0A0A;
+  --color-bg-primary: #1C1917;
+  --color-bg-secondary: #292524;
+  --color-bg-tertiary: #44403C;
+  --color-text-primary: #FAFAF9;
+  --color-text-secondary: #A8A29E;
+  --color-text-tertiary: #78716C;
+  --color-border: #44403C;
+  --color-border-subtle: #292524;
+  
+  /* Accent Colors - Premium Red/Brown (Dark Mode) */
+  --color-accent: #E63950;
+  --color-accent-hover: #F87171;
+  --color-accent-secondary: #A78B5F;
+  --color-accent-tertiary: #FCD34D;
+  
+  /* Semantic Colors - Natural (Dark Mode) */
+  --color-success: #34D399;
+  --color-success-light: #065F46;
+  --color-warning: #FBBF24;
+  --color-warning-light: #78350F;
+  --color-error: #F87171;
+  --color-error-light: #7F1D1D;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* アクセシビリティ: フォーカス表示の改善 */
+*:focus-visible {
+  outline: 2px solid var(--color-accent, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* アクセシビリティ: キーボードナビゲーション */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-accent, #3b82f6);
+  outline-offset: 2px;
+}
+
+/* アクセシビリティ: スクリーンリーダー用の非表示要素 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+html {
+  font-size: var(--app-font-size);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-size: var(--app-font-size);
+  background-color: var(--color-bg-root);
+  color: var(--color-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+  font-size: var(--app-font-size);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}

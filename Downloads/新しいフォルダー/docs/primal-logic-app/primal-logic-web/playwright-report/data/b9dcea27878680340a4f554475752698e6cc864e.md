@@ -1,0 +1,167 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - generic [ref=e8]: "Zone 1: Survival (生存領域)"
+        - generic [ref=e9]:
+          - generic [ref=e10]:
+            - generic [ref=e11]:
+              - img [ref=e12]
+              - generic [ref=e15]:
+                - generic [ref=e16]: "0"
+                - generic [ref=e17]: mg
+            - generic [ref=e18]: ナトリウム
+            - generic [ref=e19]: 0 / 5000
+          - generic [ref=e20]:
+            - generic [ref=e21]:
+              - img [ref=e22]
+              - generic [ref=e25]:
+                - generic [ref=e26]: "0"
+                - generic [ref=e27]: mg
+            - generic [ref=e28]: カリウム
+            - generic [ref=e29]: 0 / 3500
+          - generic [ref=e30]:
+            - generic [ref=e31]:
+              - img [ref=e32]
+              - generic [ref=e35]:
+                - generic [ref=e36]: "0"
+                - generic [ref=e37]: mg
+            - generic [ref=e38]: マグネシウム
+            - generic [ref=e39]: 0 / 400
+      - generic [ref=e40]:
+        - generic [ref=e41]: "Zone 2: Fuel & Construction (燃料と構築)"
+        - generic [ref=e42]:
+          - generic [ref=e44]:
+            - generic [ref=e45]: タンパク質（有効）
+            - generic [ref=e46]: 0.0 / 110.0 g
+          - generic [ref=e50]:
+            - generic [ref=e51]: 脂質
+            - generic [ref=e52]: 0.0 / 150.0 g
+          - generic [ref=e55]:
+            - generic [ref=e56]: "脂質:タンパク質比率: 0.00:1 ⚠️"
+            - generic [ref=e57]: "目標: 1:1以上"
+      - generic [ref=e59]:
+        - button "+ 食品を追加" [ref=e60] [cursor=pointer]
+        - button "⭐ いつもの" [ref=e61] [cursor=pointer]
+        - button "📋 履歴" [ref=e62] [cursor=pointer]
+      - generic [ref=e63]:
+        - generic [ref=e64]:
+          - heading "牛肉を選択" [level=2] [ref=e65]
+          - button "× 閉じる" [ref=e66] [cursor=pointer]
+        - generic [ref=e67]:
+          - generic [ref=e68]:
+            - button "🐄牛肉" [ref=e69] [cursor=pointer]
+            - button "🐖豚肉" [ref=e70] [cursor=pointer]
+            - button "🐓鶏肉" [ref=e71] [cursor=pointer]
+            - button "🥚卵・乳製品" [ref=e72] [cursor=pointer]
+            - button "🧈脂質・調味料" [ref=e73] [cursor=pointer]
+            - button "🐟魚" [ref=e74] [cursor=pointer]
+          - generic [ref=e75]:
+            - button "Ribeye" [ref=e76] [cursor=pointer]
+            - button "Sirloin" [ref=e77] [cursor=pointer]
+            - button "Ground" [ref=e78] [cursor=pointer]
+            - button "Brisket" [ref=e79] [cursor=pointer]
+            - button "Chuck" [ref=e80] [cursor=pointer]
+            - button "Liver" [ref=e81] [cursor=pointer]
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - text: QUANTITY
+              - generic [ref=e85]: 300g
+            - slider [ref=e86]: "300"
+            - generic [ref=e87]:
+              - heading "Nutrients Breakdown" [level=3] [ref=e88]
+              - generic [ref=e89]:
+                - generic [ref=e90]:
+                  - generic [ref=e92]:
+                    - generic [ref=e93]: タンパク質
+                    - generic [ref=e95]: 60.0 / 110.0 g
+                  - generic [ref=e101]:
+                    - generic [ref=e102]: 脂質
+                    - generic [ref=e104]: 66.0 / 150.0 g
+                - generic [ref=e109]:
+                  - generic [ref=e110]: ミネラル
+                  - generic [ref=e112]:
+                    - generic [ref=e113]: 亜鉛
+                    - generic [ref=e115]: 13.5 / 11.0 mg
+                  - generic [ref=e121] [cursor=pointer]:
+                    - generic [ref=e122]: マグネシウム
+                    - generic [ref=e123]:
+                      - generic [ref=e124]: 60.0 / 600.0 mg
+                      - generic [ref=e125]: 💡
+                  - generic [ref=e131]:
+                    - generic [ref=e132]: 鉄分
+                    - generic [ref=e134]: 7.5 / 8.0 mg
+                  - generic [ref=e140] [cursor=pointer]:
+                    - generic [ref=e141]: カリウム
+                    - generic [ref=e143]: 1050.0 / 4500.0 mg
+                  - generic [ref=e149] [cursor=pointer]:
+                    - generic [ref=e150]: ナトリウム
+                    - generic [ref=e152]: 150.0 / 5000.0 mg
+                - generic [ref=e157]:
+                  - generic [ref=e158]: Fat-Soluble Vitamins
+                  - generic [ref=e160]:
+                    - generic [ref=e161]: ビタミンA
+                    - generic [ref=e163]: 0.0 / 5000.0 IU
+                  - generic [ref=e168]:
+                    - generic [ref=e169]: ビタミンD
+                    - generic [ref=e171]: 0.3 / 2000.0 IU
+                  - generic [ref=e177]:
+                    - generic [ref=e178]: ビタミンK2
+                    - generic [ref=e180]: 4.5 / 200.0 μg
+                - generic [ref=e185]:
+                  - generic [ref=e186]: ビタミンB群
+                  - generic [ref=e188]:
+                    - generic [ref=e189]: ビタミンB12
+                    - generic [ref=e191]: 8.4 / 2.4 μg
+                  - generic [ref=e197]:
+                    - generic [ref=e198]: ビタミンB7（ビオチン）
+                    - generic [ref=e200]: 0.0 / 30.0 μg
+                - generic [ref=e204]:
+                  - generic [ref=e205]: その他
+                  - generic [ref=e207]:
+                    - generic [ref=e208]: コリン
+                    - generic [ref=e210]: 240.0 / 450.0 mg
+                  - generic [ref=e216]:
+                    - generic [ref=e217]: ヨウ素
+                    - generic [ref=e219]: 0.0 / 150.0 μg
+                  - generic [ref=e224]:
+                    - generic [ref=e225]: カルシウム
+                    - generic [ref=e227]: 0.0 / 1000.0 mg
+                  - generic [ref=e232]:
+                    - generic [ref=e233]: リン
+                    - generic [ref=e235]: 0.0 / 700.0 mg
+                  - generic [ref=e240]:
+                    - generic [ref=e241]: グリシン
+                    - generic [ref=e243]: 2.4 / 0.0 g
+                  - generic [ref=e248]:
+                    - generic [ref=e249]: メチオニン
+                    - generic [ref=e251]: 1.5 / 0.0 g
+                  - generic [ref=e255]:
+                    - generic [ref=e256]:
+                      - generic [ref=e257]: オメガ3/6比率
+                      - generic [ref=e258]:
+                        - generic [ref=e259]: 8.00:1 (Ω6:Ω3)
+                        - generic "オメガ6過多は炎症の原因になります。牧草牛や魚介類を増やすことを推奨します。" [ref=e260] [cursor=pointer]: ⚠️
+                    - generic [ref=e261]:
+                      - generic [ref=e262]: Ω3
+                      - generic [ref=e263]: Ω6
+                    - generic [ref=e264]: ⚠️ オメガ6過多（炎症リスク）魚か魚卵を追加してください
+          - button "🥩 ADD Ribeye" [ref=e266] [cursor=pointer]
+    - generic [ref=e267]:
+      - button "🏠 ホーム" [ref=e268] [cursor=pointer]:
+        - generic [ref=e269]: 🏠
+        - generic [ref=e270]: ホーム
+      - button "📊 履歴" [ref=e271] [cursor=pointer]:
+        - generic [ref=e272]: 📊
+        - generic [ref=e273]: 履歴
+      - button "🧪 その他" [ref=e274] [cursor=pointer]:
+        - generic [ref=e275]: 🧪
+        - generic [ref=e276]: その他
+      - button "👤 プロファイル" [ref=e277] [cursor=pointer]:
+        - generic [ref=e278]: 👤
+        - generic [ref=e279]: プロファイル
+  - button "✨" [ref=e281] [cursor=pointer]
+```

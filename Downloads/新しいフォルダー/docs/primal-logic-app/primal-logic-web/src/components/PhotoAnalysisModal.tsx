@@ -92,25 +92,58 @@ export default function PhotoAnalysisModal({
                 </h2>
 
                 <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                    {/* 食品名入力 */}
+                    {/* 食品名入力と再検索 */}
                     <div>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '14px', color: '#9ca3af' }}>
-                            食品名
+                            食品名（変更して検索可能）
                         </label>
-                        <input
-                            type="text"
-                            value={currentResult.foodName}
-                            onChange={(e) => setCurrentResult({ ...currentResult, foodName: e.target.value })}
-                            style={{
-                                width: '100%',
-                                padding: '0.75rem',
-                                backgroundColor: '#111827',
-                                border: '1px solid #4b5563',
-                                color: 'white',
-                                borderRadius: '8px',
-                                fontSize: '16px',
-                            }}
-                        />
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <input
+                                type="text"
+                                value={currentResult.foodName}
+                                onChange={(e) => setCurrentResult({ ...currentResult, foodName: e.target.value })}
+                                style={{
+                                    flex: 1,
+                                    padding: '0.75rem',
+                                    backgroundColor: '#111827',
+                                    border: '1px solid #4b5563',
+                                    color: 'white',
+                                    borderRadius: '8px',
+                                    fontSize: '16px',
+                                }}
+                            />
+                            <button
+                                onClick={async () => {
+                                    if (!currentResult.foodName || isAIProcessing) return;
+                                    setIsAIProcessing(true);
+                                    try {
+                                        const { analyzeFoodName } = await import('../services/aiService');
+                                        const result = await analyzeFoodName(currentResult.foodName);
+                                        setCurrentResult(prev => ({
+                                            ...prev,
+                                            nutrients: result.nutrients,
+                                            type: result.type
+                                        }));
+                                    } catch (e) {
+                                        alert('検索に失敗しました');
+                                    } finally {
+                                        setIsAIProcessing(false);
+                                    }
+                                }}
+                                disabled={isAIProcessing}
+                                style={{
+                                    padding: '0 1rem',
+                                    backgroundColor: '#374151',
+                                    color: 'white',
+                                    border: '1px solid #4b5563',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                    fontSize: '20px',
+                                }}
+                            >
+                                🔍
+                            </button>
+                        </div>
                     </div>
 
                     {/* 量の調整とゲージプレビュー */}
@@ -166,6 +199,14 @@ export default function PhotoAnalysisModal({
                                 unit="g"
                                 color="#eab308"
                             />
+                            {/* 電解質も表示（重要） */}
+                            {(currentResult.nutrients?.sodium || 0) > 0 && (
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#9ca3af', marginTop: '4px' }}>
+                                    <span>🧂 Na: {Math.round((currentResult.nutrients!.sodium! * ratio))}mg</span>
+                                    <span>⚡ K: {Math.round((currentResult.nutrients!.potassium || 0) * ratio)}mg</span>
+                                    <span>🧠 Mg: {Math.round((currentResult.nutrients!.magnesium || 0) * ratio)}mg</span>
+                                </div>
+                            )}
                         </div>
                     </div>
 

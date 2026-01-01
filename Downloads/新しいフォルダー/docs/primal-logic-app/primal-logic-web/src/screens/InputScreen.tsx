@@ -19,7 +19,11 @@ import { VoiceInputManager, type VoiceInputResult } from '../utils/voiceInput';
 import type { FoodItem } from '../types';
 import './InputScreen.css';
 
-export default function InputScreen() {
+interface InputScreenProps {
+  onClose?: () => void;
+}
+
+export default function InputScreen({ onClose }: InputScreenProps = {}) {
   const { t } = useTranslation();
   const { addFood, removeFood, updateFood, updateStatus, updateDiary, updateWeight, dailyLog, userProfile } = useApp();
   const [sleepScore, setSleepScore] = useState(dailyLog?.status.sleepScore || 80);
@@ -292,7 +296,23 @@ export default function InputScreen() {
   return (
     <div className="input-screen-container">
       <div className="input-screen-content">
-        <h1 className="input-screen-title">日次入力</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h1 className="input-screen-title">日次入力</h1>
+          {onClose && (
+            <button
+              onClick={onClose}
+              style={{
+                fontSize: '1.5rem',
+                border: 'none',
+                background: 'none',
+                cursor: 'pointer',
+                padding: '0.5rem',
+              }}
+            >
+              ×
+            </button>
+          )}
+        </div>
 
         {/* Section B: Fuel (The Input) - 先に表示 */}
         <div className="input-screen-section">

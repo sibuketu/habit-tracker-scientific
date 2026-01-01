@@ -38,14 +38,14 @@ export default function LabsScreen() {
       setStreakData(data);
     };
     loadStreakData();
-    
+
     // データ更新・画面遷移を監視
     const handleDataUpdate = () => {
       loadStreakData();
     };
     window.addEventListener('dailyLogUpdated', handleDataUpdate);
     window.addEventListener('screenChanged', handleDataUpdate);
-    
+
     return () => {
       window.removeEventListener('dailyLogUpdated', handleDataUpdate);
       window.removeEventListener('screenChanged', handleDataUpdate);
@@ -57,33 +57,33 @@ export default function LabsScreen() {
     const savedRemedyHistory = localStorage.getItem('primal_logic_tip_history');
     const savedTipHistory = localStorage.getItem('primal_logic_tips_displayed');
     const savedTipIds = getSavedTipIds(); // お気に入り登録したTipsのIDリスト
-    
+
     const history: (RemedyItem | Tip)[] = [];
-    
+
     // お気に入り登録したTipsを追加
     if (savedTipIds.length > 0) {
       const savedTips = TIPS_DATA.filter(tip => savedTipIds.includes(tip.id));
       history.push(...savedTips);
     }
-    
+
     if (savedRemedyHistory) {
       const remedyHistory: RemedyItem[] = JSON.parse(savedRemedyHistory);
       history.push(...remedyHistory);
     }
-    
+
     if (savedTipHistory) {
       const tipHistory: Tip[] = JSON.parse(savedTipHistory);
       history.push(...tipHistory);
     }
-    
+
     // 重複を除去（idで判定）
     const uniqueHistory = history.filter((item, index, self) =>
-      index === self.findIndex((t) => 
+      index === self.findIndex((t) =>
         ('id' in item && 'id' in t && item.id === t.id) ||
         ('symptom' in item && 'symptom' in t && item.symptom === t.symptom)
       )
     );
-    
+
     setTipHistory(uniqueHistory);
   }, []);
 
@@ -123,7 +123,7 @@ export default function LabsScreen() {
     } else if ('symptom' in tip) {
       shareText = `Did you know? ${tip.symptom} -> ${tip.remedies.join(', ')} #PrimalLogic`;
     }
-    
+
     if (navigator.share) {
       try {
         await navigator.share({
@@ -154,18 +154,51 @@ export default function LabsScreen() {
         </p>
       </div>
 
+      {/* Bio-Tuner (日次入力) */}
+      <div style={{ marginBottom: '2rem' }}>
+        <div
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const event = new CustomEvent('navigateToScreen', { detail: 'input' });
+            window.dispatchEvent(event);
+          }}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '1rem',
+            backgroundColor: '#ecfdf5',
+            borderRadius: '8px',
+            border: '1px solid #10b981',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#d1fae5'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ecfdf5'}
+        >
+          <div>
+            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px', color: '#065f46' }}>🧬 Bio-Tuner (Daily)</h3>
+            <p style={{ fontSize: '12px', color: '#065f46' }}>
+              {t('labs.inputDescription') || '睡眠、太陽光、排泄、体調記録など'}
+            </p>
+          </div>
+          <span style={{ fontSize: '20px', color: '#065f46' }}>→</span>
+        </div>
+      </div>
+
       {/* 日記機能 */}
       <div style={{ marginBottom: '2rem' }}>
-        <div 
+        <div
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             const event = new CustomEvent('navigateToScreen', { detail: 'diary' });
             window.dispatchEvent(event);
           }}
-          style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             padding: '1rem',
             backgroundColor: 'white',
@@ -189,16 +222,16 @@ export default function LabsScreen() {
 
       {/* 統計・グラフ */}
       <div style={{ marginBottom: '2rem' }}>
-        <div 
+        <div
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             const event = new CustomEvent('navigateToScreen', { detail: 'stats' });
             window.dispatchEvent(event);
           }}
-          style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             padding: '1rem',
             backgroundColor: 'white',
@@ -223,16 +256,16 @@ export default function LabsScreen() {
 
       {/* コミュニティ機能 */}
       <div style={{ marginBottom: '2rem' }}>
-        <div 
+        <div
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             const event = new CustomEvent('navigateToScreen', { detail: 'community' });
             window.dispatchEvent(event);
           }}
-          style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             padding: '1rem',
             backgroundColor: 'white',
@@ -256,16 +289,16 @@ export default function LabsScreen() {
 
       {/* ショップ */}
       <div style={{ marginBottom: '2rem' }}>
-        <div 
+        <div
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             const event = new CustomEvent('navigateToScreen', { detail: 'shop' });
             window.dispatchEvent(event);
           }}
-          style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             padding: '1rem',
             backgroundColor: '#f0f9ff',
@@ -289,16 +322,16 @@ export default function LabsScreen() {
 
       {/* ギフト機能 */}
       <div style={{ marginBottom: '2rem' }}>
-        <div 
+        <div
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             const event = new CustomEvent('navigateToScreen', { detail: 'gift' });
             window.dispatchEvent(event);
           }}
-          style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             padding: '1rem',
             backgroundColor: '#fef3c7',
@@ -322,14 +355,14 @@ export default function LabsScreen() {
 
       {/* 習慣トラッカー */}
       <div style={{ marginBottom: '2rem' }}>
-        <div 
+        <div
           onClick={() => {
             const event = new CustomEvent('navigateToScreen', { detail: 'streakTracker' });
             window.dispatchEvent(event);
           }}
-          style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
             alignItems: 'center',
             padding: '1rem',
             backgroundColor: 'white',
@@ -468,53 +501,53 @@ export default function LabsScreen() {
               </div>
             )}
             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', marginTop: '1.5rem' }}>
-                <button
-                  onClick={handlePrevTip}
-                  style={{
-                    padding: '8px 16px',
-                    backgroundColor: '#f3f4f6',
-                    border: 'none',
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    cursor: 'pointer',
-                    color: '#374151',
-                    flex: 1,
-                  }}
-                >
-                  {t('labs.tipBack')}
-                </button>
-                <button
-                  onClick={handleNextTip}
-                  style={{
-                    padding: '8px 16px',
-                    backgroundColor: '#f3f4f6',
-                    border: 'none',
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    cursor: 'pointer',
-                    color: '#374151',
-                    flex: 1,
-                  }}
-                >
-                  {t('labs.tipNext')}
-                </button>
+              <button
+                onClick={handlePrevTip}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#f3f4f6',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  color: '#374151',
+                  flex: 1,
+                }}
+              >
+                {t('labs.tipBack')}
+              </button>
+              <button
+                onClick={handleNextTip}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#f3f4f6',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  color: '#374151',
+                  flex: 1,
+                }}
+              >
+                {t('labs.tipNext')}
+              </button>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                <button
-                  onClick={() => handleShare(selectedTip)}
-                  style={{
-                    padding: '8px 16px',
-                    backgroundColor: '#fee2e2',
-                    border: 'none',
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    cursor: 'pointer',
-                    color: '#dc2626',
-                    flex: 1,
-                  }}
-                >
-                  {t('labs.tipShare')}
-                </button>
+              <button
+                onClick={() => handleShare(selectedTip)}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: '#fee2e2',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  color: '#dc2626',
+                  flex: 1,
+                }}
+              >
+                {t('labs.tipShare')}
+              </button>
             </div>
           </div>
         </div>

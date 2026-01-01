@@ -42,8 +42,9 @@ const LazyGiftScreen = lazy(() => import('./screens/GiftScreen'));
 const LazyShopScreen = lazy(() => import('./screens/ShopScreen'));
 const LazyRecipeScreen = lazy(() => import('./screens/RecipeScreen'));
 const LazyHealthDeviceScreen = lazy(() => import('./screens/HealthDeviceScreen'));
+const LazyInputScreen = lazy(() => import('./screens/InputScreen'));
 
-type Screen = 'home' | 'profile' | 'history' | 'labs' | 'settings' | 'userSettings' | 'streakTracker' | 'customFood' | 'community' | 'diary' | 'stats' | 'auth' | 'privacy' | 'terms' | 'dataExport' | 'dataImport' | 'dataDelete' | 'feedback' | 'consent' | 'onboarding' | 'language' | 'salt' | 'carbTarget' | 'nutrientCustom' | 'gift' | 'shop' | 'recipe' | 'healthDevice';
+type Screen = 'home' | 'profile' | 'history' | 'labs' | 'settings' | 'userSettings' | 'streakTracker' | 'customFood' | 'community' | 'diary' | 'stats' | 'auth' | 'privacy' | 'terms' | 'dataExport' | 'dataImport' | 'dataDelete' | 'feedback' | 'consent' | 'onboarding' | 'language' | 'salt' | 'carbTarget' | 'nutrientCustom' | 'gift' | 'shop' | 'recipe' | 'healthDevice' | 'input';
 
 // アプリケーション本体
 function AppContent() {
@@ -139,7 +140,7 @@ function AppContent() {
   useEffect(() => {
     const handleNavigate = (event: CustomEvent<string>) => {
       const screen = event.detail as Screen;
-      if (['home', 'profile', 'history', 'labs', 'settings', 'userSettings', 'streakTracker', 'customFood', 'community', 'diary', 'stats', 'auth', 'privacy', 'terms', 'dataExport', 'dataImport', 'dataDelete', 'feedback', 'consent', 'onboarding', 'language', 'salt', 'carbTarget', 'nutrientCustom', 'gift', 'shop', 'recipe', 'healthDevice'].includes(screen)) {
+      if (['home', 'profile', 'history', 'labs', 'settings', 'userSettings', 'streakTracker', 'customFood', 'community', 'diary', 'stats', 'auth', 'privacy', 'terms', 'dataExport', 'dataImport', 'dataDelete', 'feedback', 'consent', 'onboarding', 'language', 'salt', 'carbTarget', 'nutrientCustom', 'gift', 'shop', 'recipe', 'healthDevice', 'input'].includes(screen)) {
         setCurrentScreen(screen);
         // 画面遷移時にデータ更新を通知（各画面で再計算を促す）
         window.dispatchEvent(new CustomEvent('screenChanged'));
@@ -359,6 +360,13 @@ function AppContent() {
           {currentScreen === 'healthDevice' && (
             <Suspense fallback={<div style={{ padding: '2rem', textAlign: 'center' }}>読み込み中...</div>}>
               <LazyHealthDeviceScreen onBack={() => setCurrentScreen('labs')} />
+            </Suspense>
+          )}
+          {currentScreen === 'input' && (
+            <Suspense fallback={<div style={{ padding: '2rem', textAlign: 'center' }}>読み込み中...</div>}>
+              <LazyInputScreen
+                onClose={() => setCurrentScreen('home')}
+              />
             </Suspense>
           )}
         </div>

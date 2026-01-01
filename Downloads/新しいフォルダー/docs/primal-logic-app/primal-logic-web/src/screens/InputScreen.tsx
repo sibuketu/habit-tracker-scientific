@@ -42,7 +42,7 @@ export default function InputScreen({ onClose }: InputScreenProps = {}) {
     status: 'normal' | 'constipated' | 'loose' | 'watery';
     bristolScale?: number;
     notes?: string;
-  }>(dailyLog?.status.bowelMovement || { status: 'normal' });
+  }>(dailyLog?.status?.bowelMovement || { status: 'normal' });
 
   // dailyLogが変更されたら日記・体重・睡眠時間も更新
   useEffect(() => {
@@ -55,13 +55,13 @@ export default function InputScreen({ onClose }: InputScreenProps = {}) {
     if (dailyLog?.bodyFatPercentage !== undefined) {
       setBodyFatPercentage(dailyLog.bodyFatPercentage.toString());
     }
-    if (dailyLog?.status.sleepHours !== undefined) {
+    if (dailyLog?.status?.sleepHours !== undefined) {
       setSleepHours(dailyLog.status.sleepHours.toString());
     }
-    if (dailyLog?.status.bowelMovement) {
+    if (dailyLog?.status?.bowelMovement) {
       setBowelMovement(dailyLog.status.bowelMovement);
     }
-  }, [dailyLog?.diary, dailyLog?.weight, dailyLog?.bodyFatPercentage, dailyLog?.status.sleepHours, dailyLog?.status.bowelMovement]);
+  }, [dailyLog?.diary, dailyLog?.weight, dailyLog?.bodyFatPercentage, dailyLog?.status?.sleepHours, dailyLog?.status?.bowelMovement]);
 
   const [foodInput, setFoodInput] = useState('');
   const [foodAmount, setFoodAmount] = useState('300'); // カーニボアサイズのデフォルト（300g）

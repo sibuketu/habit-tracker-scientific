@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Deep Nutrition Data (Seed Data)
- * 
+ *
  * カーニボアにとっての「Tier 1（最重要）」データ
  * APIを使用せず、ローカルのマスターデータとして保持
  */
@@ -14,21 +14,21 @@ export interface DeepFoodItem {
   name_ja: string; // 日本語名
   part_location: PartLocation; // UI上の部位
   animal_type: AnimalType;
-  
+
   // マクロ (100gあたり)
   protein: number;
   fat: number;
   carbs: number;
-  
+
   // Primal Metrics (詳細データ)
   saturated_fat: number; // 重要なエネルギー源
   omega_6: number; // 低いほど良い
   zinc: number; // 亜鉛 (mg)
   vitamin_b12: number; // B12 (μg)
-  
+
   // UI用メッセージ
   primal_verdict: string; // 一言コメント
-  
+
   // 追加栄養素（既存システムとの互換性のため）
   hemeIron?: number;
   vitaminC?: number;
@@ -175,4 +175,3 @@ export function getFoodsByAnimal(animalType: AnimalType): DeepFoodItem[] {
 export function getDeepFoodById(id: string): DeepFoodItem | undefined {
   return MASTER_FOODS.find((food) => food.id === id);
 }
-

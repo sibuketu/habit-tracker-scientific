@@ -1,6 +1,6 @@
 /**
  * Calcium:Phosphorus Ratio Gauge
- * 
+ *
  * カルシウム:リン比率を表示
  * カーニボア重要：骨代謝に影響
  */
@@ -24,28 +24,29 @@ export default function CalciumPhosphorusRatioGauge({
 }: CalciumPhosphorusRatioGaugeProps) {
   const totalCalcium = calcium + previewCalcium;
   const totalPhosphorus = phosphorus + previewPhosphorus;
-  
+
   // 比率計算（Ca:P = ?:1）
-  const ratio = totalPhosphorus > 0 ? totalCalcium / totalPhosphorus : (totalCalcium > 0 ? Infinity : 0);
-  
+  const ratio =
+    totalPhosphorus > 0 ? totalCalcium / totalPhosphorus : totalCalcium > 0 ? Infinity : 0;
+
   // 推奨比率: 1:1以上（Dr. Paul Mason）
   const optimalRatioMin = 1.0;
-  
+
   // ステータス判定
   const getStatus = (): 'optimal' | 'warning' | 'low' => {
     if (totalCalcium === 0 && totalPhosphorus === 0) return 'low';
     if (ratio >= optimalRatioMin) return 'optimal';
     return 'warning'; // リン過多（骨代謝に悪影響）
   };
-  
+
   const status = getStatus();
-  
+
   const getStatusColor = () => {
     if (status === 'optimal') return '#34C759';
     if (status === 'warning') return '#FF3B30';
     return '#FF9500';
   };
-  
+
   return (
     <div
       className="nutrient-gauge-container"
@@ -53,7 +54,12 @@ export default function CalciumPhosphorusRatioGauge({
       style={{ cursor: onPress ? 'pointer' : 'default' }}
     >
       <div className="nutrient-gauge-header">
-        <span className="nutrient-gauge-label">カルシウム:リン比率</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          <span className="nutrient-gauge-label">カルシウム:リン比率</span>
+          <span style={{ fontSize: '10px', color: '#78716c' }}>
+            骨代謝に重要（推奨: 1:1以上）。リン過多は骨密度低下のリスクがあります。
+          </span>
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <span className="nutrient-gauge-value">
             {totalCalcium > 0 && totalPhosphorus > 0 ? (
@@ -77,10 +83,10 @@ export default function CalciumPhosphorusRatioGauge({
             )}
           </span>
           {status === 'warning' && (
-            <span 
-              style={{ 
-                fontSize: '12px', 
-                cursor: 'pointer', 
+            <span
+              style={{
+                fontSize: '12px',
+                cursor: 'pointer',
                 color: '#FF3B30',
               }}
               title="リン過多は骨代謝に悪影響があります。乳製品や骨粉、卵殻の摂取を推奨します。"
@@ -114,4 +120,3 @@ export default function CalciumPhosphorusRatioGauge({
     </div>
   );
 }
-

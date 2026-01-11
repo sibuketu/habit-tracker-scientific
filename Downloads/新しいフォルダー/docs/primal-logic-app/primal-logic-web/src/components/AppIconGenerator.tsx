@@ -1,31 +1,36 @@
 /**
  * アプリアイコン生成UIコンポーネント
- * 
+ *
  * 開発用: アプリアイコンの生成と確認を行うためのUI
  */
 
 import { useState } from 'react';
 // 自動生成版を使用（Replicate API）
-import { generateAppIconAuto, generateMultipleAppIconsAuto } from '../services/imageGenerationServiceAuto';
+import {
+  generateAppIconAuto,
+  generateMultipleAppIconsAuto,
+} from '../services/imageGenerationServiceAuto';
 // 手動生成版（プロンプトのみ）も残しておく
 import { generateAppIcon, generateMultipleAppIcons } from '../services/imageGenerationService';
 
 export function AppIconGenerator() {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedImages, setGeneratedImages] = useState<Array<{ style: number; variation: number; url: string }>>([]);
+  const [generatedImages, setGeneratedImages] = useState<
+    Array<{ style: number; variation: number; url: string }>
+  >([]);
   const [error, setError] = useState<string | null>(null);
 
   const handleGenerateAll = async () => {
     setIsGenerating(true);
     setError(null);
-    
+
     try {
       // 自動生成版を試す（Replicate API）
       const results = await generateMultipleAppIconsAuto();
       setGeneratedImages(results);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : '画像生成に失敗しました';
-      
+
       // Replicate APIが設定されていない場合は、手動生成版にフォールバック
       if (errorMessage.includes('Replicate APIトークンが設定されていません')) {
         try {
@@ -47,14 +52,14 @@ export function AppIconGenerator() {
   const handleGenerateSingle = async (style: 1 | 2 | 3, variation: 1 | 2 | 3 | 4 = 1) => {
     setIsGenerating(true);
     setError(null);
-    
+
     try {
       // 自動生成版を試す（Replicate API）
       const url = await generateAppIconAuto(style, variation);
-      setGeneratedImages(prev => [...prev, { style, variation, url }]);
+      setGeneratedImages((prev) => [...prev, { style, variation, url }]);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : '画像生成に失敗しました';
-      
+
       // Replicate APIが設定されていない場合は、手動生成版にフォールバック
       if (errorMessage.includes('Replicate APIトークンが設定されていません')) {
         try {
@@ -75,7 +80,7 @@ export function AppIconGenerator() {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">アプリアイコン生成</h1>
-      
+
       <div className="mb-4 space-x-2">
         <button
           onClick={handleGenerateAll}
@@ -84,7 +89,7 @@ export function AppIconGenerator() {
         >
           {isGenerating ? '生成中...' : '10個一括生成'}
         </button>
-        
+
         <button
           onClick={() => handleGenerateSingle(1, 1)}
           disabled={isGenerating}
@@ -92,7 +97,7 @@ export function AppIconGenerator() {
         >
           スタイル1-1を生成
         </button>
-        
+
         <button
           onClick={() => handleGenerateSingle(2, 1)}
           disabled={isGenerating}
@@ -100,7 +105,7 @@ export function AppIconGenerator() {
         >
           スタイル2-1を生成
         </button>
-        
+
         <button
           onClick={() => handleGenerateSingle(3, 1)}
           disabled={isGenerating}
@@ -117,11 +122,43 @@ export function AppIconGenerator() {
           <div className="text-sm">
             <p className="font-bold mb-1">✅ 無料で画像生成する方法:</p>
             <ul className="list-disc list-inside space-y-1">
-              <li><a href="https://replicate.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Replicate (Stable Diffusion)</a> - 無料枠あり</li>
-              <li><a href="https://huggingface.co/spaces/stabilityai/stable-diffusion" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Hugging Face</a> - 完全無料</li>
-              <li><a href="https://www.craiyon.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Craiyon</a> - 完全無料</li>
+              <li>
+                <a
+                  href="https://replicate.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  Replicate (Stable Diffusion)
+                </a>{' '}
+                - 無料枠あり
+              </li>
+              <li>
+                <a
+                  href="https://huggingface.co/spaces/stabilityai/stable-diffusion"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  Hugging Face
+                </a>{' '}
+                - 完全無料
+              </li>
+              <li>
+                <a
+                  href="https://www.craiyon.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  Craiyon
+                </a>{' '}
+                - 完全無料
+              </li>
             </ul>
-            <p className="mt-2 text-xs text-gray-600">プロンプトはクリップボードにコピーされています。上記のサービスに貼り付けて生成してください。</p>
+            <p className="mt-2 text-xs text-gray-600">
+              プロンプトはクリップボードにコピーされています。上記のサービスに貼り付けて生成してください。
+            </p>
           </div>
         </div>
       )}
@@ -153,4 +190,3 @@ export function AppIconGenerator() {
     </div>
   );
 }
-

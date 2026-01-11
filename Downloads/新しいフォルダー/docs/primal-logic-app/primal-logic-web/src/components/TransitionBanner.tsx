@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Transition Banner Component
- * 
+ *
  * Phase 1: 移行期間サポート - 移行期間バナー
  * 移行期間中（開始から30日間）のみ表示されるバナー
  */
@@ -42,9 +42,7 @@ export default function TransitionBanner({
         <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '0.25rem' }}>
           移行期間: {daysInTransition}/{totalDays}日（{Math.round(progress)}%）
         </div>
-        <div style={{ fontSize: '12px', opacity: 0.9 }}>
-          適応モード: 塩分目標を増量中
-        </div>
+        <div style={{ fontSize: '12px', opacity: 0.9 }}>適応モード: 塩分目標を増量中</div>
         {remainingDays > 0 && (
           <div style={{ fontSize: '11px', opacity: 0.8, marginTop: '0.25rem' }}>
             あと{remainingDays}日で移行期間終了
@@ -54,4 +52,3 @@ export default function TransitionBanner({
     </div>
   );
 }
-

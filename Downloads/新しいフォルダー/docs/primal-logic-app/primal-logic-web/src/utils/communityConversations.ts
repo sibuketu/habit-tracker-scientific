@@ -1,6 +1,6 @@
 /**
  * Community Conversations - コミュニティ会話のモックデータ
- * 
+ *
  * ユーザー同士の会話がデータとして解析され、集合知になる設計
  */
 
@@ -35,7 +35,8 @@ export const mockConversations: CommunityConversation[] = [
     title: '便秘が改善しました！マグネシウム600mgで',
     category: 'experience',
     author: '匿名ユーザーB',
-    content: 'マグネシウムを600mg摂取するようにしたら、便秘が完全に改善しました。2週間続けています。',
+    content:
+      'マグネシウムを600mg摂取するようにしたら、便秘が完全に改善しました。2週間続けています。',
     replies: 5,
     views: 189,
     upvotes: 15,
@@ -83,7 +84,8 @@ export const mockConversations: CommunityConversation[] = [
     title: 'こむら返りがなくなりました',
     category: 'experience',
     author: '匿名ユーザーF',
-    content: 'マグネシウムを増やしたら、こむら返りが完全になくなりました。毎日400mg摂取しています。',
+    content:
+      'マグネシウムを増やしたら、こむら返りが完全になくなりました。毎日400mg摂取しています。',
     replies: 4,
     views: 134,
     upvotes: 12,
@@ -91,4 +93,3 @@ export const mockConversations: CommunityConversation[] = [
     tags: ['こむら返り', '改善', 'マグネシウム'],
   },
 ];
-

@@ -21,7 +21,9 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   min-height: 200px;
 }
 
@@ -55,7 +57,9 @@
   font-size: 16px;
   margin-bottom: 20px;
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .food-category-title {
@@ -118,7 +122,9 @@
   display: flex;
   gap: 10px;
   align-items: center;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .food-category-amount-row {
@@ -135,7 +141,10 @@
   font-size: 16px;
   background-color: var(--color-bg-secondary);
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .food-category-unit-select {
@@ -145,12 +154,15 @@
   font-size: 16px;
   background-color: var(--color-bg-secondary);
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .food-category-add-button {
   padding: 12px 30px;
-  background-color: #34C759;
+  background-color: #34c759;
   color: white;
   border: none;
   border-radius: 8px;
@@ -160,6 +172,5 @@
 }
 
 .food-category-add-button:hover {
-  background-color: #30B050;
+  background-color: #30b050;
 }
-

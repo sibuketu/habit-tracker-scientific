@@ -1,66 +1,77 @@
-# Primal Logic - Capacitor設定ガイド
+# Capacitorセットアップ手順（2026-01-03）
 
-> WebアプリをCapacitorでiOSアプリ化する手順
-
----
-
-## 📱 Capacitorとは
-
-Capacitorは、Webアプリをネイティブアプリ（iOS/Android）に変換するツールです。
-
-**メリット**:
-- Webコードをそのまま使用可能
-- App Storeに公開可能
-- ネイティブ機能（通知、カメラ等）にアクセス可能
-- 開発効率が高い
+> Webアプリをネイティブアプリ化する手順
 
 ---
 
-## 🚀 セットアップ手順
+## ✅ 完了した作業
 
-### 1. Capacitorのインストール
+1. **Capacitorのインストール**: 完了
+   ```bash
+   npm install @capacitor/core @capacitor/cli @capacitor/ios @capacitor/android --save-dev
+   ```
+
+2. **Capacitorの初期化**: 完了
+   ```bash
+   npx cap init "Primal Logic" "com.primallogic.app" --web-dir="dist"
+   ```
+
+---
+
+## 📋 次のステップ
+
+### 1. Webアプリをビルド
 
 ```bash
 cd primal-logic-web
-npm install @capacitor/core @capacitor/cli
-npm install @capacitor/ios
+npm run build
 ```
 
-### 2. Capacitorの初期化
+これで`dist`ディレクトリにビルドされたファイルが生成されます。
 
+### 2. iOS/Androidプラットフォームを追加
+
+**Android（Windowsでも可能）:**
 ```bash
-npx cap init "Primal Logic" "com.primallogic.app"
+npx cap add android
 ```
 
-### 3. iOSプラットフォームの追加
-
+**iOS（macOSが必要）:**
 ```bash
 npx cap add ios
 ```
 
-### 4. Webアプリのビルド
+**注意**: WindowsではiOSプラットフォームの追加はできません。macOSが必要です。
 
-```bash
-npm run build
-```
-
-### 5. Capacitorに同期
+### 3. Capacitorに同期
 
 ```bash
 npx cap sync
 ```
 
-### 6. Xcodeで開く
+これで、ビルドされたWebアプリがネイティブプロジェクトにコピーされます。
 
+### 4. 実機でテスト
+
+**Android:**
+```bash
+npx cap open android
+```
+Android Studioが開くので、実機を接続して実行できます。
+
+**iOS（macOSが必要）:**
 ```bash
 npx cap open ios
 ```
+Xcodeが開くので、実機を接続して実行できます。
 
 ---
 
-## 📝 設定ファイル
+## 🔧 設定ファイル
 
-### `capacitor.config.ts`
+### capacitor.config.ts
+
+Capacitorの設定ファイルが作成されているはずです。確認してください。
 
 ```typescript
 import { CapacitorConfig } from '@capacitor/cli';
@@ -69,9 +80,7 @@ const config: CapacitorConfig = {
   appId: 'com.primallogic.app',
   appName: 'Primal Logic',
   webDir: 'dist',
-  server: {
-    androidScheme: 'https'
-  }
+  // その他の設定
 };
 
 export default config;
@@ -79,42 +88,23 @@ export default config;
 
 ---
 
-## 🔔 通知機能の追加
+## 📝 注意事項
 
-Capacitorでは、ネイティブ通知機能を使用できます：
-
-```bash
-npm install @capacitor/push-notifications
-```
-
-```typescript
-import { PushNotifications } from '@capacitor/push-notifications';
-
-// 通知の許可をリクエスト
-await PushNotifications.requestPermissions();
-```
+1. **WindowsでのiOS開発**: WindowsではiOSプラットフォームの追加はできません。macOSが必要です。
+2. **Android開発**: WindowsでもAndroid開発は可能です。
+3. **ビルド**: ネイティブアプリを実行する前に、必ず`npm run build`を実行してください。
 
 ---
 
-## 📦 App Store申請
+## 🎯 次のアクション
 
-1. Xcodeでプロジェクトを開く
-2. アプリ情報を設定（Bundle ID、バージョン等）
-3. 証明書とプロビジョニングプロファイルを設定
-4. Archiveを作成
-5. App Store Connectにアップロード
-6. 審査を申請
-
----
-
-## 🎯 次のステップ
-
-1. Webアプリの完成
-2. Capacitorのセットアップ
-3. iOSアプリのビルド
-4. App Store申請
+1. Webアプリをビルド: `npm run build`
+2. Androidプラットフォームを追加: `npx cap add android`
+3. Capacitorに同期: `npx cap sync`
+4. Android Studioで開く: `npx cap open android`
+5. 実機でテスト
 
 ---
 
-最終更新: 2025-12-18
+最終更新: 2026-01-03
 

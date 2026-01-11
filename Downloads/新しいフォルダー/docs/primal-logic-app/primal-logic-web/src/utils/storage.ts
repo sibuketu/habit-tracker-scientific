@@ -1,11 +1,19 @@
 /**
  * Primal Logic - Storage Utility (Web版)
- * 
+ *
  * SupabaseとlocalStorageの両方に対応したデータ永続化
  * Supabaseが利用可能な場合はSupabaseを優先、フォールバックとしてlocalStorageを使用
  */
 
-import type { DailyLog, UserProfile, UserGoal, MetabolicStatus, DietMode, ViolationType, CalculatedMetrics } from '../types';
+import type {
+  DailyLog,
+  UserProfile,
+  UserGoal,
+  MetabolicStatus,
+  DietMode,
+  ViolationType,
+  CalculatedMetrics,
+} from '../types';
 import type { DailyLogRow, ProfileRow } from '../types/supabase';
 import { supabase, isSupabaseAvailable } from '../lib/supabaseClient';
 import { logError } from './errorHandler';
@@ -44,13 +52,15 @@ export async function saveDailyLog(log: DailyLog): Promise<void> {
           sun_minutes: log.status.sunMinutes,
           activity_level: log.status.activityLevel,
           stress_level: log.status.stressLevel,
-          bowel_movement: log.status.bowelMovement ? {
-            status: log.status.bowelMovement.status,
-            bristol_scale: log.status.bowelMovement.bristolScale,
-            notes: log.status.bowelMovement.notes,
-          } : undefined,
+          bowel_movement: log.status.bowelMovement
+            ? {
+                status: log.status.bowelMovement.status,
+                bristol_scale: log.status.bowelMovement.bristolScale,
+                notes: log.status.bowelMovement.notes,
+              }
+            : undefined,
         },
-        fuel: log.fuel.map(f => ({
+        fuel: log.fuel.map((f) => ({
           item: f.item,
           amount: f.amount,
           unit: f.unit,
@@ -73,40 +83,64 @@ export async function saveDailyLog(log: DailyLog): Promise<void> {
           protein_requirement: log.calculatedMetrics.proteinRequirement,
           fat_total: log.calculatedMetrics.fatTotal,
           ...Object.fromEntries(
-            Object.entries(log.calculatedMetrics).filter(([key]) =>
-              !['netCarbs', 'effectiveVitC', 'vitCRequirement', 'effectiveVitK',
-                'effectiveIron', 'ironRequirement', 'effectiveZinc', 'fiberTotal',
-                'sodiumTotal', 'magnesiumTotal', 'effectiveProtein', 'proteinTotal',
-                'proteinRequirement', 'fatTotal'].includes(key)
-            ).map(([key, value]) => [key.toLowerCase().replace(/([A-Z])/g, '_$1').toLowerCase(), value])
+            Object.entries(log.calculatedMetrics)
+              .filter(
+                ([key]) =>
+                  ![
+                    'netCarbs',
+                    'effectiveVitC',
+                    'vitCRequirement',
+                    'effectiveVitK',
+                    'effectiveIron',
+                    'ironRequirement',
+                    'effectiveZinc',
+                    'fiberTotal',
+                    'sodiumTotal',
+                    'magnesiumTotal',
+                    'effectiveProtein',
+                    'proteinTotal',
+                    'proteinRequirement',
+                    'fatTotal',
+                  ].includes(key)
+              )
+              .map(([key, value]) => [
+                key
+                  .toLowerCase()
+                  .replace(/([A-Z])/g, '_$1')
+                  .toLowerCase(),
+                value,
+              ])
           ),
         },
-        recovery_protocol: log.recoveryProtocol ? {
-          violation_type: log.recoveryProtocol.violationType,
-          is_active: log.recoveryProtocol.isActive,
-          fasting_target_hours: log.recoveryProtocol.fastingTargetHours,
-          activities: log.recoveryProtocol.activities,
-          diet_recommendations: log.recoveryProtocol.dietRecommendations,
-          supplements: log.recoveryProtocol.supplements,
-          warnings: log.recoveryProtocol.warnings,
-          protocol_id: log.recoveryProtocol.protocolId,
-          target_fast_end: log.recoveryProtocol.targetFastEnd,
-        } : undefined,
+        recovery_protocol: log.recoveryProtocol
+          ? {
+              violation_type: log.recoveryProtocol.violationType,
+              is_active: log.recoveryProtocol.isActive,
+              fasting_target_hours: log.recoveryProtocol.fastingTargetHours,
+              activities: log.recoveryProtocol.activities,
+              diet_recommendations: log.recoveryProtocol.dietRecommendations,
+              supplements: log.recoveryProtocol.supplements,
+              warnings: log.recoveryProtocol.warnings,
+              protocol_id: log.recoveryProtocol.protocolId,
+              target_fast_end: log.recoveryProtocol.targetFastEnd,
+            }
+          : undefined,
         diary: log.diary,
         weight: log.weight,
         body_fat_percentage: log.bodyFatPercentage,
       };
 
       // Upsert操作（存在する場合は更新、存在しない場合は挿入）
-      const { error } = await supabase
-        .from('daily_logs')
-        .upsert({
+      const { error } = await supabase.from('daily_logs').upsert(
+        {
           ...logRow,
           user_id: userId,
           date: log.date,
-        }, {
+        },
+        {
           onConflict: 'user_id,date',
-        });
+        }
+      );
 
       if (error) {
         logError(error, { component: 'storage', action: 'saveDailyLog', step: 'supabase' });
@@ -124,6 +158,9 @@ export async function saveDailyLog(log: DailyLog): Promise<void> {
 
   // localStorageに保存（Supabaseが利用不可、またはエラー時）
   await saveToLocalStorage(log);
+  
+  // キャッシュをクリア（次回getDailyLogs()で最新データを取得）
+  clearDailyLogsCache();
 }
 
 /**
@@ -179,7 +216,8 @@ export async function getDailyLogByDate(date: string): Promise<DailyLog | null> 
         .eq('date', date)
         .single();
 
-      if (error && error.code !== 'PGRST116') { // PGRST116は「行が見つからない」エラー
+      if (error && error.code !== 'PGRST116') {
+        // PGRST116は「行が見つからない」エラー
         logError(error, { component: 'storage', action: 'getDailyLogByDate', step: 'supabase' });
         // フォールバック: localStorageから取得
         return getFromLocalStorage(date);
@@ -222,60 +260,114 @@ export function clearDebugDataCache() {
   cachedDebugData = null;
 }
 
+// 通常モードのキャッシュ（無限ループ防止）
+let cachedNormalData: DailyLog[] | null = null;
+let lastCacheTime: number = 0;
+const CACHE_DURATION = 2000; // 2秒間キャッシュ
+
+export function clearDailyLogsCache() {
+  cachedNormalData = null;
+  lastCacheTime = 0;
+}
+
+// 呼び出し頻度制限（無限ループ防止）
+let isGettingLogs = false;
+let lastGetTime = 0;
+const MIN_GET_INTERVAL = 1000; // 1秒以内の連続呼び出しを防ぐ
+
 export async function getDailyLogs(): Promise<DailyLog[]> {
-  // デバッグモードチェック
-  const debugMode = localStorage.getItem('settings_debug_mode');
-  if (import.meta.env.DEV) {
-    console.log('getDailyLogs: debugMode =', debugMode);
-  }
-  // JSON.parseでbooleanに変換（'true'文字列ではなく）
-  const isDebugMode = debugMode === 'true' || (debugMode !== null && JSON.parse(debugMode) === true);
-  if (isDebugMode) {
-    // キャッシュがあればそれを使用（毎回ランダム生成しない）
+  // 呼び出し頻度制限（1秒以内の連続呼び出しを防ぐ）
+  const now = Date.now();
+  if (isGettingLogs || (now - lastGetTime) < MIN_GET_INTERVAL) {
+    // 既に取得中、または1秒以内の場合はキャッシュを返す
     if (cachedDebugData) {
       return cachedDebugData;
     }
-    const { generateDebugData } = await import('./debugData');
-    cachedDebugData = generateDebugData();
-    if (import.meta.env.DEV) {
-      console.log('getDailyLogs: Generated debug data:', cachedDebugData.length, 'items');
-      if (cachedDebugData.length > 0) {
-        console.log('getDailyLogs: First debug log:', cachedDebugData[0].date, 'foods:', cachedDebugData[0].fuel?.length || 0);
-      }
+    if (cachedNormalData) {
+      return cachedNormalData;
     }
-    return cachedDebugData;
-  }
-
-  // デバッグモードがOFFの場合はキャッシュをクリア
-  cachedDebugData = null;
-
-  const userId = getUserId();
-
-  // Supabaseが利用可能な場合
-  if (isSupabaseAvailable() && supabase) {
-    try {
-      const { data, error } = await supabase
-        .from('daily_logs')
-        .select('*')
-        .eq('user_id', userId)
-        .order('date', { ascending: false });
-
-      if (error) {
-        logError(error, { component: 'storage', action: 'getDailyLogs', step: 'supabase' });
-        // フォールバック: localStorageから取得
-        return getFromLocalStorageAll();
-      }
-
-      if (data && data.length > 0) {
-        return data.map(row => convertLogRowToDailyLog(row as DailyLogRow));
-      }
-    } catch (error) {
-      logError(error, { component: 'storage', action: 'getDailyLogs', step: 'fallback' });
+    // キャッシュがない場合は待機（既に取得中の場合は待つ）
+    if (isGettingLogs) {
+      // 最大500ms待機
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (cachedDebugData) return cachedDebugData;
+      if (cachedNormalData) return cachedNormalData;
     }
+    // キャッシュがなく、取得中でもない場合は空配列を返す（無限ループ防止）
+    return [];
   }
+  
+  isGettingLogs = true;
+  lastGetTime = now;
+  
+  try {
+    // デバッグモードチェック
+    const debugMode = localStorage.getItem('settings_debug_mode');
+    // JSON.parseでbooleanに変換（'true'文字列ではなく）
+    const isDebugMode =
+      debugMode === 'true' || (debugMode !== null && JSON.parse(debugMode) === true);
+    
+    if (isDebugMode) {
+      // キャッシュがあればそれを使用（毎回ランダム生成しない）
+      if (cachedDebugData) {
+        isGettingLogs = false;
+        return cachedDebugData;
+      }
+      const { generateDebugData } = await import('./debugData');
+      cachedDebugData = generateDebugData();
+      isGettingLogs = false;
+      return cachedDebugData;
+    }
+  
+    // 通常モード: キャッシュをチェック（2秒以内ならキャッシュを返す）
+    const cacheNow = Date.now();
+    if (cachedNormalData && (cacheNow - lastCacheTime) < CACHE_DURATION) {
+      isGettingLogs = false;
+      return cachedNormalData;
+    }
 
-  // localStorageから取得
-  return getFromLocalStorageAll();
+    // デバッグモードがOFFの場合はキャッシュをクリア
+    cachedDebugData = null;
+
+    const userId = getUserId();
+    let result: DailyLog[];
+
+    // Supabaseが利用可能な場合
+    if (isSupabaseAvailable() && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('daily_logs')
+          .select('*')
+          .eq('user_id', userId)
+          .order('date', { ascending: false });
+
+        if (error) {
+          logError(error, { component: 'storage', action: 'getDailyLogs', step: 'supabase' });
+          // フォールバック: localStorageから取得
+          result = getFromLocalStorageAll();
+        } else if (data && data.length > 0) {
+          result = data.map((row) => convertLogRowToDailyLog(row as DailyLogRow));
+        } else {
+          result = getFromLocalStorageAll();
+        }
+      } catch (error) {
+        logError(error, { component: 'storage', action: 'getDailyLogs', step: 'fallback' });
+        result = getFromLocalStorageAll();
+      }
+    } else {
+      // localStorageから取得
+      result = getFromLocalStorageAll();
+    }
+    
+    // キャッシュを更新
+    cachedNormalData = result;
+    lastCacheTime = Date.now();
+    
+    isGettingLogs = false;
+    return result;
+  } finally {
+    isGettingLogs = false;
+  }
 }
 
 /**
@@ -304,13 +396,15 @@ function convertLogRowToDailyLog(row: DailyLogRow): DailyLog {
       sunMinutes: row.status.sun_minutes,
       activityLevel: row.status.activity_level,
       stressLevel: row.status.stress_level,
-      bowelMovement: row.status.bowel_movement ? {
-        status: row.status.bowel_movement.status,
-        bristolScale: row.status.bowel_movement.bristol_scale,
-        notes: row.status.bowel_movement.notes,
-      } : undefined,
+      bowelMovement: row.status.bowel_movement
+        ? {
+            status: row.status.bowel_movement.status,
+            bristolScale: row.status.bowel_movement.bristol_scale,
+            notes: row.status.bowel_movement.notes,
+          }
+        : undefined,
     },
-    fuel: row.fuel.map(f => ({
+    fuel: row.fuel.map((f) => ({
       item: f.item,
       amount: f.amount,
       unit: f.unit,
@@ -333,17 +427,19 @@ function convertLogRowToDailyLog(row: DailyLogRow): DailyLog {
       proteinRequirement: row.calculated_metrics.protein_requirement ?? 0,
       fatTotal: row.calculated_metrics.fat_total ?? 0,
     } as CalculatedMetrics,
-    recoveryProtocol: row.recovery_protocol ? {
-      violationType: row.recovery_protocol.violation_type as ViolationType,
-      isActive: row.recovery_protocol.is_active,
-      fastingTargetHours: row.recovery_protocol.fasting_target_hours,
-      activities: row.recovery_protocol.activities,
-      dietRecommendations: row.recovery_protocol.diet_recommendations,
-      supplements: row.recovery_protocol.supplements,
-      warnings: row.recovery_protocol.warnings,
-      protocolId: row.recovery_protocol.protocol_id,
-      targetFastEnd: row.recovery_protocol.target_fast_end,
-    } : undefined,
+    recoveryProtocol: row.recovery_protocol
+      ? {
+          violationType: row.recovery_protocol.violation_type as ViolationType,
+          isActive: row.recovery_protocol.is_active,
+          fastingTargetHours: row.recovery_protocol.fasting_target_hours,
+          activities: row.recovery_protocol.activities,
+          dietRecommendations: row.recovery_protocol.diet_recommendations,
+          supplements: row.recovery_protocol.supplements,
+          warnings: row.recovery_protocol.warnings,
+          protocolId: row.recovery_protocol.protocol_id,
+          targetFastEnd: row.recovery_protocol.target_fast_end,
+        }
+      : undefined,
     diary: row.diary,
     weight: row.weight,
     bodyFatPercentage: row.body_fat_percentage,
@@ -362,12 +458,15 @@ export async function getTodayLog(): Promise<DailyLog | null> {
 
   // デバッグモードチェック
   const debugMode = localStorage.getItem('settings_debug_mode');
-  const isDebugMode = debugMode === 'true' || (debugMode !== null && JSON.parse(debugMode) === true);
+  const isDebugMode =
+    debugMode === 'true' || (debugMode !== null && JSON.parse(debugMode) === true);
 
   if (isDebugMode && !actualLog) {
-    // デバッグモードで実際のデータがない場合のみ、デバッグデータから今日のログを取得
-    const allLogs = await getDailyLogs(); // getDailyLogs()がデバッグデータを返す
-    return allLogs.find(log => log.date === today) || null;
+    // デバッグモードで実際のデータがない場合のみ、デバッグデータを直接生成（無限ループ防止）
+    // getDailyLogs()を呼ばずに、直接generateDebugData()を呼ぶ
+    const { generateDebugData } = await import('./debugData');
+    const debugData = generateDebugData();
+    return debugData.find((log) => log.date === today) || null;
   }
 
   // 実際のデータがある場合はそれを返す（デバッグモードでも）
@@ -381,7 +480,8 @@ export async function deleteDailyLog(date: string): Promise<void> {
   try {
     // デバッグモードの場合はデバッグデータをクリア
     const debugMode = localStorage.getItem('settings_debug_mode');
-    const isDebugMode = debugMode === 'true' || (debugMode !== null && JSON.parse(debugMode) === true);
+    const isDebugMode =
+      debugMode === 'true' || (debugMode !== null && JSON.parse(debugMode) === true);
     if (isDebugMode) {
       // デバッグモードの場合はキャッシュをクリア
       clearDebugDataCache();
@@ -405,7 +505,11 @@ export async function deleteDailyLog(date: string): Promise<void> {
           logError(error, { component: 'storage', action: 'deleteDailyLog', step: 'supabase' });
         }
       } catch (error) {
-        logError(error, { component: 'storage', action: 'deleteDailyLog', step: 'supabase-fallback' });
+        logError(error, {
+          component: 'storage',
+          action: 'deleteDailyLog',
+          step: 'supabase-fallback',
+        });
       }
     }
 
@@ -458,14 +562,15 @@ export async function saveUserProfile(profile: UserProfile): Promise<void> {
         language: profile.language,
       };
 
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({
+      const { error } = await supabase.from('profiles').upsert(
+        {
           ...profileRow,
           user_id: userId,
-        }, {
+        },
+        {
           onConflict: 'user_id',
-        });
+        }
+      );
 
       if (error) {
         logError(error, { component: 'storage', action: 'saveUserProfile', step: 'supabase' });
@@ -493,6 +598,17 @@ export async function saveUserProfile(profile: UserProfile): Promise<void> {
  * Get user profile (Supabase優先、フォールバック: localStorage)
  */
 export async function getUserProfile(): Promise<UserProfile | null> {
+  // デバッグモードチェック
+  const debugMode = localStorage.getItem('settings_debug_mode');
+  const isDebugMode =
+    debugMode === 'true' || (debugMode !== null && JSON.parse(debugMode) === true);
+
+  if (isDebugMode) {
+    // デバッグモードの場合は、デバッグプロファイルを生成・返す
+    const { generateDebugProfile } = await import('./debugData');
+    return generateDebugProfile();
+  }
+
   const userId = getUserId();
 
   // Supabaseが利用可能な場合
@@ -613,7 +729,12 @@ export async function syncLocalStorageToSupabase(): Promise<void> {
         if (err.code === 'PGRST116') {
           await saveDailyLog(log);
         } else {
-          logError(err, { component: 'storage', action: 'syncLocalStorageToSupabase', step: 'checkLog', date: log.date });
+          logError(err, {
+            component: 'storage',
+            action: 'syncLocalStorageToSupabase',
+            step: 'checkLog',
+            date: log.date,
+          });
         }
       }
     }
@@ -636,11 +757,14 @@ export async function syncLocalStorageToSupabase(): Promise<void> {
         if (err.code === 'PGRST116') {
           await saveUserProfile(localProfile);
         } else {
-          logError(err, { component: 'storage', action: 'syncLocalStorageToSupabase', step: 'checkProfile' });
+          logError(err, {
+            component: 'storage',
+            action: 'syncLocalStorageToSupabase',
+            step: 'checkProfile',
+          });
         }
       }
     }
-
   } catch (error) {
     logError(error, { component: 'storage', action: 'syncLocalStorageToSupabase' });
     throw error;
@@ -694,10 +818,10 @@ export async function importAllData(jsonData: string): Promise<void> {
     if (data.userProfile) {
       await saveUserProfile(data.userProfile);
     }
-
   } catch (error) {
     logError(error, { component: 'storage', action: 'importAllData' });
-    throw new Error('データのインポートに失敗しました。' + (error instanceof Error ? error.message : ''));
+    throw new Error(
+      'データのインポートに失敗しました。' + (error instanceof Error ? error.message : '')
+    );
   }
 }
-

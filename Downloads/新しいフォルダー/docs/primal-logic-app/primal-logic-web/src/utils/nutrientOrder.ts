@@ -1,12 +1,12 @@
 /**
  * Primal Logic - Nutrient Order Management
- * 
+ *
  * 栄養素の表示順序と並び替え機能
  */
 
 import { logError } from './errorHandler';
 
-export type NutrientKey = 
+export type NutrientKey =
   | 'vitaminC'
   | 'vitaminK'
   | 'iron'
@@ -77,13 +77,16 @@ export function getNutrientOrder(): NutrientOrderConfig[] {
     if (saved) {
       const parsed = JSON.parse(saved);
       // 新しい栄養素（glycineMethionineRatio等）が含まれているか確認
-      const hasNewNutrients = parsed.some((item: NutrientOrderConfig) => 
-        item.key === 'glycineMethionineRatio' || item.key === 'calciumPhosphorusRatio'
+      const hasNewNutrients = parsed.some(
+        (item: NutrientOrderConfig) =>
+          item.key === 'glycineMethionineRatio' || item.key === 'calciumPhosphorusRatio'
       );
       // 新しい栄養素が含まれていない場合は、デフォルト順序を使用
       if (!hasNewNutrients) {
         if (import.meta.env.DEV) {
-          console.log('[nutrientOrder] 新しい栄養素が含まれていないため、デフォルト順序を使用します');
+          console.log(
+            '[nutrientOrder] 新しい栄養素が含まれていないため、デフォルト順序を使用します'
+          );
         }
         return DEFAULT_NUTRIENT_ORDER;
       }
@@ -109,7 +112,10 @@ export function saveNutrientOrder(order: NutrientOrderConfig[]): void {
 /**
  * Move nutrient up in order
  */
-export function moveNutrientUp(order: NutrientOrderConfig[], key: NutrientKey): NutrientOrderConfig[] {
+export function moveNutrientUp(
+  order: NutrientOrderConfig[],
+  key: NutrientKey
+): NutrientOrderConfig[] {
   const index = order.findIndex((item) => item.key === key);
   if (index <= 0) return order;
 
@@ -121,7 +127,10 @@ export function moveNutrientUp(order: NutrientOrderConfig[], key: NutrientKey): 
 /**
  * Move nutrient down in order
  */
-export function moveNutrientDown(order: NutrientOrderConfig[], key: NutrientKey): NutrientOrderConfig[] {
+export function moveNutrientDown(
+  order: NutrientOrderConfig[],
+  key: NutrientKey
+): NutrientOrderConfig[] {
   const index = order.findIndex((item) => item.key === key);
   if (index < 0 || index >= order.length - 1) return order;
 
@@ -129,4 +138,3 @@ export function moveNutrientDown(order: NutrientOrderConfig[], key: NutrientKey)
   [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
   return newOrder;
 }
-

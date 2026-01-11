@@ -1,102 +1,176 @@
-/* @tailwind base;
+@tailwind base;
 @tailwind components;
-@tailwind utilities; */
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
 :root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Color Palette - "Toxic Neon" */
+  --primal-bg: #050505;
+  --primal-text: #e0e0e0;
+  --neon-green: #00ff9d;
+  --neon-red: #ff0055;
+  --neon-blue: #00d9ff;
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --surface-texture: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
 
-  color-scheme: light;
-  color: #213547;
-  background-color: #ffffff;
+  --background-color: var(--primal-bg);
+  --text-color: var(--primal-text);
+  --primary-color: var(--neon-green);
+  --secondary-color: var(--neon-blue);
+  --accent-color: var(--neon-red);
+  --border-color: var(--glass-border);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  
-  /* フォントサイズのデフォルト値 */
-  --app-font-size: 16px;
-
-  /* Light Theme Colors - Natural Premium Palette */
-  --color-bg-root: #FAFAF9;
-  --color-bg-primary: #FFFFFF;
-  --color-bg-secondary: #F5F5F4;
-  --color-bg-tertiary: #E7E5E4;
-  --color-text-primary: #1C1917;
-  --color-text-secondary: #78716C;
-  --color-text-tertiary: #A8A29E;
-  --color-border: #E7E5E4;
-  --color-border-subtle: #F5F5F4;
-  
-  /* Accent Colors - Premium Red/Brown */
-  --color-accent: #C41E3A;
-  --color-accent-hover: #A0172F;
-  --color-accent-secondary: #8B4513;
-  --color-accent-tertiary: #D4AF37;
-  
-  /* Semantic Colors - Natural */
-  --color-success: #10B981;
-  --color-success-light: #D1FAE5;
-  --color-warning: #F59E0B;
-  --color-warning-light: #FEF3C7;
-  --color-error: #EF4444;
-  --color-error-light: #FEE2E2;
-}
-
-[data-theme="dark"] {
-  color-scheme: dark;
-  color: #ffffff;
-  background-color: #000000;
-
-  /* Dark Theme Colors - Natural Premium Palette */
-  --color-bg-root: #0A0A0A;
-  --color-bg-primary: #1C1917;
-  --color-bg-secondary: #292524;
-  --color-bg-tertiary: #44403C;
-  --color-text-primary: #FAFAF9;
-  --color-text-secondary: #A8A29E;
-  --color-text-tertiary: #78716C;
-  --color-border: #44403C;
-  --color-border-subtle: #292524;
-  
-  /* Accent Colors - Premium Red/Brown (Dark Mode) */
-  --color-accent: #E63950;
-  --color-accent-hover: #F87171;
-  --color-accent-secondary: #A78B5F;
-  --color-accent-tertiary: #FCD34D;
-  
-  /* Semantic Colors - Natural (Dark Mode) */
-  --color-success: #34D399;
-  --color-success-light: #065F46;
-  --color-warning: #FBBF24;
-  --color-warning-light: #78350F;
-  --color-error: #F87171;
-  --color-error-light: #7F1D1D;
+  --font-body: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* アクセシビリティ: フォーカス表示の改善 */
+body {
+  font-family: var(--font-body);
+  background-color: var(--primal-bg);
+  background-image:
+    var(--surface-texture),
+    radial-gradient(circle at 50% 0%, #1a1a1a 0%, var(--primal-bg) 70%);
+  color: var(--primal-text);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  width: 100vw;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app-content {
+  flex: 1;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  padding-bottom: 80px;
+  /* Space for bottom nav */
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--neon-green);
+  text-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+}
+
+/* Cards (Glassmorphism) */
+.stat-card,
+.card,
+.dashboard-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card:hover,
+.card:hover {
+  border-color: var(--neon-green);
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Buttons */
+button {
+  background: transparent;
+  border: 1px solid var(--neon-green);
+  color: var(--neon-green);
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 255, 157, 0.1);
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  background: var(--neon-green);
+  color: #000;
+  box-shadow: 0 0 30px rgba(0, 255, 157, 0.4);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  color: var(--primal-text);
+  font-family: var(--font-body);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.2);
+}
+
+/* Accessibility: Focus visible */
 *:focus-visible {
-  outline: 2px solid var(--color-accent, #3b82f6);
+  outline: 2px solid var(--neon-green);
   outline-offset: 2px;
 }
 
-/* アクセシビリティ: キーボードナビゲーション */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid var(--color-accent, #3b82f6);
+  outline: 2px solid var(--neon-green);
   outline-offset: 2px;
 }
 
-/* アクセシビリティ: スクリーンリーダー用の非表示要素 */
+/* Accessibility: Screen reader only */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -109,41 +183,64 @@ select:focus-visible {
   border-width: 0;
 }
 
-html {
-  font-size: var(--app-font-size);
+/* Glow Animation */
+@keyframes breathe {
+  0% {
+    text-shadow: 0 0 5px rgba(0, 255, 157, 0.2);
+  }
+
+  50% {
+    text-shadow: 0 0 20px rgba(0, 255, 157, 0.6);
+  }
+
+  100% {
+    text-shadow: 0 0 5px rgba(0, 255, 157, 0.2);
+  }
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  font-size: var(--app-font-size);
-  background-color: var(--color-bg-root);
-  color: var(--color-text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+
+/* AI Speed Dial & Chat Styling (Fat Finger & Neon) */
+.ai-speed-dial-container {
+  position: fixed;
+  bottom: 80px;
+  /* Above bottom nav */
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column-reverse;
+  /* Expand upwards */
+  gap: 16px;
+  align-items: center;
 }
 
-#root {
-  width: 100%;
-  height: 100vh;
-  font-size: var(--app-font-size);
+.ai-chat-bubble {
+  position: fixed;
+  /* Default position, overridden by inline styles */
+  right: 20px;
+  bottom: 120px;
+  width: 300px;
+  max-width: 90vw;
+  background: rgba(10, 10, 10, 0.95);
+  border: 1px solid var(--neon-green);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
+  z-index: 1001;
+  /* Above speed dial */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
+
+/* Global Scrollbar Hiding (User Rule: No Scrollbars) */
+::-webkit-scrollbar {
+  display: none;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-input, textarea, select {
-  font-family: inherit;
+* {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }

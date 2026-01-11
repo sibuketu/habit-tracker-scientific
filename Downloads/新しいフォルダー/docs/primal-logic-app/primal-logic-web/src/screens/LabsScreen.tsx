@@ -1,6 +1,6 @@
 /**
  * Labs Screen - 「その他（Labs）」画面
- * 
+ *
  * 必須かどうか迷った結果とりあえず実装した機能たち
  */
 
@@ -62,7 +62,7 @@ export default function LabsScreen() {
 
     // お気に入り登録したTipsを追加
     if (savedTipIds.length > 0) {
-      const savedTips = TIPS_DATA.filter(tip => savedTipIds.includes(tip.id));
+      const savedTips = TIPS_DATA.filter((tip) => savedTipIds.includes(tip.id));
       history.push(...savedTips);
     }
 
@@ -77,20 +77,22 @@ export default function LabsScreen() {
     }
 
     // 重複を除去（idで判定）
-    const uniqueHistory = history.filter((item, index, self) =>
-      index === self.findIndex((t) =>
-        ('id' in item && 'id' in t && item.id === t.id) ||
-        ('symptom' in item && 'symptom' in t && item.symptom === t.symptom)
-      )
+    const uniqueHistory = history.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex(
+          (t) =>
+            ('id' in item && 'id' in t && item.id === t.id) ||
+            ('symptom' in item && 'symptom' in t && item.symptom === t.symptom)
+        )
     );
 
     setTipHistory(uniqueHistory);
   }, []);
 
-
   // Tip詳細を表示
   const handleTipClick = (tip: Tip) => {
-    const tipIndex = TIPS_DATA.findIndex(t => t.id === tip.id);
+    const tipIndex = TIPS_DATA.findIndex((t) => t.id === tip.id);
     setCurrentTipIndex(tipIndex >= 0 ? tipIndex : 0);
     setSelectedTip(tip);
     setIsCurrentTipSaved(isTipSaved(tip.id));
@@ -146,12 +148,64 @@ export default function LabsScreen() {
   };
 
   return (
-    <div className="labs-screen-container" style={{ padding: '1rem', maxWidth: '600px', margin: '0 auto' }}>
+    <div
+      className="labs-screen-container"
+      style={{ padding: '1rem', maxWidth: '600px', margin: '0 auto' }}
+    >
       {/* 説明文 */}
-      <div style={{ marginBottom: '2rem', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+      <div
+        style={{
+          marginBottom: '2rem',
+          padding: '1rem',
+          backgroundColor: '#f9fafb',
+          borderRadius: '8px',
+        }}
+      >
         <p style={{ fontSize: '14px', color: '#78716c', lineHeight: '1.6' }}>
           {t('labs.description')}
         </p>
+      </div>
+
+      {/* Bio-Hack Dashboard (Experimental) - ボタンで表示 */}
+      <div style={{ marginBottom: '2rem' }}>
+        <div
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const event = new CustomEvent('navigateToScreen', { detail: 'bioHack' });
+            window.dispatchEvent(event);
+          }}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '1rem',
+            backgroundColor: '#ecfdf5',
+            borderRadius: '8px',
+            border: '1px solid #10b981',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#d1fae5')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ecfdf5')}
+        >
+          <div>
+            <h3
+              style={{
+                fontSize: '16px',
+                fontWeight: 'bold',
+                marginBottom: '4px',
+                color: '#065f46',
+              }}
+            >
+              🧬 Bio-Hack Terminal
+            </h3>
+            <p style={{ fontSize: '12px', color: '#065f46' }}>
+              代謝状態、細胞修復、栄養素の詳細分析
+            </p>
+          </div>
+          <span style={{ fontSize: '20px', color: '#065f46' }}>→</span>
+        </div>
       </div>
 
       {/* Bio-Tuner (日次入力) */}
@@ -174,11 +228,20 @@ export default function LabsScreen() {
             cursor: 'pointer',
             transition: 'background-color 0.2s',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#d1fae5'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ecfdf5'}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#d1fae5')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ecfdf5')}
         >
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px', color: '#065f46' }}>🧬 Bio-Tuner (Daily)</h3>
+            <h3
+              style={{
+                fontSize: '16px',
+                fontWeight: 'bold',
+                marginBottom: '4px',
+                color: '#065f46',
+              }}
+            >
+              🧬 Bio-Tuner (Daily)
+            </h3>
             <p style={{ fontSize: '12px', color: '#065f46' }}>
               {t('labs.inputDescription') || '睡眠、太陽光、排泄、体調記録など'}
             </p>
@@ -207,16 +270,58 @@ export default function LabsScreen() {
             cursor: 'pointer',
             transition: 'background-color 0.2s',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'white')}
         >
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px' }}>📝 {t('labs.diary')}</h3>
-            <p style={{ fontSize: '12px', color: '#78716c' }}>
-              {t('labs.diaryDescription')}
-            </p>
+            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px' }}>
+              📝 {t('labs.diary')}
+            </h3>
+            <p style={{ fontSize: '12px', color: '#78716c' }}>{t('labs.diaryDescription')}</p>
           </div>
           <span style={{ fontSize: '20px' }}>→</span>
+        </div>
+      </div>
+
+      {/* If-Thenルール */}
+      <div style={{ marginBottom: '2rem' }}>
+        <div
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const event = new CustomEvent('navigateToScreen', { detail: 'ifThenRules' });
+            window.dispatchEvent(event);
+          }}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '1rem',
+            backgroundColor: '#fef3c7',
+            borderRadius: '8px',
+            border: '1px solid #fbbf24',
+            cursor: 'pointer',
+            transition: 'background-color 0.2s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#fde68a')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#fef3c7')}
+        >
+          <div>
+            <h3
+              style={{
+                fontSize: '16px',
+                fontWeight: 'bold',
+                marginBottom: '4px',
+                color: '#92400e',
+              }}
+            >
+              ⚙️ If-Thenルール
+            </h3>
+            <p style={{ fontSize: '12px', color: '#92400e' }}>
+              外食時、糖質摂取時など、条件に応じた自動アクションを設定
+            </p>
+          </div>
+          <span style={{ fontSize: '20px', color: '#92400e' }}>→</span>
         </div>
       </div>
 
@@ -240,19 +345,18 @@ export default function LabsScreen() {
             cursor: 'pointer',
             transition: 'background-color 0.2s',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'white')}
         >
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px' }}>📈 {t('labs.stats')}</h3>
-            <p style={{ fontSize: '12px', color: '#78716c' }}>
-              {t('labs.statsDescription')}
-            </p>
+            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px' }}>
+              📈 {t('labs.stats')}
+            </h3>
+            <p style={{ fontSize: '12px', color: '#78716c' }}>{t('labs.statsDescription')}</p>
           </div>
           <span style={{ fontSize: '20px' }}>→</span>
         </div>
       </div>
-
 
       {/* コミュニティ機能 */}
       <div style={{ marginBottom: '2rem' }}>
@@ -274,14 +378,14 @@ export default function LabsScreen() {
             cursor: 'pointer',
             transition: 'background-color 0.2s',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'white')}
         >
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px' }}>🤝 {t('labs.community')}</h3>
-            <p style={{ fontSize: '12px', color: '#78716c' }}>
-              {t('labs.communityDescription')}
-            </p>
+            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px' }}>
+              🤝 {t('labs.community')}
+            </h3>
+            <p style={{ fontSize: '12px', color: '#78716c' }}>{t('labs.communityDescription')}</p>
           </div>
           <span style={{ fontSize: '20px' }}>→</span>
         </div>
@@ -307,14 +411,21 @@ export default function LabsScreen() {
             cursor: 'pointer',
             transition: 'background-color 0.2s',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e0f2fe'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f0f9ff'}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#e0f2fe')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#f0f9ff')}
         >
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px', color: '#0c4a6e' }}>🛍️ {t('labs.shop')}</h3>
-            <p style={{ fontSize: '12px', color: '#0c4a6e' }}>
-              {t('labs.shopDescription')}
-            </p>
+            <h3
+              style={{
+                fontSize: '16px',
+                fontWeight: 'bold',
+                marginBottom: '4px',
+                color: '#0c4a6e',
+              }}
+            >
+              🛍️ {t('labs.shop')}
+            </h3>
+            <p style={{ fontSize: '12px', color: '#0c4a6e' }}>{t('labs.shopDescription')}</p>
           </div>
           <span style={{ fontSize: '20px', color: '#0c4a6e' }}>→</span>
         </div>
@@ -340,14 +451,21 @@ export default function LabsScreen() {
             cursor: 'pointer',
             transition: 'background-color 0.2s',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fde68a'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fef3c7'}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#fde68a')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#fef3c7')}
         >
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px', color: '#78350f' }}>🎁 {t('labs.gift')}</h3>
-            <p style={{ fontSize: '12px', color: '#78350f' }}>
-              {t('labs.giftDescription')}
-            </p>
+            <h3
+              style={{
+                fontSize: '16px',
+                fontWeight: 'bold',
+                marginBottom: '4px',
+                color: '#78350f',
+              }}
+            >
+              🎁 {t('labs.gift')}
+            </h3>
+            <p style={{ fontSize: '12px', color: '#78350f' }}>{t('labs.giftDescription')}</p>
           </div>
           <span style={{ fontSize: '20px', color: '#78350f' }}>→</span>
         </div>
@@ -371,13 +489,17 @@ export default function LabsScreen() {
             cursor: 'pointer',
             transition: 'background-color 0.2s',
           }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'white')}
         >
           <div>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px' }}>🔥 {t('labs.streakTracker')}</h3>
+            <h3 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '4px' }}>
+              🔥 {t('labs.streakTracker')}
+            </h3>
             <p style={{ fontSize: '12px', color: '#78716c' }}>
-              {streakData ? `${streakData.currentStreak}${t('common.days')} ${t('common.consecutive')} | ${streakData.phase}` : t('labs.streakTrackerDescription')}
+              {streakData
+                ? `${streakData.currentStreak}${t('common.days')} ${t('common.consecutive')} | ${streakData.phase}`
+                : t('labs.streakTrackerDescription')}
             </p>
           </div>
           <span style={{ fontSize: '20px' }}>→</span>
@@ -387,7 +509,9 @@ export default function LabsScreen() {
       {/* Tips表示セクション */}
       {tipsEnabled && (
         <div style={{ marginBottom: '2rem' }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '1rem' }}>💡 {t('labs.tips')}</h3>
+          <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '1rem' }}>
+            💡 {t('labs.tips')}
+          </h3>
           <button
             onClick={() => {
               setTipsListTab('all');
@@ -454,7 +578,14 @@ export default function LabsScreen() {
             >
               ×
             </button>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '0.5rem',
+              }}
+            >
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: 0, flex: 1 }}>
                 {selectedTip.title}
               </h3>
@@ -484,23 +615,39 @@ export default function LabsScreen() {
                 </span>
               </div>
             </div>
-            <p style={{ fontSize: '14px', lineHeight: '1.6', color: '#374151', marginBottom: '1rem' }}>
+            <p
+              style={{
+                fontSize: '14px',
+                lineHeight: '1.6',
+                color: '#374151',
+                marginBottom: '1rem',
+              }}
+            >
               {selectedTip.content}
             </p>
             {selectedTip.category && (
               <div style={{ marginBottom: '1rem' }}>
-                <span style={{
-                  padding: '4px 8px',
-                  backgroundColor: '#f3f4f6',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  color: '#6b7280',
-                }}>
+                <span
+                  style={{
+                    padding: '4px 8px',
+                    backgroundColor: '#f3f4f6',
+                    borderRadius: '4px',
+                    fontSize: '12px',
+                    color: '#6b7280',
+                  }}
+                >
                   {selectedTip.category}
                 </span>
               </div>
             )}
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', marginTop: '1.5rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: '0.5rem',
+                justifyContent: 'space-between',
+                marginTop: '1.5rem',
+              }}
+            >
               <button
                 onClick={handlePrevTip}
                 style={{
@@ -583,7 +730,14 @@ export default function LabsScreen() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '1rem',
+              }}
+            >
               <h3 style={{ fontSize: '18px', fontWeight: 'bold' }}>{t('labs.tipsHistory')}</h3>
               <button
                 onClick={() => setShowTipHistory(false)}
@@ -598,35 +752,54 @@ export default function LabsScreen() {
               </button>
             </div>
             {tipHistory.length === 0 ? (
-              <p style={{ fontSize: '14px', color: '#78716c', textAlign: 'center', padding: '2rem 0' }}>
+              <p
+                style={{
+                  fontSize: '14px',
+                  color: '#78716c',
+                  textAlign: 'center',
+                  padding: '2rem 0',
+                }}
+              >
                 {t('labs.noTipsHistory')}
               </p>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {tipHistory.map((item, idx) => (
-                  <div key={idx} style={{
-                    padding: '1rem',
-                    backgroundColor: '#f9fafb',
-                    border: '1px solid #e7e5e4',
-                    borderRadius: '8px',
-                  }}>
+                  <div
+                    key={idx}
+                    style={{
+                      padding: '1rem',
+                      backgroundColor: '#f9fafb',
+                      border: '1px solid #e7e5e4',
+                      borderRadius: '8px',
+                    }}
+                  >
                     {'title' in item ? (
                       <>
                         <h4 style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '4px' }}>
                           {item.title}
                         </h4>
-                        <p style={{ fontSize: '12px', color: '#374151', marginBottom: '8px', lineHeight: '1.5' }}>
+                        <p
+                          style={{
+                            fontSize: '12px',
+                            color: '#374151',
+                            marginBottom: '8px',
+                            lineHeight: '1.5',
+                          }}
+                        >
                           {item.content}
                         </p>
                         {item.category && (
                           <div style={{ marginBottom: '8px' }}>
-                            <span style={{
-                              padding: '2px 6px',
-                              backgroundColor: '#e5e7eb',
-                              borderRadius: '4px',
-                              fontSize: '10px',
-                              color: '#6b7280',
-                            }}>
+                            <span
+                              style={{
+                                padding: '2px 6px',
+                                backgroundColor: '#e5e7eb',
+                                borderRadius: '4px',
+                                fontSize: '10px',
+                                color: '#6b7280',
+                              }}
+                            >
                               {item.category}
                             </span>
                           </div>
@@ -640,7 +813,15 @@ export default function LabsScreen() {
                         <p style={{ fontSize: '12px', color: '#78716c', marginBottom: '8px' }}>
                           {(item as RemedyItem).logic}
                         </p>
-                        <ul style={{ fontSize: '12px', color: '#374151', listStyle: 'disc', paddingLeft: '1.5rem', marginBottom: '8px' }}>
+                        <ul
+                          style={{
+                            fontSize: '12px',
+                            color: '#374151',
+                            listStyle: 'disc',
+                            paddingLeft: '1.5rem',
+                            marginBottom: '8px',
+                          }}
+                        >
                           {(item as RemedyItem).remedies.map((remedy, rIdx) => (
                             <li key={rIdx}>{remedy}</li>
                           ))}
@@ -699,9 +880,20 @@ export default function LabsScreen() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', position: 'relative', paddingRight: '2rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '1rem',
+                position: 'relative',
+                paddingRight: '2rem',
+              }}
+            >
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: 0 }}>
-                {t('labs.tipsList')} ({tipsListTab === 'all' ? TIPS_DATA.length : getSavedTipIds().length}{t('common.items')})
+                {t('labs.tipsList')} (
+                {tipsListTab === 'all' ? TIPS_DATA.length : getSavedTipIds().length}
+                {t('common.items')})
               </h3>
               <button
                 onClick={() => setShowTipsList(false)}
@@ -721,14 +913,22 @@ export default function LabsScreen() {
               </button>
             </div>
             {/* タブ */}
-            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', borderBottom: '2px solid #e7e5e4' }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: '0.5rem',
+                marginBottom: '1rem',
+                borderBottom: '2px solid #e7e5e4',
+              }}
+            >
               <button
                 onClick={() => setTipsListTab('all')}
                 style={{
                   padding: '0.5rem 1rem',
                   background: 'none',
                   border: 'none',
-                  borderBottom: tipsListTab === 'all' ? '2px solid #fbbf24' : '2px solid transparent',
+                  borderBottom:
+                    tipsListTab === 'all' ? '2px solid #fbbf24' : '2px solid transparent',
                   fontSize: '14px',
                   fontWeight: tipsListTab === 'all' ? 'bold' : 'normal',
                   color: tipsListTab === 'all' ? '#78350f' : '#6b7280',
@@ -744,7 +944,8 @@ export default function LabsScreen() {
                   padding: '0.5rem 1rem',
                   background: 'none',
                   border: 'none',
-                  borderBottom: tipsListTab === 'saved' ? '2px solid #fbbf24' : '2px solid transparent',
+                  borderBottom:
+                    tipsListTab === 'saved' ? '2px solid #fbbf24' : '2px solid transparent',
                   fontSize: '14px',
                   fontWeight: tipsListTab === 'saved' ? 'bold' : 'normal',
                   color: tipsListTab === 'saved' ? '#78350f' : '#6b7280',
@@ -755,9 +956,15 @@ export default function LabsScreen() {
                 {t('labs.tipsListSaved')} ({getSavedTipIds().length})
               </button>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }} key={tipsListRefreshKey}>
-              {(tipsListTab === 'all' ? TIPS_DATA : TIPS_DATA.filter(tip => isTipSaved(tip.id))).map((tip, idx) => {
-                const originalIndex = TIPS_DATA.findIndex(t => t.id === tip.id);
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+              key={tipsListRefreshKey}
+            >
+              {(tipsListTab === 'all'
+                ? TIPS_DATA
+                : TIPS_DATA.filter((tip) => isTipSaved(tip.id))
+              ).map((tip, idx) => {
+                const originalIndex = TIPS_DATA.findIndex((t) => t.id === tip.id);
                 return (
                   <div
                     key={tip.id}
@@ -769,7 +976,14 @@ export default function LabsScreen() {
                       transition: 'background-color 0.2s',
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        marginBottom: '0.5rem',
+                      }}
+                    >
                       <h4
                         onClick={() => {
                           setCurrentTipIndex(originalIndex >= 0 ? originalIndex : 0);
@@ -798,7 +1012,7 @@ export default function LabsScreen() {
                             saveTip(tip.id);
                           }
                           // 状態を強制的に更新して再レンダリング
-                          setTipsListRefreshKey(prev => prev + 1);
+                          setTipsListRefreshKey((prev) => prev + 1);
                         }}
                         style={{
                           background: 'none',
@@ -832,13 +1046,15 @@ export default function LabsScreen() {
                       {tip.content.substring(0, 100)}...
                     </p>
                     {tip.category && (
-                      <span style={{
-                        padding: '2px 6px',
-                        backgroundColor: '#e5e7eb',
-                        borderRadius: '4px',
-                        fontSize: '10px',
-                        color: '#6b7280',
-                      }}>
+                      <span
+                        style={{
+                          padding: '2px 6px',
+                          backgroundColor: '#e5e7eb',
+                          borderRadius: '4px',
+                          fontSize: '10px',
+                          color: '#6b7280',
+                        }}
+                      >
                         {tip.category}
                       </span>
                     )}
@@ -846,7 +1062,14 @@ export default function LabsScreen() {
                 );
               })}
               {tipsListTab === 'saved' && getSavedTipIds().length === 0 && (
-                <p style={{ fontSize: '14px', color: '#78716c', textAlign: 'center', padding: '2rem 0' }}>
+                <p
+                  style={{
+                    fontSize: '14px',
+                    color: '#78716c',
+                    textAlign: 'center',
+                    padding: '2rem 0',
+                  }}
+                >
                   {t('labs.noSavedTips')}
                 </p>
               )}
@@ -950,7 +1173,14 @@ export default function LabsScreen() {
             >
               ×
             </button>
-            <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '1.5rem', textAlign: 'center' }}>
+            <h2
+              style={{
+                fontSize: '24px',
+                fontWeight: 'bold',
+                marginBottom: '1.5rem',
+                textAlign: 'center',
+              }}
+            >
               🎨 {t('labs.appIconGenerator')}
             </h2>
             <AppIconGenerator />
@@ -960,4 +1190,3 @@ export default function LabsScreen() {
     </div>
   );
 }
-

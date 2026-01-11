@@ -112,7 +112,8 @@
 }
 
 @keyframes scan {
-  0%, 100% {
+  0%,
+  100% {
     top: 20%;
   }
   50% {
@@ -199,4 +200,3 @@
 .barcode-scanner-modal-add-button:hover {
   background-color: #b91c1c;
 }
-

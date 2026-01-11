@@ -14,7 +14,9 @@
   font-size: 16px;
   margin-bottom: 20px;
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .butcher-chart-title {
@@ -91,7 +93,7 @@
 
 .butcher-chart-food-button:hover {
   background-color: var(--color-bg-tertiary);
-  border-color: #34C759;
+  border-color: #34c759;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -141,7 +143,9 @@
   max-height: 70vh;
   overflow-y: auto;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .butcher-chart-quantity-header {
@@ -166,7 +170,9 @@
   cursor: pointer;
   font-size: 14px;
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* スマートプリセット */
@@ -283,23 +289,23 @@
 
 .butcher-chart-portion-button:hover {
   background-color: var(--color-bg-tertiary);
-  border-color: #34C759;
+  border-color: #34c759;
 }
 
 .butcher-chart-portion-button.active {
-  background-color: #34C759;
-  border-color: #34C759;
+  background-color: #34c759;
+  border-color: #34c759;
   color: white;
 }
 
 .butcher-chart-calculated-amount {
   padding: 10px;
-  background-color: #E8F5E9;
+  background-color: #e8f5e9;
   border-radius: 6px;
   text-align: center;
   font-size: 16px;
   font-weight: 600;
-  color: #2E7D32;
+  color: #2e7d32;
 }
 
 /* 個数入力 */
@@ -334,12 +340,12 @@
 
 .butcher-chart-piece-button:hover {
   background-color: var(--color-bg-tertiary);
-  border-color: #FFD700;
+  border-color: #ffd700;
 }
 
 .butcher-chart-piece-button.active {
-  background-color: #FFD700;
-  border-color: #FFD700;
+  background-color: #ffd700;
+  border-color: #ffd700;
   color: #333;
 }
 
@@ -347,7 +353,7 @@
 .butcher-chart-confirm-button {
   width: 100%;
   padding: 16px;
-  background-color: #34C759;
+  background-color: #34c759;
   color: white;
   border: none;
   border-radius: 10px;
@@ -358,8 +364,7 @@
 }
 
 .butcher-chart-confirm-button:hover {
-  background-color: #30B050;
+  background-color: #30b050;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-

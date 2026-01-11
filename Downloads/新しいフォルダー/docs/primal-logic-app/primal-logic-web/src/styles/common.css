@@ -100,7 +100,9 @@
   background-color: var(--color-bg-secondary);
   border-radius: 6px;
   border: 1px solid var(--color-border);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .info-card-highlight {
@@ -197,7 +199,9 @@
   background-color: var(--color-bg-secondary);
   border-radius: 8px;
   border: 1px solid var(--color-border);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .food-info-title {
@@ -266,17 +270,17 @@
 }
 
 .badge-required {
-  background-color: #FF3B30;
+  background-color: #ff3b30;
   color: #fff;
 }
 
 .badge-recommended {
-  background-color: #FF9500;
+  background-color: #ff9500;
   color: #fff;
 }
 
 .badge-optional {
-  background-color: #8E8E93;
+  background-color: #8e8e93;
   color: #fff;
 }
 
@@ -289,7 +293,10 @@
   font-size: 16px;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
   box-sizing: border-box;
 }
 
@@ -328,7 +335,9 @@
   background-color: var(--color-bg-secondary);
   border-radius: 8px;
   border: 1px solid var(--color-border);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .switch-row {

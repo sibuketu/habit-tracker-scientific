@@ -1,6 +1,6 @@
 /**
  * Nutrition Context - 栄養素データのグローバル状態管理
- * 
+ *
  * Geminiの提案に基づき、React Context APIを使用して
  * ButcherSelectでの変更をHomeScreenに即時反映させる
  */
@@ -70,4 +70,3 @@ export function useNutritionContext() {
   }
   return context;
 }
-

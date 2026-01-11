@@ -19,7 +19,6 @@
   }
 }
 
-[data-theme="dark"] .streak-tracker-screen-container {
+[data-theme='dark'] .streak-tracker-screen-container {
   background-color: #1f2937;
 }
-

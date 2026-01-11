@@ -1,6 +1,6 @@
 /**
  * Primal Logic - データ削除画面
- * 
+ *
  * GDPR対応：ユーザーデータの削除機能
  */
 
@@ -29,7 +29,7 @@ export default function DataDeleteScreen() {
     try {
       // ローカルストレージのデータを削除
       const keys = Object.keys(localStorage);
-      keys.forEach(key => {
+      keys.forEach((key) => {
         if (key.startsWith('primal_logic_')) {
           localStorage.removeItem(key);
         }
@@ -37,19 +37,21 @@ export default function DataDeleteScreen() {
 
       // Supabaseのデータを削除（認証済みユーザーの場合）
       if (isSupabaseAvailable() && supabase) {
-        const { data: { session } } = await supabase.auth.getSession();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (session) {
           // ユーザーのデータを削除（将来的に実装）
           // await supabase.from('daily_logs').delete().eq('user_id', session.user.id);
           // await supabase.from('user_profiles').delete().eq('user_id', session.user.id);
-          
+
           // ログアウト（アカウント削除はサーバー側で実装が必要）
           await supabase.auth.signOut();
         }
       }
 
       setDeleted(true);
-      
+
       // 3秒後にページをリロード
       setTimeout(() => {
         window.location.reload();
@@ -76,9 +78,7 @@ export default function DataDeleteScreen() {
         <h1 className="data-delete-title">データ削除</h1>
         <div className="data-delete-warning">
           <h2>⚠️ 警告</h2>
-          <p>
-            この操作を実行すると、以下のデータが完全に削除されます：
-          </p>
+          <p>この操作を実行すると、以下のデータが完全に削除されます：</p>
           <ul>
             <li>全ての食事記録</li>
             <li>プロファイル情報</li>
@@ -87,9 +87,7 @@ export default function DataDeleteScreen() {
             <li>アプリ設定</li>
             <li>アカウント情報（認証済みユーザーの場合）</li>
           </ul>
-          <p className="data-delete-warning-strong">
-            この操作は取り消せません。
-          </p>
+          <p className="data-delete-warning-strong">この操作は取り消せません。</p>
         </div>
 
         <div className="data-delete-confirm">
@@ -123,4 +121,3 @@ export default function DataDeleteScreen() {
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Argument Card Component (Web版)
- * 
+ *
  * 3-tier情報表示: Level 1 (Glance) → Level 2 (Explanation) → Level 3 (Source)
  * Phase 3: The Logic Shield
  */
@@ -16,6 +16,45 @@ interface ArgumentCardProps {
 
 export default function ArgumentCard({ card, onClose }: ArgumentCardProps) {
   const [level, setLevel] = useState<1 | 2 | 3>(1);
+  const [showCitations, setShowCitations] = useState(false);
+
+  // 引用元を抽出し、テキストから削除する関数
+  const formatArgumentCardText = (text: string): { cleanedText: string; citations: string[] } => {
+    // 引用元のパターンを抽出
+    const citationPatterns = [
+      /\[論証スタイル[^\]]*\]/g,
+      /\[疫学の批判[^\]]*\]/g,
+      /\[栄養科学[^\]]*\]/g,
+      /\[カーニボアの科学的検証[^\]]*\]/g,
+      /\[科学的検証[^\]]*\]/g,
+      /\[[^\]]*\]/g, // その他の角括弧内のテキスト
+    ];
+
+    const citations: string[] = [];
+    let cleanedText = text;
+
+    // 引用元を抽出して削除
+    citationPatterns.forEach((pattern) => {
+      const matches = cleanedText.match(pattern);
+      if (matches) {
+        citations.push(...matches.map((m) => m.replace(/[\[\]]/g, '')));
+        cleanedText = cleanedText.replace(pattern, '');
+      }
+    });
+
+    // 句読点の後に改行を追加（読みやすくするため）
+    cleanedText = cleanedText
+      .trim()
+      .replace(/。/g, '。\n\n')
+      .replace(/、/g, '、\n')
+      .replace(/\. /g, '.\n\n')
+      .replace(/, /g, ',\n');
+
+    return { cleanedText, citations: [...new Set(citations)] }; // 重複を削除
+  };
+
+  // 引用元を抽出
+  const { cleanedText: level2Text, citations } = formatArgumentCardText(card.level2);
 
   const getVerdictColor = () => {
     switch (card.verdict) {
@@ -66,13 +105,72 @@ export default function ArgumentCard({ card, onClose }: ArgumentCardProps) {
                 className="argument-card-level-card"
                 style={{ borderLeftColor: getVerdictColor() }}
               >
-                <div className="argument-card-level2-text">{card.level2}</div>
+                <div className="argument-card-level2-text">
+                  {level2Text.split('\n').map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      {index < level2Text.split('\n').length - 1 && <br />}
+                    </span>
+                  ))}
+                </div>
+                {/* 引用元ボタン */}
+                {citations.length > 0 && (
+                  <div
+                    style={{
+                      marginTop: '12px',
+                      paddingTop: '12px',
+                      borderTop: '1px solid var(--color-border)',
+                    }}
+                  >
+                    <button
+                      onClick={() => setShowCitations(!showCitations)}
+                      className="argument-card-citation-button"
+                      style={{
+                        background: 'transparent',
+                        border: '1px solid var(--color-border)',
+                        borderRadius: '6px',
+                        padding: '6px 12px',
+                        color: 'var(--color-text-secondary)',
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                      }}
+                    >
+                      {showCitations ? '▼' : '▶'} 引用元 ({citations.length})
+                    </button>
+                    {showCitations && (
+                      <div
+                        style={{
+                          marginTop: '8px',
+                          padding: '8px',
+                          backgroundColor: 'var(--color-bg-tertiary)',
+                          borderRadius: '6px',
+                        }}
+                      >
+                        {citations.map((citation, idx) => (
+                          <div
+                            key={idx}
+                            style={{
+                              fontSize: '12px',
+                              color: 'var(--color-text-secondary)',
+                              marginBottom: '4px',
+                            }}
+                          >
+                            • {citation}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
 
           {/* Level 3: Source - 削除（3枚目を消す） */}
-          
+
           {/* Expand Button */}
           {level < 2 && (
             <button
@@ -89,11 +187,17 @@ export default function ArgumentCard({ card, onClose }: ArgumentCardProps) {
             className="argument-card-verdict-badge"
             style={{ backgroundColor: getVerdictColor() }}
           >
-            判定: {card.emoji} {card.verdict === 'trash' ? '不要' : card.verdict === 'sufficient' ? '十分' : card.verdict === 'precious' ? '重要' : '安全'}
+            判定: {card.emoji}{' '}
+            {card.verdict === 'trash'
+              ? '不要'
+              : card.verdict === 'sufficient'
+                ? '十分'
+                : card.verdict === 'precious'
+                  ? '重要'
+                  : '安全'}
           </div>
         </div>
       </div>
     </div>
   );
 }
-

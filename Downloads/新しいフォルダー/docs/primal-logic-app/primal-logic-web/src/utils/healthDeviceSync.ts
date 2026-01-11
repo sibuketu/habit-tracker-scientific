@@ -1,8 +1,8 @@
 /**
  * Primal Logic - Health Device Sync Utility
- * 
+ *
  * ウェアラブルデバイス連携（Apple Health、Google Fit）
- * 
+ *
  * 注意: Webアプリでは直接的な連携は難しいため、以下の方法を提供:
  * 1. 手動入力（活動量、心拍数など）
  * 2. 将来的にモバイルアプリ（Expo）で実装予定
@@ -26,14 +26,14 @@ const HEALTH_DATA_STORAGE_KEY = 'primal_logic_health_data';
 export function saveHealthData(data: HealthData): void {
   try {
     const allData = getHealthData();
-    const existingIndex = allData.findIndex(d => d.date === data.date);
-    
+    const existingIndex = allData.findIndex((d) => d.date === data.date);
+
     if (existingIndex >= 0) {
       allData[existingIndex] = { ...allData[existingIndex], ...data };
     } else {
       allData.push(data);
     }
-    
+
     localStorage.setItem(HEALTH_DATA_STORAGE_KEY, JSON.stringify(allData));
   } catch (error) {
     logError(error, { component: 'healthDeviceSync', action: 'saveHealthData' });
@@ -49,7 +49,7 @@ export function getHealthData(date?: string): HealthData[] {
     if (!stored) return [];
     const allData: HealthData[] = JSON.parse(stored);
     if (date) {
-      return allData.filter(d => d.date === date);
+      return allData.filter((d) => d.date === date);
     }
     return allData;
   } catch (error) {
@@ -64,7 +64,7 @@ export function getHealthData(date?: string): HealthData[] {
 export function deleteHealthData(date: string): boolean {
   try {
     const allData = getHealthData();
-    const filtered = allData.filter(d => d.date !== date);
+    const filtered = allData.filter((d) => d.date !== date);
     if (filtered.length === allData.length) return false;
     localStorage.setItem(HEALTH_DATA_STORAGE_KEY, JSON.stringify(filtered));
     return true;
@@ -76,7 +76,7 @@ export function deleteHealthData(date: string): boolean {
 
 /**
  * Apple Health連携（将来実装予定）
- * 
+ *
  * 注意: Webアプリでは直接的な連携は不可能。
  * モバイルアプリ（Expo）で実装予定。
  */
@@ -90,7 +90,7 @@ export async function syncWithAppleHealth(): Promise<HealthData | null> {
 
 /**
  * Google Fit連携（将来実装予定）
- * 
+ *
  * 注意: Webアプリでは直接的な連携は不可能。
  * モバイルアプリ（Expo）で実装予定。
  */
@@ -101,4 +101,3 @@ export async function syncWithGoogleFit(): Promise<HealthData | null> {
   }
   return null;
 }
-

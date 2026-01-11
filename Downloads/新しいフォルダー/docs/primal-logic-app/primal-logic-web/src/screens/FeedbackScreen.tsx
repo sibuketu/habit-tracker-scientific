@@ -1,6 +1,6 @@
 /**
  * Primal Logic - フィードバック画面
- * 
+ *
  * ユーザーからのフィードバック・バグレポート・機能リクエストを受け付ける
  */
 
@@ -20,7 +20,7 @@ export default function FeedbackScreen() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!message.trim()) {
       alert('メッセージを入力してください');
       return;
@@ -55,12 +55,12 @@ export default function FeedbackScreen() {
       // メール送信（mailto:リンクを使用）
       const body = encodeURIComponent(
         `Type: ${type === 'bug' ? 'Bug Report' : type === 'feature' ? 'Feature Request' : 'General Feedback'}\n` +
-        `Subject: ${emailSubject || '(No Subject)'}\n\n` +
-        `Message:\n${message}\n\n` +
-        `Email: ${email || '(Not provided)'}\n` +
-        `Timestamp: ${feedbackData.timestamp}\n` +
-        `User Agent: ${feedbackData.userAgent}\n` +
-        `URL: ${feedbackData.url}`
+          `Subject: ${emailSubject || '(No Subject)'}\n\n` +
+          `Message:\n${message}\n\n` +
+          `Email: ${email || '(Not provided)'}\n` +
+          `Timestamp: ${feedbackData.timestamp}\n` +
+          `User Agent: ${feedbackData.userAgent}\n` +
+          `URL: ${feedbackData.url}`
       );
       const mailtoLink = `mailto:sibuketu12345@gmail.com?subject=${encodedSubject}&body=${body}`;
       window.location.href = mailtoLink;
@@ -100,9 +100,7 @@ export default function FeedbackScreen() {
           ← 設定に戻る
         </button>
         <h1 className="feedback-title">フィードバック</h1>
-        <p className="feedback-description">
-          バグ報告、機能リクエスト、ご意見をお聞かせください。
-        </p>
+        <p className="feedback-description">バグ報告、機能リクエスト、ご意見をお聞かせください。</p>
 
         <form onSubmit={handleSubmit} className="feedback-form">
           <div className="feedback-form-group">
@@ -182,4 +180,3 @@ export default function FeedbackScreen() {
     </div>
   );
 }
-

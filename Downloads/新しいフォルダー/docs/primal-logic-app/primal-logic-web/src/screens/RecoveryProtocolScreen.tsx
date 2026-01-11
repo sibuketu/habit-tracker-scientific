@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Recovery Protocol Screen (Web版)
- * 
+ *
  * Phase 4: Recovery Protocol詳細画面、編集UI、SET PROTOCOLボタン
  */
 
@@ -43,11 +43,16 @@ export default function RecoveryProtocolScreen({
 
       // Schedule defrost reminder if meat is in plan
       if (hasMeatInPlan(updatedProtocol)) {
-        const meatItem = updatedProtocol.dietRecommendations
-          ?.find((rec) => rec.toLowerCase().includes('ribeye') || rec.toLowerCase().includes('meat'))
-          ?.split(' ')
-          .find((word) => word.toLowerCase().includes('ribeye') || word.toLowerCase().includes('beef')) || 'meat';
-        
+        const meatItem =
+          updatedProtocol.dietRecommendations
+            ?.find(
+              (rec) => rec.toLowerCase().includes('ribeye') || rec.toLowerCase().includes('meat')
+            )
+            ?.split(' ')
+            .find(
+              (word) => word.toLowerCase().includes('ribeye') || word.toLowerCase().includes('beef')
+            ) || 'meat';
+
         await scheduleDefrostReminder(meatItem);
       }
 
@@ -57,7 +62,10 @@ export default function RecoveryProtocolScreen({
       onClose();
     } catch (error) {
       logError(error, { component: 'RecoveryProtocolScreen', action: 'handleSetProtocol' });
-      alert(getUserFriendlyErrorMessage(error) || 'エラー: プロトコルの設定に失敗しました。再度お試しください。');
+      alert(
+        getUserFriendlyErrorMessage(error) ||
+          'エラー: プロトコルの設定に失敗しました。再度お試しください。'
+      );
     }
   };
 
@@ -65,13 +73,30 @@ export default function RecoveryProtocolScreen({
     <div className="recovery-protocol-overlay" onClick={onClose}>
       <div className="recovery-protocol-container" onClick={(e) => e.stopPropagation()}>
         <div className="recovery-protocol-header">
-          <h2 className="recovery-protocol-title">リカバリープロトコル</h2>
+          <h2 className="recovery-protocol-title">
+            リカバリープロトコル
+            <span style={{ fontSize: '0.8em', color: '#f59e0b', marginLeft: '0.5rem' }}>
+              ⚠️ 実験的機能（β版）
+            </span>
+          </h2>
           <button className="recovery-protocol-close" onClick={onClose}>
             ✕
           </button>
         </div>
 
         <div className="recovery-protocol-content">
+          {/* Beta版の注意書き */}
+          <div style={{ 
+            padding: '0.75rem', 
+            backgroundColor: '#fef3c7', 
+            border: '1px solid #fbbf24',
+            borderRadius: '8px',
+            marginBottom: '1rem',
+            fontSize: '0.875rem',
+            color: '#92400e'
+          }}>
+            ⚠️ この機能は現在監視中です。ユーザーの使い方によって機能が正しいかどうかを確認しています。フィードバックをお待ちしています。
+          </div>
           <div className="recovery-protocol-section">
             <h3 className="recovery-protocol-section-title">違反タイプ</h3>
             <div className="recovery-protocol-violation-type">
@@ -166,16 +191,17 @@ export default function RecoveryProtocolScreen({
                     checked={todo.isCompleted}
                     onChange={async (e) => {
                       // Todoの完了状態を更新
-                      const updatedTodos = protocol.todos?.map(t => 
-                        t.id === todo.id ? { ...t, isCompleted: e.target.checked } : t
-                      ) || [];
-                      
+                      const updatedTodos =
+                        protocol.todos?.map((t) =>
+                          t.id === todo.id ? { ...t, isCompleted: e.target.checked } : t
+                        ) || [];
+
                       // Recovery Protocolを更新
                       const updatedProtocol: RecoveryProtocol = {
                         ...protocol,
                         todos: updatedTodos,
                       };
-                      
+
                       // 現在のログに反映
                       if (dailyLog) {
                         const updatedLog: DailyLog = {
@@ -193,11 +219,22 @@ export default function RecoveryProtocolScreen({
                     }}
                   />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '600', marginBottom: '0.25rem', color: todo.isCompleted ? '#166534' : '#92400e' }}>
+                    <div
+                      style={{
+                        fontWeight: '600',
+                        marginBottom: '0.25rem',
+                        color: todo.isCompleted ? '#166534' : '#92400e',
+                      }}
+                    >
                       {todo.title}
                     </div>
                     {todo.description && (
-                      <div style={{ fontSize: '12px', color: todo.isCompleted ? '#16a34a' : '#78350f' }}>
+                      <div
+                        style={{
+                          fontSize: '12px',
+                          color: todo.isCompleted ? '#16a34a' : '#78350f',
+                        }}
+                      >
                         {todo.description}
                       </div>
                     )}
@@ -219,4 +256,3 @@ export default function RecoveryProtocolScreen({
     </div>
   );
 }
-

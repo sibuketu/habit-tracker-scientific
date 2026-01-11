@@ -1,14 +1,14 @@
 /**
  * useNutrition Hook - 栄養素プレビュー管理
- * 
+ *
  * 食品を入力確定する前に、その食品がP:Fゲージに与える影響を視覚的にプレビューするためのState管理
  * 微量栄養素（Zinc, Magnesium, Iron, B12, Sodium等）も管理
- * 
+ *
  * Phase 2: LocalStorageとの連携機能を追加
- * 
+ *
  * Note: 栄養目標値は `src/data/carnivoreTargets.ts` の `CARNIVORE_NUTRIENT_TARGETS` および
  * `DEFAULT_CARNIVORE_TARGETS` を使用してください。USDA基準値やハードコードされた目標値は使用しないでください。
- * 
+ *
  * 特に注意:
  * - ビタミンC: 目標値は0mg（糖質ゼロ環境下では不要）
  * - ナトリウム: 目標値は5000mg以上（低インスリン状態では高用量が必要）
@@ -110,13 +110,13 @@ export function useNutrition() {
         ...prev,
         protein: (prev.protein || 0) + (additions.protein || 0),
         fat: (prev.fat || 0) + (additions.fat || 0),
-        zinc: ((prev.zinc || 0) + (additions.zinc || 0)),
-        magnesium: ((prev.magnesium || 0) + (additions.magnesium || 0)),
-        iron: ((prev.iron || 0) + (additions.iron || 0)),
-        vitamin_b12: ((prev.vitamin_b12 || 0) + (additions.vitamin_b12 || 0)),
-        vitaminC: ((prev.vitaminC || 0) + (additions.vitaminC || 0)),
-        vitaminK: ((prev.vitaminK || 0) + (additions.vitaminK || 0)),
-        sodium: ((prev.sodium || 0) + (additions.sodium || 0)),
+        zinc: (prev.zinc || 0) + (additions.zinc || 0),
+        magnesium: (prev.magnesium || 0) + (additions.magnesium || 0),
+        iron: (prev.iron || 0) + (additions.iron || 0),
+        vitamin_b12: (prev.vitamin_b12 || 0) + (additions.vitamin_b12 || 0),
+        vitaminC: (prev.vitaminC || 0) + (additions.vitaminC || 0),
+        vitaminK: (prev.vitaminK || 0) + (additions.vitaminK || 0),
+        sodium: (prev.sodium || 0) + (additions.sodium || 0),
       };
     });
   }, []);
@@ -136,4 +136,3 @@ export function useNutrition() {
     loadAllLogs,
   };
 }
-

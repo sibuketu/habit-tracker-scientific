@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Foods Database
- * 
+ *
  * 食品データベース: 栄養素データ、フラグ、バイオアベイラビリティ係数
  * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
  */
@@ -57,7 +57,7 @@ export interface FoodData {
 
 /**
  * Foods Database (Global Master)
- * 
+ *
  * Note: This is a simplified version. In production, this would be stored
  * in Firestore/Supabase and fetched dynamically.
  */
@@ -762,7 +762,7 @@ export const FOODS_DATABASE: Record<string, FoodData> = {
 export function searchFoods(query: string): FoodData[] {
   const lowerQuery = query.toLowerCase().trim();
   if (lowerQuery.length === 0) return [];
-  
+
   return Object.values(FOODS_DATABASE).filter((food) => {
     const foodName = food.name.toLowerCase();
     const foodId = food.id.toLowerCase();
@@ -798,15 +798,15 @@ export function getFoodsByType(type: FoodData['type']): FoodData[] {
  * Get foods with specific flags
  */
 export function getFoodsByFlag(flag: string): FoodData[] {
-  return Object.values(FOODS_DATABASE).filter(
-    (food) => food.flags && food.flags.includes(flag)
-  );
+  return Object.values(FOODS_DATABASE).filter((food) => food.flags && food.flags.includes(flag));
 }
 
 /**
  * Search foods by category (beef, pork, chicken, egg, fish)
  */
-export function searchFoodsByCategory(category: 'beef' | 'pork' | 'chicken' | 'egg' | 'fish'): FoodData[] {
+export function searchFoodsByCategory(
+  category: 'beef' | 'pork' | 'chicken' | 'egg' | 'fish'
+): FoodData[] {
   const categoryMap: Record<string, string[]> = {
     beef: ['beef', 'ruminant'],
     pork: ['pork', 'pig'],
@@ -822,4 +822,3 @@ export function searchFoodsByCategory(category: 'beef' | 'pork' | 'chicken' | 'e
     return keywords.some((keyword) => foodId.includes(keyword) || foodName.includes(keyword));
   });
 }
-

@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Shop Screen
- * 
+ *
  * ショップ画面: ドット絵UIやその他のカスタマイズアイテムを購入
  */
 
@@ -48,10 +48,12 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
   // 購入状態を読み込み
   useEffect(() => {
     const purchasedItems = JSON.parse(localStorage.getItem('primal_logic_shop_purchased') || '[]');
-    setShopItems(items => items.map(item => ({
-      ...item,
-      isPurchased: purchasedItems.includes(item.id),
-    })));
+    setShopItems((items) =>
+      items.map((item) => ({
+        ...item,
+        isPurchased: purchasedItems.includes(item.id),
+      }))
+    );
   }, []);
 
   // ドット絵UI変更イベントをリッスン
@@ -69,13 +71,15 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
   const handlePurchase = async (item: ShopItem) => {
     // デバッグモードで無料アイテムの場合
     if (debugMode && item.isDebugFree) {
-      const purchasedItems = JSON.parse(localStorage.getItem('primal_logic_shop_purchased') || '[]');
+      const purchasedItems = JSON.parse(
+        localStorage.getItem('primal_logic_shop_purchased') || '[]'
+      );
       if (!purchasedItems.includes(item.id)) {
         purchasedItems.push(item.id);
         localStorage.setItem('primal_logic_shop_purchased', JSON.stringify(purchasedItems));
-        setShopItems(items => items.map(i => 
-          i.id === item.id ? { ...i, isPurchased: true } : i
-        ));
+        setShopItems((items) =>
+          items.map((i) => (i.id === item.id ? { ...i, isPurchased: true } : i))
+        );
         alert(t('shop.purchaseSuccess', { name: item.name }));
       }
       return;
@@ -98,7 +102,7 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
             },
           }),
         });
-        
+
         if (response.ok) {
           const { sessionId } = await response.json();
           const stripe = (window as any).Stripe(stripeKey);
@@ -110,16 +114,20 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
         // Stripe決済に失敗した場合は、モック処理にフォールバック
       }
     }
-    
+
     // Stripe決済が利用できない場合、または失敗した場合はモック処理
     if (import.meta.env.DEV) {
       // デバッグモードでは無料で購入可能
-      const purchasedItems = JSON.parse(localStorage.getItem('primal_logic_shop_purchased') || '[]');
+      const purchasedItems = JSON.parse(
+        localStorage.getItem('primal_logic_shop_purchased') || '[]'
+      );
       if (!purchasedItems.includes(item.id)) {
         purchasedItems.push(item.id);
         localStorage.setItem('primal_logic_shop_purchased', JSON.stringify(purchasedItems));
       }
-      setShopItems(items => items.map(i => i.id === item.id ? { ...i, isPurchased: true } : i));
+      setShopItems((items) =>
+        items.map((i) => (i.id === item.id ? { ...i, isPurchased: true } : i))
+      );
       alert(t('shop.purchaseSuccessDebug').replace('{name}', item.name));
     } else {
       alert(t('shop.paymentPending'));
@@ -167,63 +175,64 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
         <div className="shop-items-section">
           <h2 className="shop-section-title">{t('shop.uiCustomization')}</h2>
           <div className="shop-items-list">
-            {shopItems.filter(item => item.category === 'ui').map(item => (
-              <div key={item.id} className="shop-item-card">
-                <div className="shop-item-header">
-                  <span className="shop-item-icon">{item.icon}</span>
-                  <div className="shop-item-info">
-                    <h3 className="shop-item-name">{item.name}</h3>
-                    <p className="shop-item-description">{item.description}</p>
+            {shopItems
+              .filter((item) => item.category === 'ui')
+              .map((item) => (
+                <div key={item.id} className="shop-item-card">
+                  <div className="shop-item-header">
+                    <span className="shop-item-icon">{item.icon}</span>
+                    <div className="shop-item-info">
+                      <h3 className="shop-item-name">{item.name}</h3>
+                      <p className="shop-item-description">{item.description}</p>
+                    </div>
+                  </div>
+                  <div className="shop-item-footer">
+                    {item.isPurchased ? (
+                      <div className="shop-item-actions">
+                        {item.id === 'dot-ui' && (
+                          <>
+                            {isDotUIEnabled ? (
+                              <button
+                                className="shop-item-disable-button"
+                                onClick={() => handleDisable(item)}
+                              >
+                                {t('shop.disablePixelArtUI')}
+                              </button>
+                            ) : (
+                              <button
+                                className="shop-item-use-button"
+                                onClick={() => handleUse(item)}
+                              >
+                                {t('shop.enablePixelArtUI')}
+                              </button>
+                            )}
+                          </>
+                        )}
+                        <span className="shop-item-purchased-badge">✓ {t('shop.purchased')}</span>
+                      </div>
+                    ) : (
+                      <div className="shop-item-purchase">
+                        <span className="shop-item-price">
+                          {debugMode && item.isDebugFree ? (
+                            <span className="shop-item-price-free">{t('shop.freeDebugMode')}</span>
+                          ) : (
+                            `${t('gift.currency')}${item.price.toLocaleString()}`
+                          )}
+                        </span>
+                        <button
+                          className="shop-item-purchase-button"
+                          onClick={() => handlePurchase(item)}
+                        >
+                          {t('shop.purchase')}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
-                <div className="shop-item-footer">
-                  {item.isPurchased ? (
-                    <div className="shop-item-actions">
-                      {item.id === 'dot-ui' && (
-                        <>
-                          {isDotUIEnabled ? (
-                            <button
-                              className="shop-item-disable-button"
-                              onClick={() => handleDisable(item)}
-                            >
-                              {t('shop.disablePixelArtUI')}
-                            </button>
-                          ) : (
-                            <button
-                              className="shop-item-use-button"
-                              onClick={() => handleUse(item)}
-                            >
-                              {t('shop.enablePixelArtUI')}
-                            </button>
-                          )}
-                        </>
-                      )}
-                      <span className="shop-item-purchased-badge">✓ {t('shop.purchased')}</span>
-                    </div>
-                  ) : (
-                    <div className="shop-item-purchase">
-                      <span className="shop-item-price">
-                        {debugMode && item.isDebugFree ? (
-                          <span className="shop-item-price-free">{t('shop.freeDebugMode')}</span>
-                        ) : (
-                          `${t('gift.currency')}${item.price.toLocaleString()}`
-                        )}
-                      </span>
-                      <button
-                        className="shop-item-purchase-button"
-                        onClick={() => handlePurchase(item)}
-                      >
-                        {t('shop.purchase')}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>
     </div>
   );
 }
-

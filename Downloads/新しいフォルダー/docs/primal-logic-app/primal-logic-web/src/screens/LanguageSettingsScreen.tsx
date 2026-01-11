@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Language Settings Screen
- * 
+ *
  * 言語設定画面
  */
 
@@ -58,9 +58,7 @@ export default function LanguageSettingsScreen({ onBack }: LanguageSettingsScree
         </div>
 
         <div className="language-settings-screen-section">
-          <p className="language-settings-screen-description">
-            {t('language.description')}
-          </p>
+          <p className="language-settings-screen-description">{t('language.description')}</p>
 
           <div className="language-settings-screen-list">
             {languages.map((lang) => (
@@ -88,4 +86,3 @@ export default function LanguageSettingsScreen({ onBack }: LanguageSettingsScree
     </div>
   );
 }
-

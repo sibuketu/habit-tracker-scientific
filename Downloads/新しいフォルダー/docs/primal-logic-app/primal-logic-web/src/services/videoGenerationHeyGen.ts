@@ -1,6 +1,6 @@
 /**
  * Primal Logic - HeyGen API Integration
- * 
+ *
  * HeyGen APIを使用して動画を生成
  * API仕様: https://www.heygen.com/api (要確認)
  */
@@ -38,7 +38,10 @@ export interface HeyGenVideoResponse {
  * @param script 動画スクリプト
  * @param useFreePlan Freeプランを使用する場合true（3分・720p・月3本まで）
  */
-export async function generateVideoWithHeyGen(script: VideoScript, useFreePlan: boolean = false): Promise<string> {
+export async function generateVideoWithHeyGen(
+  script: VideoScript,
+  useFreePlan: boolean = false
+): Promise<string> {
   if (!HEYGEN_API_KEY) {
     throw new Error('VITE_HEYGEN_API_KEY is not set');
   }
@@ -62,7 +65,7 @@ export async function generateVideoWithHeyGen(script: VideoScript, useFreePlan: 
     text: script.script,
     // avatar_idとvoice_idは必須だが、デフォルト値を使用する場合は省略可能
     // 実際の使用時には、事前にList Avatars APIとList Voices APIで取得したIDを使用
-    dimension: useFreePlan 
+    dimension: useFreePlan
       ? { width: 1280, height: 720 } // Freeプラン: 720p
       : { width: 1920, height: 1080 }, // 有料プラン: 1080p（Teamプランなら4Kも可能）
   };
@@ -106,9 +109,13 @@ export async function generateVideoWithHeyGen(script: VideoScript, useFreePlan: 
 /**
  * 動画生成のステータスをポーリング
  */
-async function pollVideoStatus(videoId: string, maxAttempts = 60, intervalMs = 5000): Promise<string> {
+async function pollVideoStatus(
+  videoId: string,
+  maxAttempts = 60,
+  intervalMs = 5000
+): Promise<string> {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    await new Promise(resolve => setTimeout(resolve, intervalMs));
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
 
     try {
       // エンドポイント: GET https://api.heygen.com/v2/video_status?video_id={video_id}
@@ -142,4 +149,3 @@ async function pollVideoStatus(videoId: string, maxAttempts = 60, intervalMs = 5
 
   throw new Error('Video generation timeout');
 }
-

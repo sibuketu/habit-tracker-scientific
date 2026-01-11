@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Knowledge Base (Primal Knowledge)
- * 
+ *
  * カーニボアに対する批判や誤解を解くためのQ&Aデータ
  * isVisibleフラグで表示/非表示を制御可能
  */
@@ -108,4 +108,3 @@ export function getVisibleKnowledge(): KnowledgeItem[] {
 export function getKnowledgeById(id: string): KnowledgeItem | undefined {
   return KNOWLEDGE_DATA.find((item) => item.id === id);
 }
-

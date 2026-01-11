@@ -1,13 +1,13 @@
 /**
  * Primal Logic - Feature Display Settings
- * 
+ *
  * あらゆる機能の表示/非表示を管理するユーティリティ
  * デフォルトは全部表示（ON）
  */
 
 import { logError } from './errorHandler';
 
-export type FeatureKey = 
+export type FeatureKey =
   // 画面要素
   | 'streakDisplay' // ストリーク表示
   | 'phaseDisplay' // Phase表示
@@ -53,39 +53,201 @@ export interface FeatureDisplayConfig {
  */
 export const ALL_FEATURE_DISPLAY_CONFIGS: FeatureDisplayConfig[] = [
   // 画面要素
-  { key: 'streakDisplay', label: 'ストリーク表示', category: 'screenElement', defaultVisible: true, description: '連続日数の表示' },
-  { key: 'phaseDisplay', label: 'Phase表示', category: 'screenElement', defaultVisible: true, description: '現在のPhase（Rookie, Carnivore, Hunter等）' },
-  { key: 'transitionBanner', label: '移行期間バナー', category: 'screenElement', defaultVisible: true, description: '移行期間中の進捗バナー' },
-  { key: 'transitionGuide', label: '移行期間ガイド', category: 'screenElement', defaultVisible: true, description: '移行期間の詳細ガイド' },
-  { key: 'pfRatioGauge', label: 'P:F比率ゲージ', category: 'screenElement', defaultVisible: true, description: 'タンパク質:脂質比率' },
-  { key: 'omegaRatioGauge', label: 'オメガ比率ゲージ', category: 'screenElement', defaultVisible: true, description: 'オメガ3/6比率' },
-  { key: 'calciumPhosphorusRatioGauge', label: 'カルシウム:リン比率ゲージ', category: 'screenElement', defaultVisible: true, description: 'カルシウム:リン比率' },
-  { key: 'glycineMethionineRatioGauge', label: 'グリシン:メチオニン比率ゲージ', category: 'screenElement', defaultVisible: true, description: 'グリシン:メチオニン比率' },
-  { key: 'argumentCard', label: '理論武装カード', category: 'screenElement', defaultVisible: true, description: '栄養素をタップした時の理論説明' },
-  { key: 'recoveryProtocol', label: '回復プロトコル', category: 'screenElement', defaultVisible: true, description: '違反時の回復プロトコル' },
-  { key: 'myFoodsTab', label: '「いつもの」タブ', category: 'screenElement', defaultVisible: true, description: 'よく使う食品のタブ' },
-  { key: 'historyTab', label: '履歴タブ', category: 'screenElement', defaultVisible: true, description: '過去のログ履歴' },
-  { key: 'aiSpeedDial', label: 'AI Speed Dial', category: 'screenElement', defaultVisible: true, description: 'AIチャット・写真・音声入力' },
-  { key: 'photoUpload', label: '写真アップロード', category: 'screenElement', defaultVisible: true, description: '写真から食品を登録' },
-  { key: 'avoidZone', label: 'Avoid Zone', category: 'screenElement', defaultVisible: true, description: '植物性食品・抗栄養素の警告表示' },
-  
+  {
+    key: 'streakDisplay',
+    label: 'ストリーク表示',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: '連続日数の表示',
+  },
+  {
+    key: 'phaseDisplay',
+    label: 'Phase表示',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: '現在のPhase（Rookie, Carnivore, Hunter等）',
+  },
+  {
+    key: 'transitionBanner',
+    label: '移行期間バナー',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: '移行期間中の進捗バナー',
+  },
+  {
+    key: 'transitionGuide',
+    label: '移行期間ガイド',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: '移行期間の詳細ガイド',
+  },
+  {
+    key: 'pfRatioGauge',
+    label: 'P:F比率ゲージ',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: 'タンパク質:脂質比率',
+  },
+  {
+    key: 'omegaRatioGauge',
+    label: 'オメガ比率ゲージ',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: 'オメガ3/6比率',
+  },
+  {
+    key: 'calciumPhosphorusRatioGauge',
+    label: 'カルシウム:リン比率ゲージ',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: 'カルシウム:リン比率',
+  },
+  {
+    key: 'glycineMethionineRatioGauge',
+    label: 'グリシン:メチオニン比率ゲージ',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: 'グリシン:メチオニン比率',
+  },
+  {
+    key: 'argumentCard',
+    label: '理論武装カード',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: '栄養素をタップした時の理論説明',
+  },
+  {
+    key: 'recoveryProtocol',
+    label: '回復プロトコル',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: '違反時の回復プロトコル',
+  },
+  {
+    key: 'myFoodsTab',
+    label: '「いつもの」タブ',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: 'よく使う食品のタブ',
+  },
+  {
+    key: 'historyTab',
+    label: '履歴タブ',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: '過去のログ履歴',
+  },
+  {
+    key: 'aiSpeedDial',
+    label: 'AI Speed Dial',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: 'AIチャット・写真・音声入力',
+  },
+  {
+    key: 'photoUpload',
+    label: '写真アップロード',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: '写真から食品を登録',
+  },
+  {
+    key: 'avoidZone',
+    label: 'Avoid Zone',
+    category: 'screenElement',
+    defaultVisible: true,
+    description: '植物性食品・抗栄養素の警告表示',
+  },
+
   // 分析機能
-  { key: 'nutrientTrendGraph', label: '栄養素トレンドグラフ', category: 'analysis', defaultVisible: true, description: '栄養素の推移グラフ' },
-  { key: 'weeklySummary', label: '週間サマリー', category: 'analysis', defaultVisible: true, description: '週間の統計サマリー' },
-  { key: 'monthlySummary', label: '月間サマリー', category: 'analysis', defaultVisible: true, description: '月間の統計サマリー' },
-  { key: 'statisticsCard', label: '統計カード', category: 'analysis', defaultVisible: true, description: '記録日数、違反なし日数等' },
-  
+  {
+    key: 'nutrientTrendGraph',
+    label: '栄養素トレンドグラフ',
+    category: 'analysis',
+    defaultVisible: true,
+    description: '栄養素の推移グラフ',
+  },
+  {
+    key: 'weeklySummary',
+    label: '週間サマリー',
+    category: 'analysis',
+    defaultVisible: true,
+    description: '週間の統計サマリー',
+  },
+  {
+    key: 'monthlySummary',
+    label: '月間サマリー',
+    category: 'analysis',
+    defaultVisible: true,
+    description: '月間の統計サマリー',
+  },
+  {
+    key: 'statisticsCard',
+    label: '統計カード',
+    category: 'analysis',
+    defaultVisible: true,
+    description: '記録日数、違反なし日数等',
+  },
+
   // 通知設定
-  { key: 'electrolyteAlert', label: '電解質アラート', category: 'notification', defaultVisible: true, description: 'Na/K/Mgのバランス崩れ通知' },
-  { key: 'fatDeficiencyReminder', label: '脂質不足リマインダー', category: 'notification', defaultVisible: true, description: '夕方18時時点で脂質不足の場合の通知' },
-  { key: 'streakReminder', label: 'ストリークリマインダー', category: 'notification', defaultVisible: true, description: 'ストリーク継続のリマインダー' },
-  
+  {
+    key: 'electrolyteAlert',
+    label: '電解質アラート',
+    category: 'notification',
+    defaultVisible: true,
+    description: 'Na/K/Mgのバランス崩れ通知',
+  },
+  {
+    key: 'fatDeficiencyReminder',
+    label: '脂質不足リマインダー',
+    category: 'notification',
+    defaultVisible: true,
+    description: '夕方18時時点で脂質不足の場合の通知',
+  },
+  {
+    key: 'streakReminder',
+    label: 'ストリークリマインダー',
+    category: 'notification',
+    defaultVisible: true,
+    description: 'ストリーク継続のリマインダー',
+  },
+
   // その他
-  { key: 'debugMode', label: 'デバッグモード', category: 'other', defaultVisible: true, description: 'デバッグ用ダミーデータ表示' },
-  { key: 'customFoodRegistration', label: 'カスタム食品登録', category: 'other', defaultVisible: true, description: 'ユーザー定義食品の登録' },
-  { key: 'bodyCompositionSettings', label: '体組成設定', category: 'other', defaultVisible: true, description: 'LBMベースのタンパク質計算' },
-  { key: 'metabolicStressIndicators', label: '代謝ストレス指標', category: 'other', defaultVisible: true, description: '朝起きるのが辛い等のチェック' },
-  { key: 'nutrientTargetCustomization', label: '栄養素目標値のカスタマイズ', category: 'other', defaultVisible: true, description: '栄養素目標値の手動設定' },
+  {
+    key: 'debugMode',
+    label: 'デバッグモード',
+    category: 'other',
+    defaultVisible: true,
+    description: 'デバッグ用ダミーデータ表示',
+  },
+  {
+    key: 'customFoodRegistration',
+    label: 'カスタム食品登録',
+    category: 'other',
+    defaultVisible: true,
+    description: 'ユーザー定義食品の登録',
+  },
+  {
+    key: 'bodyCompositionSettings',
+    label: '体組成設定',
+    category: 'other',
+    defaultVisible: true,
+    description: 'LBMベースのタンパク質計算',
+  },
+  {
+    key: 'metabolicStressIndicators',
+    label: '代謝ストレス指標',
+    category: 'other',
+    defaultVisible: true,
+    description: '朝起きるのが辛い等のチェック',
+  },
+  {
+    key: 'nutrientTargetCustomization',
+    label: '栄養素目標値のカスタマイズ',
+    category: 'other',
+    defaultVisible: true,
+    description: '栄養素目標値の手動設定',
+  },
 ];
 
 const STORAGE_KEY = 'primal_logic_feature_display_settings';
@@ -96,26 +258,25 @@ const STORAGE_KEY = 'primal_logic_feature_display_settings';
 export function getFeatureDisplaySettings(): Record<FeatureKey, boolean> {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // デフォルト値とマージ（新しい機能が追加された場合も対応）
-      const defaults = {} as Record<FeatureKey, boolean>;
-      ALL_FEATURE_DISPLAY_CONFIGS.forEach(config => {
-        defaults[config.key] = config.defaultVisible;
-      });
-      return { ...defaults, ...parsed };
-    }
     // デフォルトは全部表示
     const defaults = {} as Record<FeatureKey, boolean>;
-    ALL_FEATURE_DISPLAY_CONFIGS.forEach(config => {
+    ALL_FEATURE_DISPLAY_CONFIGS.forEach((config) => {
       defaults[config.key] = config.defaultVisible;
     });
+
+    // 既存の設定があればマージ、なければデフォルト
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // 新しい機能（parsedにないキー）はデフォルト値(true)を使う
+      return { ...defaults, ...parsed };
+    }
+
     return defaults;
   } catch (error) {
     logError(error, { component: 'featureDisplaySettings', action: 'getFeatureDisplaySettings' });
     // エラー時もデフォルトは全部表示
     const defaults = {} as Record<FeatureKey, boolean>;
-    ALL_FEATURE_DISPLAY_CONFIGS.forEach(config => {
+    ALL_FEATURE_DISPLAY_CONFIGS.forEach((config) => {
       defaults[config.key] = config.defaultVisible;
     });
     return defaults;
@@ -145,13 +306,14 @@ export function toggleFeatureVisibility(key: FeatureKey): void {
 /**
  * カテゴリごとに表示/非表示を切り替え
  */
-export function toggleCategoryVisibility(category: FeatureDisplayConfig['category'], visible: boolean): void {
+export function toggleCategoryVisibility(
+  category: FeatureDisplayConfig['category'],
+  visible: boolean
+): void {
   const settings = getFeatureDisplaySettings();
-  ALL_FEATURE_DISPLAY_CONFIGS
-    .filter(config => config.category === category)
-    .forEach(config => {
-      settings[config.key] = visible;
-    });
+  ALL_FEATURE_DISPLAY_CONFIGS.filter((config) => config.category === category).forEach((config) => {
+    settings[config.key] = visible;
+  });
   saveFeatureDisplaySettings(settings);
 }
 
@@ -160,9 +322,8 @@ export function toggleCategoryVisibility(category: FeatureDisplayConfig['categor
  */
 export function setAllFeaturesVisible(visible: boolean): void {
   const settings = {} as Record<FeatureKey, boolean>;
-  ALL_FEATURE_DISPLAY_CONFIGS.forEach(config => {
+  ALL_FEATURE_DISPLAY_CONFIGS.forEach((config) => {
     settings[config.key] = visible;
   });
   saveFeatureDisplaySettings(settings);
 }
-

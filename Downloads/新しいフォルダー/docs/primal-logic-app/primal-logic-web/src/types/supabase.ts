@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Supabase Database Types
- * 
+ *
  * Supabaseデータベースのテーブル型定義
  */
 
@@ -130,4 +130,3 @@ export interface TipHistoryRow {
   viewed_at: string; // ISO timestamp
   created_at?: string;
 }
-

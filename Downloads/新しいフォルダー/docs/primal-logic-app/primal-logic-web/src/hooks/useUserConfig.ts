@@ -1,6 +1,6 @@
 /**
  * useUserConfig Hook - ユーザー設定管理
- * 
+ *
  * 塩の単位や重量など、ユーザー固有の設定を管理
  */
 
@@ -57,4 +57,3 @@ export function useUserConfig() {
     updateConfig,
   };
 }
-

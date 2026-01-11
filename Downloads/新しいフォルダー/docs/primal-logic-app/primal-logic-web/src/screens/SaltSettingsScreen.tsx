@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Salt Settings Screen
- * 
+ *
  * 塩ミル設定画面
  */
 
@@ -17,9 +17,9 @@ interface SaltSettingsScreenProps {
 export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) {
   const { t } = useTranslation();
   const { config, updateConfig } = useUserConfig();
-  const [saltType, setSaltType] = useState<'table_salt' | 'sea_salt' | 'himalayan_salt' | 'celtic_salt'>(
-    config.saltType || 'table_salt'
-  );
+  const [saltType, setSaltType] = useState<
+    'table_salt' | 'sea_salt' | 'himalayan_salt' | 'celtic_salt'
+  >(config.saltType || 'table_salt');
   const [saltUnitWeight, setSaltUnitWeight] = useState<number>(config.saltUnitWeight || 0.5);
 
   useEffect(() => {
@@ -27,7 +27,9 @@ export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) 
     setSaltUnitWeight(config.saltUnitWeight || 0.5);
   }, [config]);
 
-  const handleSaltTypeChange = (type: 'table_salt' | 'sea_salt' | 'himalayan_salt' | 'celtic_salt') => {
+  const handleSaltTypeChange = (
+    type: 'table_salt' | 'sea_salt' | 'himalayan_salt' | 'celtic_salt'
+  ) => {
     setSaltType(type);
     updateConfig({ saltType: type });
   };
@@ -39,10 +41,26 @@ export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) 
   };
 
   const saltTypes = [
-    { code: 'table_salt' as const, name: '食卓塩', description: '一般的な精製塩。ナトリウム含有量が高い。' },
-    { code: 'sea_salt' as const, name: '海塩', description: '海水から作られた塩。ミネラルが豊富。' },
-    { code: 'himalayan_salt' as const, name: 'ヒマラヤ塩', description: 'ヒマラヤ山脈の岩塩。84種類のミネラルを含む。' },
-    { code: 'celtic_salt' as const, name: 'ケルト塩', description: 'フランスのケルト地方の海塩。マグネシウムが豊富。' },
+    {
+      code: 'table_salt' as const,
+      name: '食卓塩',
+      description: '一般的な精製塩。ナトリウム含有量が高い。',
+    },
+    {
+      code: 'sea_salt' as const,
+      name: '海塩',
+      description: '海水から作られた塩。ミネラルが豊富。',
+    },
+    {
+      code: 'himalayan_salt' as const,
+      name: 'ヒマラヤ塩',
+      description: 'ヒマラヤ山脈の岩塩。84種類のミネラルを含む。',
+    },
+    {
+      code: 'celtic_salt' as const,
+      name: 'ケルト塩',
+      description: 'フランスのケルト地方の海塩。マグネシウムが豊富。',
+    },
   ];
 
   return (
@@ -64,9 +82,7 @@ export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) 
             {saltTypes.map((type) => (
               <button
                 key={type.code}
-                className={`salt-settings-screen-button ${
-                  saltType === type.code ? 'active' : ''
-                }`}
+                className={`salt-settings-screen-button ${saltType === type.code ? 'active' : ''}`}
                 onClick={() => handleSaltTypeChange(type.code)}
                 aria-label={`${type.name}を選択`}
                 aria-current={saltType === type.code ? 'true' : 'false'}
@@ -96,9 +112,7 @@ export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) 
             />
             <span className="salt-settings-screen-input-unit">g</span>
           </div>
-          <p className="salt-settings-screen-hint">
-            デフォルト: 0.5g/削り
-          </p>
+          <p className="salt-settings-screen-hint">デフォルト: 0.5g/削り</p>
           <button
             className="salt-settings-screen-reset-button"
             onClick={() => handleUnitWeightChange(0.5)}
@@ -110,4 +124,3 @@ export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) 
     </div>
   );
 }
-

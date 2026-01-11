@@ -1,6 +1,6 @@
 /**
  * Primal Logic - エラーハンドリングユーティリティ
- * 
+ *
  * 統一されたエラーハンドリングとユーザーフレンドリーなエラーメッセージ
  */
 
@@ -18,7 +18,7 @@ export class AppError extends Error {
 /**
  * エラータイプ
  */
-export type ErrorType = 
+export type ErrorType =
   | 'NETWORK_ERROR'
   | 'AUTH_ERROR'
   | 'VALIDATION_ERROR'
@@ -36,27 +36,47 @@ export function getUserFriendlyErrorMessage(error: unknown, context?: Record<str
 
   if (error instanceof Error) {
     // ネットワークエラー
-    if (error.message.includes('fetch') || error.message.includes('network') || error.message.includes('Network')) {
+    if (
+      error.message.includes('fetch') ||
+      error.message.includes('network') ||
+      error.message.includes('Network')
+    ) {
       return 'ネットワークエラーが発生しました。インターネット接続を確認してください。';
     }
 
     // 認証エラー
-    if (error.message.includes('auth') || error.message.includes('unauthorized') || error.message.includes('認証')) {
+    if (
+      error.message.includes('auth') ||
+      error.message.includes('unauthorized') ||
+      error.message.includes('認証')
+    ) {
       return '認証エラーが発生しました。ログインし直してください。';
     }
 
     // バリデーションエラー
-    if (error.message.includes('validation') || error.message.includes('invalid') || error.message.includes('無効')) {
+    if (
+      error.message.includes('validation') ||
+      error.message.includes('invalid') ||
+      error.message.includes('無効')
+    ) {
       return '入力内容に誤りがあります。確認してください。';
     }
 
     // APIエラー
-    if (error.message.includes('API') || error.message.includes('500') || error.message.includes('503')) {
+    if (
+      error.message.includes('API') ||
+      error.message.includes('500') ||
+      error.message.includes('503')
+    ) {
       return 'サーバーエラーが発生しました。しばらくしてから再度お試しください。';
     }
 
     // ストレージエラー
-    if (error.message.includes('storage') || error.message.includes('localStorage') || error.message.includes('保存')) {
+    if (
+      error.message.includes('storage') ||
+      error.message.includes('localStorage') ||
+      error.message.includes('保存')
+    ) {
       return 'データの保存に失敗しました。ブラウザの設定を確認してください。';
     }
 
@@ -90,7 +110,8 @@ export function getErrorType(error: unknown): ErrorType {
     if (message.includes('fetch') || message.includes('network')) return 'NETWORK_ERROR';
     if (message.includes('auth') || message.includes('unauthorized')) return 'AUTH_ERROR';
     if (message.includes('validation') || message.includes('invalid')) return 'VALIDATION_ERROR';
-    if (message.includes('api') || message.includes('500') || message.includes('503')) return 'API_ERROR';
+    if (message.includes('api') || message.includes('500') || message.includes('503'))
+      return 'API_ERROR';
     if (message.includes('storage') || message.includes('localstorage')) return 'STORAGE_ERROR';
   }
 
@@ -147,10 +168,7 @@ export function withErrorHandling<T extends (...args: unknown[]) => Promise<unkn
 /**
  * エラーを安全に処理する（エラーを投げずに処理）
  */
-export async function safeExecute<T>(
-  fn: () => Promise<T>,
-  fallback?: T
-): Promise<T | null> {
+export async function safeExecute<T>(fn: () => Promise<T>, fallback?: T): Promise<T | null> {
   try {
     return await fn();
   } catch (error) {
@@ -158,4 +176,3 @@ export async function safeExecute<T>(
     return fallback ?? null;
   }
 }
-

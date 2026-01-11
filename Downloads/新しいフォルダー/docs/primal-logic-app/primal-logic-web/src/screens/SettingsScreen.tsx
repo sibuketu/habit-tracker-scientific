@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Settings Screen
- * 
+ *
  * ユーザー設定画面: 文字サイズ、表示設定など
  */
 
@@ -12,11 +12,15 @@ import { requestNotificationPermission } from '../utils/defrostReminder';
 import HelpTooltip from '../components/common/HelpTooltip';
 import './SettingsScreen.css';
 
-export default function SettingsScreen() {
-  const { 
-    showKnowledge, 
-    toggleKnowledge, 
-    showNutrientPreview, 
+interface SettingsScreenProps {
+  onShowOnboarding?: () => void;
+}
+
+export default function SettingsScreen({ onShowOnboarding }: SettingsScreenProps = {}) {
+  const {
+    showKnowledge,
+    toggleKnowledge,
+    showNutrientPreview,
     toggleNutrientPreview,
     fontSize,
     setFontSize,
@@ -29,7 +33,8 @@ export default function SettingsScreen() {
   } = useSettings();
 
   const [fontSizeLocal, setFontSizeLocal] = useState(fontSize || 'medium');
-  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
+  const [notificationPermission, setNotificationPermission] =
+    useState<NotificationPermission>('default');
   const [notificationEnabled, setNotificationEnabled] = useState(() => {
     const saved = localStorage.getItem('settings_notification_enabled');
     return saved ? JSON.parse(saved) : false;
@@ -126,11 +131,7 @@ export default function SettingsScreen() {
               </div>
             </div>
             <label className="settings-screen-switch">
-              <input
-                type="checkbox"
-                checked={showKnowledge}
-                onChange={toggleKnowledge}
-              />
+              <input type="checkbox" checked={showKnowledge} onChange={toggleKnowledge} />
               <span className="settings-screen-switch-slider"></span>
             </label>
           </div>
@@ -164,11 +165,7 @@ export default function SettingsScreen() {
               </div>
             </div>
             <label className="settings-screen-switch">
-              <input
-                type="checkbox"
-                checked={darkMode}
-                onChange={toggleDarkMode}
-              />
+              <input type="checkbox" checked={darkMode} onChange={toggleDarkMode} />
               <span className="settings-screen-switch-slider"></span>
             </label>
           </div>
@@ -183,11 +180,7 @@ export default function SettingsScreen() {
               </div>
             </div>
             <label className="settings-screen-switch">
-              <input
-                type="checkbox"
-                checked={tipsEnabled}
-                onChange={toggleTips}
-              />
+              <input type="checkbox" checked={tipsEnabled} onChange={toggleTips} />
               <span className="settings-screen-switch-slider"></span>
             </label>
           </div>
@@ -202,11 +195,7 @@ export default function SettingsScreen() {
               </div>
             </div>
             <label className="settings-screen-switch">
-              <input
-                type="checkbox"
-                checked={debugMode}
-                onChange={toggleDebugMode}
-              />
+              <input type="checkbox" checked={debugMode} onChange={toggleDebugMode} />
               <span className="settings-screen-switch-slider"></span>
             </label>
           </div>
@@ -222,11 +211,11 @@ export default function SettingsScreen() {
                 <HelpTooltip text="ブラウザの通知機能を有効にします。電解質アラート、脂質不足リマインダー、ストリークリマインダーなどの通知を受け取れます。" />
               </label>
               <div className="settings-screen-switch-description">
-                {notificationPermission === 'granted' 
+                {notificationPermission === 'granted'
                   ? '通知が許可されています'
                   : notificationPermission === 'denied'
-                  ? '通知が拒否されています。ブラウザの設定から許可してください。'
-                  : '通知の許可をリクエストします'}
+                    ? '通知が拒否されています。ブラウザの設定から許可してください。'
+                    : '通知の許可をリクエストします'}
               </div>
             </div>
             <label className="settings-screen-switch">
@@ -240,15 +229,17 @@ export default function SettingsScreen() {
             </label>
           </div>
           {notificationPermission === 'denied' && (
-            <div style={{ 
-              marginTop: '0.5rem', 
-              padding: '0.75rem', 
-              backgroundColor: '#fef2f2', 
-              border: '1px solid #fecaca', 
-              borderRadius: '6px',
-              fontSize: '0.875rem',
-              color: '#991b1b'
-            }}>
+            <div
+              style={{
+                marginTop: '0.5rem',
+                padding: '0.75rem',
+                backgroundColor: '#fef2f2',
+                border: '1px solid #fecaca',
+                borderRadius: '6px',
+                fontSize: '0.875rem',
+                color: '#991b1b',
+              }}
+            >
               ⚠️ 通知が拒否されています。ブラウザの設定から通知を許可してください。
             </div>
           )}
@@ -279,6 +270,23 @@ export default function SettingsScreen() {
           </div>
         </div>
 
+        {/* アプリ情報 */}
+        <div className="settings-screen-section">
+          <h2 className="settings-screen-section-title">アプリ情報</h2>
+          <div className="settings-screen-button-row">
+            <button
+              className="settings-screen-option-button"
+              onClick={() => {
+                if (onShowOnboarding) {
+                  localStorage.removeItem('primal_logic_onboarding_completed');
+                  onShowOnboarding();
+                }
+              }}
+            >
+              オンボーディングを再表示
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

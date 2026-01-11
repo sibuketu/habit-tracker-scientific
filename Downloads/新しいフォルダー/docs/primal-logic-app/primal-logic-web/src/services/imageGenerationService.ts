@@ -1,6 +1,6 @@
 /**
  * 画像生成サービス（無料版 - プロンプト生成のみ）
- * 
+ *
  * 実際の画像生成は外部サービスで手動実行
  * 将来的に無料API（Replicate等）を統合可能
  */
@@ -12,23 +12,23 @@ import { logError } from '../utils/errorHandler';
 
 /**
  * 画像生成プロンプトを生成（無料版）
- * 
+ *
  * 実際の画像生成は手動で行うか、無料APIサービスを使用してください
- * 
+ *
  * @param prompt 画像生成プロンプト
  * @param size 画像サイズ（デフォルト: "1024x1024"）
  * @returns プロンプト文字列（画像URLではない）
  */
 export async function generateImage(
   prompt: string,
-  size: "1024x1024" | "1792x1024" | "1024x1792" = "1024x1024"
+  size: '1024x1024' | '1792x1024' | '1024x1792' = '1024x1024'
 ): Promise<string> {
   // 無料版: プロンプトを返すだけ
   // 実際の画像生成は以下のサービスで手動実行:
   // - https://replicate.com/ (Stable Diffusion - 無料枠あり)
   // - https://huggingface.co/spaces/stabilityai/stable-diffusion (完全無料)
   // - https://www.craiyon.com/ (無料)
-  
+
   if (import.meta.env.DEV) {
     console.log('画像生成プロンプト:', prompt);
     console.log('サイズ:', size);
@@ -37,7 +37,7 @@ export async function generateImage(
     console.log('- Hugging Face: https://huggingface.co/spaces/stabilityai/stable-diffusion');
     console.log('- Craiyon: https://www.craiyon.com/');
   }
-  
+
   // プロンプトをクリップボードにコピーする機能を提供
   if (navigator.clipboard) {
     try {
@@ -46,25 +46,29 @@ export async function generateImage(
         console.log('プロンプトをクリップボードにコピーしました');
       }
     } catch (err) {
-      logError(err, { component: 'imageGenerationService', action: 'generateImage', step: 'copyToClipboard' });
+      logError(err, {
+        component: 'imageGenerationService',
+        action: 'generateImage',
+        step: 'copyToClipboard',
+      });
     }
   }
-  
+
   // エラーをスローして、UI側で手動生成を案内
   throw new Error(
     `💰 画像生成は有料APIのため、現在は自動生成できません。\n\n` +
-    `📋 生成されたプロンプト: ${prompt}\n\n` +
-    `✅ 以下の無料サービスで手動生成してください:\n` +
-    `- Replicate (Stable Diffusion): https://replicate.com/\n` +
-    `- Hugging Face: https://huggingface.co/spaces/stabilityai/stable-diffusion\n` +
-    `- Craiyon: https://www.craiyon.com/\n\n` +
-    `（プロンプトはクリップボードにコピーされています）`
+      `📋 生成されたプロンプト: ${prompt}\n\n` +
+      `✅ 以下の無料サービスで手動生成してください:\n` +
+      `- Replicate (Stable Diffusion): https://replicate.com/\n` +
+      `- Hugging Face: https://huggingface.co/spaces/stabilityai/stable-diffusion\n` +
+      `- Craiyon: https://www.craiyon.com/\n\n` +
+      `（プロンプトはクリップボードにコピーされています）`
   );
 }
 
 /**
  * アプリアイコンを生成
- * 
+ *
  * @param style アイコンのスタイル（1: ミートアイコン、2: 論理+肉、3: C文字+肉）
  * @param variation バリエーション番号（1-4）
  * @returns 生成された画像のURL
@@ -107,65 +111,73 @@ function getAppIconPrompt(style: 1 | 2 | 3, variation: 1 | 2 | 3 | 4): string {
 
 /**
  * 複数のアプリアイコンプロンプトを一括生成（10個程度）
- * 
+ *
  * 無料版: プロンプトを生成するだけ。実際の画像生成は手動で行う
- * 
+ *
  * @returns プロンプトの配列（エラーをスローしてプロンプトを表示）
  */
-export async function generateMultipleAppIcons(): Promise<Array<{ style: number; variation: number; url: string }>> {
+export async function generateMultipleAppIcons(): Promise<
+  Array<{ style: number; variation: number; url: string }>
+> {
   // 無料版: すべてのプロンプトをまとめて表示
   const allPrompts: Array<{ style: number; variation: number; prompt: string }> = [];
-  
+
   // スタイル1: 4バリエーション
   for (let v = 1; v <= 4; v++) {
     const prompt = getAppIconPrompt(1, v as 1 | 2 | 3 | 4);
     allPrompts.push({ style: 1, variation: v, prompt });
   }
-  
+
   // スタイル2: 3バリエーション
   for (let v = 1; v <= 3; v++) {
     const prompt = getAppIconPrompt(2, v as 1 | 2 | 3);
     allPrompts.push({ style: 2, variation: v, prompt });
   }
-  
+
   // スタイル3: 3バリエーション
   for (let v = 1; v <= 3; v++) {
     const prompt = getAppIconPrompt(3, v as 1 | 2 | 3);
     allPrompts.push({ style: 3, variation: v, prompt });
   }
-  
+
   // すべてのプロンプトをクリップボードにコピー
-  const promptsText = allPrompts.map((p, idx) => 
-    `${idx + 1}. スタイル${p.style} - バリエーション${p.variation}:\n${p.prompt}\n`
-  ).join('\n');
-  
+  const promptsText = allPrompts
+    .map(
+      (p, idx) => `${idx + 1}. スタイル${p.style} - バリエーション${p.variation}:\n${p.prompt}\n`
+    )
+    .join('\n');
+
   if (navigator.clipboard) {
     try {
       await navigator.clipboard.writeText(promptsText);
     } catch (err) {
-      logError(err, { component: 'imageGenerationService', action: 'generateMultipleAppIcons', step: 'copyToClipboard' });
+      logError(err, {
+        component: 'imageGenerationService',
+        action: 'generateMultipleAppIcons',
+        step: 'copyToClipboard',
+      });
     }
   }
-  
+
   // エラーとしてプロンプトを返す（UI側で表示）
   throw new Error(
     `💰 画像生成は有料APIのため、現在は自動生成できません。\n\n` +
-    `📋 以下の10個のプロンプトがクリップボードにコピーされました:\n\n` +
-    promptsText +
-    `\n✅ 無料で画像生成する方法:\n` +
-    `1. Replicate (Stable Diffusion): https://replicate.com/\n` +
-    `   - 無料枠あり、高品質\n` +
-    `2. Hugging Face: https://huggingface.co/spaces/stabilityai/stable-diffusion\n` +
-    `   - 完全無料\n` +
-    `3. Craiyon: https://www.craiyon.com/\n` +
-    `   - 完全無料\n\n` +
-    `上記のサービスにプロンプトを貼り付けて、10個の画像を生成してください。`
+      `📋 以下の10個のプロンプトがクリップボードにコピーされました:\n\n` +
+      promptsText +
+      `\n✅ 無料で画像生成する方法:\n` +
+      `1. Replicate (Stable Diffusion): https://replicate.com/\n` +
+      `   - 無料枠あり、高品質\n` +
+      `2. Hugging Face: https://huggingface.co/spaces/stabilityai/stable-diffusion\n` +
+      `   - 完全無料\n` +
+      `3. Craiyon: https://www.craiyon.com/\n` +
+      `   - 完全無料\n\n` +
+      `上記のサービスにプロンプトを貼り付けて、10個の画像を生成してください。`
   );
 }
 
 /**
  * SNS投稿用の画像を生成
- * 
+ *
  * @param prompt 画像生成プロンプト
  * @returns 生成された画像のURL
  */
@@ -173,4 +185,3 @@ export async function generateSNSImage(prompt: string): Promise<string> {
   const enhancedPrompt = `Create a social media post image for a carnivore diet app. ${prompt} Style: Modern, engaging, Instagram/Twitter optimized, 1024x1024px, high quality, vibrant colors.`;
   return generateImage(enhancedPrompt, '1024x1024');
 }
-

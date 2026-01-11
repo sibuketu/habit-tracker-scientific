@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Recovery Algorithm
- * 
+ *
  * 違反タイプ別の処方箋生成ロジック
  * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
  */
@@ -10,16 +10,14 @@ import type { ViolationType, RecoveryProtocol } from '../types';
 
 /**
  * Generate recovery protocol based on violation type
- * 
+ *
  * Violation Types:
  * - SUGAR_CARBS: Insulin spike, glycogen refill
  * - SEED_OILS: Inflammation, oxidative stress
  * - ALCOHOL: Liver stress, dehydration
  * - OXALATES: Crystal formation, mineral binding
  */
-export function generateRecoveryProtocol(
-  violationType: ViolationType
-): RecoveryProtocol {
+export function generateRecoveryProtocol(violationType: ViolationType): RecoveryProtocol {
   const baseProtocol: Omit<RecoveryProtocol, 'violationType'> = {
     isActive: true,
     fastingTargetHours: 16,
@@ -36,10 +34,7 @@ export function generateRecoveryProtocol(
         violationType,
         fastingTargetHours: 18,
         activities: ['Sprint/HIIT (Force glycogen burn)'],
-        dietRecommendations: [
-          'Zero Carb / High Fat next day',
-          'Focus on ruminant meat',
-        ],
+        dietRecommendations: ['Zero Carb / High Fat next day', 'Focus on ruminant meat'],
         protocolId: 'sugar_carbs_detox_18h',
       };
 
@@ -53,9 +48,7 @@ export function generateRecoveryProtocol(
           'Ruminant Fat only (No chicken/pork for 2 days)',
           'Focus on beef tallow, lamb fat',
         ],
-        supplements: [
-          'Vitamin E (optional) - to protect cell membranes',
-        ],
+        supplements: ['Vitamin E (optional) - to protect cell membranes'],
         protocolId: 'oil_detox_18h',
       };
 
@@ -70,9 +63,7 @@ export function generateRecoveryProtocol(
           'Eggs (Choline) for liver support',
         ],
         supplements: [],
-        warnings: [
-          'Keep fasting short (12-14h) to prioritize nutrient repair',
-        ],
+        warnings: ['Keep fasting short (12-14h) to prioritize nutrient repair'],
         protocolId: 'alcohol_recovery_12h',
       };
 
@@ -87,9 +78,7 @@ export function generateRecoveryProtocol(
           'Citric acid (Lemon water) - helps prevent stones',
         ],
         supplements: [],
-        warnings: [
-          'Do NOT fast too long (promotes oxalate dumping)',
-        ],
+        warnings: ['Do NOT fast too long (promotes oxalate dumping)'],
         protocolId: 'oxalate_mitigation_14h',
       };
 
@@ -104,7 +93,7 @@ export function generateRecoveryProtocol(
 
 /**
  * Detect violation type from food item
- * 
+ *
  * This is a simplified version. In production, you'd want:
  * - A food database with flags (seed_oil, high_oxalate, etc.)
  * - More sophisticated detection logic
@@ -167,12 +156,8 @@ export function detectViolationType(foodName: string): ViolationType | null {
 /**
  * Calculate target fast end time
  */
-export function calculateTargetFastEnd(
-  fastingHours: number,
-  startTime?: Date
-): string {
+export function calculateTargetFastEnd(fastingHours: number, startTime?: Date): string {
   const start = startTime || new Date();
   const end = new Date(start.getTime() + fastingHours * 60 * 60 * 1000);
   return end.toISOString();
 }
-

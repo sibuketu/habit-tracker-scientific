@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Consent Screen
- * 
+ *
  * 初回起動時のプライバシーポリシー・利用規約への同意画面
  */
 
@@ -48,7 +48,13 @@ export default function ConsentScreen({ onAccept, onDecline }: ConsentScreenProp
               onChange={(e) => setPrivacyAccepted(e.target.checked)}
             />
             <span>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleViewPrivacy(); }}>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleViewPrivacy();
+                }}
+              >
                 プライバシーポリシー
               </a>
               に同意します
@@ -62,7 +68,13 @@ export default function ConsentScreen({ onAccept, onDecline }: ConsentScreenProp
               onChange={(e) => setTermsAccepted(e.target.checked)}
             />
             <span>
-              <a href="#" onClick={(e) => { e.preventDefault(); handleViewTerms(); }}>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleViewTerms();
+                }}
+              >
                 利用規約
               </a>
               に同意します
@@ -89,4 +101,3 @@ export default function ConsentScreen({ onAccept, onDecline }: ConsentScreenProp
     </div>
   );
 }
-

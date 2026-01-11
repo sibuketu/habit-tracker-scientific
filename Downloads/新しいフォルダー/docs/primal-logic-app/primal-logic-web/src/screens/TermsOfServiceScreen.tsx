@@ -23,16 +23,15 @@ export default function TermsOfServiceScreen() {
           <section className="terms-of-service-section">
             <h2>1. はじめに</h2>
             <p>
-              本利用規約（以下「本規約」）は、Primal Logic（以下「当アプリ」）の利用条件を定めるものです。
+              本利用規約（以下「本規約」）は、Primal
+              Logic（以下「当アプリ」）の利用条件を定めるものです。
               当アプリを利用することにより、本規約に同意したものとみなされます。
             </p>
           </section>
 
           <section className="terms-of-service-section">
             <h2>2. サービスの内容</h2>
-            <p>
-              当アプリは、カーニボアダイエット管理アプリとして、以下の機能を提供します：
-            </p>
+            <p>当アプリは、カーニボアダイエット管理アプリとして、以下の機能を提供します：</p>
             <ul>
               <li>栄養素追跡（100項目以上の栄養素）</li>
               <li>動的目標値計算（ユーザープロファイルに基づく）</li>
@@ -45,9 +44,7 @@ export default function TermsOfServiceScreen() {
 
           <section className="terms-of-service-section">
             <h2>3. 利用資格</h2>
-            <p>
-              当アプリは、以下の条件を満たす方にご利用いただけます：
-            </p>
+            <p>当アプリは、以下の条件を満たす方にご利用いただけます：</p>
             <ul>
               <li>18歳以上であること（保護者の同意がある場合は除く）</li>
               <li>本規約に同意すること</li>
@@ -78,9 +75,7 @@ export default function TermsOfServiceScreen() {
 
           <section className="terms-of-service-section">
             <h2>5. 禁止事項</h2>
-            <p>
-              以下の行為は禁止されています：
-            </p>
+            <p>以下の行為は禁止されています：</p>
             <ul>
               <li>当アプリの機能を不正に使用すること</li>
               <li>他のユーザーのアカウントに不正にアクセスすること</li>
@@ -129,20 +124,15 @@ export default function TermsOfServiceScreen() {
 
           <section className="terms-of-service-section">
             <h2>9. 準拠法</h2>
-            <p>
-              本規約は、日本法に準拠し、解釈されます。
-            </p>
+            <p>本規約は、日本法に準拠し、解釈されます。</p>
           </section>
 
           <section className="terms-of-service-section">
             <h2>10. お問い合わせ</h2>
-            <p>
-              本規約に関するご質問は、設定画面からお問い合わせください。
-            </p>
+            <p>本規約に関するご質問は、設定画面からお問い合わせください。</p>
           </section>
         </div>
       </div>
     </div>
   );
 }
-

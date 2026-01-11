@@ -125,7 +125,7 @@
 
 .settings-screen-switch-slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 20px;
   width: 20px;
   left: 4px;
@@ -136,7 +136,7 @@
 }
 
 .settings-screen-switch input:checked + .settings-screen-switch-slider {
-  background-color: #007AFF;
+  background-color: #007aff;
 }
 
 .settings-screen-switch input:checked + .settings-screen-switch-slider:before {
@@ -166,4 +166,3 @@
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
-

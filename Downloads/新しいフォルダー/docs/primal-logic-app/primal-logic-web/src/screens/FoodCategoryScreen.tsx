@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Food Category Screen
- * 
+ *
  * 巨大アイコン5つ（牛・豚・鶏・卵・魚）で食品を選択
  */
 
@@ -86,7 +86,8 @@ export default function FoodCategoryScreen() {
         protein: (selectedFood.nutrientsRaw.protein || 0) * ratio,
         fat: (selectedFood.nutrientsRaw.fat || 0) * ratio,
         carbs: (selectedFood.nutrientsRaw.carbs || 0) * ratio,
-        netCarbs: ((selectedFood.nutrientsRaw.carbs || 0) - (selectedFood.nutrientsRaw.fiber || 0)) * ratio,
+        netCarbs:
+          ((selectedFood.nutrientsRaw.carbs || 0) - (selectedFood.nutrientsRaw.fiber || 0)) * ratio,
         fiber: (selectedFood.nutrientsRaw.fiber || 0) * ratio,
         hemeIron: (selectedFood.nutrientsRaw.hemeIron || 0) * ratio,
         nonHemeIron: (selectedFood.nutrientsRaw.nonHemeIron || 0) * ratio,
@@ -200,4 +201,3 @@ export default function FoodCategoryScreen() {
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Tomorrow Log Utility
- * 
+ *
  * 「明日のログに追加」機能: Phase 4の仕様
  * SET PROTOCOLボタンで明日のログにRecovery Protocolと推奨食品を追加
  */
@@ -20,19 +20,17 @@ export function getTomorrowDate(): string {
 
 /**
  * Create or update tomorrow's log with recovery protocol
- * 
+ *
  * Phase 4仕様:
  * - Adds menu to tomorrow's log
  * - Sets a "Defrost Reminder" for tonight
  */
-export async function addProtocolToTomorrowLog(
-  protocol: RecoveryProtocol
-): Promise<DailyLog> {
+export async function addProtocolToTomorrowLog(protocol: RecoveryProtocol): Promise<DailyLog> {
   const tomorrowDate = getTomorrowDate();
-  
+
   // Get existing tomorrow's log or create new one
   let tomorrowLog = await getDailyLogByDate(tomorrowDate);
-  
+
   if (!tomorrowLog) {
     // Create new log for tomorrow
     tomorrowLog = {
@@ -53,12 +51,12 @@ export async function addProtocolToTomorrowLog(
   // Add recommended foods from diet recommendations
   // Extract food items from diet recommendations
   const recommendedFoods: FoodItem[] = [];
-  
+
   if (protocol.dietRecommendations) {
     protocol.dietRecommendations.forEach((rec) => {
       // Simple parsing - in production, use more sophisticated logic
       const lowerRec = rec.toLowerCase();
-      
+
       if (lowerRec.includes('ribeye') || lowerRec.includes('beef')) {
         recommendedFoods.push({
           item: 'Beef Ribeye',
@@ -144,4 +142,3 @@ export async function addProtocolToTomorrowLog(
 
   return tomorrowLog;
 }
-

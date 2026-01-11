@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Type Definitions
- * 
+ *
  * データ構造、Recovery Protocol、Food types の型定義
  */
 
@@ -226,20 +226,102 @@ export interface UserProfile {
   customNutrientTargets?: Record<string, { mode: 'auto' | 'manual'; value?: number }>;
 }
 
+export const defaultUserProfile: UserProfile = {
+  gender: 'male',
+  height: 170,
+  weight: 70,
+  age: 30,
+  activityLevel: 'moderate',
+  goal: USER_GOALS.HEALING,
+  metabolicStatus: METABOLIC_STATUS.TRANSITIONING,
+  mode: DIET_MODES.LION_DIET,
+};
+
 /**
  * Daily Status Metrics
  */
 export interface DailyStatus {
+  // 基本スコア
   sleepScore: number; // 0-100
-  sleepHours?: number; // 睡眠時間（時間）- 新規追加
-  sunMinutes: number;
+  sleepHours?: number; // 睡眠時間（時間）
+  sunMinutes: number; // 日光浴時間（分）
   activityLevel: 'high' | 'low' | 'moderate';
   stressLevel?: 'low' | 'medium' | 'high';
+
+  // 排泄 (Bowel Movement)
   bowelMovement?: {
     status: 'normal' | 'constipated' | 'loose' | 'watery';
-    bristolScale?: number; // 1-7 (オプション)
-    notes?: string; // メモ（オプション）
+    bristolScale?: number; // 1-7
+    frequency?: number; // 回数
+    blood?: boolean; // 出血有無
+    pain?: boolean; // 痛み有無
   };
+
+  // 身体状態 (Physical)
+  weight?: number; // 体重 (kg)
+  bodyFatPercentage?: number; // 体脂肪率 (%)
+  muscleMass?: number; // 筋肉量 (kg)
+  waterWeight?: number; // 体水分率 (%)
+  bodyTemperature?: number; // 体温 (℃)
+  systolicBloodPressure?: number; // 収縮期血圧
+  diastolicBloodPressure?: number; // 拡張期血圧
+  heartRate?: number; // 安静時心拍数 (bpm)
+  hrv?: number; // 心拍変動 (ms)
+  oxygenSaturation?: number; // SpO2 (%)
+  respiratoryRate?: number; // 呼吸数 (回/分)
+  energyLevel?: number; // 1-10 (エネルギーレベル)
+  physicalFatigue?: number; // 1-10 (身体的疲労感)
+  muscleSoreness?: number; // 1-10 (筋肉痛)
+  jointPain?: number; // 1-10 (関節痛)
+  headache?: number; // 1-10 (頭痛)
+  nausea?: number; // 1-10 (吐き気)
+  bloating?: number; // 1-10 (腹部膨満感)
+  skinCondition?: 'good' | 'dry' | 'oily' | 'acne' | 'rash'; // 肌の状態
+  libido?: number; // 1-10 (性欲)
+
+  // メンタル (Mental)
+  mood?: 'great' | 'good' | 'neutral' | 'bad' | 'terrible'; // 気分
+  anxiety?: number; // 1-10 (不安)
+  depression?: number; // 1-10 (抑うつ)
+  irritability?: number; // 1-10 (イライラ)
+  focus?: number; // 1-10 (集中力)
+  brainFog?: number; // 1-10 (ブレインフォグ)
+  motivation?: number; // 1-10 (やる気)
+  gratitude?: string; // 感謝日記（テキスト）
+
+  // 睡眠詳細 (Sleep Detail)
+  bedTime?: string; // 就床時刻 (HH:mm)
+  wakeTime?: string; // 起床時刻 (HH:mm)
+  sleepLatency?: number; // 入眠潜時 (分)
+  remSleep?: number; // REM睡眠 (分)
+  deepSleep?: number; // 深い睡眠 (分)
+  awakeCount?: number; // 中途覚醒回数
+  snoring?: boolean; // いびき
+  dreamContent?: string; // 夢の内容
+
+  // 社交 (Social)
+  socialInteractions?: number; // 社交回数（人との会話など）
+  loneliness?: number; // 1-10 (孤独感)
+  socialSatisfaction?: number; // 1-10 (社交満足度)
+  sharedMeal?: boolean; // 誰かと食事をしたか
+  partnerIntimacy?: boolean; // パートナーとの親密な時間
+
+  // 環境 (Environment)
+  weather?: 'sunny' | 'cloudy' | 'rainy' | 'snowy'; // 天気
+  temperature?: number; // 気温 (℃)
+  humidity?: number; // 湿度 (%)
+  airQuality?: 'good' | 'moderate' | 'unhealthy'; // 空気質
+  noiseLevel?: 'quiet' | 'moderate' | 'noisy'; // 騒音レベル
+  blueLightExposure?: number; // 夜間のブルーライト暴露 (1-10)
+
+  // その他 (Other)
+  meditationMinutes?: number; // 瞑想時間 (分)
+  coldExposureMinutes?: number; // 寒冷暴露時間 (分)
+  saunaMinutes?: number; // サウナ時間 (分)
+  groundingMinutes?: number; // アーシング時間 (分)
+  fastingHours?: number; // 断食時間 (時間)
+  ketones?: number; // 血中ケトン体 (mmol/L)
+  glucose?: number; // 血糖値 (mg/dL)
 }
 
 /**
@@ -418,12 +500,12 @@ export interface TodoItem {
   id: string;
   title: string;
   description?: string;
-  actionType: 'timer' | 'add_food' | 'set_protocol' | 'open_screen' | 'custom';
+  actionType: 'timer' | 'add_food' | 'set_protocol' | 'open_screen' | 'update_input' | 'custom';
   actionParams?: Record<string, any>;
   isCompleted: boolean;
   // 後方互換性のため（コード内でaction.typeとaction.paramsを使っている場合）
   action?: {
-    type: 'timer' | 'add_food' | 'set_protocol' | 'open_screen' | 'custom';
+    type: 'timer' | 'add_food' | 'set_protocol' | 'open_screen' | 'update_input' | 'custom';
     params?: Record<string, any>;
   };
 }
@@ -448,7 +530,7 @@ export interface DailyLog {
   date: string; // ISO date string (YYYY-MM-DD)
   status: DailyStatus;
   fuel: FoodItem[];
-  calculatedMetrics: CalculatedMetrics;
+  calculatedMetrics?: CalculatedMetrics; // ✅ オプショナルに変更（useMemoで計算するため）
   recoveryProtocol?: RecoveryProtocol;
   diary?: string; // 日記（自由入力、メンタル・体調・身体能力など総合的に記録）
   weight?: number; // 体重（kg）- 日次記録
@@ -463,4 +545,3 @@ export interface TrashIntake {
   source: string;
   severity: 'low' | 'medium' | 'high';
 }
-

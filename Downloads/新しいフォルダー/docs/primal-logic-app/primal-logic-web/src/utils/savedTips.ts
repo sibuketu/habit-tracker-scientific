@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Saved Tips (お気に入りTips)
- * 
+ *
  * ユーザーが星で保存したTipsを管理
  */
 
@@ -45,7 +45,7 @@ export function saveTip(tipId: string): void {
 export function unsaveTip(tipId: string): void {
   try {
     const saved = getSavedTipIds();
-    const filtered = saved.filter(id => id !== tipId);
+    const filtered = saved.filter((id) => id !== tipId);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   } catch (error) {
     logError(error, { component: 'savedTips', action: 'unsaveTip', tipId });
@@ -59,4 +59,3 @@ export function isTipSaved(tipId: string): boolean {
   const saved = getSavedTipIds();
   return saved.includes(tipId);
 }
-

@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Weather Service
- * 
+ *
  * OpenWeatherMap APIを使用して天気情報を取得
  * ビタミンD合成計算に活用
  */
@@ -89,10 +89,7 @@ export async function getCityName(lat: number, lon: number): Promise<string | nu
 /**
  * OpenWeatherMap APIから天気情報を取得
  */
-export async function getWeatherData(
-  lat?: number,
-  lon?: number
-): Promise<WeatherData | null> {
+export async function getWeatherData(lat?: number, lon?: number): Promise<WeatherData | null> {
   try {
     // キャッシュを確認
     const cached = getCachedWeatherData();
@@ -119,7 +116,9 @@ export async function getWeatherData(
     const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
     if (!apiKey) {
       if (import.meta.env.DEV) {
-        console.log('OpenWeatherMap API key is not set. Set VITE_OPENWEATHER_API_KEY in .env file.');
+        console.log(
+          'OpenWeatherMap API key is not set. Set VITE_OPENWEATHER_API_KEY in .env file.'
+        );
       }
       return null;
     }
@@ -268,4 +267,3 @@ export function getWeatherVitaminDFactor(weather: WeatherData): number {
 
   return Math.max(0, Math.min(1, factor)); // 0-1の範囲に制限
 }
-

@@ -1,12 +1,21 @@
 /**
  * Nutrient Trend Chart Component
- * 
+ *
  * 栄養素の推移グラフを表示するコンポーネント
  * rechartsを使用して日次・週次・月次の推移を表示
  */
 
 import { useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 import type { DailyLog, CalculatedMetrics } from '../../types';
 
 interface NutrientTrendChartProps {
@@ -36,8 +45,9 @@ export default function NutrientTrendChart({
     if (period === 'daily') {
       // 日次データ（最大30日分）
       const recentLogs = sortedLogs.slice(-30);
-      return recentLogs.map(log => {
-        const value = (log.calculatedMetrics as CalculatedMetrics & Record<string, number>)[nutrientKey] || 0;
+      return recentLogs.map((log) => {
+        const value =
+          (log.calculatedMetrics as CalculatedMetrics & Record<string, number>)[nutrientKey] || 0;
         return {
           date: log.date.split('T')[0].split('-').slice(1).join('/'), // MM/DD形式
           value: Math.round(value * 10) / 10, // 小数点第1位まで
@@ -47,18 +57,19 @@ export default function NutrientTrendChart({
     } else if (period === 'weekly') {
       // 週次データ（最大12週分）
       const weeklyData: Record<string, { total: number; count: number }> = {};
-      
-      sortedLogs.forEach(log => {
+
+      sortedLogs.forEach((log) => {
         const date = new Date(log.date);
         const weekStart = new Date(date);
         weekStart.setDate(date.getDate() - date.getDay()); // 週の開始日（日曜日）
         const weekKey = weekStart.toISOString().split('T')[0];
-        
+
         if (!weeklyData[weekKey]) {
           weeklyData[weekKey] = { total: 0, count: 0 };
         }
-        
-        const value = (log.calculatedMetrics as CalculatedMetrics & Record<string, number>)[nutrientKey] || 0;
+
+        const value =
+          (log.calculatedMetrics as CalculatedMetrics & Record<string, number>)[nutrientKey] || 0;
         weeklyData[weekKey].total += value;
         weeklyData[weekKey].count += 1;
       });
@@ -77,16 +88,17 @@ export default function NutrientTrendChart({
     } else {
       // 月次データ（最大12ヶ月分）
       const monthlyData: Record<string, { total: number; count: number }> = {};
-      
-      sortedLogs.forEach(log => {
+
+      sortedLogs.forEach((log) => {
         const date = new Date(log.date);
         const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-        
+
         if (!monthlyData[monthKey]) {
           monthlyData[monthKey] = { total: 0, count: 0 };
         }
-        
-        const value = (log.calculatedMetrics as CalculatedMetrics & Record<string, number>)[nutrientKey] || 0;
+
+        const value =
+          (log.calculatedMetrics as CalculatedMetrics & Record<string, number>)[nutrientKey] || 0;
         monthlyData[monthKey].total += value;
         monthlyData[monthKey].count += 1;
       });
@@ -117,37 +129,53 @@ export default function NutrientTrendChart({
     <div style={{ width: '100%', height: '300px', marginTop: '1rem' }}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-          <XAxis 
-            dataKey="date" 
-            stroke="#78716c"
+          <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+          <XAxis
+            dataKey="date"
+            stroke="#71717a"
+            tick={{ fill: '#a1a1aa' }}
             style={{ fontSize: '12px' }}
           />
-          <YAxis 
-            stroke="#78716c"
+          <YAxis
+            stroke="#71717a"
+            tick={{ fill: '#a1a1aa' }}
             style={{ fontSize: '12px' }}
-            label={{ value: `${nutrientLabel} (${unit})`, angle: -90, position: 'insideLeft', style: { fontSize: '12px' } }}
+            label={{
+              value: `${nutrientLabel} (${unit})`,
+              angle: -90,
+              position: 'insideLeft',
+              style: { fontSize: '12px', fill: '#a1a1aa' },
+            }}
           />
-          <Tooltip 
-            formatter={(value: number | undefined) => value !== undefined ? [`${value}${unit}`, nutrientLabel] : ['', '']}
+          <Tooltip
+            formatter={(value: number | undefined) =>
+              value !== undefined ? [`${value}${unit}`, nutrientLabel] : ['', '']
+            }
             labelFormatter={(label) => `日付: ${label}`}
-            contentStyle={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+            contentStyle={{
+              backgroundColor: '#18181b',
+              border: '1px solid #27272a',
+              borderRadius: '8px',
+              color: '#e4e4e7',
+            }}
+            itemStyle={{ color: '#f43f5e' }}
+            labelStyle={{ color: '#a1a1aa' }}
           />
-          <Legend />
-          <Line 
-            type="monotone" 
-            dataKey="value" 
-            stroke="#dc2626" 
-            strokeWidth={2}
+          <Legend wrapperStyle={{ color: '#a1a1aa' }} />
+          <Line
+            type="monotone"
+            dataKey="value"
+            stroke="#f43f5e" /* Neon Red */
+            strokeWidth={3}
             name={nutrientLabel}
-            dot={{ r: 4 }}
-            activeDot={{ r: 6 }}
+            dot={{ r: 4, fill: '#09090b', stroke: '#f43f5e', strokeWidth: 2 }}
+            activeDot={{ r: 6, fill: '#f43f5e', stroke: '#fff' }}
           />
           {targetValue && (
-            <Line 
-              type="monotone" 
-              dataKey="target" 
-              stroke="#22c55e" 
+            <Line
+              type="monotone"
+              dataKey="target"
+              stroke="#bef264" /* Neon Lime/ish */
               strokeWidth={2}
               strokeDasharray="5 5"
               name="目標値"
@@ -159,4 +187,3 @@ export default function NutrientTrendChart({
     </div>
   );
 }
-

@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Recipe Storage Utility
- * 
+ *
  * レシピ登録・保存機能
  */
 
@@ -57,12 +57,15 @@ export function saveRecipe(recipe: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'
 /**
  * レシピを更新
  */
-export function updateRecipe(id: string, recipe: Partial<Omit<Recipe, 'id' | 'createdAt'>>): Recipe | null {
+export function updateRecipe(
+  id: string,
+  recipe: Partial<Omit<Recipe, 'id' | 'createdAt'>>
+): Recipe | null {
   try {
     const recipes = getRecipes();
-    const index = recipes.findIndex(r => r.id === id);
+    const index = recipes.findIndex((r) => r.id === id);
     if (index === -1) return null;
-    
+
     recipes[index] = {
       ...recipes[index],
       ...recipe,
@@ -82,7 +85,7 @@ export function updateRecipe(id: string, recipe: Partial<Omit<Recipe, 'id' | 'cr
 export function deleteRecipe(id: string): boolean {
   try {
     const recipes = getRecipes();
-    const filtered = recipes.filter(r => r.id !== id);
+    const filtered = recipes.filter((r) => r.id !== id);
     if (filtered.length === recipes.length) return false;
     localStorage.setItem(RECIPE_STORAGE_KEY, JSON.stringify(filtered));
     return true;
@@ -98,10 +101,9 @@ export function deleteRecipe(id: string): boolean {
 export function getRecipeById(id: string): Recipe | null {
   try {
     const recipes = getRecipes();
-    return recipes.find(r => r.id === id) || null;
+    return recipes.find((r) => r.id === id) || null;
   } catch (error) {
     logError(error, { component: 'recipeStorage', action: 'getRecipeById' });
     return null;
   }
 }
-

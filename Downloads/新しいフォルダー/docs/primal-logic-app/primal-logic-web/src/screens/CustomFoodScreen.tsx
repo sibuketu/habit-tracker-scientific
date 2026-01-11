@@ -1,6 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import { analyzeFoodName } from '../services/aiService';
-import { addCustomFood, updateCustomFood, getCustomFoodById, type MyFoodItem } from '../utils/myFoodsStorage';
+import {
+  addCustomFood,
+  updateCustomFood,
+  getCustomFoodById,
+  type MyFoodItem,
+} from '../utils/myFoodsStorage';
 import { getRandomTip, getRandomTipExcluding, type Tip } from '../data/tips';
 import { saveTip, unsaveTip, isTipSaved } from '../utils/savedTips';
 import { useTranslation } from '../utils/i18n';
@@ -94,7 +99,6 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
     }
   }, [foodId]);
 
-
   // 食品名から栄養素を推測（半自動）
   const handleAnalyze = async () => {
     if (!foodName.trim()) {
@@ -108,14 +112,17 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
     // ローディング中のTipsを表示
     // 現在のTipsを履歴に追加（戻るボタン用）
     if (loadingTip) {
-      setPreviousTips(prev => [...prev, loadingTip]);
+      setPreviousTips((prev) => [...prev, loadingTip]);
     }
     const randomTip = loadingTip ? getRandomTipExcluding(loadingTip.id) : getRandomTip();
     setLoadingTip(randomTip);
     setIsTipSavedState(isTipSaved(randomTip.id));
 
     try {
-      const result = await analyzeFoodName(foodName, Object.keys(followupAnswers).length > 0 ? followupAnswers : undefined);
+      const result = await analyzeFoodName(
+        foodName,
+        Object.keys(followupAnswers).length > 0 ? followupAnswers : undefined
+      );
       setFoodName(result.foodName);
       setType(result.type === 'plant' ? 'animal' : result.type);
       setNutrients(result.nutrients || {});
@@ -185,8 +192,11 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
   };
 
   // 栄養素の値を更新
-  const updateNutrient = (key: keyof NonNullable<MyFoodItem['nutrients']>, value: number | undefined) => {
-    setNutrients(prev => ({
+  const updateNutrient = (
+    key: keyof NonNullable<MyFoodItem['nutrients']>,
+    value: number | undefined
+  ) => {
+    setNutrients((prev) => ({
       ...prev,
       [key]: value === undefined || value === 0 ? undefined : value,
     }));
@@ -197,11 +207,26 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
       <div className="custom-food-content">
         <div className="custom-food-header">
           <h2>{foodId ? t('customFood.edit') : t('customFood.add')}</h2>
-          <button onClick={onClose} className="close-button">×</button>
+          <button
+            onClick={onClose}
+            className="close-button"
+            style={{ fontSize: '1.5rem', padding: '0.5rem 1rem' }}
+          >
+            ←
+          </button>
         </div>
 
         {error && (
-          <div className="error-message" style={{ color: '#dc2626', padding: '0.75rem', marginBottom: '1rem', backgroundColor: '#fef2f2', borderRadius: '8px' }}>
+          <div
+            className="error-message"
+            style={{
+              color: '#dc2626',
+              padding: '0.75rem',
+              marginBottom: '1rem',
+              backgroundColor: '#fef2f2',
+              borderRadius: '8px',
+            }}
+          >
             {error}
           </div>
         )}
@@ -210,7 +235,14 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
         <div className="custom-food-section">
           <label>
             <strong>{t('customFood.foodName')}</strong>
-            <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+            <div
+              style={{
+                fontSize: '12px',
+                color: '#6b7280',
+                marginTop: '0.25rem',
+                marginBottom: '0.5rem',
+              }}
+            >
               {t('customFood.foodNameDescription')}
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
@@ -225,7 +257,13 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
                     setDisplayName(newFoodName);
                   }}
                   placeholder={t('customFood.foodNamePlaceholder')}
-                  style={{ width: '100%', padding: '0.75rem', paddingRight: '3rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    paddingRight: '3rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                  }}
                 />
                 <button
                   onClick={toggleVoiceInput}
@@ -258,13 +296,13 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
                 disabled={isAnalyzing || !foodName.trim()}
                 style={{
                   padding: '0.75rem 1.5rem',
-                  backgroundColor: isAnalyzing ? '#9ca3af' : '#3b82f6',
+                  backgroundColor: isAnalyzing ? '#9ca3af' : '#b91c1c',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
                   cursor: isAnalyzing ? 'not-allowed' : 'pointer',
                   fontWeight: '600',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {isAnalyzing ? t('customFood.analyzing') : t('customFood.aiSuggest')}
@@ -274,7 +312,14 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
 
           <label style={{ marginTop: '1rem', display: 'block' }}>
             <strong>{t('customFood.displayName')}</strong>
-            <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+            <div
+              style={{
+                fontSize: '12px',
+                color: '#6b7280',
+                marginTop: '0.25rem',
+                marginBottom: '0.5rem',
+              }}
+            >
               {t('customFood.displayNameDescription')}
             </div>
             <input
@@ -282,14 +327,35 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder={foodName || t('customFood.displayNamePlaceholder')}
-              style={{ width: '100%', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '8px', marginTop: '0.5rem' }}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px',
+                marginTop: '0.5rem',
+              }}
             />
           </label>
 
           {/* AIローディング中のTips表示 */}
           {isAnalyzing && loadingTip && (
-            <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#fef3c7', border: '1px solid #fbbf24', borderRadius: '8px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+            <div
+              style={{
+                marginTop: '1rem',
+                padding: '1rem',
+                backgroundColor: '#fef3c7',
+                border: '1px solid #fbbf24',
+                borderRadius: '8px',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  marginBottom: '0.5rem',
+                }}
+              >
                 <div style={{ fontWeight: '600', color: '#92400e', flex: 1 }}>
                   💡 {loadingTip.title}
                 </div>
@@ -317,7 +383,14 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
                   ⭐
                 </button>
               </div>
-              <div style={{ fontSize: '12px', color: '#78350f', lineHeight: '1.5', marginBottom: '0.5rem' }}>
+              <div
+                style={{
+                  fontSize: '12px',
+                  color: '#78350f',
+                  lineHeight: '1.5',
+                  marginBottom: '0.5rem',
+                }}
+              >
                 {loadingTip.content.substring(0, 150)}...
               </div>
               <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
@@ -325,7 +398,7 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
                   <button
                     onClick={() => {
                       const prevTip = previousTips[previousTips.length - 1];
-                      setPreviousTips(prev => prev.slice(0, -1));
+                      setPreviousTips((prev) => prev.slice(0, -1));
                       setLoadingTip(prevTip);
                       setIsTipSavedState(isTipSaved(prevTip.id));
                     }}
@@ -346,7 +419,7 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
                 <button
                   onClick={() => {
                     if (loadingTip) {
-                      setPreviousTips(prev => [...prev, loadingTip]);
+                      setPreviousTips((prev) => [...prev, loadingTip]);
                     }
                     const nextTip = getRandomTipExcluding(loadingTip.id);
                     setLoadingTip(nextTip);
@@ -368,64 +441,132 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
               </div>
               <div style={{ clear: 'both' }} />
             </div>
-          )
-          }
-        </div >
+          )}
+        </div>
 
         {/* AI追加質問（食品名だけでは推測が難しい場合） */}
-        {
-          showFollowupInput && aiFollowupQuestions.length > 0 && (
-            <div className="custom-food-section" style={{ backgroundColor: '#fef3c7', padding: '1rem', borderRadius: '8px', marginBottom: '1rem', border: '1px solid #fbbf24' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                <span style={{ backgroundColor: '#f59e0b', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>?</span>
-                <strong style={{ fontSize: '16px' }}>{t('customFood.additionalInfoNeeded')}</strong>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {aiFollowupQuestions.map((question, index) => (
-                  <div key={index}>
-                    <label style={{ fontSize: '14px', color: '#374151', display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                      {question}
-                    </label>
-                    <input
-                      type="text"
-                      value={followupAnswers[question] || ''}
-                      onChange={(e) => setFollowupAnswers({ ...followupAnswers, [question]: e.target.value })}
-                      placeholder={t('customFood.answerPlaceholder')}
-                      style={{
-                        width: '100%',
-                        padding: '0.5rem',
-                        border: '1px solid #e5e7eb',
-                        borderRadius: '4px',
-                        fontSize: '14px',
-                      }}
-                    />
-                  </div>
-                ))}
-                <button
-                  onClick={handleAnalyze}
-                  disabled={isAnalyzing}
-                  style={{
-                    marginTop: '0.5rem',
-                    padding: '0.75rem 1.5rem',
-                    backgroundColor: isAnalyzing ? '#9ca3af' : '#f59e0b',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    cursor: isAnalyzing ? 'not-allowed' : 'pointer',
-                    fontWeight: '600',
-                  }}
-                >
-                  {isAnalyzing ? t('customFood.reanalyzing') : t('customFood.reanalyzeWithAnswer')}
-                </button>
-              </div>
+        {showFollowupInput && aiFollowupQuestions.length > 0 && (
+          <div
+            className="custom-food-section"
+            style={{
+              backgroundColor: '#fef3c7',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+              border: '1px solid #fbbf24',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                marginBottom: '0.75rem',
+              }}
+            >
+              <span
+                style={{
+                  backgroundColor: '#f59e0b',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                }}
+              >
+                ?
+              </span>
+              <strong style={{ fontSize: '16px' }}>{t('customFood.additionalInfoNeeded')}</strong>
             </div>
-          )
-        }
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {aiFollowupQuestions.map((question, index) => (
+                <div key={index}>
+                  <label
+                    style={{
+                      fontSize: '14px',
+                      color: '#374151',
+                      display: 'block',
+                      marginBottom: '0.5rem',
+                      fontWeight: '500',
+                    }}
+                  >
+                    {question}
+                  </label>
+                  <input
+                    type="text"
+                    value={followupAnswers[question] || ''}
+                    onChange={(e) =>
+                      setFollowupAnswers({ ...followupAnswers, [question]: e.target.value })
+                    }
+                    placeholder={t('customFood.answerPlaceholder')}
+                    style={{
+                      width: '100%',
+                      padding: '0.5rem',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '4px',
+                      fontSize: '14px',
+                    }}
+                  />
+                </div>
+              ))}
+              <button
+                onClick={handleAnalyze}
+                disabled={isAnalyzing}
+                style={{
+                  marginTop: '0.5rem',
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: isAnalyzing ? '#9ca3af' : '#f59e0b',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: isAnalyzing ? 'not-allowed' : 'pointer',
+                  fontWeight: '600',
+                }}
+              >
+                {isAnalyzing ? t('customFood.reanalyzing') : t('customFood.reanalyzeWithAnswer')}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* ステップ2: 食品タイプ */}
-        <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-            <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>2</span>
+        <div
+          className="custom-food-section"
+          style={{
+            backgroundColor: '#f9fafb',
+            padding: '1rem',
+            borderRadius: '8px',
+            marginBottom: '1rem',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              marginBottom: '0.75rem',
+            }}
+          >
+            <span
+              style={{
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                borderRadius: '50%',
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              2
+            </span>
             <strong style={{ fontSize: '16px' }}>{t('customFood.foodType')}</strong>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
@@ -435,7 +576,7 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
                 onClick={() => setType(foodType)}
                 style={{
                   padding: '0.5rem 1rem',
-                  backgroundColor: type === foodType ? '#3b82f6' : '#f3f4f6',
+                  backgroundColor: type === foodType ? '#b91c1c' : '#f3f4f6',
                   color: type === foodType ? 'white' : '#374151',
                   border: 'none',
                   borderRadius: '8px',
@@ -443,96 +584,209 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
                   fontSize: '14px',
                 }}
               >
-                {foodType === 'animal' ? t('customFood.foodTypeAnimal') : t('customFood.foodTypeTrash')}
+                {foodType === 'animal'
+                  ? t('customFood.foodTypeAnimal')
+                  : t('customFood.foodTypeTrash')}
               </button>
             ))}
           </div>
         </div>
 
         {/* ステップ3: 栄養素（必須） */}
-        <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-            <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>3</span>
+        <div
+          className="custom-food-section"
+          style={{
+            backgroundColor: '#f9fafb',
+            padding: '1rem',
+            borderRadius: '8px',
+            marginBottom: '1rem',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              marginBottom: '0.75rem',
+            }}
+          >
+            <span
+              style={{
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                borderRadius: '50%',
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '14px',
+                fontWeight: 'bold',
+              }}
+            >
+              3
+            </span>
             <strong style={{ fontSize: '16px' }}>{t('customFood.nutrientsRequired')}</strong>
           </div>
           <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '0.75rem' }}>
-            {t('customFood.nutrientsPer100g')}
+            100gあたりの値
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '400px', overflowY: 'auto', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 0,
+              maxHeight: '400px',
+              overflowY: 'auto',
+              padding: '0.5rem',
+              backgroundColor: 'transparent',
+              borderRadius: '8px',
+              border: '1px solid #e5e7eb',
+            }}
+          >
             {/* タンパク質 */}
             <div>
-              <MiniNutrientGauge
-                label={t('customFood.protein')}
-                currentDailyTotal={nutrients?.protein || 0}
-                previewAmount={0}
-                target={100}
-                color="#64748b"
-                unit="g/100g"
-              />
+              <div>
+                <MiniNutrientGauge
+                  label=""
+                  currentDailyTotal={nutrients?.protein || 0}
+                  previewAmount={0}
+                  target={100}
+                  color="#64748b"
+                  unit="g"
+                />
+                <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                  {t('customFood.protein')}
+                </div>
+              </div>
               <input
                 type="number"
                 value={nutrients?.protein || ''}
-                onChange={(e) => updateNutrient('protein', e.target.value ? parseFloat(e.target.value) : undefined)}
+                onChange={(e) =>
+                  updateNutrient('protein', e.target.value ? parseFloat(e.target.value) : undefined)
+                }
                 placeholder="0"
                 step="0.1"
-                style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                style={{
+                  width: '100%',
+                  padding: '0.5rem',
+                  marginTop: '0.5rem',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '4px',
+                }}
               />
             </div>
 
             {/* 脂質 */}
             <div>
-              <MiniNutrientGauge
-                label={t('customFood.fat')}
-                currentDailyTotal={nutrients?.fat || 0}
-                previewAmount={0}
-                target={100}
-                color="#64748b"
-                unit="g/100g"
-              />
+              <div>
+                <MiniNutrientGauge
+                  label=""
+                  currentDailyTotal={nutrients?.fat || 0}
+                  previewAmount={0}
+                  target={100}
+                  color="#64748b"
+                  unit="g"
+                />
+                <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                  {t('customFood.fat')}
+                </div>
+              </div>
               <input
                 type="number"
                 value={nutrients?.fat || ''}
-                onChange={(e) => updateNutrient('fat', e.target.value ? parseFloat(e.target.value) : undefined)}
+                onChange={(e) =>
+                  updateNutrient('fat', e.target.value ? parseFloat(e.target.value) : undefined)
+                }
                 placeholder="0"
                 step="0.1"
-                style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                style={{
+                  width: '100%',
+                  padding: '0.5rem',
+                  marginTop: '0.5rem',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '4px',
+                }}
               />
             </div>
 
             {/* 炭水化物 */}
             <div>
-              <MiniNutrientGauge
-                label={t('customFood.carbs')}
-                currentDailyTotal={nutrients?.carbs || 0}
-                previewAmount={0}
-                target={100}
-                color="#64748b"
-                unit="g/100g"
-              />
+              <div>
+                <MiniNutrientGauge
+                  label=""
+                  currentDailyTotal={nutrients?.carbs || 0}
+                  previewAmount={0}
+                  target={100}
+                  color="#64748b"
+                  unit="g"
+                />
+                <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                  {t('customFood.carbs')}
+                </div>
+              </div>
               <input
                 type="number"
                 value={nutrients?.carbs || ''}
-                onChange={(e) => updateNutrient('carbs', e.target.value ? parseFloat(e.target.value) : undefined)}
+                onChange={(e) =>
+                  updateNutrient('carbs', e.target.value ? parseFloat(e.target.value) : undefined)
+                }
                 placeholder="0"
                 step="0.1"
-                style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                style={{
+                  width: '100%',
+                  padding: '0.5rem',
+                  marginTop: '0.5rem',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '4px',
+                }}
               />
             </div>
           </div>
         </div>
 
         {/* ステップ4: 栄養素（詳細） */}
-        <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+        <div
+          className="custom-food-section"
+          style={{
+            backgroundColor: '#f9fafb',
+            padding: '1rem',
+            borderRadius: '8px',
+            marginBottom: '1rem',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '0.75rem',
+            }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>4</span>
+              <span
+                style={{
+                  backgroundColor: '#3b82f6',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                }}
+              >
+                4
+              </span>
               <strong style={{ fontSize: '16px' }}>{t('customFood.nutrientsDetailed')}</strong>
             </div>
             <button
               onClick={() => setShowAdvancedNutrients(!showAdvancedNutrients)}
               style={{
                 padding: '0.5rem 1rem',
-                backgroundColor: showAdvancedNutrients ? '#3b82f6' : '#f3f4f6',
+                backgroundColor: showAdvancedNutrients ? '#b91c1c' : '#f3f4f6',
                 color: showAdvancedNutrients ? 'white' : '#374151',
                 border: 'none',
                 borderRadius: '8px',
@@ -545,435 +799,782 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
             </button>
           </div>
           {showAdvancedNutrients && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-              <label>
-                {t('customFood.sodium')} (mg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.sodium')}
-                  currentDailyTotal={nutrients?.sodium || 0}
-                  previewAmount={0}
-                  target={5000}
-                  color="#64748b"
-                  unit="mg/100g"
-                  nutrientKey="sodium"
-                />
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '1rem',
+              }}
+            >
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.sodium || 0}
+                    previewAmount={0}
+                    target={5000}
+                    color="#64748b"
+                    unit="mg"
+                    nutrientKey="sodium"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.sodium')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.sodium || ''}
-                  onChange={(e) => updateNutrient('sodium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'sodium',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.magnesium')} (mg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.magnesium')}
-                  currentDailyTotal={nutrients?.magnesium || 0}
-                  previewAmount={0}
-                  target={600}
-                  color="#64748b"
-                  unit="mg/100g"
-                  nutrientKey="magnesium"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.magnesium || 0}
+                    previewAmount={0}
+                    target={600}
+                    color="#64748b"
+                    unit="mg"
+                    nutrientKey="magnesium"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.magnesium')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.magnesium || ''}
-                  onChange={(e) => updateNutrient('magnesium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'magnesium',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.potassium')} (mg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.potassium')}
-                  currentDailyTotal={nutrients?.potassium || 0}
-                  previewAmount={0}
-                  target={4500}
-                  color="#64748b"
-                  unit="mg/100g"
-                  nutrientKey="potassium"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.potassium || 0}
+                    previewAmount={0}
+                    target={4500}
+                    color="#64748b"
+                    unit="mg"
+                    nutrientKey="potassium"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.potassium')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.potassium || ''}
-                  onChange={(e) => updateNutrient('potassium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'potassium',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.zinc')} (mg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.zinc')}
-                  currentDailyTotal={nutrients?.zinc || 0}
-                  previewAmount={0}
-                  target={11}
-                  color="#64748b"
-                  unit="mg/100g"
-                  nutrientKey="zinc"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.zinc || 0}
+                    previewAmount={0}
+                    target={11}
+                    color="#64748b"
+                    unit="mg"
+                    nutrientKey="zinc"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.zinc')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.zinc || ''}
-                  onChange={(e) => updateNutrient('zinc', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient('zinc', e.target.value ? parseFloat(e.target.value) : undefined)
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.iron')} (mg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.iron')}
-                  currentDailyTotal={nutrients?.iron || 0}
-                  previewAmount={0}
-                  target={8}
-                  color="#64748b"
-                  unit="mg/100g"
-                  nutrientKey="iron"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.iron || 0}
+                    previewAmount={0}
+                    target={8}
+                    color="#64748b"
+                    unit="mg"
+                    nutrientKey="iron"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.iron')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.iron || ''}
-                  onChange={(e) => updateNutrient('iron', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient('iron', e.target.value ? parseFloat(e.target.value) : undefined)
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.vitaminA')} (IU/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.vitaminA')}
-                  currentDailyTotal={nutrients?.vitaminA || 0}
-                  previewAmount={0}
-                  target={5000}
-                  color="#64748b"
-                  unit="IU/100g"
-                  nutrientKey="vitamin_a"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.vitaminA || 0}
+                    previewAmount={0}
+                    target={5000}
+                    color="#64748b"
+                    unit="IU"
+                    nutrientKey="vitamin_a"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.vitaminA')} (IU/100g)
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.vitaminA || ''}
-                  onChange={(e) => updateNutrient('vitaminA', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'vitaminA',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.vitaminD')} (IU/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.vitaminD')}
-                  currentDailyTotal={nutrients?.vitaminD || 0}
-                  previewAmount={0}
-                  target={2000}
-                  color="#64748b"
-                  unit="IU/100g"
-                  nutrientKey="vitamin_d"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.vitaminD || 0}
+                    previewAmount={0}
+                    target={2000}
+                    color="#64748b"
+                    unit="IU"
+                    nutrientKey="vitamin_d"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.vitaminD')} (IU/100g)
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.vitaminD || ''}
-                  onChange={(e) => updateNutrient('vitaminD', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'vitaminD',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.vitaminK2')} (μg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.vitaminK2')}
-                  currentDailyTotal={nutrients?.vitaminK2 || 0}
-                  previewAmount={0}
-                  target={200}
-                  color="#64748b"
-                  unit="μg/100g"
-                  nutrientKey="vitamin_k2"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.vitaminK2 || 0}
+                    previewAmount={0}
+                    target={200}
+                    color="#64748b"
+                    unit="μg"
+                    nutrientKey="vitamin_k2"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.vitaminK2')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.vitaminK2 || ''}
-                  onChange={(e) => updateNutrient('vitaminK2', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'vitaminK2',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.vitaminB12')} (μg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.vitaminB12')}
-                  currentDailyTotal={nutrients?.vitaminB12 || 0}
-                  previewAmount={0}
-                  target={2.4}
-                  color="#64748b"
-                  unit="μg/100g"
-                  nutrientKey="vitamin_b12"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.vitaminB12 || 0}
+                    previewAmount={0}
+                    target={2.4}
+                    color="#64748b"
+                    unit="μg"
+                    nutrientKey="vitamin_b12"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.vitaminB12')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.vitaminB12 || ''}
-                  onChange={(e) => updateNutrient('vitaminB12', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'vitaminB12',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.omega3')} (g/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.omega3')}
-                  currentDailyTotal={nutrients?.omega3 || 0}
-                  previewAmount={0}
-                  target={2}
-                  color="#64748b"
-                  unit="g/100g"
-                  nutrientKey="omega3"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.omega3 || 0}
+                    previewAmount={0}
+                    target={2}
+                    color="#64748b"
+                    unit="g"
+                    nutrientKey="omega3"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.omega3')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.omega3 || ''}
-                  onChange={(e) => updateNutrient('omega3', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'omega3',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.omega6')} (g/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.omega6')}
-                  currentDailyTotal={nutrients?.omega6 || 0}
-                  previewAmount={0}
-                  target={5}
-                  color="#64748b"
-                  unit="g/100g"
-                  nutrientKey="omega6"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.omega6 || 0}
+                    previewAmount={0}
+                    target={5}
+                    color="#64748b"
+                    unit="g"
+                    nutrientKey="omega6"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.omega6')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.omega6 || ''}
-                  onChange={(e) => updateNutrient('omega6', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'omega6',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.calcium')} (mg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.calcium')}
-                  currentDailyTotal={nutrients?.calcium || 0}
-                  previewAmount={0}
-                  target={1000}
-                  color="#64748b"
-                  unit="mg/100g"
-                  nutrientKey="calcium"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.calcium || 0}
+                    previewAmount={0}
+                    target={1000}
+                    color="#64748b"
+                    unit="mg"
+                    nutrientKey="calcium"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.calcium')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.calcium || ''}
-                  onChange={(e) => updateNutrient('calcium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'calcium',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.phosphorus')} (mg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.phosphorus')}
-                  currentDailyTotal={nutrients?.phosphorus || 0}
-                  previewAmount={0}
-                  target={700}
-                  color="#64748b"
-                  unit="mg/100g"
-                  nutrientKey="phosphorus"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.phosphorus || 0}
+                    previewAmount={0}
+                    target={700}
+                    color="#64748b"
+                    unit="mg"
+                    nutrientKey="phosphorus"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.phosphorus')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.phosphorus || ''}
-                  onChange={(e) => updateNutrient('phosphorus', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'phosphorus',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.glycine')} (g/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.glycine')}
-                  currentDailyTotal={nutrients?.glycine || 0}
-                  previewAmount={0}
-                  target={10}
-                  color="#64748b"
-                  unit="g/100g"
-                  nutrientKey="glycine"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.glycine || 0}
+                    previewAmount={0}
+                    target={10}
+                    color="#64748b"
+                    unit="g"
+                    nutrientKey="glycine"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.glycine')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.glycine || ''}
-                  onChange={(e) => updateNutrient('glycine', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'glycine',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.methionine')} (g/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.methionine')}
-                  currentDailyTotal={nutrients?.methionine || 0}
-                  previewAmount={0}
-                  target={2}
-                  color="#64748b"
-                  unit="g/100g"
-                  nutrientKey="methionine"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.methionine || 0}
+                    previewAmount={0}
+                    target={2}
+                    color="#64748b"
+                    unit="g"
+                    nutrientKey="methionine"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.methionine')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.methionine || ''}
-                  onChange={(e) => updateNutrient('methionine', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'methionine',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
-              <label>
-                {t('customFood.taurine')} (mg/100g)
-                <MiniNutrientGauge
-                  label={t('customFood.taurine')}
-                  currentDailyTotal={nutrients?.taurine || 0}
-                  previewAmount={0}
-                  target={500}
-                  color="#64748b"
-                  unit="mg/100g"
-                  nutrientKey="taurine"
-                />
+              </div>
+              <div>
+                <div>
+                  <MiniNutrientGauge
+                    label=""
+                    currentDailyTotal={nutrients?.taurine || 0}
+                    previewAmount={0}
+                    target={500}
+                    color="#64748b"
+                    unit="mg"
+                    nutrientKey="taurine"
+                  />
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.taurine')}
+                  </div>
+                </div>
                 <input
                   type="number"
                   value={nutrients?.taurine || ''}
-                  onChange={(e) => updateNutrient('taurine', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'taurine',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
-              </label>
+              </div>
               <label>
-                {t('customFood.vitaminB5')} (mg/100g)
+                {t('customFood.vitaminB5')}
                 <input
                   type="number"
                   value={nutrients?.vitaminB5 || ''}
-                  onChange={(e) => updateNutrient('vitaminB5', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'vitaminB5',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
               <label>
-                {t('customFood.vitaminB9')} (μg/100g)
+                {t('customFood.vitaminB9')}
                 <input
                   type="number"
                   value={nutrients?.vitaminB9 || ''}
-                  onChange={(e) => updateNutrient('vitaminB9', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'vitaminB9',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
               <label>
-                {t('customFood.chromium')} (μg/100g)
+                {t('customFood.chromium')}
                 <input
                   type="number"
                   value={nutrients?.chromium || ''}
-                  onChange={(e) => updateNutrient('chromium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'chromium',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
               <label>
-                {t('customFood.molybdenum')} (μg/100g)
+                {t('customFood.molybdenum')}
                 <input
                   type="number"
                   value={nutrients?.molybdenum || ''}
-                  onChange={(e) => updateNutrient('molybdenum', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'molybdenum',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
               <label>
-                {t('customFood.fluoride')} (mg/100g)
+                {t('customFood.fluoride')}
                 <input
                   type="number"
                   value={nutrients?.fluoride || ''}
-                  onChange={(e) => updateNutrient('fluoride', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'fluoride',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
               <label>
-                {t('customFood.chloride')} (mg/100g)
+                {t('customFood.chloride')}
                 <input
                   type="number"
                   value={nutrients?.chloride || ''}
-                  onChange={(e) => updateNutrient('chloride', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'chloride',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
               <label>
-                {t('customFood.boron')} (mg/100g)
+                {t('customFood.boron')}
                 <input
                   type="number"
                   value={nutrients?.boron || ''}
-                  onChange={(e) => updateNutrient('boron', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient('boron', e.target.value ? parseFloat(e.target.value) : undefined)
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
               <label>
-                {t('customFood.nickel')} (mg/100g)
+                {t('customFood.nickel')}
                 <input
                   type="number"
                   value={nutrients?.nickel || ''}
-                  onChange={(e) => updateNutrient('nickel', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'nickel',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.01"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
               <label>
-                {t('customFood.silicon')} (mg/100g)
+                {t('customFood.silicon')}
                 <input
                   type="number"
                   value={nutrients?.silicon || ''}
-                  onChange={(e) => updateNutrient('silicon', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'silicon',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
               <label>
-                {t('customFood.vanadium')} (μg/100g)
+                {t('customFood.vanadium')}
                 <input
                   type="number"
                   value={nutrients?.vanadium || ''}
-                  onChange={(e) => updateNutrient('vanadium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'vanadium',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
                   placeholder="0"
                   step="0.1"
-                  style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.25rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
                 />
               </label>
             </div>
@@ -982,232 +1583,421 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
 
         {/* ステップ5: 抗栄養素 */}
         {
-          (
-            <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>5</span>
-                <strong style={{ fontSize: '16px' }}>{t('customFood.antiNutrients')}</strong>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.5rem' }}>
-                <label>
-                  {t('customFood.phytates')} (mg/100g)
+          <div
+            className="custom-food-section"
+            style={{
+              backgroundColor: '#f9fafb',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                marginBottom: '0.75rem',
+              }}
+            >
+              <span
+                style={{
+                  backgroundColor: '#3b82f6',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '14px',
+                  fontWeight: 'bold',
+                }}
+              >
+                5
+              </span>
+              <strong style={{ fontSize: '16px' }}>{t('customFood.antiNutrients')}</strong>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div>
+                <div>
                   <MiniNutrientGauge
-                    label={t('customFood.phytates')}
+                    label=""
                     currentDailyTotal={nutrients?.phytates || 0}
                     previewAmount={0}
                     target={0}
                     color="#ef4444"
-                    unit="mg/100g"
+                    unit="mg"
                     nutrientKey="phytates"
                   />
-                  <input
-                    type="number"
-                    value={nutrients?.phytates || ''}
-                    onChange={(e) => updateNutrient('phytates', e.target.value ? parseFloat(e.target.value) : undefined)}
-                    placeholder="0"
-                    step="0.1"
-                    style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
-                  />
-                </label>
-                <label>
-                  {t('customFood.oxalates')} (mg/100g)
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.phytates')}
+                  </div>
+                </div>
+                <input
+                  type="number"
+                  value={nutrients?.phytates || ''}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'phytates',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
+                  placeholder="0"
+                  step="0.1"
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
+                />
+              </div>
+              <div>
+                <div>
                   <MiniNutrientGauge
-                    label={t('customFood.oxalates')}
+                    label=""
                     currentDailyTotal={nutrients?.oxalates || 0}
                     previewAmount={0}
                     target={0}
                     color="#ef4444"
-                    unit="mg/100g"
+                    unit="mg"
                     nutrientKey="oxalates"
                   />
-                  <input
-                    type="number"
-                    value={nutrients?.oxalates || ''}
-                    onChange={(e) => updateNutrient('oxalates', e.target.value ? parseFloat(e.target.value) : undefined)}
-                    placeholder="0"
-                    step="0.1"
-                    style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
-                  />
-                </label>
-                <label>
-                  {t('customFood.lectins')} (mg/100g)
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.oxalates')}
+                  </div>
+                </div>
+                <input
+                  type="number"
+                  value={nutrients?.oxalates || ''}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'oxalates',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
+                  placeholder="0"
+                  step="0.1"
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
+                />
+              </div>
+              <div>
+                <div>
                   <MiniNutrientGauge
-                    label={t('customFood.lectins')}
+                    label=""
                     currentDailyTotal={nutrients?.lectins || 0}
                     previewAmount={0}
                     target={0}
                     color="#ef4444"
-                    unit="mg/100g"
+                    unit="mg"
                     nutrientKey="lectins"
                   />
-                  <input
-                    type="number"
-                    value={nutrients?.lectins || ''}
-                    onChange={(e) => updateNutrient('lectins', e.target.value ? parseFloat(e.target.value) : undefined)}
-                    placeholder="0"
-                    step="0.1"
-                    style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
-                  />
-                </label>
+                  <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                    {t('customFood.lectins')}
+                  </div>
+                </div>
+                <input
+                  type="number"
+                  value={nutrients?.lectins || ''}
+                  onChange={(e) =>
+                    updateNutrient(
+                      'lectins',
+                      e.target.value ? parseFloat(e.target.value) : undefined
+                    )
+                  }
+                  placeholder="0"
+                  step="0.1"
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    marginTop: '0.5rem',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '4px',
+                  }}
+                />
               </div>
             </div>
-          )
+          </div>
         }
 
         {/* ステップ6: 抗栄養素（詳細） */}
         {
-          (
-            <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>6</span>
-                  <strong style={{ fontSize: '16px' }}>{t('customFood.antiNutrientsDetailed')}</strong>
-                </div>
-                <button
-                  onClick={() => setShowAdvancedAntiNutrients(!showAdvancedAntiNutrients)}
+          <div
+            className="custom-food-section"
+            style={{
+              backgroundColor: '#f9fafb',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '0.75rem',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span
                   style={{
-                    padding: '0.5rem 1rem',
-                    backgroundColor: showAdvancedAntiNutrients ? '#3b82f6' : '#f3f4f6',
-                    color: showAdvancedAntiNutrients ? 'white' : '#374151',
-                    border: 'none',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
+                    backgroundColor: '#3b82f6',
+                    color: 'white',
+                    borderRadius: '50%',
+                    width: '24px',
+                    height: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     fontSize: '14px',
-                    fontWeight: '500',
+                    fontWeight: 'bold',
                   }}
                 >
-                  {showAdvancedAntiNutrients ? t('customFood.hideDetails') : t('customFood.showDetails')}
-                </button>
+                  6
+                </span>
+                <strong style={{ fontSize: '16px' }}>
+                  {t('customFood.antiNutrientsDetailed')}
+                </strong>
               </div>
-              {showAdvancedAntiNutrients && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                  <label>
-                    {t('customFood.polyphenols')} (mg/100g)
+              <button
+                onClick={() => setShowAdvancedAntiNutrients(!showAdvancedAntiNutrients)}
+                style={{
+                  padding: '0.5rem 1rem',
+                  backgroundColor: showAdvancedAntiNutrients ? '#b91c1c' : '#f3f4f6',
+                  color: showAdvancedAntiNutrients ? 'white' : '#374151',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                }}
+              >
+                {showAdvancedAntiNutrients
+                  ? t('customFood.hideDetails')
+                  : t('customFood.showDetails')}
+              </button>
+            </div>
+            {showAdvancedAntiNutrients && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div>
+                  <div>
                     <MiniNutrientGauge
-                      label={t('customFood.polyphenols')}
+                      label=""
                       currentDailyTotal={nutrients?.polyphenols || 0}
                       previewAmount={0}
                       target={0}
                       color="#ef4444"
-                      unit="mg/100g"
+                      unit="mg"
                       nutrientKey="polyphenols"
                     />
-                    <input
-                      type="number"
-                      value={nutrients?.polyphenols || ''}
-                      onChange={(e) => updateNutrient('polyphenols', e.target.value ? parseFloat(e.target.value) : undefined)}
-                      placeholder="0"
-                      step="0.1"
-                      style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
-                    />
-                  </label>
-                  <label>
-                    {t('customFood.flavonoids')} (mg/100g)
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                      {t('customFood.polyphenols')}
+                    </div>
+                  </div>
+                  <input
+                    type="number"
+                    value={nutrients?.polyphenols || ''}
+                    onChange={(e) =>
+                      updateNutrient(
+                        'polyphenols',
+                        e.target.value ? parseFloat(e.target.value) : undefined
+                      )
+                    }
+                    placeholder="0"
+                    step="0.1"
+                    style={{
+                      width: '100%',
+                      padding: '0.5rem',
+                      marginTop: '0.5rem',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '4px',
+                    }}
+                  />
+                </div>
+                <div>
+                  <div>
                     <MiniNutrientGauge
-                      label={t('customFood.flavonoids')}
+                      label=""
                       currentDailyTotal={nutrients?.flavonoids || 0}
                       previewAmount={0}
                       target={0}
                       color="#ef4444"
-                      unit="mg/100g"
+                      unit="mg"
                       nutrientKey="flavonoids"
                     />
-                    <input
-                      type="number"
-                      value={nutrients?.flavonoids || ''}
-                      onChange={(e) => updateNutrient('flavonoids', e.target.value ? parseFloat(e.target.value) : undefined)}
-                      placeholder="0"
-                      step="0.1"
-                      style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
-                    />
-                  </label>
-                  <label>
-                    {t('customFood.saponins')} (mg/100g)
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                      {t('customFood.flavonoids')}
+                    </div>
+                  </div>
+                  <input
+                    type="number"
+                    value={nutrients?.flavonoids || ''}
+                    onChange={(e) =>
+                      updateNutrient(
+                        'flavonoids',
+                        e.target.value ? parseFloat(e.target.value) : undefined
+                      )
+                    }
+                    placeholder="0"
+                    step="0.1"
+                    style={{
+                      width: '100%',
+                      padding: '0.5rem',
+                      marginTop: '0.5rem',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '4px',
+                    }}
+                  />
+                </div>
+                <div>
+                  <div>
                     <MiniNutrientGauge
-                      label={t('customFood.saponins')}
+                      label=""
                       currentDailyTotal={nutrients?.saponins || 0}
                       previewAmount={0}
                       target={0}
                       color="#ef4444"
-                      unit="mg/100g"
+                      unit="mg"
                       nutrientKey="saponins"
                     />
-                    <input
-                      type="number"
-                      value={nutrients?.saponins || ''}
-                      onChange={(e) => updateNutrient('saponins', e.target.value ? parseFloat(e.target.value) : undefined)}
-                      placeholder="0"
-                      step="0.1"
-                      style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
-                    />
-                  </label>
-                  <label>
-                    {t('customFood.goitrogens')} (mg/100g)
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                      {t('customFood.saponins')}
+                    </div>
+                  </div>
+                  <input
+                    type="number"
+                    value={nutrients?.saponins || ''}
+                    onChange={(e) =>
+                      updateNutrient(
+                        'saponins',
+                        e.target.value ? parseFloat(e.target.value) : undefined
+                      )
+                    }
+                    placeholder="0"
+                    step="0.1"
+                    style={{
+                      width: '100%',
+                      padding: '0.5rem',
+                      marginTop: '0.5rem',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '4px',
+                    }}
+                  />
+                </div>
+                <div>
+                  <div>
                     <MiniNutrientGauge
-                      label={t('customFood.goitrogens')}
+                      label=""
                       currentDailyTotal={nutrients?.goitrogens || 0}
                       previewAmount={0}
                       target={0}
                       color="#ef4444"
-                      unit="mg/100g"
+                      unit="mg"
                       nutrientKey="goitrogens"
                     />
-                    <input
-                      type="number"
-                      value={nutrients?.goitrogens || ''}
-                      onChange={(e) => updateNutrient('goitrogens', e.target.value ? parseFloat(e.target.value) : undefined)}
-                      placeholder="0"
-                      step="0.1"
-                      style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
-                    />
-                  </label>
-                  <label>
-                    {t('customFood.tannins')} (mg/100g)
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                      {t('customFood.goitrogens')}
+                    </div>
+                  </div>
+                  <input
+                    type="number"
+                    value={nutrients?.goitrogens || ''}
+                    onChange={(e) =>
+                      updateNutrient(
+                        'goitrogens',
+                        e.target.value ? parseFloat(e.target.value) : undefined
+                      )
+                    }
+                    placeholder="0"
+                    step="0.1"
+                    style={{
+                      width: '100%',
+                      padding: '0.5rem',
+                      marginTop: '0.5rem',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '4px',
+                    }}
+                  />
+                </div>
+                <div>
+                  <div>
                     <MiniNutrientGauge
-                      label={t('customFood.tannins')}
+                      label=""
                       currentDailyTotal={nutrients?.tannins || 0}
                       previewAmount={0}
                       target={0}
                       color="#ef4444"
-                      unit="mg/100g"
+                      unit="mg"
                       nutrientKey="tannins"
                     />
-                    <input
-                      type="number"
-                      value={nutrients?.tannins || ''}
-                      onChange={(e) => updateNutrient('tannins', e.target.value ? parseFloat(e.target.value) : undefined)}
-                      placeholder="0"
-                      step="0.1"
-                      style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
-                    />
-                  </label>
+                    <div style={{ fontSize: '12px', color: '#6b7280', marginTop: 0 }}>
+                      {t('customFood.tannins')}
+                    </div>
+                  </div>
+                  <input
+                    type="number"
+                    value={nutrients?.tannins || ''}
+                    onChange={(e) =>
+                      updateNutrient(
+                        'tannins',
+                        e.target.value ? parseFloat(e.target.value) : undefined
+                      )
+                    }
+                    placeholder="0"
+                    step="0.1"
+                    style={{
+                      width: '100%',
+                      padding: '0.5rem',
+                      marginTop: '0.5rem',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '4px',
+                    }}
+                  />
                 </div>
-              )}
-            </div>
-          )
+              </div>
+            )}
+          </div>
         }
 
         {/* 今日のログに追加するオプション */}
-        {
-          !foodId && (
-            <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                <input
-                  type="checkbox"
-                  checked={addToTodayLog}
-                  onChange={(e) => setAddToTodayLog(e.target.checked)}
-                  style={{ width: '20px', height: '20px', cursor: 'pointer' }}
-                />
-                <span style={{ fontSize: '14px', color: '#374151' }}>
-                  {t('customFood.addToTodayLog')}
-                </span>
-              </label>
-            </div>
-          )
-        }
+        {!foodId && (
+          <div
+            style={{
+              marginTop: '1rem',
+              padding: '1rem',
+              backgroundColor: '#f9fafb',
+              borderRadius: '8px',
+            }}
+          >
+            <label
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
+            >
+              <input
+                type="checkbox"
+                checked={addToTodayLog}
+                onChange={(e) => setAddToTodayLog(e.target.checked)}
+                style={{ width: '20px', height: '20px', cursor: 'pointer' }}
+              />
+              <span style={{ fontSize: '14px', color: '#374151' }}>
+                {t('customFood.addToTodayLog')}
+              </span>
+            </label>
+          </div>
+        )}
 
         {/* 保存ボタン */}
-        <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', justifyContent: 'flex-end' }}>
+        <div
+          style={{ display: 'flex', gap: '1rem', marginTop: '2rem', justifyContent: 'flex-end' }}
+        >
           <button
             onClick={onClose}
             style={{
@@ -1227,7 +2017,7 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
             disabled={isLoading}
             style={{
               padding: '0.75rem 1.5rem',
-              backgroundColor: isLoading ? '#9ca3af' : '#3b82f6',
+              backgroundColor: isLoading ? '#9ca3af' : '#b91c1c',
               color: 'white',
               border: 'none',
               borderRadius: '8px',
@@ -1238,8 +2028,7 @@ export default function CustomFoodScreen({ foodId, onClose, onSave }: CustomFood
             {isLoading ? t('customFood.saving') : t('customFood.save')}
           </button>
         </div>
-      </div >
-    </div >
+      </div>
+    </div>
   );
 }
-

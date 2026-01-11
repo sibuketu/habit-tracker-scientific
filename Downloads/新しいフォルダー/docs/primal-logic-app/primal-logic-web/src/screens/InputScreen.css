@@ -96,7 +96,10 @@
   background-color: var(--color-bg-primary);
   box-sizing: border-box;
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .input-screen-button-row {
@@ -172,8 +175,8 @@
 }
 
 .input-screen-weather-button.active {
-  background-color: #FFD700;
-  border-color: #FFD700;
+  background-color: #ffd700;
+  border-color: #ffd700;
   color: #000;
   font-weight: 600;
 }
@@ -193,7 +196,9 @@
   border-radius: 8px;
   border: 1px solid var(--color-border);
   overflow-y: auto;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .input-screen-suggestion-item {
@@ -255,7 +260,10 @@
   cursor: pointer;
   min-width: 60px;
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .input-screen-unit-spinner {
@@ -268,7 +276,10 @@
   text-align: center;
   -moz-appearance: textfield;
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .input-screen-unit-spinner::-webkit-outer-spin-button,
@@ -288,7 +299,7 @@
 
 .input-screen-add-button {
   width: 100%;
-  background-color: #34C759;
+  background-color: #34c759;
   padding: 12px;
   border-radius: 8px;
   border: none;
@@ -301,7 +312,7 @@
 }
 
 .input-screen-add-button:hover {
-  background-color: #30B650;
+  background-color: #30b650;
 }
 
 .input-screen-save-button {

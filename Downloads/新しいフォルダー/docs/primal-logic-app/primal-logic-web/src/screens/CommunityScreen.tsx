@@ -1,6 +1,6 @@
 /**
  * Community Screen - コミュニティ機能
- * 
+ *
  * 設計思想: 既存コミュニティ系の上位互換 + データ駆動型集合知
  * - 既存コミュニティ（Discord、Reddit、X等）の上位互換
  * - 会話はデータベースに保存され、ログとして活用される
@@ -8,7 +8,11 @@
  */
 
 import { useState, useEffect } from 'react';
-import { analyzePatterns, exportDataForConsultation, type PatternAnalysis } from '../utils/communityAnalytics';
+import {
+  analyzePatterns,
+  exportDataForConsultation,
+  type PatternAnalysis,
+} from '../utils/communityAnalytics';
 import { mockCommunityInsights, mockCommunityPatterns } from '../utils/communityMockData';
 import { mockConversations } from '../utils/communityConversations';
 import { useTranslation } from '../utils/i18n';
@@ -49,12 +53,14 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
     <div className="community-screen-container">
       <div className="community-screen-content">
         {/* ヘッダー */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between',
-          marginBottom: '2rem',
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '2rem',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <button
               onClick={onBack}
@@ -90,28 +96,30 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
 
         {/* 設計思想の説明（展開可能） */}
         {showConcept && (
-          <div style={{
-            padding: '1.5rem',
-            backgroundColor: '#f9fafb',
-            borderRadius: '16px',
-            border: '1px solid #e5e7eb',
-            marginBottom: '2rem',
-          }}>
-            <h2 style={{ 
-              fontSize: '16px', 
-              fontWeight: 'bold', 
-              marginBottom: '0.75rem',
-              color: '#1f2937',
-            }}>
+          <div
+            style={{
+              padding: '1.5rem',
+              backgroundColor: '#f9fafb',
+              borderRadius: '16px',
+              border: '1px solid #e5e7eb',
+              marginBottom: '2rem',
+            }}
+          >
+            <h2
+              style={{
+                fontSize: '16px',
+                fontWeight: 'bold',
+                marginBottom: '0.75rem',
+                color: '#1f2937',
+              }}
+            >
               {t('community.conceptTitle')}
             </h2>
             <div style={{ fontSize: '14px', color: '#4b5563', lineHeight: '1.6' }}>
               <p style={{ marginBottom: '0.75rem' }}>
                 <strong>{t('community.concept1')}</strong>
               </p>
-              <p style={{ marginBottom: '0.75rem' }}>
-                {t('community.concept2')}
-              </p>
+              <p style={{ marginBottom: '0.75rem' }}>{t('community.concept2')}</p>
               <ul style={{ marginLeft: '1.5rem', marginTop: '0.75rem' }}>
                 <li style={{ marginBottom: '0.5rem' }}>
                   <strong>{t('community.concept3')}</strong>: {t('community.concept3Desc')}
@@ -131,20 +139,23 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
         )}
 
         {/* カテゴリタブ */}
-        <div style={{
-          display: 'flex',
-          gap: '0.5rem',
-          marginBottom: '2rem',
-          borderBottom: '1px solid #e5e7eb',
-          overflowX: 'auto',
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.5rem',
+            marginBottom: '2rem',
+            borderBottom: '1px solid #e5e7eb',
+            overflowX: 'auto',
+          }}
+        >
           <button
             onClick={() => setActiveCategory('conversations')}
             style={{
               padding: '0.75rem 1rem',
               background: 'none',
               border: 'none',
-              borderBottom: activeCategory === 'conversations' ? '2px solid #dc2626' : '2px solid transparent',
+              borderBottom:
+                activeCategory === 'conversations' ? '2px solid #dc2626' : '2px solid transparent',
               color: activeCategory === 'conversations' ? '#dc2626' : '#6b7280',
               fontWeight: activeCategory === 'conversations' ? '600' : '400',
               cursor: 'pointer',
@@ -160,7 +171,8 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
               padding: '0.75rem 1rem',
               background: 'none',
               border: 'none',
-              borderBottom: activeCategory === 'insights' ? '2px solid #dc2626' : '2px solid transparent',
+              borderBottom:
+                activeCategory === 'insights' ? '2px solid #dc2626' : '2px solid transparent',
               color: activeCategory === 'insights' ? '#dc2626' : '#6b7280',
               fontWeight: activeCategory === 'insights' ? '600' : '400',
               cursor: 'pointer',
@@ -176,7 +188,8 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
               padding: '0.75rem 1rem',
               background: 'none',
               border: 'none',
-              borderBottom: activeCategory === 'patterns' ? '2px solid #dc2626' : '2px solid transparent',
+              borderBottom:
+                activeCategory === 'patterns' ? '2px solid #dc2626' : '2px solid transparent',
               color: activeCategory === 'patterns' ? '#dc2626' : '#6b7280',
               fontWeight: activeCategory === 'patterns' ? '600' : '400',
               cursor: 'pointer',
@@ -192,7 +205,8 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
               padding: '0.75rem 1rem',
               background: 'none',
               border: 'none',
-              borderBottom: activeCategory === 'consultation' ? '2px solid #dc2626' : '2px solid transparent',
+              borderBottom:
+                activeCategory === 'consultation' ? '2px solid #dc2626' : '2px solid transparent',
               color: activeCategory === 'consultation' ? '#dc2626' : '#6b7280',
               fontWeight: activeCategory === 'consultation' ? '600' : '400',
               cursor: 'pointer',
@@ -207,55 +221,74 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
         {/* コンテンツ */}
         {activeCategory === 'conversations' && (
           <div>
-            <div style={{
-              padding: '1.5rem',
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              border: '1px solid #e5e7eb',
-              marginBottom: '1rem',
-            }}>
-              <h2 style={{ 
-                fontSize: '18px', 
-                fontWeight: 'bold', 
-                marginBottom: '0.75rem',
-                color: '#1f2937',
-              }}>
+            <div
+              style={{
+                padding: '1.5rem',
+                backgroundColor: 'white',
+                borderRadius: '16px',
+                border: '1px solid #e5e7eb',
+                marginBottom: '1rem',
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  marginBottom: '0.75rem',
+                  color: '#1f2937',
+                }}
+              >
                 💬 {t('community.conversationsTitle')}
               </h2>
-              <div style={{
-                padding: '1rem',
-                backgroundColor: '#fef3c7',
-                borderRadius: '8px',
-                marginBottom: '1rem',
-                border: '1px solid #fbbf24',
-              }}>
-                <div style={{ 
-                  fontSize: '14px', 
-                  color: '#78350f',
-                  fontWeight: '600',
-                  marginBottom: '0.5rem',
-                }}>
+              <div
+                style={{
+                  padding: '1rem',
+                  backgroundColor: '#fef3c7',
+                  borderRadius: '8px',
+                  marginBottom: '1rem',
+                  border: '1px solid #fbbf24',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '14px',
+                    color: '#78350f',
+                    fontWeight: '600',
+                    marginBottom: '0.5rem',
+                  }}
+                >
                   ⚠️ {t('community.comingSoonWarning')}
                 </div>
-                <p style={{ 
-                  fontSize: '13px', 
-                  color: '#78350f',
-                  lineHeight: '1.6',
-                  margin: 0,
-                }}>
+                <p
+                  style={{
+                    fontSize: '13px',
+                    color: '#78350f',
+                    lineHeight: '1.6',
+                    margin: 0,
+                  }}
+                >
                   {t('community.comingSoonDescription')}
                 </p>
               </div>
-              <p style={{ 
-                fontSize: '13px', 
-                color: '#6b7280',
-                lineHeight: '1.6',
-                marginBottom: '1rem',
-              }}>
+              <p
+                style={{
+                  fontSize: '13px',
+                  color: '#6b7280',
+                  lineHeight: '1.6',
+                  marginBottom: '1rem',
+                }}
+              >
                 {t('community.conversationsDescription')}
               </p>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
+
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.75rem',
+                  marginTop: '1rem',
+                }}
+              >
                 {mockConversations.map((conversation) => (
                   <div
                     key={conversation.id}
@@ -271,36 +304,44 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
                       alert(t('community.threadDetail'));
                     }}
                   >
-                    <div style={{ 
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      marginBottom: '0.5rem',
-                    }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        marginBottom: '0.5rem',
+                      }}
+                    >
                       <div style={{ flex: 1 }}>
-                        <div style={{ 
-                          fontSize: '15px', 
-                          fontWeight: '600',
-                          color: '#1f2937',
-                          marginBottom: '0.25rem',
-                        }}>
+                        <div
+                          style={{
+                            fontSize: '15px',
+                            fontWeight: '600',
+                            color: '#1f2937',
+                            marginBottom: '0.25rem',
+                          }}
+                        >
                           {conversation.title}
                         </div>
-                        <div style={{ 
-                          fontSize: '13px', 
-                          color: '#6b7280',
-                          marginBottom: '0.5rem',
-                          lineHeight: '1.5',
-                        }}>
+                        <div
+                          style={{
+                            fontSize: '13px',
+                            color: '#6b7280',
+                            marginBottom: '0.5rem',
+                            lineHeight: '1.5',
+                          }}
+                        >
                           {conversation.content}
                         </div>
                       </div>
                     </div>
-                    <div style={{ 
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                    }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
                       <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                         <span style={{ fontSize: '12px', color: '#9ca3af' }}>
                           {conversation.author}
@@ -321,12 +362,14 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
                         </span>
                       </div>
                     </div>
-                    <div style={{ 
-                      display: 'flex',
-                      gap: '0.5rem',
-                      marginTop: '0.5rem',
-                      flexWrap: 'wrap',
-                    }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: '0.5rem',
+                        marginTop: '0.5rem',
+                        flexWrap: 'wrap',
+                      }}
+                    >
                       {conversation.tags.map((tag, index) => (
                         <span
                           key={index}
@@ -351,40 +394,55 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
 
         {activeCategory === 'insights' && (
           <div>
-            <div style={{
-              padding: '1.5rem',
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              border: '1px solid #e5e7eb',
-              marginBottom: '1rem',
-            }}>
-              <h2 style={{ 
-                fontSize: '18px', 
-                fontWeight: 'bold', 
+            <div
+              style={{
+                padding: '1.5rem',
+                backgroundColor: 'white',
+                borderRadius: '16px',
+                border: '1px solid #e5e7eb',
                 marginBottom: '1rem',
-                color: '#1f2937',
-              }}>
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  marginBottom: '1rem',
+                  color: '#1f2937',
+                }}
+              >
                 💡 {t('community.insightsTitle')}
               </h2>
-              <p style={{ 
-                fontSize: '14px', 
-                color: '#6b7280',
-                lineHeight: '1.6',
-                marginBottom: '1rem',
-              }}>
+              <p
+                style={{
+                  fontSize: '14px',
+                  color: '#6b7280',
+                  lineHeight: '1.6',
+                  marginBottom: '1rem',
+                }}
+              >
                 {t('community.insightsDescription')}
               </p>
-              <p style={{ 
-                fontSize: '13px', 
-                color: '#9ca3af',
-                lineHeight: '1.6',
-                marginBottom: '1rem',
-                fontStyle: 'italic',
-              }}>
+              <p
+                style={{
+                  fontSize: '13px',
+                  color: '#9ca3af',
+                  lineHeight: '1.6',
+                  marginBottom: '1rem',
+                  fontStyle: 'italic',
+                }}
+              >
                 {t('community.insightsNote')}
               </p>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
+
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.75rem',
+                  marginTop: '1rem',
+                }}
+              >
                 {mockCommunityInsights.map((insight) => (
                   <div
                     key={insight.id}
@@ -395,35 +453,43 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
                       border: '1px solid #e5e7eb',
                     }}
                   >
-                    <div style={{ 
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      marginBottom: '0.5rem',
-                    }}>
-                      <div style={{ 
-                        fontSize: '15px', 
-                        fontWeight: '600',
-                        color: '#1f2937',
-                      }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        marginBottom: '0.5rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: '15px',
+                          fontWeight: '600',
+                          color: '#1f2937',
+                        }}
+                      >
                         {insight.title}
                       </div>
-                      <div style={{
-                        padding: '0.25rem 0.75rem',
-                        backgroundColor: '#dc2626',
-                        color: 'white',
-                        borderRadius: '12px',
-                        fontSize: '12px',
-                        fontWeight: '600',
-                      }}>
+                      <div
+                        style={{
+                          padding: '0.25rem 0.75rem',
+                          backgroundColor: '#dc2626',
+                          color: 'white',
+                          borderRadius: '12px',
+                          fontSize: '12px',
+                          fontWeight: '600',
+                        }}
+                      >
                         {insight.stat}
                       </div>
                     </div>
-                    <div style={{ 
-                      fontSize: '13px', 
-                      color: '#6b7280',
-                      lineHeight: '1.5',
-                    }}>
+                    <div
+                      style={{
+                        fontSize: '13px',
+                        color: '#6b7280',
+                        lineHeight: '1.5',
+                      }}
+                    >
                       {insight.description}
                     </div>
                   </div>
@@ -435,31 +501,44 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
 
         {activeCategory === 'patterns' && (
           <div>
-            <div style={{
-              padding: '1.5rem',
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              border: '1px solid #e5e7eb',
-              marginBottom: '1rem',
-            }}>
-              <h2 style={{ 
-                fontSize: '18px', 
-                fontWeight: 'bold', 
+            <div
+              style={{
+                padding: '1.5rem',
+                backgroundColor: 'white',
+                borderRadius: '16px',
+                border: '1px solid #e5e7eb',
                 marginBottom: '1rem',
-                color: '#1f2937',
-              }}>
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  marginBottom: '1rem',
+                  color: '#1f2937',
+                }}
+              >
                 📊 {t('community.patternsTitle')}
               </h2>
-              <p style={{ 
-                fontSize: '14px', 
-                color: '#6b7280',
-                lineHeight: '1.6',
-                marginBottom: '1rem',
-              }}>
+              <p
+                style={{
+                  fontSize: '14px',
+                  color: '#6b7280',
+                  lineHeight: '1.6',
+                  marginBottom: '1rem',
+                }}
+              >
                 {t('community.patternsDescription')}
               </p>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1rem' }}>
+
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.75rem',
+                  marginTop: '1rem',
+                }}
+              >
                 {mockCommunityPatterns.map((pattern) => (
                   <div
                     key={pattern.id}
@@ -470,42 +549,52 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
                       border: '1px solid #e5e7eb',
                     }}
                   >
-                    <div style={{ 
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      marginBottom: '0.5rem',
-                    }}>
-                      <div style={{ 
-                        fontSize: '15px', 
-                        fontWeight: '600',
-                        color: '#1f2937',
-                      }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        marginBottom: '0.5rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: '15px',
+                          fontWeight: '600',
+                          color: '#1f2937',
+                        }}
+                      >
                         {pattern.pattern}
                       </div>
-                      <div style={{
-                        padding: '0.25rem 0.75rem',
-                        backgroundColor: '#059669',
-                        color: 'white',
-                        borderRadius: '12px',
-                        fontSize: '12px',
-                        fontWeight: '600',
-                      }}>
+                      <div
+                        style={{
+                          padding: '0.25rem 0.75rem',
+                          backgroundColor: '#059669',
+                          color: 'white',
+                          borderRadius: '12px',
+                          fontSize: '12px',
+                          fontWeight: '600',
+                        }}
+                      >
                         {pattern.percentage}%
                       </div>
                     </div>
-                    <div style={{ 
-                      fontSize: '13px', 
-                      color: '#6b7280',
-                      lineHeight: '1.5',
-                      marginBottom: '0.25rem',
-                    }}>
+                    <div
+                      style={{
+                        fontSize: '13px',
+                        color: '#6b7280',
+                        lineHeight: '1.5',
+                        marginBottom: '0.25rem',
+                      }}
+                    >
                       {pattern.description}
                     </div>
-                    <div style={{ 
-                      fontSize: '12px', 
-                      color: '#9ca3af',
-                    }}>
+                    <div
+                      style={{
+                        fontSize: '12px',
+                        color: '#9ca3af',
+                      }}
+                    >
                       {t('community.sampleSize')}: {pattern.sampleSize.toLocaleString()}
                     </div>
                   </div>
@@ -517,77 +606,95 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
 
         {activeCategory === 'consultation' && (
           <div>
-            <div style={{
-              padding: '1.5rem',
-              backgroundColor: 'white',
-              borderRadius: '16px',
-              border: '1px solid #e5e7eb',
-              marginBottom: '1rem',
-            }}>
-              <h2 style={{ 
-                fontSize: '18px', 
-                fontWeight: 'bold', 
+            <div
+              style={{
+                padding: '1.5rem',
+                backgroundColor: 'white',
+                borderRadius: '16px',
+                border: '1px solid #e5e7eb',
                 marginBottom: '1rem',
-                color: '#1f2937',
-              }}>
+              }}
+            >
+              <h2
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  marginBottom: '1rem',
+                  color: '#1f2937',
+                }}
+              >
                 👨‍⚕️ {t('community.consultationTitle')}
               </h2>
-              <div style={{
-                padding: '1rem',
-                backgroundColor: '#eff6ff',
-                borderRadius: '8px',
-                marginBottom: '1rem',
-              }}>
-                <div style={{ 
-                  fontSize: '14px', 
-                  color: '#1e40af',
-                  lineHeight: '1.6',
-                  marginBottom: '0.75rem',
-                }}>
+              <div
+                style={{
+                  padding: '1rem',
+                  backgroundColor: '#eff6ff',
+                  borderRadius: '8px',
+                  marginBottom: '1rem',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '14px',
+                    color: '#1e40af',
+                    lineHeight: '1.6',
+                    marginBottom: '0.75rem',
+                  }}
+                >
                   <strong>{t('community.consultationSubtitle')}</strong>
                 </div>
-                <p style={{ 
-                  fontSize: '13px', 
-                  color: '#1e3a8a',
-                  lineHeight: '1.6',
-                  marginBottom: '0.75rem',
-                }}>
+                <p
+                  style={{
+                    fontSize: '13px',
+                    color: '#1e3a8a',
+                    lineHeight: '1.6',
+                    marginBottom: '0.75rem',
+                  }}
+                >
                   {t('community.consultationDesc1')}
                 </p>
-                <p style={{ 
-                  fontSize: '13px', 
-                  color: '#1e3a8a',
-                  lineHeight: '1.6',
-                  marginBottom: '0.75rem',
-                }}>
+                <p
+                  style={{
+                    fontSize: '13px',
+                    color: '#1e3a8a',
+                    lineHeight: '1.6',
+                    marginBottom: '0.75rem',
+                  }}
+                >
                   {t('community.consultationDesc2')}
                 </p>
-                <p style={{ 
-                  fontSize: '13px', 
-                  color: '#1e3a8a',
-                  lineHeight: '1.6',
-                  marginBottom: '0.75rem',
-                }}>
+                <p
+                  style={{
+                    fontSize: '13px',
+                    color: '#1e3a8a',
+                    lineHeight: '1.6',
+                    marginBottom: '0.75rem',
+                  }}
+                >
                   {t('community.consultationDesc3')}
                 </p>
-                <p style={{ 
-                  fontSize: '13px', 
-                  color: '#1e3a8a',
-                  lineHeight: '1.6',
-                }}>
+                <p
+                  style={{
+                    fontSize: '13px',
+                    color: '#1e3a8a',
+                    lineHeight: '1.6',
+                  }}
+                >
                   {t('community.consultationDesc4')}
                 </p>
               </div>
-              <p style={{ 
-                fontSize: '13px', 
-                color: '#6b7280',
-                lineHeight: '1.6',
-                marginBottom: '1rem',
-                fontStyle: 'italic',
-              }}>
+              <p
+                style={{
+                  fontSize: '13px',
+                  color: '#6b7280',
+                  lineHeight: '1.6',
+                  marginBottom: '1rem',
+                  fontStyle: 'italic',
+                }}
+              >
                 {t('community.consultationNote')}
               </p>
-              
+
               <button
                 onClick={async () => {
                   try {
@@ -621,17 +728,21 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
               >
                 {t('community.exportData')}
               </button>
-              
-              <div style={{
-                padding: '1rem',
-                backgroundColor: '#eff6ff',
-                borderRadius: '8px',
-                marginTop: '1rem',
-              }}>
-                <div style={{ 
-                  fontSize: '13px', 
-                  color: '#1e40af',
-                }}>
+
+              <div
+                style={{
+                  padding: '1rem',
+                  backgroundColor: '#eff6ff',
+                  borderRadius: '8px',
+                  marginTop: '1rem',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '13px',
+                    color: '#1e40af',
+                  }}
+                >
                   💡 将来的には、専門医・コーチとのデータ共有プラットフォームが利用可能になります
                 </div>
               </div>

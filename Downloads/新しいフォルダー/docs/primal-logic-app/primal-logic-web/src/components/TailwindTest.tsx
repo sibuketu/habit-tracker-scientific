@@ -22,9 +22,7 @@ export default function TailwindTest() {
           </div>
         </div>
         <div className="p-4 bg-carnivore-red-50 rounded-lg border border-carnivore-red-200">
-          <h2 className="text-lg font-semibold text-carnivore-red-800 mb-2">
-            Red Color Palette
-          </h2>
+          <h2 className="text-lg font-semibold text-carnivore-red-800 mb-2">Red Color Palette</h2>
           <div className="flex gap-2">
             <div className="w-16 h-16 bg-carnivore-red-200 rounded"></div>
             <div className="w-16 h-16 bg-carnivore-red-400 rounded"></div>
@@ -33,9 +31,7 @@ export default function TailwindTest() {
           </div>
         </div>
         <div className="p-4 bg-carnivore-zinc-50 rounded-lg border border-carnivore-zinc-200">
-          <h2 className="text-lg font-semibold text-carnivore-zinc-800 mb-2">
-            Zinc Color Palette
-          </h2>
+          <h2 className="text-lg font-semibold text-carnivore-zinc-800 mb-2">Zinc Color Palette</h2>
           <div className="flex gap-2">
             <div className="w-16 h-16 bg-carnivore-zinc-200 rounded"></div>
             <div className="w-16 h-16 bg-carnivore-zinc-400 rounded"></div>
@@ -50,4 +46,3 @@ export default function TailwindTest() {
     </div>
   );
 }
-

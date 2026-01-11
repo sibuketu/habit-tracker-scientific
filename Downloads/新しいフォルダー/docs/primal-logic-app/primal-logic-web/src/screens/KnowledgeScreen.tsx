@@ -1,17 +1,24 @@
 /**
  * Primal Logic - Knowledge Screen (理論武装モード)
- * 
+ *
  * カーニボアダイエットに関する一般的な誤解（Myth）と科学的真実（Truth）を表示
  * カード型のリスト表示で、MythをタップするとTruthとSourceが表示される
  */
 
 import { useState, useMemo } from 'react';
-import { KNOWLEDGE_BASE, getAllCategories, getKnowledgeByCategory, type KnowledgeItem } from '../data/knowledgeBase';
+import {
+  KNOWLEDGE_BASE,
+  getAllCategories,
+  getKnowledgeByCategory,
+  type KnowledgeItem,
+} from '../data/knowledgeBase';
 import './KnowledgeScreen.css';
 
 export default function KnowledgeScreen() {
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
-  const [selectedCategory, setSelectedCategory] = useState<KnowledgeItem['category'] | 'All'>('All');
+  const [selectedCategory, setSelectedCategory] = useState<KnowledgeItem['category'] | 'All'>(
+    'All'
+  );
 
   const categories = useMemo(() => ['All', ...getAllCategories()] as const, []);
   const filteredKnowledge = useMemo(() => {
@@ -50,11 +57,17 @@ export default function KnowledgeScreen() {
             className={`knowledge-category-button ${selectedCategory === category ? 'active' : ''}`}
             onClick={() => setSelectedCategory(category)}
           >
-            {category === 'All' ? 'すべて' : 
-             category === 'Digestion' ? '消化' :
-             category === 'Heart Health' ? '心臓' :
-             category === 'Long-term Health' ? '長期健康' :
-             category === 'Nutrition' ? '栄養' : 'その他'}
+            {category === 'All'
+              ? 'すべて'
+              : category === 'Digestion'
+                ? '消化'
+                : category === 'Heart Health'
+                  ? '心臓'
+                  : category === 'Long-term Health'
+                    ? '長期健康'
+                    : category === 'Nutrition'
+                      ? '栄養'
+                      : 'その他'}
           </button>
         ))}
       </div>

@@ -1,16 +1,16 @@
 /**
  * Primal Logic - Coffee Caffeine Calculator
- * 
+ *
  * コーヒー入力からカフェイン量を自動計算
  */
 
 // スタバのサイズ別カフェイン含有量（mg）
 const STARBUCKS_CAFFEINE: Record<string, number> = {
-  'short': 155, // 240ml
-  'tall': 220, // 350ml
-  'grande': 330, // 470ml
-  'venti': 415, // 590ml
-  'trenta': 475, // 920ml（コールドドリンクのみ）
+  short: 155, // 240ml
+  tall: 220, // 350ml
+  grande: 330, // 470ml
+  venti: 415, // 590ml
+  trenta: 475, // 920ml（コールドドリンクのみ）
 };
 
 // 一般的なコーヒーのカフェイン含有量（mg/100ml）
@@ -18,7 +18,7 @@ const COFFEE_CAFFEINE_PER_100ML = 60; // ドリップコーヒー
 
 /**
  * コーヒー入力からカフェイン量を計算
- * 
+ *
  * @param input コーヒー入力（例: "スタバのコーヒーShort", "コーヒー2杯", "コーヒー300ml"）
  * @returns カフェイン量（mg）と説明
  */
@@ -27,7 +27,7 @@ export function calculateCaffeineFromCoffee(input: string): {
   description: string;
 } {
   const lowerInput = input.toLowerCase().trim();
-  
+
   // スタバのサイズを検出
   for (const [size, caffeine] of Object.entries(STARBUCKS_CAFFEINE)) {
     if (lowerInput.includes(`スタバ`) || lowerInput.includes(`starbucks`)) {
@@ -39,7 +39,7 @@ export function calculateCaffeineFromCoffee(input: string): {
       }
     }
   }
-  
+
   // 杯数を検出（例: "コーヒー2杯"）
   const cupMatch = lowerInput.match(/(\d+)\s*杯/);
   if (cupMatch) {
@@ -52,7 +52,7 @@ export function calculateCaffeineFromCoffee(input: string): {
       description: `コーヒー${cups}杯（${ml}ml）: 約${Math.round(caffeine)}mg`,
     };
   }
-  
+
   // ml数を検出（例: "コーヒー300ml"）
   const mlMatch = lowerInput.match(/(\d+)\s*ml/);
   if (mlMatch) {
@@ -63,7 +63,7 @@ export function calculateCaffeineFromCoffee(input: string): {
       description: `コーヒー${ml}ml: 約${Math.round(caffeine)}mg`,
     };
   }
-  
+
   // デフォルト: 1杯と仮定
   return {
     caffeineMg: Math.round((200 / 100) * COFFEE_CAFFEINE_PER_100ML),
@@ -80,4 +80,3 @@ export function getCaffeineIntakeLevel(caffeineMg: number): 'none' | 'low' | 'mo
   if (caffeineMg < 300) return 'moderate';
   return 'high';
 }
-

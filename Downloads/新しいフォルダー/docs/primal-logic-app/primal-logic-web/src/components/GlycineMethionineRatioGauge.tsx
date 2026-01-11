@@ -1,6 +1,6 @@
 /**
  * Glycine:Methionine Ratio Gauge
- * 
+ *
  * グリシン:メチオニン比率を表示
  * カーニボア重要：長寿の視点（Nose to Tail理論）
  */
@@ -24,28 +24,29 @@ export default function GlycineMethionineRatioGauge({
 }: GlycineMethionineRatioGaugeProps) {
   const totalGlycine = glycine + previewGlycine;
   const totalMethionine = methionine + previewMethionine;
-  
+
   // 比率計算（Gly:Met = ?:1）
-  const ratio = totalMethionine > 0 ? totalGlycine / totalMethionine : (totalGlycine > 0 ? Infinity : 0);
-  
+  const ratio =
+    totalMethionine > 0 ? totalGlycine / totalMethionine : totalGlycine > 0 ? Infinity : 0;
+
   // 推奨比率: 1:1以上（Dr. Paul Saladino）
   const optimalRatioMin = 1.0;
-  
+
   // ステータス判定
   const getStatus = (): 'optimal' | 'warning' | 'low' => {
     if (totalGlycine === 0 && totalMethionine === 0) return 'low';
     if (ratio >= optimalRatioMin) return 'optimal';
     return 'warning'; // メチオニン過多（炎症や老化のリスク）
   };
-  
+
   const status = getStatus();
-  
+
   const getStatusColor = () => {
     if (status === 'optimal') return '#34C759';
     if (status === 'warning') return '#FF3B30';
     return '#FF9500';
   };
-  
+
   // ボーンブロス提案メッセージ
   const getBoneBrothMessage = () => {
     if (status === 'warning' && totalMethionine > 0) {
@@ -56,9 +57,9 @@ export default function GlycineMethionineRatioGauge({
     }
     return null;
   };
-  
+
   const boneBrothMessage = getBoneBrothMessage();
-  
+
   return (
     <div
       className="nutrient-gauge-container"
@@ -90,10 +91,10 @@ export default function GlycineMethionineRatioGauge({
             )}
           </span>
           {status === 'warning' && (
-            <span 
-              style={{ 
-                fontSize: '12px', 
-                cursor: 'pointer', 
+            <span
+              style={{
+                fontSize: '12px',
+                cursor: 'pointer',
                 color: '#FF3B30',
               }}
               title="メチオニン過多は炎症や老化につながる可能性があります。コラーゲン（グリシン）を追加することを推奨します。"
@@ -125,18 +126,20 @@ export default function GlycineMethionineRatioGauge({
         </div>
       )}
       {boneBrothMessage && (
-        <div className="nutrient-gauge-hint" style={{ 
-          marginTop: '8px', 
-          padding: '8px', 
-          backgroundColor: '#FFF3CD', 
-          borderRadius: '4px',
-          fontSize: '0.9em',
-          color: '#856404',
-        }}>
+        <div
+          className="nutrient-gauge-hint"
+          style={{
+            marginTop: '8px',
+            padding: '8px',
+            backgroundColor: '#FFF3CD',
+            borderRadius: '4px',
+            fontSize: '0.9em',
+            color: '#856404',
+          }}
+        >
           💡 {boneBrothMessage}
         </div>
       )}
     </div>
   );
 }
-

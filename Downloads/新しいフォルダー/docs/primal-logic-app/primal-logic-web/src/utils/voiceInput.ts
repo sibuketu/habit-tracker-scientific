@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Voice Input (Web Speech API)
- * 
+ *
  * WindowsHキーでの音声入力対応
  * Web Speech APIを使用した音声認識機能
  */
@@ -48,8 +48,6 @@ interface SpeechRecognitionAlternative {
   transcript: string;
   confidence: number;
 }
-
-
 
 export interface VoiceInputOptions {
   language?: string; // 'ja-JP', 'en-US', 'fr-FR', 'de-DE'
@@ -123,7 +121,10 @@ export class VoiceInputManager {
    */
   start(): void {
     if (!this.recognition) {
-      logError(new Error('Speech Recognition is not available.'), { component: 'voiceInput', action: 'start' });
+      logError(new Error('Speech Recognition is not available.'), {
+        component: 'voiceInput',
+        action: 'start',
+      });
       return;
     }
 
@@ -202,7 +203,7 @@ export class VoiceInputManager {
 
 /**
  * WindowsHキーでの音声入力（ブラウザの制約により完全対応は困難だが、可能な範囲で実装）
- * 
+ *
  * 注意: WindowsHキーはOSレベルのショートカットのため、ブラウザから直接制御することはできません。
  * 代わりに、マイクボタンをクリックするか、カスタムショートカットキー（例: Ctrl+Shift+V）を使用します。
  */
@@ -224,4 +225,3 @@ export function setupVoiceInputShortcut(
     }
   });
 }
-

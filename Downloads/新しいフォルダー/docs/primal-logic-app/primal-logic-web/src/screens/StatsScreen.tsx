@@ -1,6 +1,6 @@
 /**
  * Stats Screen - 統計・グラフ表示画面
- * 
+ *
  * 栄養素の推移グラフ、体重推移グラフを表示
  */
 
@@ -53,7 +53,7 @@ export default function StatsScreen() {
       userProfile.supplementVitaminD,
       userProfile.supplementIodine,
       userProfile.alcoholFrequency,
-      userProfile.caffeineIntake,
+      userProfile.caffeineIntake
     );
   }, [userProfile]);
 
@@ -69,7 +69,7 @@ export default function StatsScreen() {
     { key: 'effectiveVitK', label: 'ビタミンK', unit: 'μg', target: undefined },
   ];
 
-  const selectedNutrientOption = nutrientOptions.find(opt => opt.key === selectedNutrient);
+  const selectedNutrientOption = nutrientOptions.find((opt) => opt.key === selectedNutrient);
 
   return (
     <div className="stats-screen-container">
@@ -95,30 +95,35 @@ export default function StatsScreen() {
         </div>
 
         {/* 期間選択 */}
-        <div style={{
-          display: 'flex',
-          gap: '0.5rem',
-          marginBottom: '1rem',
-        }}>
-          {([
-            { key: 'daily', label: '日次' },
-            { key: 'weekly', label: '週次' },
-            { key: 'monthly', label: '月次' }
-          ] as const).map(({ key, label }) => (
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.5rem',
+            marginBottom: '1rem',
+          }}
+        >
+          {(
+            [
+              { key: 'daily', label: '日次' },
+              { key: 'weekly', label: '週次' },
+              { key: 'monthly', label: '月次' },
+            ] as const
+          ).map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setSelectedPeriod(key)}
               style={{
                 padding: '0.5rem 1rem',
-                backgroundColor: selectedPeriod === key ? '#dc2626' : '#f9fafb',
-                color: selectedPeriod === key ? 'white' : '#78716c',
+                backgroundColor: selectedPeriod === key ? 'rgba(244, 63, 94, 0.2)' : '#18181b',
+                color: selectedPeriod === key ? '#f43f5e' : '#a1a1aa',
                 border: '1px solid',
-                borderColor: selectedPeriod === key ? '#dc2626' : '#e5e7eb',
+                borderColor: selectedPeriod === key ? '#f43f5e' : '#27272a',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 fontWeight: '500',
                 fontSize: '14px',
                 transition: 'all 0.2s',
+                boxShadow: selectedPeriod === key ? '0 0 8px rgba(244, 63, 94, 0.3)' : 'none',
               }}
             >
               {label}
@@ -131,7 +136,15 @@ export default function StatsScreen() {
           <div className="stats-screen-nutrient-section">
             {/* 栄養素選択 */}
             <div className="stats-screen-nutrient-selector">
-              <label style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>
+              <label
+                style={{
+                  fontSize: '14px',
+                  fontWeight: '600',
+                  marginBottom: '0.5rem',
+                  display: 'block',
+                  color: '#e4e4e7',
+                }}
+              >
                 栄養素を選択
               </label>
               <select
@@ -140,13 +153,14 @@ export default function StatsScreen() {
                 style={{
                   width: '100%',
                   padding: '0.75rem',
-                  border: '1px solid #e5e7eb',
+                  border: '1px solid #27272a',
                   borderRadius: '8px',
                   fontSize: '14px',
-                  backgroundColor: 'white',
+                  backgroundColor: '#18181b',
+                  color: '#e4e4e7',
                 }}
               >
-                {nutrientOptions.map(opt => (
+                {nutrientOptions.map((opt) => (
                   <option key={opt.key} value={opt.key}>
                     {opt.label}
                   </option>
@@ -157,7 +171,15 @@ export default function StatsScreen() {
             {/* グラフ表示 */}
             {selectedNutrientOption && (
               <div className="stats-screen-chart-container">
-                <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '1rem' }}>
+                <h2
+                  style={{
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                    marginBottom: '1rem',
+                    color: '#f43f5e',
+                    textShadow: '0 0 5px rgba(244, 63, 94, 0.4)',
+                  }}
+                >
                   {selectedNutrientOption.label}の推移
                 </h2>
                 <NutrientTrendChart
@@ -176,17 +198,21 @@ export default function StatsScreen() {
         {/* 体重グラフ */}
         {activeTab === 'weight' && (
           <div className="stats-screen-weight-section">
-            <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '1rem' }}>
+            <h2
+              style={{
+                fontSize: '18px',
+                fontWeight: 'bold',
+                marginBottom: '1rem',
+                color: '#06b6d4',
+                textShadow: '0 0 5px rgba(6, 182, 212, 0.4)',
+              }}
+            >
               体重の推移
             </h2>
-            <WeightTrendChart
-              logs={logs}
-              period={selectedPeriod}
-            />
+            <WeightTrendChart logs={logs} period={selectedPeriod} />
           </div>
         )}
       </div>
     </div>
   );
 }
-

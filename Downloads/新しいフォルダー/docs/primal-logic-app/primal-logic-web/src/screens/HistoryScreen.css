@@ -92,7 +92,9 @@
 .history-screen-expand-icon {
   font-size: 12px;
   color: var(--color-text-secondary);
-  transition: transform 0.3s ease, color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
 }
 
 .history-screen-log-item.expanded .history-screen-expand-icon {
@@ -121,7 +123,7 @@
 
 .history-screen-recovery-badge {
   font-size: 12px;
-  color: #FF3B30;
+  color: #ff3b30;
   font-weight: 600;
 }
 
@@ -132,7 +134,9 @@
   border-radius: 6px;
   border: 1px solid var(--color-border);
   animation: slideDown 0.3s ease;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 @keyframes slideDown {
@@ -204,9 +208,9 @@
 .history-screen-recovery-section {
   margin-top: 16px;
   padding: 12px;
-  background-color: #FFF3CD;
+  background-color: #fff3cd;
   border-radius: 8px;
-  border: 1px solid #FFC107;
+  border: 1px solid #ffc107;
 }
 
 .history-screen-recovery-section.clickable {
@@ -215,7 +219,7 @@
 }
 
 .history-screen-recovery-section.clickable:hover {
-  background-color: #FFE69C;
+  background-color: #ffe69c;
 }
 
 .history-screen-recovery-title {
@@ -230,4 +234,3 @@
   color: #856404;
   margin-top: 4px;
 }
-

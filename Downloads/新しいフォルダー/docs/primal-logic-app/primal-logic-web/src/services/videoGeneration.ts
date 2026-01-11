@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Video Generation Service
- * 
+ *
  * 動画生成機能: Makefilm/HeyGen/Runway APIを使用してロング動画を自動生成
  */
 
@@ -21,7 +21,7 @@ export interface VideoScript {
   platform?: 'youtube' | 'tiktok' | 'instagram'; // プラットフォーム（アスペクト比の決定に使用）
 }
 
-export type ContentType = 
+export type ContentType =
   | 'explainer' // 説明動画
   | 'counter' // 反論動画
   | 'testimonial' // 体験談
@@ -52,31 +52,48 @@ export interface VideoGenerationOptions {
  */
 export function detectContentType(script: string): ContentType {
   const scriptLower = script.toLowerCase();
-  
+
   // 反論動画のキーワード
-  const counterKeywords = ['反論', '間違い', '批判', 'counter', 'myth', 'debunk', 'wrong', 'misconception'];
-  if (counterKeywords.some(keyword => scriptLower.includes(keyword))) {
+  const counterKeywords = [
+    '反論',
+    '間違い',
+    '批判',
+    'counter',
+    'myth',
+    'debunk',
+    'wrong',
+    'misconception',
+  ];
+  if (counterKeywords.some((keyword) => scriptLower.includes(keyword))) {
     return 'counter';
   }
-  
+
   // 体験談のキーワード
-  const testimonialKeywords = ['体験', '実践', '結果', 'testimonial', 'experience', 'result', 'story'];
-  if (testimonialKeywords.some(keyword => scriptLower.includes(keyword))) {
+  const testimonialKeywords = [
+    '体験',
+    '実践',
+    '結果',
+    'testimonial',
+    'experience',
+    'result',
+    'story',
+  ];
+  if (testimonialKeywords.some((keyword) => scriptLower.includes(keyword))) {
     return 'testimonial';
   }
-  
+
   // 教育動画のキーワード
   const educationalKeywords = ['学ぶ', '学習', '教育', 'learn', 'education', 'how to', 'guide'];
-  if (educationalKeywords.some(keyword => scriptLower.includes(keyword))) {
+  if (educationalKeywords.some((keyword) => scriptLower.includes(keyword))) {
     return 'educational';
   }
-  
+
   // エンタメ動画のキーワード
   const entertainmentKeywords = ['面白い', '驚き', 'fun', 'amazing', 'wow', 'shocking'];
-  if (entertainmentKeywords.some(keyword => scriptLower.includes(keyword))) {
+  if (entertainmentKeywords.some((keyword) => scriptLower.includes(keyword))) {
     return 'entertainment';
   }
-  
+
   // デフォルト: 説明動画
   return 'explainer';
 }
@@ -84,10 +101,7 @@ export function detectContentType(script: string): ContentType {
 /**
  * テンプレートを自動選択
  */
-export function selectTemplate(
-  contentType: ContentType,
-  videoType: VideoType
-): TemplateSelection {
+export function selectTemplate(contentType: ContentType, videoType: VideoType): TemplateSelection {
   if (videoType === 'long') {
     // ロング動画（YouTube用）
     if (contentType === 'explainer' || contentType === 'educational') {
@@ -96,7 +110,8 @@ export function selectTemplate(
         category: 'Explainer Video',
         orientation: 'landscape',
         style: 'professional',
-        reason: 'カーニボアダイエットの説明・教育コンテンツに最適。プロフェッショナルな説明動画スタイル。'
+        reason:
+          'カーニボアダイエットの説明・教育コンテンツに最適。プロフェッショナルな説明動画スタイル。',
       };
     }
     if (contentType === 'counter') {
@@ -105,7 +120,7 @@ export function selectTemplate(
         category: 'Advertisement',
         orientation: 'landscape',
         style: 'news',
-        reason: 'ニューススタイルで「事実を伝える」印象を与える。カウンター動画に最適。'
+        reason: 'ニューススタイルで「事実を伝える」印象を与える。カウンター動画に最適。',
       };
     }
     if (contentType === 'testimonial') {
@@ -114,7 +129,7 @@ export function selectTemplate(
         category: 'Explainer Video',
         orientation: 'landscape',
         style: 'professional',
-        reason: '体験談も解説動画スタイルで統一。プロフェッショナルな印象を与える。'
+        reason: '体験談も解説動画スタイルで統一。プロフェッショナルな印象を与える。',
       };
     }
     // デフォルト
@@ -123,7 +138,7 @@ export function selectTemplate(
       category: 'Explainer Video',
       orientation: 'landscape',
       style: 'professional',
-      reason: 'デフォルト: 説明動画スタイル'
+      reason: 'デフォルト: 説明動画スタイル',
     };
   } else {
     // ショート動画（TikTok/Instagram用）
@@ -133,7 +148,7 @@ export function selectTemplate(
         category: 'Social Media',
         orientation: 'portrait',
         style: 'entertainment',
-        reason: 'SNS向けに最適化されている。エンタメ性が高い。'
+        reason: 'SNS向けに最適化されている。エンタメ性が高い。',
       };
     }
     if (contentType === 'counter') {
@@ -142,7 +157,7 @@ export function selectTemplate(
         category: 'Advertisement',
         orientation: 'portrait',
         style: 'news',
-        reason: 'ニューススタイルでインパクトのある反論動画。'
+        reason: 'ニューススタイルでインパクトのある反論動画。',
       };
     }
     // デフォルト
@@ -151,7 +166,7 @@ export function selectTemplate(
       category: 'Social Media',
       orientation: 'portrait',
       style: 'entertainment',
-      reason: 'デフォルト: SNS向けエンタメスタイル'
+      reason: 'デフォルト: SNS向けエンタメスタイル',
     };
   }
 }
@@ -168,26 +183,28 @@ export async function generateVideoScript(options: VideoGenerationOptions): Prom
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
   // 動画タイプを自動判定（platformから）
-  const videoType: VideoType = options.videoType || (options.platform === 'youtube' ? 'long' : 'short');
-  
+  const videoType: VideoType =
+    options.videoType || (options.platform === 'youtube' ? 'long' : 'short');
+
   // コンテンツタイプを自動判定（topicから推測、または指定された値を使用）
   // 戦略: 最初は解説動画に集中。デフォルトは説明動画（explainer）
   const contentType: ContentType = options.contentType || 'explainer'; // デフォルトは説明動画
-  
+
   // テンプレートを自動選択
   const templateSelection = selectTemplate(contentType, videoType);
 
   // Freeプランの場合、スクリプトは3分以内（約450-500文字）に制限
-  const maxDuration = options.useFreePlan ? 180 : (videoType === 'long' ? 600 : 45); // 秒
-  const maxScriptLength = options.useFreePlan ? 500 : (videoType === 'long' ? 5000 : 500); // 文字数
-  
+  const maxDuration = options.useFreePlan ? 180 : videoType === 'long' ? 600 : 45; // 秒
+  const maxScriptLength = options.useFreePlan ? 500 : videoType === 'long' ? 5000 : 500; // 文字数
+
   // コンテンツタイプに応じたプロンプト調整
   const contentTypePrompt = {
     explainer: '説明動画スタイルで、カーニボアダイエットについて分かりやすく説明してください。',
-    counter: '反論動画スタイルで、カーニボアダイエットへの批判や誤解に対して、科学的根拠に基づいて反論してください。ニューススタイルで「事実を伝える」印象を与えてください。',
+    counter:
+      '反論動画スタイルで、カーニボアダイエットへの批判や誤解に対して、科学的根拠に基づいて反論してください。ニューススタイルで「事実を伝える」印象を与えてください。',
     testimonial: '体験談スタイルで、カーニボアダイエットの実践体験や結果を語る形式にしてください。',
     educational: '教育動画スタイルで、カーニボアダイエットについて学べる内容にしてください。',
-    entertainment: 'エンタメ動画スタイルで、視聴者が楽しめる、シェアしたくなる内容にしてください。'
+    entertainment: 'エンタメ動画スタイルで、視聴者が楽しめる、シェアしたくなる内容にしてください。',
   };
 
   const prompt = `
@@ -223,15 +240,15 @@ ${options.language === 'en' ? '- **重要**: 英語で作成してください�
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
-    
+
     // JSONを抽出（```json で囲まれている場合がある）
     const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/) || text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       throw new Error('Failed to parse JSON from response');
     }
-    
+
     const script = JSON.parse(jsonMatch[1] || jsonMatch[0]) as VideoScript;
-    
+
     // Freeプランの場合、スクリプト長さをチェック
     if (options.useFreePlan && script.script.length > maxScriptLength) {
       // スクリプトが長すぎる場合は、文の区切りで切り詰める
@@ -251,10 +268,12 @@ ${options.language === 'en' ? '- **重要**: 英語で作成してください�
       }
       script.script = truncatedScript + '...';
       if (import.meta.env.DEV) {
-        console.warn(`Freeプランの制限により、スクリプトを${truncatedScript.length}文字に切り詰めました（元の長さ: ${script.script.length}文字）`);
+        console.warn(
+          `Freeプランの制限により、スクリプトを${truncatedScript.length}文字に切り詰めました（元の長さ: ${script.script.length}文字）`
+        );
       }
     }
-    
+
     return script;
   } catch (error) {
     logError(error, { component: 'videoGeneration', action: 'generateVideoScript' });
@@ -278,17 +297,21 @@ export async function generateVideo(options: VideoGenerationOptions): Promise<{
 }> {
   // 1. スクリプト生成
   const script = await generateVideoScript(options);
-  
+
   // 2. 動画生成（優先順位: Makefilm > HeyGen > Runway）
   // Freeプランの場合はHeyGenのみを使用（制限があるため）
   let videoUrl: string | undefined;
-  
+
   if (options.useFreePlan) {
     // Freeプランの場合、HeyGenのみ使用
     try {
       videoUrl = await generateVideoWithHeyGen(script, true);
     } catch (error) {
-      logError(error, { component: 'videoGeneration', action: 'generateVideo', step: 'heyGenFreePlan' });
+      logError(error, {
+        component: 'videoGeneration',
+        action: 'generateVideo',
+        step: 'heyGenFreePlan',
+      });
     }
   } else {
     // 有料プランの場合、優先順位で試行
@@ -305,15 +328,18 @@ export async function generateVideo(options: VideoGenerationOptions): Promise<{
         try {
           videoUrl = await generateVideoWithRunway(script);
         } catch (error3) {
-          logError(error3, { component: 'videoGeneration', action: 'generateVideo', step: 'allServicesFailed' });
+          logError(error3, {
+            component: 'videoGeneration',
+            action: 'generateVideo',
+            step: 'allServicesFailed',
+          });
         }
       }
     }
   }
-  
+
   return {
     script,
     videoUrl,
   };
 }
-

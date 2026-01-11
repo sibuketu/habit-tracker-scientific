@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Nutrient Calculator Engine
- * 
+ *
  * 栄養素計算エンジン: Vitamin C動的計算、Vitamin K変換、電解質ロジック
  * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
  */
@@ -16,13 +16,13 @@ import type { FoodItem, CalculatedMetrics, UserProfile } from '../types';
 
 /**
  * Calculate dynamic Vitamin C requirement based on carb intake
- * 
+ *
  * カーニボアロジック: 糖質ゼロ環境下ではビタミンC必要量が大幅に減少
  * - グルコース・アスコルビン酸拮抗作用により、新鮮な肉に含まれる微量（DHAA）で十分
  * - 肉食のみでも1日約30mgを摂取可能なため、「ビタミンは肉で足りる」
  * - 壊血病を防ぐために必要な最小量は約10mg（RDA基準の90mgは不要）
  * - ただし、炭水化物を摂取している場合は動的に計算
- * 
+ *
  * Formula:
  * - If carbs < 20g (strict carnivore): 10mg（カーニボアロジック: 最小必要量）
  * - If carbs > 100g: 100mg（標準RDA）
@@ -54,7 +54,7 @@ export function calculateEffectiveVitaminC(foods: FoodItem[]): number {
 
 /**
  * Calculate effective Vitamin K (K1 conversion + MK-4)
- * 
+ *
  * Formula: (K1 * 0.1) + (MK-4 * 1.0)
  */
 export function calculateEffectiveVitaminK(foods: FoodItem[]): number {
@@ -62,7 +62,7 @@ export function calculateEffectiveVitaminK(foods: FoodItem[]): number {
   // which foods contain K1 vs MK-4. For now, we'll assume:
   // - Animal foods: MK-4 (100% bioavailability)
   // - Plant foods: K1 (10% bioavailability)
-  
+
   return foods.reduce((sum, food) => {
     const vitK = food.nutrients?.vitaminK || 0;
     const coefficient =
@@ -75,18 +75,17 @@ export function calculateEffectiveVitaminK(foods: FoodItem[]): number {
 
 /**
  * Calculate effective Iron (Heme vs Non-Heme)
- * 
+ *
  * Formula: (Heme * 1.0) + (Non-Heme * 0.1)
  */
 export function calculateEffectiveIron(foods: FoodItem[]): number {
   return foods.reduce((sum, food) => {
     const hemeIron = food.nutrients?.hemeIron || 0;
     const nonHemeIron = food.nutrients?.nonHemeIron || 0;
-    
+
     const effectiveHeme = hemeIron * BIOAVAILABILITY_COEFFICIENTS.iron.heme;
-    const effectiveNonHeme =
-      nonHemeIron * BIOAVAILABILITY_COEFFICIENTS.iron.nonHeme;
-    
+    const effectiveNonHeme = nonHemeIron * BIOAVAILABILITY_COEFFICIENTS.iron.nonHeme;
+
     return sum + effectiveHeme + effectiveNonHeme;
   }, 0);
 }
@@ -172,11 +171,11 @@ export function calculateIronRequirement(gender?: 'male' | 'female'): number {
   if (!gender) {
     return DYNAMIC_REQUIREMENTS.iron.male.base; // デフォルトは男性
   }
-  
+
   if (gender === 'male') {
     return DYNAMIC_REQUIREMENTS.iron.male.base;
   }
-  
+
   // 女性の場合（月経がある場合を想定）
   return DYNAMIC_REQUIREMENTS.iron.female.base;
 }
@@ -188,7 +187,7 @@ export function calculateIronRequirement(gender?: 'male' | 'female'): number {
 export function calculateEffectiveProtein(foods: FoodItem[]): number {
   return foods.reduce((sum, food) => {
     const protein = food.nutrients?.protein || 0;
-    
+
     // 卵の調理法による吸収率補正
     let absorptionCoefficient = 1.0;
     if (food.type === 'dairy' && food.item.toLowerCase().includes('egg')) {
@@ -198,12 +197,12 @@ export function calculateEffectiveProtein(foods: FoodItem[]): number {
         absorptionCoefficient = 0.909; // 加熱卵: 90.9%の吸収率
       }
     }
-    
+
     const bioavailabilityCoefficient =
       food.type === 'animal' || food.type === 'ruminant' || food.type === 'dairy'
         ? BIOAVAILABILITY_COEFFICIENTS.protein.animal
         : BIOAVAILABILITY_COEFFICIENTS.protein.plant;
-    
+
     return sum + protein * bioavailabilityCoefficient * absorptionCoefficient;
   }, 0);
 }
@@ -222,21 +221,21 @@ export function calculateTotalProtein(foods: FoodItem[]): number {
  */
 export function calculateAnimalProtein(foods: FoodItem[]): number {
   return foods
-    .filter(food => food.type === 'animal' || food.type === 'ruminant' || food.type === 'dairy')
+    .filter((food) => food.type === 'animal' || food.type === 'ruminant' || food.type === 'dairy')
     .reduce((sum, food) => {
       const protein = food.nutrients?.protein || 0;
       const bioavailabilityCoefficient =
         food.type === 'animal' || food.type === 'ruminant' || food.type === 'dairy'
           ? BIOAVAILABILITY_COEFFICIENTS.protein.animal
           : BIOAVAILABILITY_COEFFICIENTS.protein.plant;
-      
+
       // 吸収率補正（卵の調理法など）
       let absorptionCoefficient = 1.0;
       if (food.type === 'dairy' && food.eggCookingMethod === 'raw') {
         // 生卵の場合はタンパク質吸収率が低い
         absorptionCoefficient = 0.5; // 50%の吸収率
       }
-      
+
       return sum + protein * bioavailabilityCoefficient * absorptionCoefficient;
     }, 0);
 }
@@ -320,7 +319,7 @@ export function calculateAllMetrics(
   // ビタミンB7（ビオチン）
   const vitaminB7Total = foods.reduce((sum, food) => sum + (food.nutrients?.vitaminB7 || 0), 0);
   // ビタミンB7（ビオチン）の吸収阻害フラグ（生卵を含む場合）
-  const biotinBlocked = foods.some(food => food.biotinBlocked === true);
+  const biotinBlocked = foods.some((food) => food.biotinBlocked === true);
   // タウリン（カーニボア重要：内臓・魚・肉に豊富）
   const taurineTotal = foods.reduce((sum, food) => sum + (food.nutrients?.taurine || 0), 0);
   // その他のビタミン・ミネラル（余計なくらい大量に）
@@ -338,31 +337,44 @@ export function calculateAllMetrics(
   const phytatesTotal = foods.reduce((sum, food) => sum + (food.nutrients?.phytates || 0), 0);
   const polyphenolsTotal = foods.reduce((sum, food) => sum + (food.nutrients?.polyphenols || 0), 0);
   const flavonoidsTotal = foods.reduce((sum, food) => sum + (food.nutrients?.flavonoids || 0), 0);
-  const anthocyaninsTotal = foods.reduce((sum, food) => sum + (food.nutrients?.anthocyanins || 0), 0);
+  const anthocyaninsTotal = foods.reduce(
+    (sum, food) => sum + (food.nutrients?.anthocyanins || 0),
+    0
+  );
   const oxalatesTotal = foods.reduce((sum, food) => sum + (food.nutrients?.oxalates || 0), 0);
   const lectinsTotal = foods.reduce((sum, food) => sum + (food.nutrients?.lectins || 0), 0);
   const saponinsTotal = foods.reduce((sum, food) => sum + (food.nutrients?.saponins || 0), 0);
   const goitrogensTotal = foods.reduce((sum, food) => sum + (food.nutrients?.goitrogens || 0), 0);
   const tanninsTotal = foods.reduce((sum, food) => sum + (food.nutrients?.tannins || 0), 0);
-  const trypsinInhibitorsTotal = foods.reduce((sum, food) => sum + (food.nutrients?.trypsinInhibitors || 0), 0);
-  const proteaseInhibitorsTotal = foods.reduce((sum, food) => sum + (food.nutrients?.proteaseInhibitors || 0), 0);
-  const cyanogenicGlycosidesTotal = foods.reduce((sum, food) => sum + (food.nutrients?.cyanogenicGlycosides || 0), 0);
+  const trypsinInhibitorsTotal = foods.reduce(
+    (sum, food) => sum + (food.nutrients?.trypsinInhibitors || 0),
+    0
+  );
+  const proteaseInhibitorsTotal = foods.reduce(
+    (sum, food) => sum + (food.nutrients?.proteaseInhibitors || 0),
+    0
+  );
+  const cyanogenicGlycosidesTotal = foods.reduce(
+    (sum, food) => sum + (food.nutrients?.cyanogenicGlycosides || 0),
+    0
+  );
   const solanineTotal = foods.reduce((sum, food) => sum + (food.nutrients?.solanine || 0), 0);
   const chaconineTotal = foods.reduce((sum, food) => sum + (food.nutrients?.chaconine || 0), 0);
   // 植物性タンパク質・植物油（Avoid Zone用）
   const plantProteinTotal = foods
-    .filter(food => food.type === 'plant')
+    .filter((food) => food.type === 'plant')
     .reduce((sum, food) => sum + (food.nutrients?.protein || 0), 0);
   const vegetableOilTotal = foods
-    .filter(food => food.type === 'plant')
+    .filter((food) => food.type === 'plant')
     .reduce((sum, food) => sum + (food.nutrients?.fat || 0), 0);
 
   // 違反検出（カーニボア違反があるかどうか）
   const violationTypes: string[] = [];
-  if (plantProteinTotal > 0 || fiberTotal > 0 || foods.some(food => food.type === 'plant')) {
+  if (plantProteinTotal > 0 || fiberTotal > 0 || foods.some((food) => food.type === 'plant')) {
     violationTypes.push('plant_food');
   }
-  if (netCarbs > 20) { // デフォルト: 20g以上で違反（設定可能）
+  if (netCarbs > 20) {
+    // デフォルト: 20g以上で違反（設定可能）
     violationTypes.push('high_carbs');
   }
   const hasViolation = violationTypes.length > 0;
@@ -503,7 +515,10 @@ export function getSodiumStatus(sodiumTotal: number): {
  * Calculate Omega 6:3 ratio and inflammation score
  * Gemini提案: 比率を計算し、炎症リスクを評価
  */
-export function calculateOmegaRatio(omega6: number, omega3: number): {
+export function calculateOmegaRatio(
+  omega6: number,
+  omega3: number
+): {
   ratio: number;
   status: 'excellent' | 'good' | 'warning' | 'danger';
   inflammationScore: number;
@@ -515,7 +530,7 @@ export function calculateOmegaRatio(omega6: number, omega3: number): {
       inflammationScore: 100, // オメガ3がゼロは危険
     };
   }
-  
+
   const ratio = omega6 / omega3;
   let status: 'excellent' | 'good' | 'warning' | 'danger';
   if (ratio < 2.0) {
@@ -527,10 +542,10 @@ export function calculateOmegaRatio(omega6: number, omega3: number): {
   } else {
     status = 'danger';
   }
-  
+
   // Gemini提案: InflammationScore = (Omega6 / Omega3)
   const inflammationScore = ratio;
-  
+
   return { ratio, status, inflammationScore };
 }
 
@@ -543,7 +558,7 @@ export function calculateEffectiveFat(foods: FoodItem[]): number {
     const fat = food.nutrients?.fat || 0;
     const omega6 = food.nutrients?.omega6 || 0;
     const omega3 = food.nutrients?.omega3 || 0;
-    
+
     // Gemini提案: オメガ6比率が高い食品は有効脂質を20%減らす
     // 判定: オメガ6がオメガ3の10倍以上の場合
     let effectiveFat = fat;
@@ -553,7 +568,7 @@ export function calculateEffectiveFat(foods: FoodItem[]): number {
       // オメガ3がゼロでオメガ6がある場合もペナルティ
       effectiveFat = fat * 0.8;
     }
-    
+
     return sum + effectiveFat;
   }, 0);
 }
@@ -562,7 +577,10 @@ export function calculateEffectiveFat(foods: FoodItem[]): number {
  * Check electrolyte balance (Na:Mg ratio)
  * Gemini提案: Na > 5000 && Mg < 300 の場合、警告を出す
  */
-export function checkElectrolyteBalance(sodium: number, magnesium: number): {
+export function checkElectrolyteBalance(
+  sodium: number,
+  magnesium: number
+): {
   isBalanced: boolean;
   warning?: string;
 } {
@@ -585,4 +603,3 @@ export function calculateEffectiveCalcium(calcium: number, vitaminD: number): nu
   }
   return calcium; // ビタミンD充足時は100%
 }
-

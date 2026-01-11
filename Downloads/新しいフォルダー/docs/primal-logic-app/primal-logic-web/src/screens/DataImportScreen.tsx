@@ -1,6 +1,6 @@
 /**
  * Primal Logic - データインポート画面
- * 
+ *
  * データのバックアップと復元機能
  */
 
@@ -40,7 +40,11 @@ export default function DataImportScreen({ onBack }: DataImportScreenProps) {
       }
 
       // 既存データのバックアップ（確認）
-      if (!window.confirm('既存のデータを上書きしますか？\n（推奨: 先にエクスポートしてバックアップを取ってください）')) {
+      if (
+        !window.confirm(
+          '既存のデータを上書きしますか？\n（推奨: 先にエクスポートしてバックアップを取ってください）'
+        )
+      ) {
         setImporting(false);
         return;
       }
@@ -118,17 +122,9 @@ export default function DataImportScreen({ onBack }: DataImportScreenProps) {
           </button>
         </div>
 
-        {imported && (
-          <div className="data-import-success">
-            ✅ データのインポートが完了しました
-          </div>
-        )}
+        {imported && <div className="data-import-success">✅ データのインポートが完了しました</div>}
 
-        {error && (
-          <div className="data-import-error">
-            ⚠️ {error}
-          </div>
-        )}
+        {error && <div className="data-import-error">⚠️ {error}</div>}
 
         <div className="data-import-info">
           <h3>注意事項</h3>
@@ -142,4 +138,3 @@ export default function DataImportScreen({ onBack }: DataImportScreenProps) {
     </div>
   );
 }
-

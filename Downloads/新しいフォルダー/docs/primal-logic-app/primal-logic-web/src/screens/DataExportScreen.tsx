@@ -1,6 +1,6 @@
 /**
  * Primal Logic - データエクスポート画面
- * 
+ *
  * GDPR対応：ユーザーデータのエクスポート機能
  */
 
@@ -69,18 +69,12 @@ export default function DataExportScreen() {
           これには、食事記録、プロファイル情報、設定などが含まれます。
         </p>
 
-        <button
-          onClick={handleExport}
-          disabled={exporting}
-          className="data-export-button"
-        >
+        <button onClick={handleExport} disabled={exporting} className="data-export-button">
           {exporting ? 'エクスポート中...' : 'データをエクスポート'}
         </button>
 
         {exported && (
-          <div className="data-export-success">
-            ✅ データのエクスポートが完了しました
-          </div>
+          <div className="data-export-success">✅ データのエクスポートが完了しました</div>
         )}
 
         <div className="data-export-info">
@@ -97,4 +91,3 @@ export default function DataExportScreen() {
     </div>
   );
 }
-

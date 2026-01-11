@@ -1,6 +1,6 @@
 /**
  * ButcherSelect専用の栄養素並び順管理
- * 
+ *
  * Nutrients Breakdownセクションの栄養素の表示順序と並び替え機能
  */
 
@@ -77,7 +77,10 @@ export function saveButcherNutrientOrder(order: ButcherNutrientOrderConfig[]): v
   }
 }
 
-export function moveButcherNutrientUp(order: ButcherNutrientOrderConfig[], key: ButcherNutrientKey): ButcherNutrientOrderConfig[] {
+export function moveButcherNutrientUp(
+  order: ButcherNutrientOrderConfig[],
+  key: ButcherNutrientKey
+): ButcherNutrientOrderConfig[] {
   const index = order.findIndex((item) => item.key === key);
   if (index <= 0) return order;
 
@@ -86,7 +89,10 @@ export function moveButcherNutrientUp(order: ButcherNutrientOrderConfig[], key: 
   return newOrder;
 }
 
-export function moveButcherNutrientDown(order: ButcherNutrientOrderConfig[], key: ButcherNutrientKey): ButcherNutrientOrderConfig[] {
+export function moveButcherNutrientDown(
+  order: ButcherNutrientOrderConfig[],
+  key: ButcherNutrientKey
+): ButcherNutrientOrderConfig[] {
   const index = order.findIndex((item) => item.key === key);
   if (index < 0 || index >= order.length - 1) return order;
 
@@ -100,7 +106,10 @@ export type SortMode = 'default' | 'deficiency'; // 優先度順 | 不足順
 export function sortNutrientsByMode(
   order: ButcherNutrientOrderConfig[],
   mode: SortMode,
-  nutrientDataMap: Record<ButcherNutrientKey, { currentDailyTotal: number; previewAmount: number; target: number }>
+  nutrientDataMap: Record<
+    ButcherNutrientKey,
+    { currentDailyTotal: number; previewAmount: number; target: number }
+  >
 ): ButcherNutrientOrderConfig[] {
   if (mode === 'default') {
     // 優先度順（priority順）でソート
@@ -110,25 +119,24 @@ export function sortNutrientsByMode(
     return [...order].sort((a, b) => {
       const dataA = nutrientDataMap[a.key];
       const dataB = nutrientDataMap[b.key];
-      
+
       if (!dataA || !dataB) return 0;
-      
+
       // targetが0以下の場合は除外（最後に配置）
       if (dataA.target <= 0 && dataB.target <= 0) return 0;
       if (dataA.target <= 0) return 1; // Aを後ろに
       if (dataB.target <= 0) return -1; // Bを後ろに
-      
+
       // 合計値（currentDailyTotal + previewAmount）で達成率を計算
       const totalA = dataA.currentDailyTotal + dataA.previewAmount;
       const totalB = dataB.currentDailyTotal + dataB.previewAmount;
-      
+
       const ratioA = totalA / dataA.target;
       const ratioB = totalB / dataB.target;
-      
+
       return ratioA - ratioB; // 小さい順（不足している順）
     });
   }
-  
+
   return order;
 }
-

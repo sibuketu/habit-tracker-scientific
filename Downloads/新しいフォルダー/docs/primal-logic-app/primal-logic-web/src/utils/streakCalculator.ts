@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Streak Calculator
- * 
+ *
  * ストリーク（継続日数）とフェーズ（称号）を計算するユーティリティ
  */
 
@@ -82,8 +82,8 @@ export async function calculateStreak(): Promise<StreakData> {
           const streakRow = data as StreakRow;
           // フェーズを決定
           let currentPhase = PHASES[0];
-          let nextPhase: typeof PHASES[number] | null = null;
-          
+          let nextPhase: (typeof PHASES)[number] | null = null;
+
           for (let i = PHASES.length - 1; i >= 0; i--) {
             if (streakRow.current_streak >= PHASES[i].days) {
               currentPhase = PHASES[i];
@@ -104,14 +104,18 @@ export async function calculateStreak(): Promise<StreakData> {
           };
         }
       } catch (err) {
-        logError(err, { component: 'streakCalculator', action: 'calculateStreak', step: 'supabase' });
+        logError(err, {
+          component: 'streakCalculator',
+          action: 'calculateStreak',
+          step: 'supabase',
+        });
         // フォールバック: ログから計算
       }
     }
 
     // localStorageからログを取得して計算
     const logs = await getDailyLogs();
-    
+
     if (logs.length === 0) {
       return {
         currentStreak: 0,
@@ -125,7 +129,7 @@ export async function calculateStreak(): Promise<StreakData> {
 
     // 日付でソート（新しい順）
     const sortedLogs = [...logs].sort((a, b) => compareDates(b.date, a.date));
-    
+
     const today = getTodayString();
     let currentStreak = 0;
     let longestStreak = 0;
@@ -134,20 +138,22 @@ export async function calculateStreak(): Promise<StreakData> {
 
     // 今日または昨日から連続日数を計算
     // 違反がない日のログのみをフィルタリング
-    const validLogs = sortedLogs.filter(log => !log.calculatedMetrics?.hasViolation);
-    
+    const validLogs = sortedLogs.filter((log) => !log.calculatedMetrics?.hasViolation);
+
     if (validLogs.length === 0) {
       currentStreak = 0;
     } else {
       // 最新のログの日付を確認
       const latestLogDate = validLogs[0].date;
-      const daysDiff = Math.floor((new Date(today).getTime() - new Date(latestLogDate).getTime()) / (1000 * 60 * 60 * 24));
-      
+      const daysDiff = Math.floor(
+        (new Date(today).getTime() - new Date(latestLogDate).getTime()) / (1000 * 60 * 60 * 24)
+      );
+
       // 今日または昨日に記録がある場合のみ、連続日数を計算
       if (daysDiff <= 1) {
         // 連続日数を計算（違反日は除外）
         let expectedDate: string;
-        
+
         // 今日または昨日から開始
         if (latestLogDate === today) {
           currentStreak = 1;
@@ -160,7 +166,7 @@ export async function calculateStreak(): Promise<StreakData> {
           currentStreak = 0;
           expectedDate = '';
         }
-        
+
         // 連続日数を計算（違反日は除外）
         if (currentStreak > 0) {
           for (let i = 1; i < validLogs.length; i++) {
@@ -192,7 +198,7 @@ export async function calculateStreak(): Promise<StreakData> {
         lastDate = null;
         continue;
       }
-      
+
       if (lastDate === null) {
         tempStreak = 1;
         lastDate = log.date;
@@ -213,8 +219,8 @@ export async function calculateStreak(): Promise<StreakData> {
 
     // フェーズを決定
     let currentPhase = PHASES[0];
-    let nextPhase: typeof PHASES[number] | null = null;
-    
+    let nextPhase: (typeof PHASES)[number] | null = null;
+
     for (let i = PHASES.length - 1; i >= 0; i--) {
       if (currentStreak >= PHASES[i].days) {
         currentPhase = PHASES[i];
@@ -245,4 +251,3 @@ export async function calculateStreak(): Promise<StreakData> {
     };
   }
 }
-

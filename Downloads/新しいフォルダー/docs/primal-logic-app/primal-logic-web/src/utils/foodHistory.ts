@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Food History Utility
- * 
+ *
  * ヒストリーレコメンド: 過去の入力履歴からデフォルト値を取得
  */
 
@@ -26,11 +26,15 @@ export async function getFoodHistory(foodName: string): Promise<FoodHistoryEntry
     // すべてのログから該当する食品を集計
     logs.forEach((log) => {
       log.fuel.forEach((food) => {
-        if (food.item === foodName || food.item.includes(foodName) || foodName.includes(food.item)) {
+        if (
+          food.item === foodName ||
+          food.item.includes(foodName) ||
+          foodName.includes(food.item)
+        ) {
           const key = `${food.amount}${food.unit}`;
           if (!history[key]) {
             // unitを'g' | '個'に変換（'serving'や'piece'の場合は'g'に変換）
-            const unit: 'g' | '個' = (food.unit === 'g' || food.unit === '個') ? food.unit : 'g';
+            const unit: 'g' | '個' = food.unit === 'g' || food.unit === '個' ? food.unit : 'g';
             history[key] = { amount: food.amount, unit, count: 0 };
           }
           history[key].count++;
@@ -42,7 +46,7 @@ export async function getFoodHistory(foodName: string): Promise<FoodHistoryEntry
     const entries = Object.values(history);
     if (entries.length === 0) return null;
 
-    const mostUsed = entries.reduce((prev, current) => 
+    const mostUsed = entries.reduce((prev, current) =>
       current.count > prev.count ? current : prev
     );
 
@@ -102,13 +106,13 @@ export async function getAllFoodHistory(): Promise<FoodHistoryEntry[]> {
         const foodName = food.item;
         // 同じ食品名で、同じ量・単位の組み合わせを集計
         const key = `${foodName}_${food.amount}_${food.unit}`;
-        
+
         if (!foodMap[key]) {
-          const unit: 'g' | '個' = (food.unit === 'g' || food.unit === '個') ? food.unit : 'g';
-          foodMap[key] = { 
-            amount: food.amount, 
-            unit, 
-            count: 0 
+          const unit: 'g' | '個' = food.unit === 'g' || food.unit === '個' ? food.unit : 'g';
+          foodMap[key] = {
+            amount: food.amount,
+            unit,
+            count: 0,
           };
         }
         foodMap[key].count++;
@@ -127,7 +131,7 @@ export async function getAllFoodHistory(): Promise<FoodHistoryEntry[]> {
     });
 
     // 「不明な食品」を除外
-    const filteredEntries = entries.filter(entry => entry.foodName !== '不明な食品');
+    const filteredEntries = entries.filter((entry) => entry.foodName !== '不明な食品');
 
     // 入力回数順にソート（多い順）
     return filteredEntries.sort((a, b) => b.count - a.count);
@@ -136,4 +140,3 @@ export async function getAllFoodHistory(): Promise<FoodHistoryEntry[]> {
     return [];
   }
 }
-

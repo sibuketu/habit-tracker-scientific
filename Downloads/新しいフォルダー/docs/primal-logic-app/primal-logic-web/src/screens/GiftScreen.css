@@ -134,7 +134,7 @@
   cursor: pointer;
 }
 
-.gift-message-privacy-label input[type="checkbox"] {
+.gift-message-privacy-label input[type='checkbox'] {
   cursor: pointer;
 }
 
@@ -544,4 +544,3 @@
 .gift-reply-actions button:last-child:hover {
   background-color: #e5e7eb;
 }
-

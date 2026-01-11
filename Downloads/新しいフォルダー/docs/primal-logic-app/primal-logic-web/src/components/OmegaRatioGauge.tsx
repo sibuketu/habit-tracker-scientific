@@ -1,6 +1,6 @@
 /**
  * Omega 3/6 Ratio Gauge
- * 
+ *
  * オメガ3/6比率をシーソー表示で表示
  * カーニボア重要：炎症管理のための最重要指標
  */
@@ -24,14 +24,14 @@ export default function OmegaRatioGauge({
 }: OmegaRatioGaugeProps) {
   const totalOmega3 = omega3 + previewOmega3;
   const totalOmega6 = omega6 + previewOmega6;
-  
+
   // 比率計算（6:3 = ?:1）
-  const ratio = totalOmega3 > 0 ? totalOmega6 / totalOmega3 : (totalOmega6 > 0 ? Infinity : 0);
-  
+  const ratio = totalOmega3 > 0 ? totalOmega6 / totalOmega3 : totalOmega6 > 0 ? Infinity : 0;
+
   // 推奨比率: 1:1 〜 1:4（カーニボア推奨）
   const optimalRatioMin = 1;
   const optimalRatioMax = 4;
-  
+
   // ステータス判定
   const getStatus = (): 'optimal' | 'warning' | 'low' => {
     if (totalOmega3 === 0 && totalOmega6 === 0) return 'low';
@@ -40,20 +40,20 @@ export default function OmegaRatioGauge({
     if (ratio > optimalRatioMax) return 'warning'; // オメガ6過多（炎症リスク）
     return 'low'; // オメガ3過多（問題なしだが表示用）
   };
-  
+
   const status = getStatus();
-  
+
   const getStatusColor = () => {
     if (status === 'optimal') return '#34C759';
     if (status === 'warning') return '#FF3B30';
     return '#FF9500';
   };
-  
+
   // シーソー表示用のパーセンテージ
   const total = totalOmega3 + totalOmega6;
   const omega3Percent = total > 0 ? (totalOmega3 / total) * 100 : 0;
   const omega6Percent = total > 0 ? (totalOmega6 / total) * 100 : 0;
-  
+
   return (
     <div
       className="nutrient-gauge-container"
@@ -85,10 +85,10 @@ export default function OmegaRatioGauge({
             )}
           </span>
           {status === 'warning' && (
-            <span 
-              style={{ 
-                fontSize: '12px', 
-                cursor: 'pointer', 
+            <span
+              style={{
+                fontSize: '12px',
+                cursor: 'pointer',
                 color: '#FF3B30',
               }}
               title="オメガ6過多は炎症の原因になります。牧草牛や魚介類を増やすことを推奨します。"
@@ -99,7 +99,16 @@ export default function OmegaRatioGauge({
         </div>
       </div>
       {/* シーソー表示 */}
-      <div style={{ display: 'flex', width: '100%', height: '24px', borderRadius: '4px', overflow: 'hidden', marginTop: '8px' }}>
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          height: '24px',
+          borderRadius: '4px',
+          overflow: 'hidden',
+          marginTop: '8px',
+        }}
+      >
         {/* オメガ3（左側、緑） */}
         <div
           style={{
@@ -144,4 +153,3 @@ export default function OmegaRatioGauge({
     </div>
   );
 }
-

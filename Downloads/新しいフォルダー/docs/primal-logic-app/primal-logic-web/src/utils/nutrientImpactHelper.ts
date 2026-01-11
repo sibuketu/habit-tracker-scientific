@@ -22,7 +22,7 @@ export function calculateNutrientImpact(
   newValue: UserProfile[keyof UserProfile]
 ): NutrientImpact[] {
   const impacts: NutrientImpact[] = [];
-  
+
   // 変更前の目標値を計算
   const beforeTargets = getCarnivoreTargets(
     currentProfile.gender,
@@ -33,10 +33,10 @@ export function calculateNutrientImpact(
     currentProfile.isPostMenopause,
     currentProfile.stressLevel
   );
-  
+
   // 変更後のプロファイルを作成
   const afterProfile = { ...currentProfile, [changedField]: newValue };
-  
+
   // 変更後の目標値を計算
   const afterTargets = getCarnivoreTargets(
     afterProfile.gender,
@@ -47,7 +47,7 @@ export function calculateNutrientImpact(
     afterProfile.isPostMenopause,
     afterProfile.stressLevel
   );
-  
+
   // 変動した栄養素を検出
   const nutrients: Array<{ key: keyof typeof beforeTargets; name: string; unit: string }> = [
     { key: 'protein', name: 'タンパク質', unit: 'g' },
@@ -56,7 +56,7 @@ export function calculateNutrientImpact(
     { key: 'magnesium', name: 'マグネシウム', unit: 'mg' },
     { key: 'vitamin_d', name: 'ビタミンD', unit: 'IU' },
   ];
-  
+
   nutrients.forEach(({ key, name, unit }) => {
     const before = beforeTargets[key];
     const after = afterTargets[key];
@@ -70,30 +70,48 @@ export function calculateNutrientImpact(
       });
     }
   });
-  
+
   return impacts;
 }
 
 /**
  * フィールドごとの栄養素変動説明を取得
  */
-export function getFieldImpactDescription(field: keyof UserProfile, value: UserProfile[keyof UserProfile]): string {
+export function getFieldImpactDescription(
+  field: keyof UserProfile,
+  value: UserProfile[keyof UserProfile]
+): string {
   const descriptions: Record<string, string | Record<string, string>> = {
-    age: (typeof value === 'number' && value > 50) ? '高齢者はビタミンDとタンパク質の必要量が増加します' : '',
+    age:
+      typeof value === 'number' && value > 50
+        ? '高齢者はビタミンDとタンパク質の必要量が増加します'
+        : '',
     activityLevel: {
       active: '活動的な人はタンパク質・脂質・マグネシウムの必要量が増加します',
       moderate: '中程度の活動量では、タンパク質と脂質がやや増加します',
       sedentary: '低活動量では、標準的な必要量が適用されます',
     },
-    isPregnant: (typeof value === 'boolean' && value) ? '妊娠中はタンパク質・鉄分・マグネシウムの必要量が増加します' : '',
-    isBreastfeeding: (typeof value === 'boolean' && value) ? '授乳中はタンパク質・マグネシウムの必要量が増加します' : '',
-    isPostMenopause: (typeof value === 'boolean' && value) ? '閉経後は鉄分の必要量が8mgに減少します（月経がないため）' : '',
+    isPregnant:
+      typeof value === 'boolean' && value
+        ? '妊娠中はタンパク質・鉄分・マグネシウムの必要量が増加します'
+        : '',
+    isBreastfeeding:
+      typeof value === 'boolean' && value
+        ? '授乳中はタンパク質・マグネシウムの必要量が増加します'
+        : '',
+    isPostMenopause:
+      typeof value === 'boolean' && value
+        ? '閉経後は鉄分の必要量が8mgに減少します（月経がないため）'
+        : '',
     stressLevel: {
       high: '高ストレス時はマグネシウムの必要量が増加します',
       moderate: '中程度のストレスでは、標準的な必要量が適用されます',
       low: '低ストレスでは、標準的な必要量が適用されます',
     },
-    sleepHours: (typeof value === 'number' && value < 7) ? '睡眠不足はマグネシウムとコルチゾールに影響します' : '',
+    sleepHours:
+      typeof value === 'number' && value < 7
+        ? '睡眠不足はマグネシウムとコルチゾールに影響します'
+        : '',
     exerciseIntensity: {
       intense: '激しい運動ではタンパク質・脂質・マグネシウムの必要量が増加します',
       moderate: '中程度の運動では、タンパク質と脂質がやや増加します',
@@ -112,7 +130,7 @@ export function getFieldImpactDescription(field: keyof UserProfile, value: UserP
       daily: '毎日の日光暴露では、ビタミンD合成が十分な可能性があります',
     },
   };
-  
+
   const desc = descriptions[field];
   if (typeof desc === 'string') {
     return desc;
@@ -122,4 +140,3 @@ export function getFieldImpactDescription(field: keyof UserProfile, value: UserP
   }
   return '';
 }
-

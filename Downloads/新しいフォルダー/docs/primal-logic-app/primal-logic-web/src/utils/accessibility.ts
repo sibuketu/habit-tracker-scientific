@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Accessibility Utilities
- * 
+ *
  * アクセシビリティ関連のユーティリティ関数
  */
 
@@ -8,10 +8,7 @@
  * キーボードナビゲーション用のイベントハンドラー
  * EnterキーまたはSpaceキーでクリックと同じ動作を実行
  */
-export function handleKeyboardNavigation(
-  e: React.KeyboardEvent,
-  callback: () => void
-): void {
+export function handleKeyboardNavigation(e: React.KeyboardEvent, callback: () => void): void {
   if (e.key === 'Enter' || e.key === ' ') {
     e.preventDefault();
     callback();
@@ -32,4 +29,3 @@ export function getAriaLabel(screen: string): string {
   };
   return labels[screen] || screen;
 }
-

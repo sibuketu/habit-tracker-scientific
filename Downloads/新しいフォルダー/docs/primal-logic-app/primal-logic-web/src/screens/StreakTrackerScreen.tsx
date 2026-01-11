@@ -1,6 +1,6 @@
 /**
  * Streak Tracker Screen - 習慣トラッカー画面
- * 
+ *
  * 連続記録日数の詳細を表示
  */
 
@@ -23,22 +23,19 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
 
   useEffect(() => {
     const loadData = async () => {
-      const [streak, dailyLogs] = await Promise.all([
-        calculateStreak(),
-        getDailyLogs(),
-      ]);
+      const [streak, dailyLogs] = await Promise.all([calculateStreak(), getDailyLogs()]);
       setStreakData(streak);
       setLogs(dailyLogs);
     };
     loadData();
-    
+
     // データ更新・画面遷移を監視
     const handleDataUpdate = () => {
       loadData();
     };
     window.addEventListener('dailyLogUpdated', handleDataUpdate);
     window.addEventListener('screenChanged', handleDataUpdate);
-    
+
     return () => {
       window.removeEventListener('dailyLogUpdated', handleDataUpdate);
       window.removeEventListener('screenChanged', handleDataUpdate);
@@ -74,12 +71,14 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
     <div className="streak-tracker-screen-container">
       <div className="streak-tracker-screen-content">
         {/* ヘッダー */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          marginBottom: '2rem',
-          gap: '1rem',
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '2rem',
+            gap: '1rem',
+          }}
+        >
           <button
             onClick={onBack}
             style={{
@@ -98,29 +97,40 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
         </div>
 
         {/* 現在の連続日数（コンパクト版） */}
-        <div style={{ 
-          textAlign: 'center', 
-          marginBottom: '2rem',
-          padding: '1.5rem',
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          border: '1px solid #e5e7eb',
-        }}>
-          <div style={{ fontSize: '64px', fontWeight: 'bold', color: '#dc2626', marginBottom: '0.5rem' }}>
+        <div
+          style={{
+            textAlign: 'center',
+            marginBottom: '2rem',
+            padding: '1.5rem',
+            backgroundColor: 'white',
+            borderRadius: '16px',
+            border: '1px solid #e5e7eb',
+          }}
+        >
+          <div
+            style={{
+              fontSize: '64px',
+              fontWeight: 'bold',
+              color: '#dc2626',
+              marginBottom: '0.5rem',
+            }}
+          >
             {streakData.currentStreak}
           </div>
           <div style={{ fontSize: '16px', color: '#6b7280', marginBottom: '1rem' }}>日連続</div>
-          
+
           {/* フェーズと次のフェーズまでを1行で表示 */}
-          <div style={{ 
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '0.75rem',
-            backgroundColor: '#fef2f2',
-            borderRadius: '8px',
-            marginBottom: '0.5rem',
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '0.75rem',
+              backgroundColor: '#fef2f2',
+              borderRadius: '8px',
+              marginBottom: '0.5rem',
+            }}
+          >
             <span style={{ fontSize: '14px', color: '#78716c' }}>現在のフェーズ</span>
             <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#dc2626' }}>
               {streakData.phase}
@@ -128,32 +138,38 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
           </div>
 
           {streakData.nextPhase && (
-            <div style={{ 
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '0.75rem',
-              backgroundColor: '#f9fafb',
-              borderRadius: '8px',
-              marginBottom: streakData.longestStreak > 0 ? '0.5rem' : '0',
-            }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '0.75rem',
+                backgroundColor: '#f9fafb',
+                borderRadius: '8px',
+                marginBottom: streakData.longestStreak > 0 ? '0.5rem' : '0',
+              }}
+            >
               <span style={{ fontSize: '14px', color: '#6b7280' }}>次のフェーズまで</span>
               <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#1f2937' }}>
-                {streakData.daysUntilNextPhase !== null ? `${streakData.daysUntilNextPhase}日` : '---'}
+                {streakData.daysUntilNextPhase !== null
+                  ? `${streakData.daysUntilNextPhase}日`
+                  : '---'}
               </span>
             </div>
           )}
 
           {/* 最長連続日数 */}
           {streakData.longestStreak > 0 && (
-            <div style={{ 
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '0.75rem',
-              backgroundColor: '#f9fafb',
-              borderRadius: '8px',
-            }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '0.75rem',
+                backgroundColor: '#f9fafb',
+                borderRadius: '8px',
+              }}
+            >
               <span style={{ fontSize: '14px', color: '#6b7280' }}>最長記録</span>
               <span style={{ fontSize: '18px', fontWeight: 'bold', color: '#1f2937' }}>
                 {streakData.longestStreak}日
@@ -163,11 +179,13 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
         </div>
 
         {/* カレンダー表示 */}
-        <div style={{ 
-          marginTop: '2rem',
-        }}>
-          <StreakCalendar 
-            logs={logs} 
+        <div
+          style={{
+            marginTop: '2rem',
+          }}
+        >
+          <StreakCalendar
+            logs={logs}
             onDayClick={(date) => {
               // 履歴画面に遷移
               const event = new CustomEvent('navigateToScreen', { detail: 'history' });
@@ -177,9 +195,7 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
             }}
           />
         </div>
-
       </div>
     </div>
   );
 }
-

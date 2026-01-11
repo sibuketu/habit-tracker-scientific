@@ -1,8 +1,8 @@
 /**
  * Primal Logic - i18n (Internationalization)
- * 
+ *
  * 多言語対応のための翻訳機能
- * 
+ *
  * 【方針転換】翻訳機能を実装
  * - ユーザーの要望により、翻訳機能を今実装する
  * - 優先順位: 英語 → フランス語 → ドイツ語 → 日本語 → 中国語
@@ -34,7 +34,7 @@ const translations: Record<Language, Record<string, string>> = {
     'common.send': '送信',
     'common.current': '現在',
     'common.locale': 'ja-JP',
-    
+
     // 言語設定
     'language.title': '言語設定',
     'language.description': 'アプリの表示言語を選択してください。',
@@ -43,14 +43,14 @@ const translations: Record<Language, Record<string, string>> = {
     'language.french': 'Français',
     'language.german': 'Deutsch',
     'language.chinese': '中文',
-    
+
     // ギフト機能
     'gift.title': 'Gift',
     'gift.subtitle': '新しい仲間を応援しよう',
     'gift.description': 'あなたのGiftが、新規ユーザーの割引になります。',
     'gift.currentStatus': '今月の状況',
     'gift.totalAmount': 'Gift総額',
-    'gift.newUsers': '新規加入者',
+    'gift.newUsers': '何人を助けたか',
     'gift.discountPerUser': '現在の割引',
     'gift.messageLabel': 'メッセージ（任意）',
     'gift.messagePlaceholder': '新規ユーザーへのメッセージを入力...',
@@ -81,7 +81,7 @@ const translations: Record<Language, Record<string, string>> = {
     'gift.currency': '¥',
     'gift.reply': '返信',
     'gift.replyPlaceholder': '返信を入力...',
-    
+
     // Labs画面
     'labs.description': 'ここは必須かどうか迷った結果とりあえず実装した機能たちです',
     'labs.diary': '日記',
@@ -110,7 +110,7 @@ const translations: Record<Language, Record<string, string>> = {
     'labs.tipSaved': '保存済み',
     'labs.tipSave': '保存する',
     'labs.appIconGenerator': 'アプリアイコン生成',
-    
+
     // ホーム画面
     'home.addFood': '食品を追加',
     'home.myFoods': 'いつもの',
@@ -131,7 +131,8 @@ const translations: Record<Language, Record<string, string>> = {
     'home.addFromPhoto': '写真から追加',
     'home.barcodeScan': 'バーコード読み取り',
     'home.recipe': 'レシピ',
-    'home.noMyFoodsRegistered': 'まだ登録されていません。履歴から⭐ボタンで登録するか、新規作成ボタンから作成できます。',
+    'home.noMyFoodsRegistered':
+      'まだ登録されていません。履歴から⭐ボタンで登録するか、新規作成ボタンから作成できます。',
     'home.beef': '牛肉',
     'home.pork': '豚肉',
     'home.chicken': '鶏肉',
@@ -140,7 +141,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.confirmAdd': '追加を確認',
     'home.originalAmount': '元の量',
     'home.changeAmount': '量を変更',
-    
+
     // プロフィール画面
     'profile.title': 'プロフィール',
     'profile.userSettings': 'ユーザー設定',
@@ -189,7 +190,7 @@ const translations: Record<Language, Record<string, string>> = {
     'profile.navigateToFeedback': 'フィードバック画面に遷移',
     'profile.navigateToPrivacyPolicy': 'プライバシーポリシー画面に遷移',
     'profile.navigateToTermsOfService': '利用規約画面に遷移',
-    
+
     // 設定画面
     'settings.title': '設定',
     'settings.general': '一般',
@@ -198,7 +199,7 @@ const translations: Record<Language, Record<string, string>> = {
     'settings.data': 'データ',
     'settings.about': 'について',
     'settings.hideSection': 'このセクションを非表示にする',
-    
+
     // 履歴画面
     'history.title': '履歴',
     'history.noData': 'データがまだありません',
@@ -228,13 +229,13 @@ const translations: Record<Language, Record<string, string>> = {
     'history.items': '品目',
     'history.violation': '違反',
     'history.recovery': 'リカバリー',
-    
+
     // 統計画面
     'stats.title': '統計・グラフ',
     'stats.nutrientTrends': '栄養素の推移',
     'stats.weightTrends': '体重の推移',
     'stats.noData': 'データがまだありません',
-    
+
     // 日記画面
     'diary.title': '日記',
     'diary.physicalCondition': '体調',
@@ -246,7 +247,7 @@ const translations: Record<Language, Record<string, string>> = {
     'diary.placeholder': '体調・メンタル・身体能力など自由に記録してください',
     'diary.pastDiary': '過去の日記',
     'diary.noEntries': '日記がまだありません',
-    
+
     // コミュニティ画面
     'community.title': 'コミュニティ',
     'community.comingSoon': '今後実装予定',
@@ -254,11 +255,13 @@ const translations: Record<Language, Record<string, string>> = {
     'community.showConcept': '設計思想を表示',
     'community.conceptTitle': 'コミュニティの設計思想',
     'community.concept1': '「仲間を作る場だけでなく」、「全員が被験者となった巨大な実験室」です。',
-    'community.concept2': 'あなたの記録が匿名化され、集合知として統合されます。そのデータをAIと専門医が解析し、あなたの生存戦略に役立てます。',
+    'community.concept2':
+      'あなたの記録が匿名化され、集合知として統合されます。そのデータをAIと専門医が解析し、あなたの生存戦略に役立てます。',
     'community.concept3': '既存コミュニティの上位互換',
     'community.concept3Desc': 'Discord、Reddit、X等の機能を提供',
     'community.concept4': '会話の記録と活用',
-    'community.concept4Desc': 'コミュニティ内の会話は全てデータベースに保存され、過去の会話に基づいてAIが回答',
+    'community.concept4Desc':
+      'コミュニティ内の会話は全てデータベースに保存され、過去の会話に基づいてAIが回答',
     'community.concept5': '集合知',
     'community.concept5Desc': '匿名化されたデータから実践的なパターンを抽出',
     'community.concept6': 'データ主導',
@@ -269,31 +272,41 @@ const translations: Record<Language, Record<string, string>> = {
     'community.consultation': '専門医相談',
     'community.conversationsTitle': 'コミュニティ会話',
     'community.comingSoonWarning': '今後実装予定',
-    'community.comingSoonDescription': 'コミュニティ機能は、セキュリティとパフォーマンスを重視し、段階的に実装予定です。現在はモックデータを表示しています。',
-    'community.conversationsDescription': 'ユーザー同士の会話がデータとして解析され、集合知になります。仲間を作ってもいいし、データとして貢献するだけでも構いません。',
+    'community.comingSoonDescription':
+      'コミュニティ機能は、セキュリティとパフォーマンスを重視し、段階的に実装予定です。現在はモックデータを表示しています。',
+    'community.conversationsDescription':
+      'ユーザー同士の会話がデータとして解析され、集合知になります。仲間を作ってもいいし、データとして貢献するだけでも構いません。',
     'community.threadDetail': 'スレッド詳細画面（準備中）',
     'community.insightsTitle': 'コミュニティの集合知',
-    'community.insightsDescription': '匿名化された実践データから抽出された洞察です。あなたの記録も自動的に集合知に貢献します。',
-    'community.insightsNote': '※ 最初はデータ量が少ないため、十分に役立つ情報が出ない場合があります。ユーザーが増えるほど、より有用な集合知が生成されます。',
+    'community.insightsDescription':
+      '匿名化された実践データから抽出された洞察です。あなたの記録も自動的に集合知に貢献します。',
+    'community.insightsNote':
+      '※ 最初はデータ量が少ないため、十分に役立つ情報が出ない場合があります。ユーザーが増えるほど、より有用な集合知が生成されます。',
     'community.patternsTitle': '実践パターン',
-    'community.patternsDescription': 'あなたのログから抽出された実践的なパターンです。将来的にはコミュニティ全体のデータから抽出されます。',
+    'community.patternsDescription':
+      'あなたのログから抽出された実践的なパターンです。将来的にはコミュニティ全体のデータから抽出されます。',
     'community.sampleSize': 'サンプル数',
     'community.consultationTitle': 'データ主導の専門医相談',
     'community.consultationSubtitle': '「会話」ではなく「カルテ」で相談',
-    'community.consultationDesc1': '従来のコミュニティでは、医師に「昨日は何を食べましたか？」「症状は？」と逐一説明する必要がありました。',
-    'community.consultationDesc2': 'このアプリでは、アプリ内のスタッツ（食事・排泄・体重の推移グラフ）を医師に共有するだけで、即座に外科手術的なアドバイスを受けることができます。',
-    'community.consultationDesc3': '医師は「何を食べたか」を聞く必要がなく、データを見て即座に判断できるため、効率的で正確な診療が可能です。',
-    'community.consultationDesc4': 'また、AIが既出の質問に自動回答するため、同じ質問を繰り返す必要がありません。',
-    'community.consultationNote': '※ 仲間を作ってもいいですが、それだけではありません。あなたの会話やデータが集合知として統合され、他のユーザーの生存戦略に役立てられます。',
+    'community.consultationDesc1':
+      '従来のコミュニティでは、医師に「昨日は何を食べましたか？」「症状は？」と逐一説明する必要がありました。',
+    'community.consultationDesc2':
+      'このアプリでは、アプリ内のスタッツ（食事・排泄・体重の推移グラフ）を医師に共有するだけで、即座に外科手術的なアドバイスを受けることができます。',
+    'community.consultationDesc3':
+      '医師は「何を食べたか」を聞く必要がなく、データを見て即座に判断できるため、効率的で正確な診療が可能です。',
+    'community.consultationDesc4':
+      'また、AIが既出の質問に自動回答するため、同じ質問を繰り返す必要がありません。',
+    'community.consultationNote':
+      '※ 仲間を作ってもいいですが、それだけではありません。あなたの会話やデータが集合知として統合され、他のユーザーの生存戦略に役立てられます。',
     'community.exportData': 'データをエクスポート（JSON形式）',
     'community.exportFailed': 'データのエクスポートに失敗しました。',
-    
+
     // 習慣トラッカー画面
     'streak.title': '習慣トラッカー',
     'streak.currentStreak': '現在のストリーク',
     'streak.phase': 'フェーズ',
     'streak.days': '日',
-    
+
     // カスタム食品画面
     'customFood.title': 'カスタム食品登録',
     'customFood.add': 'カスタム食品登録',
@@ -370,7 +383,7 @@ const translations: Record<Language, Record<string, string>> = {
     'customFood.goitrogens': 'ゴイトロゲン',
     'customFood.tannins': 'タンニン',
     'customFood.addToTodayLog': '今日のログに追加する',
-    
+
     // ButcherSelect component
     'butcher.saltType': '塩の種類',
     'butcher.quantity': '数量',
@@ -381,10 +394,12 @@ const translations: Record<Language, Record<string, string>> = {
     'butcher.sortByPriority': '優先度順',
     'butcher.sortByDeficiency': '不足順',
     'butcher.omega36Ratio': 'オメガ3/6比率',
-    'butcher.omega6ExcessWarning': 'オメガ6過多は炎症の原因になります。牧草牛や魚介類を増やすことを推奨します。',
+    'butcher.omega6ExcessWarning':
+      'オメガ6過多は炎症の原因になります。牧草牛や魚介類を増やすことを推奨します。',
     'butcher.omega6ExcessRisk': '⚠️ オメガ6過多（炎症リスク）魚か魚卵を追加してください',
     'butcher.optimalRatioRange': '✅ 推奨比率範囲内（1:1 〜 1:4）',
-    'butcher.biotinBlockedHint': '生卵を摂取しているため、ビタミンB7（ビオチン）の吸収が阻害される可能性があります。加熱した卵を摂取することを推奨します。',
+    'butcher.biotinBlockedHint':
+      '生卵を摂取しているため、ビタミンB7（ビオチン）の吸収が阻害される可能性があります。加熱した卵を摂取することを推奨します。',
     'butcher.magnesiumHint': '現状: 不足気味。ミネラルウォーターや塩で補給可能',
     'butcher.photoAnalysisFailed': '写真の解析に失敗しました。もう一度お試しください。',
     'butcher.piece': '個',
@@ -405,7 +420,7 @@ const translations: Record<Language, Record<string, string>> = {
     'butcher.saponins': 'サポニン',
     'butcher.goitrogens': 'ゴイトロゲン',
     'butcher.tannins': 'タンニン',
-    
+
     // ショップ画面
     'shop.title': 'ショップ',
     'shop.pixelArtUI': 'ドット絵UI',
@@ -425,7 +440,7 @@ const translations: Record<Language, Record<string, string>> = {
     'shop.enablePixelArtUISuccess': 'ドット絵UIを有効化しました。ページをリロードします。',
     'shop.disablePixelArtUISuccess': 'ドット絵UIを無効化しました。ページをリロードします。',
     'shop.paymentComingSoon': '決済処理は今後実装予定です（{name}: ¥{price}）',
-    
+
     // レシピ画面
     'recipe.title': 'レシピ',
     'recipe.createNew': '+ 新しいレシピを作成',
@@ -455,13 +470,13 @@ const translations: Record<Language, Record<string, string>> = {
     'recipe.back': '← 戻る',
     'recipe.cancel': 'キャンセル',
     'recipe.save': '保存',
-    
+
     // 入力画面
     'input.title': '食品入力',
     'input.search': '検索',
     'input.searchPlaceholder': '食品名で検索...',
     'input.noResults': '検索結果がありません',
-    
+
     // 認証画面
     'auth.title': 'ログイン',
     'auth.email': 'メールアドレス',
@@ -469,7 +484,7 @@ const translations: Record<Language, Record<string, string>> = {
     'auth.login': 'ログイン',
     'auth.signup': '新規登録',
     'auth.logout': 'ログアウト',
-    
+
     // ナビゲーション
     'nav.home': 'ホーム',
     'nav.homeAriaLabel': 'ホーム画面',
@@ -480,7 +495,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.labs': 'その他',
     'nav.historyAriaLabel': '履歴画面',
     'nav.labsAriaLabel': 'その他画面',
-    
+
     // その他
     'common.processing': '処理中...',
     'common.yes': 'はい',
@@ -506,7 +521,7 @@ const translations: Record<Language, Record<string, string>> = {
     'common.send': 'Send',
     'common.current': 'Current',
     'common.locale': 'en-US',
-    
+
     // 言語設定
     'language.title': 'Language Settings',
     'language.description': 'Select the display language for the app.',
@@ -515,7 +530,7 @@ const translations: Record<Language, Record<string, string>> = {
     'language.french': 'Français',
     'language.german': 'Deutsch',
     'language.chinese': '中文',
-    
+
     // ギフト機能
     'gift.title': 'Gift',
     'gift.subtitle': 'Support new members',
@@ -535,7 +550,8 @@ const translations: Record<Language, Record<string, string>> = {
     'gift.myMessages': 'My Messages',
     'gift.myMessagesDescription': 'Messages you wrote when sending Gifts in the past',
     'gift.communityMessages': 'Messages from the Community',
-    'gift.communityMessagesDescription': 'Public messages written by other users when they sent Gifts',
+    'gift.communityMessagesDescription':
+      'Public messages written by other users when they sent Gifts',
     'gift.publicMessages': 'Public Messages',
     'gift.noMessages': 'No messages yet',
     'gift.viewMessages': 'View Messages',
@@ -554,7 +570,7 @@ const translations: Record<Language, Record<string, string>> = {
     'gift.currency': '¥',
     'gift.reply': 'Reply',
     'gift.replyPlaceholder': 'Enter your reply...',
-    
+
     // Labs screen
     'labs.description': 'Features implemented while deciding if they are essential',
     'labs.diary': 'Diary',
@@ -566,7 +582,8 @@ const translations: Record<Language, Record<string, string>> = {
     'labs.shop': 'Shop',
     'labs.shopDescription': 'Purchase pixel art UI and other customization items.',
     'labs.gift': 'Gift',
-    'labs.giftDescription': 'Support new members. 100% will be converted to discounts for new users.',
+    'labs.giftDescription':
+      'Support new members. 100% will be converted to discounts for new users.',
     'labs.streakTracker': 'Habit Tracker',
     'labs.streakTrackerDescription': 'Check streak',
     'labs.tips': 'Tips',
@@ -583,7 +600,7 @@ const translations: Record<Language, Record<string, string>> = {
     'labs.tipSaved': 'Saved',
     'labs.tipSave': 'Save',
     'labs.appIconGenerator': 'App Icon Generator',
-    
+
     // Home screen
     'home.addFood': 'Add Food',
     'home.myFoods': 'My Foods',
@@ -593,7 +610,8 @@ const translations: Record<Language, Record<string, string>> = {
     'home.addFromPhoto': 'Add from Photo',
     'home.barcodeScan': 'Barcode Scan',
     'home.recipe': 'Recipe',
-    'home.noMyFoodsRegistered': 'Not registered yet. You can register from history with the ⭐ button or create a new one from the create button.',
+    'home.noMyFoodsRegistered':
+      'Not registered yet. You can register from history with the ⭐ button or create a new one from the create button.',
     'home.today': 'Today',
     'home.yesterday': 'Yesterday',
     'home.noFoods': 'No foods added yet',
@@ -604,7 +622,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.add': 'Add',
     'home.gram': 'g',
     'home.piece': 'piece',
-    
+
     // Profile screen
     'profile.title': 'Profile',
     'profile.userSettings': 'User Settings',
@@ -653,7 +671,7 @@ const translations: Record<Language, Record<string, string>> = {
     'profile.navigateToFeedback': 'Navigate to feedback screen',
     'profile.navigateToPrivacyPolicy': 'Navigate to privacy policy screen',
     'profile.navigateToTermsOfService': 'Navigate to terms of service screen',
-    
+
     // Settings screen
     'settings.title': 'Settings',
     'settings.general': 'General',
@@ -662,7 +680,7 @@ const translations: Record<Language, Record<string, string>> = {
     'settings.data': 'Data',
     'settings.about': 'About',
     'settings.hideSection': 'Hide this section',
-    
+
     // History screen
     'history.title': 'History',
     'history.noData': 'No data yet',
@@ -687,13 +705,13 @@ const translations: Record<Language, Record<string, string>> = {
     'history.items': 'items',
     'history.violation': 'Violation',
     'history.recovery': 'Recovery',
-    
+
     // Stats screen
     'stats.title': 'Statistics & Charts',
     'stats.nutrientTrends': 'Nutrient Trends',
     'stats.weightTrends': 'Weight Trends',
     'stats.noData': 'No data yet',
-    
+
     // Diary screen
     'diary.title': 'Diary',
     'diary.physicalCondition': 'Physical Condition',
@@ -701,54 +719,68 @@ const translations: Record<Language, Record<string, string>> = {
     'diary.physicalAbility': 'Physical Ability',
     'diary.save': 'Save',
     'diary.noEntries': 'No diary entries yet',
-    
+
     // Community screen
     'community.title': 'Community',
     'community.comingSoon': 'Coming Soon',
     'community.description': 'Data-driven community features',
     'community.showConcept': 'Show design concept',
     'community.conceptTitle': 'Community Design Concept',
-    'community.concept1': 'Not just a place to make friends, but a huge laboratory where everyone becomes a subject.',
-    'community.concept2': 'Your records are anonymized and integrated as collective intelligence. AI and specialists analyze this data to help your survival strategy.',
+    'community.concept1':
+      'Not just a place to make friends, but a huge laboratory where everyone becomes a subject.',
+    'community.concept2':
+      'Your records are anonymized and integrated as collective intelligence. AI and specialists analyze this data to help your survival strategy.',
     'community.concept3': 'Superior to existing communities',
     'community.concept3Desc': 'Provides features from Discord, Reddit, X, etc.',
     'community.concept4': 'Conversation recording and utilization',
-    'community.concept4Desc': 'All conversations in the community are saved to a database, and AI responds based on past conversations',
+    'community.concept4Desc':
+      'All conversations in the community are saved to a database, and AI responds based on past conversations',
     'community.concept5': 'Collective intelligence',
     'community.concept5Desc': 'Extract practical patterns from anonymized data',
     'community.concept6': 'Data-driven',
-    'community.concept6Desc': 'Consult with specialists using "medical records" instead of "conversations"',
+    'community.concept6Desc':
+      'Consult with specialists using "medical records" instead of "conversations"',
     'community.conversations': 'Conversations',
     'community.insights': 'Collective Intelligence',
     'community.patterns': 'Practice Patterns',
     'community.consultation': 'Specialist Consultation',
     'community.conversationsTitle': 'Community Conversations',
     'community.comingSoonWarning': 'Coming Soon',
-    'community.comingSoonDescription': 'Community features will be implemented gradually, prioritizing security and performance. Currently showing mock data.',
-    'community.conversationsDescription': 'User conversations are analyzed as data and become collective intelligence. You can make friends, or just contribute as data.',
+    'community.comingSoonDescription':
+      'Community features will be implemented gradually, prioritizing security and performance. Currently showing mock data.',
+    'community.conversationsDescription':
+      'User conversations are analyzed as data and become collective intelligence. You can make friends, or just contribute as data.',
     'community.threadDetail': 'Thread detail screen (preparing)',
     'community.insightsTitle': 'Community Collective Intelligence',
-    'community.insightsDescription': 'Insights extracted from anonymized practice data. Your records also automatically contribute to collective intelligence.',
-    'community.insightsNote': '※ Initially, there may not be enough useful information due to limited data. As more users join, more useful collective intelligence will be generated.',
+    'community.insightsDescription':
+      'Insights extracted from anonymized practice data. Your records also automatically contribute to collective intelligence.',
+    'community.insightsNote':
+      '※ Initially, there may not be enough useful information due to limited data. As more users join, more useful collective intelligence will be generated.',
     'community.patternsTitle': 'Practice Patterns',
-    'community.patternsDescription': 'Practical patterns extracted from your logs. In the future, they will be extracted from the entire community data.',
+    'community.patternsDescription':
+      'Practical patterns extracted from your logs. In the future, they will be extracted from the entire community data.',
     'community.sampleSize': 'Sample size',
     'community.consultationTitle': 'Data-Driven Specialist Consultation',
     'community.consultationSubtitle': 'Consult using "medical records" instead of "conversations"',
-    'community.consultationDesc1': 'In traditional communities, you had to explain to doctors one by one: "What did you eat yesterday?" "What are your symptoms?"',
-    'community.consultationDesc2': 'In this app, by simply sharing your in-app stats (diet, excretion, weight trend graphs) with doctors, you can receive immediate surgical-level advice.',
-    'community.consultationDesc3': 'Doctors don\'t need to ask "what did you eat" and can make immediate judgments by looking at data, enabling efficient and accurate medical care.',
-    'community.consultationDesc4': 'Also, since AI automatically answers previously asked questions, you don\'t need to repeat the same questions.',
-    'community.consultationNote': '※ You can make friends, but it\'s not just that. Your conversations and data are integrated as collective intelligence and help other users\' survival strategies.',
+    'community.consultationDesc1':
+      'In traditional communities, you had to explain to doctors one by one: "What did you eat yesterday?" "What are your symptoms?"',
+    'community.consultationDesc2':
+      'In this app, by simply sharing your in-app stats (diet, excretion, weight trend graphs) with doctors, you can receive immediate surgical-level advice.',
+    'community.consultationDesc3':
+      'Doctors don\'t need to ask "what did you eat" and can make immediate judgments by looking at data, enabling efficient and accurate medical care.',
+    'community.consultationDesc4':
+      "Also, since AI automatically answers previously asked questions, you don't need to repeat the same questions.",
+    'community.consultationNote':
+      "※ You can make friends, but it's not just that. Your conversations and data are integrated as collective intelligence and help other users' survival strategies.",
     'community.exportData': 'Export Data (JSON format)',
     'community.exportFailed': 'Failed to export data.',
-    
+
     // Streak tracker screen
     'streak.title': 'Habit Tracker',
     'streak.currentStreak': 'Current Streak',
     'streak.phase': 'Phase',
     'streak.days': 'days',
-    
+
     // Custom food screen
     'customFood.title': 'Custom Food Registration',
     'customFood.add': 'Custom Food Registration',
@@ -757,7 +789,8 @@ const translations: Record<Language, Record<string, string>> = {
     'customFood.foodNameDescription': 'Enter food name and press AI Suggest button',
     'customFood.foodNamePlaceholder': 'Enter food name...',
     'customFood.displayName': 'Display Name',
-    'customFood.displayNameDescription': 'Name used for search and display (can be same as food name)',
+    'customFood.displayNameDescription':
+      'Name used for search and display (can be same as food name)',
     'customFood.displayNamePlaceholder': 'Enter display name...',
     'customFood.aiSuggest': 'AI Suggest',
     'customFood.analyzing': 'Analyzing...',
@@ -824,8 +857,8 @@ const translations: Record<Language, Record<string, string>> = {
     'customFood.saponins': 'Saponins',
     'customFood.goitrogens': 'Goitrogens',
     'customFood.tannins': 'Tannins',
-    'customFood.addToTodayLog': 'Add to today\'s log',
-    
+    'customFood.addToTodayLog': "Add to today's log",
+
     // ButcherSelect component
     'butcher.saltType': 'Salt Type',
     'butcher.quantity': 'Quantity',
@@ -836,11 +869,14 @@ const translations: Record<Language, Record<string, string>> = {
     'butcher.sortByPriority': 'By Priority',
     'butcher.sortByDeficiency': 'By Deficiency',
     'butcher.omega36Ratio': 'Omega 3/6 Ratio',
-    'butcher.omega6ExcessWarning': 'Excess omega-6 causes inflammation. It is recommended to increase grass-fed beef and seafood.',
+    'butcher.omega6ExcessWarning':
+      'Excess omega-6 causes inflammation. It is recommended to increase grass-fed beef and seafood.',
     'butcher.omega6ExcessRisk': 'Excess omega-6 (inflammation risk) Please add fish or fish eggs',
     'butcher.optimalRatioRange': 'Within recommended ratio range (1:1 to 1:4)',
-    'butcher.biotinBlockedHint': 'Since you are consuming raw eggs, vitamin B7 (biotin) absorption may be inhibited. It is recommended to consume cooked eggs.',
-    'butcher.magnesiumHint': 'Current: Slightly deficient. Can be supplemented with mineral water or salt',
+    'butcher.biotinBlockedHint':
+      'Since you are consuming raw eggs, vitamin B7 (biotin) absorption may be inhibited. It is recommended to consume cooked eggs.',
+    'butcher.magnesiumHint':
+      'Current: Slightly deficient. Can be supplemented with mineral water or salt',
     'butcher.photoAnalysisFailed': 'Photo analysis failed. Please try again.',
     'butcher.piece': 'piece',
     'butcher.grindUnit': 'grind',
@@ -860,7 +896,7 @@ const translations: Record<Language, Record<string, string>> = {
     'butcher.saponins': 'Saponins',
     'butcher.goitrogens': 'Goitrogens',
     'butcher.tannins': 'Tannins',
-    
+
     // Shop screen
     'shop.title': 'Shop',
     'shop.pixelArtUI': 'Pixel Art UI',
@@ -872,7 +908,7 @@ const translations: Record<Language, Record<string, string>> = {
     'shop.enablePixelArtUISuccess': 'Pixel Art UI enabled. Reloading page...',
     'shop.disablePixelArtUISuccess': 'Pixel Art UI disabled. Reloading page...',
     'shop.paymentComingSoon': 'Payment processing coming soon ({name}: ¥{price})',
-    
+
     // Recipe screen
     'recipe.title': 'Recipe',
     'recipe.createNew': '+ Create New Recipe',
@@ -902,13 +938,13 @@ const translations: Record<Language, Record<string, string>> = {
     'recipe.back': '← Back',
     'recipe.cancel': 'Cancel',
     'recipe.save': 'Save',
-    
+
     // Input screen
     'input.title': 'Food Input',
     'input.search': 'Search',
     'input.searchPlaceholder': 'Search by food name...',
     'input.noResults': 'No search results',
-    
+
     // Auth screen
     'auth.title': 'Login',
     'auth.email': 'Email',
@@ -916,7 +952,7 @@ const translations: Record<Language, Record<string, string>> = {
     'auth.login': 'Login',
     'auth.signup': 'Sign Up',
     'auth.logout': 'Logout',
-    
+
     // Navigation
     'nav.home': 'Home',
     'nav.homeAriaLabel': 'Home screen',
@@ -927,7 +963,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.labs': 'Other',
     'nav.historyAriaLabel': 'History screen',
     'nav.labsAriaLabel': 'Other screen',
-    
+
     // Other
     'common.processing': 'Processing...',
     'common.yes': 'Yes',
@@ -953,16 +989,16 @@ const translations: Record<Language, Record<string, string>> = {
     'common.send': 'Envoyer',
     'common.current': 'Actuel',
     'common.locale': 'fr-FR',
-    
+
     // 言語設定
     'language.title': 'Paramètres de langue',
-    'language.description': 'Sélectionnez la langue d\'affichage de l\'application.',
+    'language.description': "Sélectionnez la langue d'affichage de l'application.",
     'language.japanese': '日本語',
     'language.english': 'English',
     'language.french': 'Français',
     'language.german': 'Deutsch',
     'language.chinese': '中文',
-    
+
     // ギフト機能
     'gift.title': 'Cadeau',
     'gift.subtitle': 'Soutenez les nouveaux membres',
@@ -980,9 +1016,11 @@ const translations: Record<Language, Record<string, string>> = {
     'gift.purchaseNote': '※ 100% sera converti en réductions pour les nouveaux utilisateurs',
     'gift.purchaseSuccess': 'Merci pour votre contribution !',
     'gift.myMessages': 'Mes messages',
-    'gift.myMessagesDescription': 'Messages que vous avez écrits lors de l\'envoi de cadeaux dans le passé',
+    'gift.myMessagesDescription':
+      "Messages que vous avez écrits lors de l'envoi de cadeaux dans le passé",
     'gift.communityMessages': 'Messages de la communauté',
-    'gift.communityMessagesDescription': 'Messages publics écrits par d\'autres utilisateurs lors de l\'envoi de cadeaux',
+    'gift.communityMessagesDescription':
+      "Messages publics écrits par d'autres utilisateurs lors de l'envoi de cadeaux",
     'gift.publicMessages': 'Messages publics',
     'gift.noMessages': 'Aucun message pour le moment',
     'gift.viewMessages': 'Voir les messages',
@@ -1001,19 +1039,21 @@ const translations: Record<Language, Record<string, string>> = {
     'gift.currency': '¥',
     'gift.reply': 'Répondre',
     'gift.replyPlaceholder': 'Entrez votre réponse...',
-    
+
     // Écran Labs
     'labs.description': 'Fonctionnalités implémentées en décidant si elles sont essentielles',
     'labs.diary': 'Journal',
-    'labs.diaryDescription': 'Enregistrer l\'état physique, mental, capacités physiques, etc.',
+    'labs.diaryDescription': "Enregistrer l'état physique, mental, capacités physiques, etc.",
     'labs.stats': 'Statistiques et graphiques',
-    'labs.statsDescription': 'Afficher les tendances nutritionnelles et les tendances de poids dans des graphiques',
+    'labs.statsDescription':
+      'Afficher les tendances nutritionnelles et les tendances de poids dans des graphiques',
     'labs.community': 'Communauté',
     'labs.communityDescription': 'Fonctionnalités communautaires basées sur les données',
     'labs.shop': 'Boutique',
-    'labs.shopDescription': 'Achetez des UI en pixel art et d\'autres articles de personnalisation.',
+    'labs.shopDescription': "Achetez des UI en pixel art et d'autres articles de personnalisation.",
     'labs.gift': 'Cadeau',
-    'labs.giftDescription': 'Soutenez les nouveaux membres. 100% sera converti en réductions pour les nouveaux utilisateurs.',
+    'labs.giftDescription':
+      'Soutenez les nouveaux membres. 100% sera converti en réductions pour les nouveaux utilisateurs.',
     'labs.streakTracker': 'Suivi des habitudes',
     'labs.streakTrackerDescription': 'Vérifier la série',
     'labs.tips': 'Conseils',
@@ -1029,8 +1069,8 @@ const translations: Record<Language, Record<string, string>> = {
     'labs.tipShare': '📤 Partager',
     'labs.tipSaved': 'Enregistré',
     'labs.tipSave': 'Enregistrer',
-    'labs.appIconGenerator': 'Générateur d\'icône d\'application',
-    
+    'labs.appIconGenerator': "Générateur d'icône d'application",
+
     // History screen
     'history.title': 'Historique',
     'history.noData': 'Aucune donnée pour le moment',
@@ -1055,18 +1095,18 @@ const translations: Record<Language, Record<string, string>> = {
     'history.items': 'articles',
     'history.violation': 'Violation',
     'history.recovery': 'Récupération',
-    
+
     // Navigation
     'nav.home': 'Accueil',
-    'nav.homeAriaLabel': 'Écran d\'accueil',
+    'nav.homeAriaLabel': "Écran d'accueil",
     'nav.profile': 'Paramètres',
     'nav.profileAriaLabel': 'Écran de paramètres',
     'nav.mainNavigationAriaLabel': 'Navigation principale',
     'nav.history': 'Historique',
     'nav.labs': 'Autre',
-    'nav.historyAriaLabel': 'Écran d\'historique',
+    'nav.historyAriaLabel': "Écran d'historique",
     'nav.labsAriaLabel': 'Écran autre',
-    
+
     // Home screen
     'home.addFood': 'Ajouter un aliment',
     'home.myFoods': 'Mes aliments',
@@ -1076,8 +1116,9 @@ const translations: Record<Language, Record<string, string>> = {
     'home.addFromPhoto': 'Ajouter depuis une photo',
     'home.barcodeScan': 'Scanner le code-barres',
     'home.recipe': 'Recette',
-    'home.noMyFoodsRegistered': 'Pas encore enregistré. Vous pouvez enregistrer depuis l\'historique avec le bouton ⭐ ou en créer un nouveau depuis le bouton de création.',
-    'home.today': 'Aujourd\'hui',
+    'home.noMyFoodsRegistered':
+      "Pas encore enregistré. Vous pouvez enregistrer depuis l'historique avec le bouton ⭐ ou en créer un nouveau depuis le bouton de création.",
+    'home.today': "Aujourd'hui",
     'home.yesterday': 'Hier',
     'home.noFoods': 'Aucun aliment ajouté pour le moment',
     'home.noHistory': 'Aucun historique pour le moment',
@@ -1087,32 +1128,34 @@ const translations: Record<Language, Record<string, string>> = {
     'home.add': 'Ajouter',
     'home.gram': 'g',
     'home.piece': 'pièce',
-    
+
     // Profile screen
     'profile.title': 'Profil',
     'profile.userSettings': 'Paramètres utilisateur',
     'profile.userSettingsDescription': 'Informations de base, objectifs, état métabolique, etc.',
     'profile.debugMode': 'Mode débogage',
-    'profile.debugModeDescription': 'Afficher des données fictives (30 jours de données d\'échantillon)',
+    'profile.debugModeDescription':
+      "Afficher des données fictives (30 jours de données d'échantillon)",
     'profile.debugModeOn': '⚠️ Mode débogage ON: Les données fictives sont affichées',
     'profile.debugModeOff': 'Mode débogage OFF: Les données réelles sont affichées',
-    'profile.customFood': 'Enregistrement d\'aliment personnalisé',
-    'profile.customFoodDescription': 'Entrez le nom de l\'aliment, l\'IA suggère, modifiez et enregistrez',
+    'profile.customFood': "Enregistrement d'aliment personnalisé",
+    'profile.customFoodDescription':
+      "Entrez le nom de l'aliment, l'IA suggère, modifiez et enregistrez",
     'profile.uiSettings': 'Paramètres UI',
-    'profile.uiSettingsDescription': 'Taille de police, paramètres d\'affichage, etc.',
+    'profile.uiSettingsDescription': "Taille de police, paramètres d'affichage, etc.",
     'profile.languageSettings': 'Paramètres de langue',
     'profile.nutrientTargets': 'Personnalisation des objectifs nutritionnels',
     'profile.saltSettings': 'Paramètres de sel',
     'profile.saltType': 'Type de sel',
     'profile.tableSalt': 'Sel de table',
     'profile.seaSalt': 'Sel de mer',
-    'profile.himalayanSalt': 'Sel de l\'Himalaya',
+    'profile.himalayanSalt': "Sel de l'Himalaya",
     'profile.celticSalt': 'Sel celtique',
     'profile.perShave': 'par tour',
-    'profile.carbTargetSettings': 'Paramètres d\'objectif de glucides',
+    'profile.carbTargetSettings': "Paramètres d'objectif de glucides",
     'profile.dataManagement': 'Gestion des données',
     'profile.account': 'Compte',
-    'profile.accountDescription': 'Informations de compte et paramètres d\'authentification',
+    'profile.accountDescription': "Informations de compte et paramètres d'authentification",
     'profile.exportData': 'Exporter les données',
     'profile.exportDescription': 'Télécharger toutes les données au format JSON',
     'profile.importData': 'Importer les données',
@@ -1124,60 +1167,76 @@ const translations: Record<Language, Record<string, string>> = {
     'profile.importSuccess': 'Importation des données réussie',
     'profile.importFailed': 'Importation des données échouée',
     'profile.importConfirm': 'Les données existantes seront écrasées. Continuer?',
-    'profile.navigateToUserSettings': 'Naviguer vers l\'écran des paramètres utilisateur',
-    'profile.navigateToLanguage': 'Naviguer vers l\'écran des paramètres de langue',
-    'profile.openCustomFood': 'Ouvrir l\'écran d\'enregistrement d\'aliment personnalisé',
-    'profile.navigateToUISettings': 'Naviguer vers l\'écran des paramètres UI',
-    'profile.navigateToSaltSettings': 'Naviguer vers l\'écran des paramètres de sel',
-    'profile.navigateToCarbTargetSettings': 'Naviguer vers l\'écran des paramètres d\'objectif de glucides',
-    'profile.navigateToAccount': 'Naviguer vers l\'écran du compte',
-    'profile.navigateToDataExport': 'Naviguer vers l\'écran d\'exportation des données',
-    'profile.navigateToDataDelete': 'Naviguer vers l\'écran de suppression des données',
-    'profile.navigateToFeedback': 'Naviguer vers l\'écran de commentaires',
-    'profile.navigateToPrivacyPolicy': 'Naviguer vers l\'écran de la politique de confidentialité',
-    'profile.navigateToTermsOfService': 'Naviguer vers l\'écran des conditions d\'utilisation',
-    
+    'profile.navigateToUserSettings': "Naviguer vers l'écran des paramètres utilisateur",
+    'profile.navigateToLanguage': "Naviguer vers l'écran des paramètres de langue",
+    'profile.openCustomFood': "Ouvrir l'écran d'enregistrement d'aliment personnalisé",
+    'profile.navigateToUISettings': "Naviguer vers l'écran des paramètres UI",
+    'profile.navigateToSaltSettings': "Naviguer vers l'écran des paramètres de sel",
+    'profile.navigateToCarbTargetSettings':
+      "Naviguer vers l'écran des paramètres d'objectif de glucides",
+    'profile.navigateToAccount': "Naviguer vers l'écran du compte",
+    'profile.navigateToDataExport': "Naviguer vers l'écran d'exportation des données",
+    'profile.navigateToDataDelete': "Naviguer vers l'écran de suppression des données",
+    'profile.navigateToFeedback': "Naviguer vers l'écran de commentaires",
+    'profile.navigateToPrivacyPolicy': "Naviguer vers l'écran de la politique de confidentialité",
+    'profile.navigateToTermsOfService': "Naviguer vers l'écran des conditions d'utilisation",
+
     // Community screen
     'community.title': 'Communauté',
     'community.comingSoon': 'Bientôt disponible',
     'community.description': 'Fonctionnalités communautaires basées sur les données',
     'community.showConcept': 'Afficher le concept de conception',
     'community.conceptTitle': 'Concept de conception de la communauté',
-    'community.concept1': 'Non seulement un lieu pour se faire des amis, mais un énorme laboratoire où tout le monde devient un sujet.',
-    'community.concept2': 'Vos enregistrements sont anonymisés et intégrés comme intelligence collective. L\'IA et les spécialistes analysent ces données pour aider votre stratégie de survie.',
+    'community.concept1':
+      'Non seulement un lieu pour se faire des amis, mais un énorme laboratoire où tout le monde devient un sujet.',
+    'community.concept2':
+      "Vos enregistrements sont anonymisés et intégrés comme intelligence collective. L'IA et les spécialistes analysent ces données pour aider votre stratégie de survie.",
     'community.concept3': 'Supérieur aux communautés existantes',
     'community.concept3Desc': 'Fournit des fonctionnalités de Discord, Reddit, X, etc.',
     'community.concept4': 'Enregistrement et utilisation des conversations',
-    'community.concept4Desc': 'Toutes les conversations dans la communauté sont enregistrées dans une base de données, et l\'IA répond en fonction des conversations passées',
+    'community.concept4Desc':
+      "Toutes les conversations dans la communauté sont enregistrées dans une base de données, et l'IA répond en fonction des conversations passées",
     'community.concept5': 'Intelligence collective',
     'community.concept5Desc': 'Extraire des modèles pratiques des données anonymisées',
     'community.concept6': 'Axé sur les données',
-    'community.concept6Desc': 'Consulter des spécialistes en utilisant "dossiers médicaux" au lieu de "conversations"',
+    'community.concept6Desc':
+      'Consulter des spécialistes en utilisant "dossiers médicaux" au lieu de "conversations"',
     'community.conversations': 'Conversations',
     'community.insights': 'Intelligence collective',
     'community.patterns': 'Modèles de pratique',
     'community.consultation': 'Consultation spécialisée',
     'community.conversationsTitle': 'Conversations communautaires',
     'community.comingSoonWarning': 'Bientôt disponible',
-    'community.comingSoonDescription': 'Les fonctionnalités communautaires seront implémentées progressivement, en privilégiant la sécurité et les performances. Affichage actuellement des données fictives.',
-    'community.conversationsDescription': 'Les conversations des utilisateurs sont analysées comme données et deviennent une intelligence collective. Vous pouvez vous faire des amis, ou simplement contribuer comme données.',
+    'community.comingSoonDescription':
+      'Les fonctionnalités communautaires seront implémentées progressivement, en privilégiant la sécurité et les performances. Affichage actuellement des données fictives.',
+    'community.conversationsDescription':
+      'Les conversations des utilisateurs sont analysées comme données et deviennent une intelligence collective. Vous pouvez vous faire des amis, ou simplement contribuer comme données.',
     'community.threadDetail': 'Écran de détail du fil (en préparation)',
     'community.insightsTitle': 'Intelligence collective de la communauté',
-    'community.insightsDescription': 'Insights extraits des données de pratique anonymisées. Vos enregistrements contribuent également automatiquement à l\'intelligence collective.',
-    'community.insightsNote': '※ Au début, il peut ne pas y avoir suffisamment d\'informations utiles en raison de données limitées. À mesure que plus d\'utilisateurs rejoignent, une intelligence collective plus utile sera générée.',
+    'community.insightsDescription':
+      "Insights extraits des données de pratique anonymisées. Vos enregistrements contribuent également automatiquement à l'intelligence collective.",
+    'community.insightsNote':
+      "※ Au début, il peut ne pas y avoir suffisamment d'informations utiles en raison de données limitées. À mesure que plus d'utilisateurs rejoignent, une intelligence collective plus utile sera générée.",
     'community.patternsTitle': 'Modèles de pratique',
-    'community.patternsDescription': 'Modèles pratiques extraits de vos journaux. À l\'avenir, ils seront extraits des données de toute la communauté.',
-    'community.sampleSize': 'Taille de l\'échantillon',
+    'community.patternsDescription':
+      "Modèles pratiques extraits de vos journaux. À l'avenir, ils seront extraits des données de toute la communauté.",
+    'community.sampleSize': "Taille de l'échantillon",
     'community.consultationTitle': 'Consultation spécialisée axée sur les données',
-    'community.consultationSubtitle': 'Consulter en utilisant "dossiers médicaux" au lieu de "conversations"',
-    'community.consultationDesc1': 'Dans les communautés traditionnelles, vous deviez expliquer aux médecins un par un: "Qu\'avez-vous mangé hier?" "Quels sont vos symptômes?"',
-    'community.consultationDesc2': 'Dans cette application, en partageant simplement vos statistiques dans l\'application (graphiques de tendances de régime, d\'excrétion, de poids) avec les médecins, vous pouvez recevoir des conseils immédiats de niveau chirurgical.',
-    'community.consultationDesc3': 'Les médecins n\'ont pas besoin de demander "qu\'avez-vous mangé" et peuvent faire des jugements immédiats en regardant les données, permettant des soins médicaux efficaces et précis.',
-    'community.consultationDesc4': 'De plus, puisque l\'IA répond automatiquement aux questions précédemment posées, vous n\'avez pas besoin de répéter les mêmes questions.',
-    'community.consultationNote': '※ Vous pouvez vous faire des amis, mais ce n\'est pas seulement ça. Vos conversations et données sont intégrées comme intelligence collective et aident les stratégies de survie d\'autres utilisateurs.',
+    'community.consultationSubtitle':
+      'Consulter en utilisant "dossiers médicaux" au lieu de "conversations"',
+    'community.consultationDesc1':
+      'Dans les communautés traditionnelles, vous deviez expliquer aux médecins un par un: "Qu\'avez-vous mangé hier?" "Quels sont vos symptômes?"',
+    'community.consultationDesc2':
+      "Dans cette application, en partageant simplement vos statistiques dans l'application (graphiques de tendances de régime, d'excrétion, de poids) avec les médecins, vous pouvez recevoir des conseils immédiats de niveau chirurgical.",
+    'community.consultationDesc3':
+      'Les médecins n\'ont pas besoin de demander "qu\'avez-vous mangé" et peuvent faire des jugements immédiats en regardant les données, permettant des soins médicaux efficaces et précis.',
+    'community.consultationDesc4':
+      "De plus, puisque l'IA répond automatiquement aux questions précédemment posées, vous n'avez pas besoin de répéter les mêmes questions.",
+    'community.consultationNote':
+      "※ Vous pouvez vous faire des amis, mais ce n'est pas seulement ça. Vos conversations et données sont intégrées comme intelligence collective et aident les stratégies de survie d'autres utilisateurs.",
     'community.exportData': 'Exporter les données (format JSON)',
-    'community.exportFailed': 'Échec de l\'exportation des données.',
-    
+    'community.exportFailed': "Échec de l'exportation des données.",
+
     // ButcherSelect component
     'butcher.saltType': 'Type de sel',
     'butcher.quantity': 'Quantité',
@@ -1188,12 +1247,16 @@ const translations: Record<Language, Record<string, string>> = {
     'butcher.sortByPriority': 'Par priorité',
     'butcher.sortByDeficiency': 'Par carence',
     'butcher.omega36Ratio': 'Ratio Oméga 3/6',
-    'butcher.omega6ExcessWarning': 'L\'excès d\'oméga-6 cause l\'inflammation. Il est recommandé d\'augmenter le bœuf nourri à l\'herbe et les fruits de mer.',
-    'butcher.omega6ExcessRisk': 'Excès d\'oméga-6 (risque d\'inflammation) Veuillez ajouter du poisson ou des œufs de poisson',
+    'butcher.omega6ExcessWarning':
+      "L'excès d'oméga-6 cause l'inflammation. Il est recommandé d'augmenter le bœuf nourri à l'herbe et les fruits de mer.",
+    'butcher.omega6ExcessRisk':
+      "Excès d'oméga-6 (risque d'inflammation) Veuillez ajouter du poisson ou des œufs de poisson",
     'butcher.optimalRatioRange': 'Dans la plage de ratio recommandée (1:1 à 1:4)',
-    'butcher.biotinBlockedHint': 'Comme vous consommez des œufs crus, l\'absorption de la vitamine B7 (biotine) peut être inhibée. Il est recommandé de consommer des œufs cuits.',
-    'butcher.magnesiumHint': 'Actuel: Légèrement déficient. Peut être complété avec de l\'eau minérale ou du sel',
-    'butcher.photoAnalysisFailed': 'L\'analyse de la photo a échoué. Veuillez réessayer.',
+    'butcher.biotinBlockedHint':
+      "Comme vous consommez des œufs crus, l'absorption de la vitamine B7 (biotine) peut être inhibée. Il est recommandé de consommer des œufs cuits.",
+    'butcher.magnesiumHint':
+      "Actuel: Légèrement déficient. Peut être complété avec de l'eau minérale ou du sel",
+    'butcher.photoAnalysisFailed': "L'analyse de la photo a échoué. Veuillez réessayer.",
     'butcher.piece': 'pièce',
     'butcher.grindUnit': 'tour',
     'butcher.avoidZone': '⚠️ Zone à éviter (Choses à éviter)',
@@ -1212,7 +1275,7 @@ const translations: Record<Language, Record<string, string>> = {
     'butcher.saponins': 'Saponines',
     'butcher.goitrogens': 'Goitrogènes',
     'butcher.tannins': 'Tanins',
-    
+
     // Shop screen
     'shop.title': 'Boutique',
     'shop.pixelArtUI': 'UI Pixel Art',
@@ -1220,11 +1283,12 @@ const translations: Record<Language, Record<string, string>> = {
     'shop.comingSoon': 'Bientôt disponible',
     'shop.purchaseSuccess': '{name} acheté !',
     'shop.purchaseSuccessDebug': '{name} acheté (Mode Debug)',
-    'shop.paymentPending': 'La fonctionnalité de paiement est actuellement en cours de développement. Veuillez patienter.',
+    'shop.paymentPending':
+      'La fonctionnalité de paiement est actuellement en cours de développement. Veuillez patienter.',
     'shop.enablePixelArtUISuccess': 'UI Pixel Art activée. Rechargement de la page...',
     'shop.disablePixelArtUISuccess': 'UI Pixel Art désactivée. Rechargement de la page...',
     'shop.paymentComingSoon': 'Traitement des paiements à venir ({name}: ¥{price})',
-    
+
     // Settings screen
     'settings.title': 'Paramètres',
     'settings.general': 'Général',
@@ -1233,12 +1297,13 @@ const translations: Record<Language, Record<string, string>> = {
     'settings.data': 'Données',
     'settings.about': 'À propos',
     'settings.hideSection': 'Masquer cette section',
-    
+
     // Recipe screen
     'recipe.title': 'Recette',
     'recipe.createNew': '+ Créer une nouvelle recette',
     'recipe.noRecipes': 'Aucune recette',
-    'recipe.noRecipesDescription': 'Vous pouvez enregistrer des combinaisons fréquemment consommées comme recettes',
+    'recipe.noRecipesDescription':
+      'Vous pouvez enregistrer des combinaisons fréquemment consommées comme recettes',
     'recipe.use': 'Utiliser',
     'recipe.edit': 'Modifier',
     'recipe.delete': 'Supprimer',
@@ -1252,10 +1317,10 @@ const translations: Record<Language, Record<string, string>> = {
     'recipe.addFood': '+ Ajouter un aliment',
     'recipe.noFoods': 'Aucun aliment',
     'recipe.containsFoods': 'Aliments contenus:',
-    'recipe.foodNamePrompt': 'Veuillez entrer le nom de l\'aliment:',
+    'recipe.foodNamePrompt': "Veuillez entrer le nom de l'aliment:",
     'recipe.amountPrompt': 'Veuillez entrer la quantité (g):',
     'recipe.invalidAmount': 'Veuillez entrer une quantité valide',
-    'recipe.saveFailed': 'Échec de l\'enregistrement de la recette',
+    'recipe.saveFailed': "Échec de l'enregistrement de la recette",
     'recipe.deleteConfirm': 'Supprimer cette recette?',
     'recipe.deleteFailed': 'Échec de la suppression de la recette',
     'recipe.added': '{name} ajouté',
@@ -1283,7 +1348,7 @@ const translations: Record<Language, Record<string, string>> = {
     'common.send': 'Senden',
     'common.current': 'Aktuell',
     'common.locale': 'de-DE',
-    
+
     // 言語設定
     'language.title': 'Spracheinstellungen',
     'language.description': 'Wählen Sie die Anzeigesprache für die App.',
@@ -1292,7 +1357,7 @@ const translations: Record<Language, Record<string, string>> = {
     'language.french': 'Français',
     'language.german': 'Deutsch',
     'language.chinese': '中文',
-    
+
     // ギフト機能
     'gift.title': 'Geschenk',
     'gift.subtitle': 'Neue Mitglieder unterstützen',
@@ -1310,9 +1375,11 @@ const translations: Record<Language, Record<string, string>> = {
     'gift.purchaseNote': '※ 100% wird in Rabatte für neue Benutzer umgewandelt',
     'gift.purchaseSuccess': 'Vielen Dank für Ihren Beitrag!',
     'gift.myMessages': 'Meine Nachrichten',
-    'gift.myMessagesDescription': 'Nachrichten, die Sie beim Versenden von Geschenken in der Vergangenheit geschrieben haben',
+    'gift.myMessagesDescription':
+      'Nachrichten, die Sie beim Versenden von Geschenken in der Vergangenheit geschrieben haben',
     'gift.communityMessages': 'Nachrichten von der Gemeinschaft',
-    'gift.communityMessagesDescription': 'Öffentliche Nachrichten, die von anderen Benutzern beim Versenden von Geschenken geschrieben wurden',
+    'gift.communityMessagesDescription':
+      'Öffentliche Nachrichten, die von anderen Benutzern beim Versenden von Geschenken geschrieben wurden',
     'gift.publicMessages': 'Öffentliche Nachrichten',
     'gift.noMessages': 'Noch keine Nachrichten',
     'gift.viewMessages': 'Nachrichten anzeigen',
@@ -1331,11 +1398,13 @@ const translations: Record<Language, Record<string, string>> = {
     'gift.currency': '¥',
     'gift.reply': 'Antworten',
     'gift.replyPlaceholder': 'Geben Sie Ihre Antwort ein...',
-    
+
     // Labs-Bildschirm
-    'labs.description': 'Funktionen, die implementiert wurden, während entschieden wurde, ob sie wesentlich sind',
+    'labs.description':
+      'Funktionen, die implementiert wurden, während entschieden wurde, ob sie wesentlich sind',
     'labs.diary': 'Tagebuch',
-    'labs.diaryDescription': 'Körperlichen Zustand, geistigen Zustand, körperliche Fähigkeiten usw. aufzeichnen',
+    'labs.diaryDescription':
+      'Körperlichen Zustand, geistigen Zustand, körperliche Fähigkeiten usw. aufzeichnen',
     'labs.stats': 'Statistiken & Diagramme',
     'labs.statsDescription': 'Nährstofftrends und Gewichtstrends in Diagrammen anzeigen',
     'labs.community': 'Gemeinschaft',
@@ -1343,7 +1412,8 @@ const translations: Record<Language, Record<string, string>> = {
     'labs.shop': 'Shop',
     'labs.shopDescription': 'Pixel-Art-UI und andere Anpassungsartikel kaufen.',
     'labs.gift': 'Geschenk',
-    'labs.giftDescription': 'Neue Mitglieder unterstützen. 100% wird in Rabatte für neue Benutzer umgewandelt.',
+    'labs.giftDescription':
+      'Neue Mitglieder unterstützen. 100% wird in Rabatte für neue Benutzer umgewandelt.',
     'labs.streakTracker': 'Gewohnheits-Tracker',
     'labs.streakTrackerDescription': 'Serie überprüfen',
     'labs.tips': 'Tipps',
@@ -1360,7 +1430,7 @@ const translations: Record<Language, Record<string, string>> = {
     'labs.tipSaved': 'Gespeichert',
     'labs.tipSave': 'Speichern',
     'labs.appIconGenerator': 'App-Icon-Generator',
-    
+
     // History screen
     'history.title': 'Verlauf',
     'history.noData': 'Noch keine Daten',
@@ -1385,7 +1455,7 @@ const translations: Record<Language, Record<string, string>> = {
     'history.items': 'Artikel',
     'history.violation': 'Verstoß',
     'history.recovery': 'Wiederherstellung',
-    
+
     // Navigation
     'nav.home': 'Startseite',
     'nav.homeAriaLabel': 'Startseitenbildschirm',
@@ -1396,7 +1466,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.labs': 'Andere',
     'nav.historyAriaLabel': 'Verlaufbildschirm',
     'nav.labsAriaLabel': 'Andere Bildschirm',
-    
+
     // Profile screen
     'profile.title': 'Profil',
     'profile.userSettings': 'Benutzereinstellungen',
@@ -1406,7 +1476,8 @@ const translations: Record<Language, Record<string, string>> = {
     'profile.debugModeOn': '⚠️ Debug-Modus EIN: Dummydaten werden angezeigt',
     'profile.debugModeOff': 'Debug-Modus AUS: Tatsächliche Daten werden angezeigt',
     'profile.customFood': 'Benutzerdefinierte Lebensmittelregistrierung',
-    'profile.customFoodDescription': 'Lebensmittelname eingeben, KI schlägt vor, bearbeiten und speichern',
+    'profile.customFoodDescription':
+      'Lebensmittelname eingeben, KI schlägt vor, bearbeiten und speichern',
     'profile.uiSettings': 'UI-Einstellungen',
     'profile.uiSettingsDescription': 'Schriftgröße, Anzeigeeinstellungen usw.',
     'profile.languageSettings': 'Spracheinstellungen',
@@ -1445,48 +1516,62 @@ const translations: Record<Language, Record<string, string>> = {
     'profile.navigateToFeedback': 'Zum Feedback-Bildschirm navigieren',
     'profile.navigateToPrivacyPolicy': 'Zum Datenschutzrichtlinien-Bildschirm navigieren',
     'profile.navigateToTermsOfService': 'Zum Nutzungsbedingungen-Bildschirm navigieren',
-    
+
     // Community screen
     'community.title': 'Gemeinschaft',
     'community.comingSoon': 'Demnächst verfügbar',
     'community.description': 'Datengetriebene Community-Funktionen',
     'community.showConcept': 'Designkonzept anzeigen',
     'community.conceptTitle': 'Community-Designkonzept',
-    'community.concept1': 'Nicht nur ein Ort, um Freunde zu finden, sondern ein riesiges Labor, in dem jeder zum Subjekt wird.',
-    'community.concept2': 'Ihre Aufzeichnungen werden anonymisiert und als kollektive Intelligenz integriert. KI und Spezialisten analysieren diese Daten, um Ihre Überlebensstrategie zu unterstützen.',
+    'community.concept1':
+      'Nicht nur ein Ort, um Freunde zu finden, sondern ein riesiges Labor, in dem jeder zum Subjekt wird.',
+    'community.concept2':
+      'Ihre Aufzeichnungen werden anonymisiert und als kollektive Intelligenz integriert. KI und Spezialisten analysieren diese Daten, um Ihre Überlebensstrategie zu unterstützen.',
     'community.concept3': 'Überlegen zu bestehenden Gemeinschaften',
     'community.concept3Desc': 'Bietet Funktionen von Discord, Reddit, X usw.',
     'community.concept4': 'Gesprächsaufzeichnung und -nutzung',
-    'community.concept4Desc': 'Alle Gespräche in der Gemeinschaft werden in einer Datenbank gespeichert, und die KI antwortet basierend auf vergangenen Gesprächen',
+    'community.concept4Desc':
+      'Alle Gespräche in der Gemeinschaft werden in einer Datenbank gespeichert, und die KI antwortet basierend auf vergangenen Gesprächen',
     'community.concept5': 'Kollektive Intelligenz',
     'community.concept5Desc': 'Praktische Muster aus anonymisierten Daten extrahieren',
     'community.concept6': 'Datengetrieben',
-    'community.concept6Desc': 'Mit Spezialisten unter Verwendung von "Krankenakten" statt "Gesprächen" konsultieren',
+    'community.concept6Desc':
+      'Mit Spezialisten unter Verwendung von "Krankenakten" statt "Gesprächen" konsultieren',
     'community.conversations': 'Gespräche',
     'community.insights': 'Kollektive Intelligenz',
     'community.patterns': 'Praxis-Muster',
     'community.consultation': 'Spezialistenberatung',
     'community.conversationsTitle': 'Community-Gespräche',
     'community.comingSoonWarning': 'Demnächst verfügbar',
-    'community.comingSoonDescription': 'Community-Funktionen werden schrittweise implementiert, wobei Sicherheit und Leistung priorisiert werden. Derzeit werden Mock-Daten angezeigt.',
-    'community.conversationsDescription': 'Benutzergespräche werden als Daten analysiert und werden zu kollektiver Intelligenz. Sie können Freunde finden oder einfach als Daten beitragen.',
+    'community.comingSoonDescription':
+      'Community-Funktionen werden schrittweise implementiert, wobei Sicherheit und Leistung priorisiert werden. Derzeit werden Mock-Daten angezeigt.',
+    'community.conversationsDescription':
+      'Benutzergespräche werden als Daten analysiert und werden zu kollektiver Intelligenz. Sie können Freunde finden oder einfach als Daten beitragen.',
     'community.threadDetail': 'Thread-Detailbildschirm (in Vorbereitung)',
     'community.insightsTitle': 'Kollektive Intelligenz der Gemeinschaft',
-    'community.insightsDescription': 'Erkenntnisse, die aus anonymisierten Praxisdaten extrahiert wurden. Ihre Aufzeichnungen tragen auch automatisch zur kollektiven Intelligenz bei.',
-    'community.insightsNote': '※ Anfangs gibt es möglicherweise nicht genügend nützliche Informationen aufgrund begrenzter Daten. Je mehr Benutzer beitreten, desto nützlichere kollektive Intelligenz wird generiert.',
+    'community.insightsDescription':
+      'Erkenntnisse, die aus anonymisierten Praxisdaten extrahiert wurden. Ihre Aufzeichnungen tragen auch automatisch zur kollektiven Intelligenz bei.',
+    'community.insightsNote':
+      '※ Anfangs gibt es möglicherweise nicht genügend nützliche Informationen aufgrund begrenzter Daten. Je mehr Benutzer beitreten, desto nützlichere kollektive Intelligenz wird generiert.',
     'community.patternsTitle': 'Praxis-Muster',
-    'community.patternsDescription': 'Praktische Muster, die aus Ihren Protokollen extrahiert wurden. In Zukunft werden sie aus den Daten der gesamten Gemeinschaft extrahiert.',
+    'community.patternsDescription':
+      'Praktische Muster, die aus Ihren Protokollen extrahiert wurden. In Zukunft werden sie aus den Daten der gesamten Gemeinschaft extrahiert.',
     'community.sampleSize': 'Stichprobengröße',
     'community.consultationTitle': 'Datengetriebene Spezialistenberatung',
     'community.consultationSubtitle': 'Konsultieren Sie mit "Krankenakten" statt "Gesprächen"',
-    'community.consultationDesc1': 'In traditionellen Gemeinschaften mussten Sie Ärzten einzeln erklären: "Was haben Sie gestern gegessen?" "Was sind Ihre Symptome?"',
-    'community.consultationDesc2': 'In dieser App können Sie durch einfaches Teilen Ihrer In-App-Statistiken (Diät-, Ausscheidungs-, Gewichtstrenddiagramme) mit Ärzten sofort chirurgische Ratschläge erhalten.',
-    'community.consultationDesc3': 'Ärzte müssen nicht fragen "was haben Sie gegessen" und können sofortige Urteile fällen, indem sie Daten betrachten, was effiziente und genaue medizinische Versorgung ermöglicht.',
-    'community.consultationDesc4': 'Außerdem, da die KI automatisch auf zuvor gestellte Fragen antwortet, müssen Sie dieselben Fragen nicht wiederholen.',
-    'community.consultationNote': '※ Sie können Freunde finden, aber es ist nicht nur das. Ihre Gespräche und Daten werden als kollektive Intelligenz integriert und helfen den Überlebensstrategien anderer Benutzer.',
+    'community.consultationDesc1':
+      'In traditionellen Gemeinschaften mussten Sie Ärzten einzeln erklären: "Was haben Sie gestern gegessen?" "Was sind Ihre Symptome?"',
+    'community.consultationDesc2':
+      'In dieser App können Sie durch einfaches Teilen Ihrer In-App-Statistiken (Diät-, Ausscheidungs-, Gewichtstrenddiagramme) mit Ärzten sofort chirurgische Ratschläge erhalten.',
+    'community.consultationDesc3':
+      'Ärzte müssen nicht fragen "was haben Sie gegessen" und können sofortige Urteile fällen, indem sie Daten betrachten, was effiziente und genaue medizinische Versorgung ermöglicht.',
+    'community.consultationDesc4':
+      'Außerdem, da die KI automatisch auf zuvor gestellte Fragen antwortet, müssen Sie dieselben Fragen nicht wiederholen.',
+    'community.consultationNote':
+      '※ Sie können Freunde finden, aber es ist nicht nur das. Ihre Gespräche und Daten werden als kollektive Intelligenz integriert und helfen den Überlebensstrategien anderer Benutzer.',
     'community.exportData': 'Daten exportieren (JSON-Format)',
     'community.exportFailed': 'Datenexport fehlgeschlagen.',
-    
+
     // Home screen
     'home.addFood': 'Lebensmittel hinzufügen',
     'home.myFoods': 'Meine Lebensmittel',
@@ -1496,7 +1581,8 @@ const translations: Record<Language, Record<string, string>> = {
     'home.addFromPhoto': 'Aus Foto hinzufügen',
     'home.barcodeScan': 'Barcode scannen',
     'home.recipe': 'Rezept',
-    'home.noMyFoodsRegistered': 'Noch nicht registriert. Sie können aus dem Verlauf mit der ⭐-Schaltfläche registrieren oder eine neue aus der Erstellungsschaltfläche erstellen.',
+    'home.noMyFoodsRegistered':
+      'Noch nicht registriert. Sie können aus dem Verlauf mit der ⭐-Schaltfläche registrieren oder eine neue aus der Erstellungsschaltfläche erstellen.',
     'home.today': 'Heute',
     'home.yesterday': 'Gestern',
     'home.noFoods': 'Noch keine Lebensmittel hinzugefügt',
@@ -1507,7 +1593,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.add': 'Hinzufügen',
     'home.gram': 'g',
     'home.piece': 'Stück',
-    
+
     // Shop screen
     'shop.title': 'Geschäft',
     'shop.pixelArtUI': 'Pixel-Art-UI',
@@ -1519,7 +1605,7 @@ const translations: Record<Language, Record<string, string>> = {
     'shop.enablePixelArtUISuccess': 'Pixel-Art-UI aktiviert. Seite wird neu geladen...',
     'shop.disablePixelArtUISuccess': 'Pixel-Art-UI deaktiviert. Seite wird neu geladen...',
     'shop.paymentComingSoon': 'Zahlungsabwicklung kommt bald ({name}: ¥{price})',
-    
+
     // Settings screen
     'settings.title': 'Einstellungen',
     'settings.general': 'Allgemein',
@@ -1528,7 +1614,7 @@ const translations: Record<Language, Record<string, string>> = {
     'settings.data': 'Daten',
     'settings.about': 'Über',
     'settings.hideSection': 'Diesen Abschnitt ausblenden',
-    
+
     // ButcherSelect component
     'butcher.saltType': 'Salztyp',
     'butcher.quantity': 'Menge',
@@ -1539,11 +1625,15 @@ const translations: Record<Language, Record<string, string>> = {
     'butcher.sortByPriority': 'Nach Priorität',
     'butcher.sortByDeficiency': 'Nach Mangel',
     'butcher.omega36Ratio': 'Omega-3/6-Verhältnis',
-    'butcher.omega6ExcessWarning': 'Überschüssiges Omega-6 verursacht Entzündungen. Es wird empfohlen, grasgefüttertes Rindfleisch und Meeresfrüchte zu erhöhen.',
-    'butcher.omega6ExcessRisk': 'Überschüssiges Omega-6 (Entzündungsrisiko) Bitte fügen Sie Fisch oder Fischeier hinzu',
+    'butcher.omega6ExcessWarning':
+      'Überschüssiges Omega-6 verursacht Entzündungen. Es wird empfohlen, grasgefüttertes Rindfleisch und Meeresfrüchte zu erhöhen.',
+    'butcher.omega6ExcessRisk':
+      'Überschüssiges Omega-6 (Entzündungsrisiko) Bitte fügen Sie Fisch oder Fischeier hinzu',
     'butcher.optimalRatioRange': 'Innerhalb des empfohlenen Verhältnisbereichs (1:1 bis 1:4)',
-    'butcher.biotinBlockedHint': 'Da Sie rohe Eier konsumieren, kann die Aufnahme von Vitamin B7 (Biotin) gehemmt werden. Es wird empfohlen, gekochte Eier zu konsumieren.',
-    'butcher.magnesiumHint': 'Aktuell: Leicht mangelhaft. Kann mit Mineralwasser oder Salz ergänzt werden',
+    'butcher.biotinBlockedHint':
+      'Da Sie rohe Eier konsumieren, kann die Aufnahme von Vitamin B7 (Biotin) gehemmt werden. Es wird empfohlen, gekochte Eier zu konsumieren.',
+    'butcher.magnesiumHint':
+      'Aktuell: Leicht mangelhaft. Kann mit Mineralwasser oder Salz ergänzt werden',
     'butcher.photoAnalysisFailed': 'Fotoanalyse fehlgeschlagen. Bitte versuchen Sie es erneut.',
     'butcher.piece': 'Stück',
     'butcher.grindUnit': 'Drehung',
@@ -1563,12 +1653,13 @@ const translations: Record<Language, Record<string, string>> = {
     'butcher.saponins': 'Saponine',
     'butcher.goitrogens': 'Goitrogene',
     'butcher.tannins': 'Tannine',
-    
+
     // Recipe screen
     'recipe.title': 'Rezept',
     'recipe.createNew': '+ Neues Rezept erstellen',
     'recipe.noRecipes': 'Keine Rezepte',
-    'recipe.noRecipesDescription': 'Sie können häufig gegessene Kombinationen als Rezepte speichern',
+    'recipe.noRecipesDescription':
+      'Sie können häufig gegessene Kombinationen als Rezepte speichern',
     'recipe.use': 'Verwenden',
     'recipe.edit': 'Bearbeiten',
     'recipe.delete': 'Löschen',
@@ -1613,7 +1704,7 @@ const translations: Record<Language, Record<string, string>> = {
     'common.send': '发送',
     'common.current': '当前',
     'common.locale': 'zh-CN',
-    
+
     // 言語設定
     'language.title': '语言设置',
     'language.description': '选择应用程序的显示语言。',
@@ -1622,7 +1713,7 @@ const translations: Record<Language, Record<string, string>> = {
     'language.french': 'Français',
     'language.german': 'Deutsch',
     'language.chinese': '中文',
-    
+
     // ギフト機能
     'gift.title': '礼物',
     'gift.subtitle': '支持新成员',
@@ -1661,7 +1752,7 @@ const translations: Record<Language, Record<string, string>> = {
     'gift.currency': '¥',
     'gift.reply': '回复',
     'gift.replyPlaceholder': '输入您的回复...',
-    
+
     // Labs画面
     'labs.description': '这些是决定是否必需后暂时实现的功能',
     'labs.diary': '日记',
@@ -1690,7 +1781,7 @@ const translations: Record<Language, Record<string, string>> = {
     'labs.tipSaved': '已保存',
     'labs.tipSave': '保存',
     'labs.appIconGenerator': '应用图标生成器',
-    
+
     // History screen
     'history.title': '历史',
     'history.noData': '还没有数据',
@@ -1715,7 +1806,7 @@ const translations: Record<Language, Record<string, string>> = {
     'history.items': '项',
     'history.violation': '违规',
     'history.recovery': '恢复',
-    
+
     // Navigation
     'nav.home': '首页',
     'nav.homeAriaLabel': '首页屏幕',
@@ -1726,7 +1817,7 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.labs': '其他',
     'nav.historyAriaLabel': '历史屏幕',
     'nav.labsAriaLabel': '其他屏幕',
-    
+
     // Profile screen
     'profile.title': '个人资料',
     'profile.userSettings': '用户设置',
@@ -1775,7 +1866,7 @@ const translations: Record<Language, Record<string, string>> = {
     'profile.navigateToFeedback': '导航到反馈屏幕',
     'profile.navigateToPrivacyPolicy': '导航到隐私政策屏幕',
     'profile.navigateToTermsOfService': '导航到服务条款屏幕',
-    
+
     // Community screen
     'community.title': '社区',
     'community.comingSoon': '即将推出',
@@ -1783,7 +1874,8 @@ const translations: Record<Language, Record<string, string>> = {
     'community.showConcept': '显示设计理念',
     'community.conceptTitle': '社区设计理念',
     'community.concept1': '不仅是交朋友的场所，更是一个巨大的实验室，每个人都成为受试者。',
-    'community.concept2': '您的记录被匿名化并整合为集体智慧。AI和专家分析这些数据，帮助您的生存策略。',
+    'community.concept2':
+      '您的记录被匿名化并整合为集体智慧。AI和专家分析这些数据，帮助您的生存策略。',
     'community.concept3': '优于现有社区',
     'community.concept3Desc': '提供Discord、Reddit、X等的功能',
     'community.concept4': '对话记录和利用',
@@ -1798,25 +1890,33 @@ const translations: Record<Language, Record<string, string>> = {
     'community.consultation': '专家咨询',
     'community.conversationsTitle': '社区对话',
     'community.comingSoonWarning': '即将推出',
-    'community.comingSoonDescription': '社区功能将逐步实施，优先考虑安全性和性能。目前显示模拟数据。',
-    'community.conversationsDescription': '用户对话被分析为数据并成为集体智慧。您可以交朋友，或者只是作为数据贡献。',
+    'community.comingSoonDescription':
+      '社区功能将逐步实施，优先考虑安全性和性能。目前显示模拟数据。',
+    'community.conversationsDescription':
+      '用户对话被分析为数据并成为集体智慧。您可以交朋友，或者只是作为数据贡献。',
     'community.threadDetail': '线程详情屏幕（准备中）',
     'community.insightsTitle': '社区集体智慧',
     'community.insightsDescription': '从匿名实践数据中提取的见解。您的记录也会自动贡献给集体智慧。',
-    'community.insightsNote': '※ 最初，由于数据量有限，可能没有足够有用的信息。随着更多用户加入，将生成更有用的集体智慧。',
+    'community.insightsNote':
+      '※ 最初，由于数据量有限，可能没有足够有用的信息。随着更多用户加入，将生成更有用的集体智慧。',
     'community.patternsTitle': '实践模式',
-    'community.patternsDescription': '从您的日志中提取的实用模式。将来，它们将从整个社区的数据中提取。',
+    'community.patternsDescription':
+      '从您的日志中提取的实用模式。将来，它们将从整个社区的数据中提取。',
     'community.sampleSize': '样本数量',
     'community.consultationTitle': '数据驱动的专家咨询',
     'community.consultationSubtitle': '使用"病历"而不是"对话"咨询',
-    'community.consultationDesc1': '在传统社区中，您必须逐一向医生解释："您昨天吃了什么？" "症状是什么？"',
-    'community.consultationDesc2': '在此应用中，只需与医生分享您的应用内统计信息（饮食、排泄、体重趋势图），即可立即获得手术级别的建议。',
-    'community.consultationDesc3': '医生不需要问"您吃了什么"，可以通过查看数据立即做出判断，从而实现高效和准确的医疗护理。',
+    'community.consultationDesc1':
+      '在传统社区中，您必须逐一向医生解释："您昨天吃了什么？" "症状是什么？"',
+    'community.consultationDesc2':
+      '在此应用中，只需与医生分享您的应用内统计信息（饮食、排泄、体重趋势图），即可立即获得手术级别的建议。',
+    'community.consultationDesc3':
+      '医生不需要问"您吃了什么"，可以通过查看数据立即做出判断，从而实现高效和准确的医疗护理。',
     'community.consultationDesc4': '此外，由于AI自动回答之前提出的问题，您不需要重复相同的问题。',
-    'community.consultationNote': '※ 您可以交朋友，但不仅如此。您的对话和数据被整合为集体智慧，帮助其他用户的生存策略。',
+    'community.consultationNote':
+      '※ 您可以交朋友，但不仅如此。您的对话和数据被整合为集体智慧，帮助其他用户的生存策略。',
     'community.exportData': '导出数据（JSON格式）',
     'community.exportFailed': '数据导出失败。',
-    
+
     // Home screen
     'home.addFood': '添加食物',
     'home.myFoods': '我的食物',
@@ -1826,7 +1926,8 @@ const translations: Record<Language, Record<string, string>> = {
     'home.addFromPhoto': '从照片添加',
     'home.barcodeScan': '扫描条形码',
     'home.recipe': '食谱',
-    'home.noMyFoodsRegistered': '尚未注册。您可以使用⭐按钮从历史记录中注册，或从创建按钮创建新记录。',
+    'home.noMyFoodsRegistered':
+      '尚未注册。您可以使用⭐按钮从历史记录中注册，或从创建按钮创建新记录。',
     'home.today': '今天',
     'home.yesterday': '昨天',
     'home.noFoods': '尚未添加食物',
@@ -1837,7 +1938,7 @@ const translations: Record<Language, Record<string, string>> = {
     'home.add': '添加',
     'home.gram': 'g',
     'home.piece': '个',
-    
+
     // Shop screen
     'shop.title': '商店',
     'shop.pixelArtUI': '像素艺术UI',
@@ -1849,7 +1950,7 @@ const translations: Record<Language, Record<string, string>> = {
     'shop.enablePixelArtUISuccess': '像素艺术UI已启用。正在重新加载页面...',
     'shop.disablePixelArtUISuccess': '像素艺术UI已禁用。正在重新加载页面...',
     'shop.paymentComingSoon': '支付处理即将推出 ({name}: ¥{price})',
-    
+
     // Settings screen
     'settings.title': '设置',
     'settings.general': '常规',
@@ -1858,7 +1959,7 @@ const translations: Record<Language, Record<string, string>> = {
     'settings.data': '数据',
     'settings.about': '关于',
     'settings.hideSection': '隐藏此部分',
-    
+
     // Recipe screen
     'recipe.title': '食谱',
     'recipe.createNew': '+ 创建新食谱',
@@ -1888,7 +1989,7 @@ const translations: Record<Language, Record<string, string>> = {
     'recipe.back': '← 返回',
     'recipe.cancel': '取消',
     'recipe.save': '保存',
-    
+
     // ButcherSelect component
     'butcher.saltType': '盐类型',
     'butcher.quantity': '数量',
@@ -1902,7 +2003,8 @@ const translations: Record<Language, Record<string, string>> = {
     'butcher.omega6ExcessWarning': '过量的omega-6会导致炎症。建议增加草饲牛肉和海鲜。',
     'butcher.omega6ExcessRisk': '过量的omega-6（炎症风险）请添加鱼或鱼卵',
     'butcher.optimalRatioRange': '在推荐比率范围内（1:1 至 1:4）',
-    'butcher.biotinBlockedHint': '由于您正在食用生鸡蛋，维生素B7（生物素）的吸收可能会受到抑制。建议食用煮熟的鸡蛋。',
+    'butcher.biotinBlockedHint':
+      '由于您正在食用生鸡蛋，维生素B7（生物素）的吸收可能会受到抑制。建议食用煮熟的鸡蛋。',
     'butcher.magnesiumHint': '当前：略有不足。可以通过矿泉水或盐补充',
     'butcher.photoAnalysisFailed': '照片分析失败。请重试。',
     'butcher.piece': '个',
@@ -1932,13 +2034,13 @@ function getCurrentLanguage(): Language {
   if (saved && ['fr', 'de', 'en', 'ja', 'zh'].includes(saved)) {
     return saved as Language;
   }
-  
+
   // ブラウザの言語設定から判定
   const browserLang = navigator.language.split('-')[0];
   if (['fr', 'de', 'en', 'ja', 'zh'].includes(browserLang)) {
     return browserLang as Language;
   }
-  
+
   // 優先順位: 英語 → フランス語 → ドイツ語 → 日本語 → 中国語
   // デフォルトは英語（競合が少なく、グローバル市場への展開が容易）
   return 'en';
@@ -1964,22 +2066,21 @@ export function t(key: string, lang?: Language): string {
 // 翻訳フック
 export function useTranslation() {
   const [language, setLanguageState] = useState<Language>(getLanguage());
-  
+
   useEffect(() => {
     const handleLanguageChange = (e: CustomEvent<Language>) => {
       setLanguageState(e.detail);
     };
-    
+
     window.addEventListener('languageChanged', handleLanguageChange as EventListener);
-    
+
     return () => {
       window.removeEventListener('languageChanged', handleLanguageChange as EventListener);
     };
   }, []);
-  
+
   return {
     t: (key: string) => t(key, language),
     language,
   };
 }
-

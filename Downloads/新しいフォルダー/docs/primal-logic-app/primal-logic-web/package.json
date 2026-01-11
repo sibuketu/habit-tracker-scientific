@@ -8,11 +8,22 @@
     "build": "vite build",
     "build:skip-check": "vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\"",
     "preview": "vite preview",
     "save-todo": "tsx scripts/saveTodoToObsidian.ts",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed"
+    "test:headed": "playwright test --headed",
+    "test:visual": "playwright test tests/visual-regression.spec.ts",
+    "test:visual:update": "playwright test tests/visual-regression.spec.ts --update-snapshots",
+    "test:all": "playwright test && playwright test tests/visual-regression.spec.ts",
+    "test:all:update": "playwright test && playwright test tests/visual-regression.spec.ts --update-snapshots",
+    "test:unit": "jest",
+    "test:unit:watch": "jest --watch",
+    "test:unit:coverage": "jest --coverage",
+    "screenshot:all": "tsx scripts/capture-screenshots-simple.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",

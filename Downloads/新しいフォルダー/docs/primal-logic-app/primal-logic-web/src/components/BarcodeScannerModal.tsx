@@ -1,11 +1,16 @@
 /**
  * Primal Logic - Barcode Scanner Modal
- * 
+ *
  * バーコード読み取りモーダル（スキャン中の表示、成功/失敗のフィードバック）
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { scanBarcodeFromCamera, getFoodInfoFromBarcode, isBarcodeDetectorAvailable, type BarcodeResult } from '../utils/barcodeScanner';
+import {
+  scanBarcodeFromCamera,
+  getFoodInfoFromBarcode,
+  isBarcodeDetectorAvailable,
+  type BarcodeResult,
+} from '../utils/barcodeScanner';
 import { logError } from '../utils/errorHandler';
 import './BarcodeScannerModal.css';
 
@@ -15,7 +20,11 @@ interface BarcodeScannerModalProps {
   onSuccess: (foodName: string, amount: number) => void;
 }
 
-export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: BarcodeScannerModalProps) {
+export default function BarcodeScannerModal({
+  isOpen,
+  onClose,
+  onSuccess,
+}: BarcodeScannerModalProps) {
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [barcodeResult, setBarcodeResult] = useState<BarcodeResult | null>(null);
@@ -34,7 +43,7 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
     } else {
       // モーダルが閉じられたらカメラを停止
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current.getTracks().forEach((track) => track.stop());
         streamRef.current = null;
       }
     }
@@ -45,13 +54,19 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
       // モバイルブラウザの検出
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-      
+
       if (isIOS) {
-        setError('iOS Safariではバーコード読み取りに対応していません。画像をアップロードしてバーコードを読み取る機能をご利用ください。');
+        setError(
+          'iOS Safariではバーコード読み取りに対応していません。画像をアップロードしてバーコードを読み取る機能をご利用ください。'
+        );
       } else if (isMobile) {
-        setError('このモバイルブラウザではバーコード読み取りに対応していません。Android Chromeをご利用ください。');
+        setError(
+          'このモバイルブラウザではバーコード読み取りに対応していません。Android Chromeをご利用ください。'
+        );
       } else {
-        setError('このブラウザはバーコード読み取りに対応していません。ChromeまたはEdgeをご利用ください。');
+        setError(
+          'このブラウザはバーコード読み取りに対応していません。ChromeまたはEdgeをご利用ください。'
+        );
       }
       return;
     }
@@ -63,12 +78,12 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
 
     try {
       // カメラアクセス
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' } 
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' },
       });
-      
+
       streamRef.current = stream;
-      
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         await videoRef.current.play();
@@ -76,11 +91,11 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
 
       // バーコードスキャン
       const result = await scanBarcodeFromCamera(videoRef.current || undefined);
-      
+
       if (result) {
         setBarcodeResult(result);
         setScanning(false);
-        
+
         // 食品情報を取得
         setLoadingFoodInfo(true);
         try {
@@ -102,7 +117,7 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
       }
     } catch (error: unknown) {
       logError(error, { component: 'BarcodeScannerModal', action: 'handleStartScan' });
-      
+
       const err = error as { name?: string; message?: string };
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
         setError('カメラの許可が必要です。ブラウザの設定からカメラを許可してください。');
@@ -117,11 +132,11 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
 
   const handleAddFood = () => {
     if (!foodInfo) return;
-    
+
     const foodName = foodInfo.product_name || foodInfo.product_name_en || '不明な食品';
     const amountStr = prompt(`${foodName}の量を入力してください（g）:`, '100');
     if (!amountStr) return;
-    
+
     const amount = Number(amountStr);
     if (isNaN(amount) || amount <= 0) {
       alert('有効な量を入力してください');
@@ -135,7 +150,7 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
   const handleClose = () => {
     // カメラを停止
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
     onClose();
@@ -148,7 +163,9 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
       <div className="barcode-scanner-modal" onClick={(e) => e.stopPropagation()}>
         <div className="barcode-scanner-modal-header">
           <h2 className="barcode-scanner-modal-title">バーコード読み取り</h2>
-          <button onClick={handleClose} className="barcode-scanner-modal-close">×</button>
+          <button onClick={handleClose} className="barcode-scanner-modal-close">
+            ×
+          </button>
         </div>
 
         <div className="barcode-scanner-modal-content">
@@ -172,7 +189,9 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
                 />
                 <div className="barcode-scanner-modal-scan-line" />
               </div>
-              <p className="barcode-scanner-modal-scanning-text">バーコードをカメラに向けてください...</p>
+              <p className="barcode-scanner-modal-scanning-text">
+                バーコードをカメラに向けてください...
+              </p>
             </div>
           )}
 
@@ -189,7 +208,7 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
             <div className="barcode-scanner-modal-result">
               <p className="barcode-scanner-modal-success">✓ バーコードを読み取りました</p>
               <p className="barcode-scanner-modal-barcode">コード: {barcodeResult.code}</p>
-              
+
               {loadingFoodInfo && (
                 <p className="barcode-scanner-modal-loading">商品情報を取得中...</p>
               )}
@@ -209,4 +228,3 @@ export default function BarcodeScannerModal({ isOpen, onClose, onSuccess }: Barc
     </div>
   );
 }
-

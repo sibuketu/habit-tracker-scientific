@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Settings Hook
- * 
+ *
  * アプリ設定の管理（Local Storage）
  */
 
@@ -60,9 +60,8 @@ export const useSettings = () => {
     setFontSizeState(size);
     localStorage.setItem('app_font_size', size);
     // フォントサイズを直接適用
-    const fontSizeValue = size === 'small' ? '14px' : 
-      size === 'medium' ? '16px' : 
-      size === 'large' ? '18px' : '20px';
+    const fontSizeValue =
+      size === 'small' ? '14px' : size === 'medium' ? '16px' : size === 'large' ? '18px' : '20px';
     document.documentElement.style.setProperty('--app-font-size', fontSizeValue);
     document.body.style.fontSize = fontSizeValue;
     const rootElement = document.getElementById('root');
@@ -85,7 +84,7 @@ export const useSettings = () => {
     const newValue = !darkMode;
     setDarkModeState(newValue);
     localStorage.setItem('settings_dark_mode', JSON.stringify(newValue));
-    
+
     // テーマを適用
     if (newValue) {
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -123,9 +122,8 @@ export const useSettings = () => {
 
   useEffect(() => {
     const applyFontSize = (size: 'small' | 'medium' | 'large' | 'xlarge') => {
-      const fontSizeValue = size === 'small' ? '14px' : 
-        size === 'medium' ? '16px' : 
-        size === 'large' ? '18px' : '20px';
+      const fontSizeValue =
+        size === 'small' ? '14px' : size === 'medium' ? '16px' : size === 'large' ? '18px' : '20px';
       document.documentElement.style.setProperty('--app-font-size', fontSizeValue);
       document.body.style.fontSize = fontSizeValue;
       const rootElement = document.getElementById('root');
@@ -134,7 +132,12 @@ export const useSettings = () => {
       }
     };
 
-    const savedFontSize = localStorage.getItem('app_font_size') as 'small' | 'medium' | 'large' | 'xlarge' | null;
+    const savedFontSize = localStorage.getItem('app_font_size') as
+      | 'small'
+      | 'medium'
+      | 'large'
+      | 'xlarge'
+      | null;
     if (savedFontSize) {
       setFontSizeState(savedFontSize);
       applyFontSize(savedFontSize);

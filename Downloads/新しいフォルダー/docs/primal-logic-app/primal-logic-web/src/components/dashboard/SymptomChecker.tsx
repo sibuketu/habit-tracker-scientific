@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Symptom Checker (トラブルシューティング)
- * 
+ *
  * カーニボア実践中の症状をチェックし、対処法を提案するコンポーネント
  */
 
@@ -48,7 +48,7 @@ export default function SymptomChecker() {
               ×
             </button>
             <h2 className="symptom-modal-title">{selectedSymptom.symptom}</h2>
-            
+
             <div className="symptom-modal-section">
               <h3 className="symptom-modal-section-title">🔍 考えられる原因</h3>
               <ul className="symptom-modal-list">
@@ -77,4 +77,3 @@ export default function SymptomChecker() {
     </>
   );
 }
-

@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Help Tooltip Component
- * 
+ *
  * スマホ対応のツールチップコンポーネント
  */
 
@@ -19,12 +19,21 @@ export default function HelpTooltip({ text, children, position = 'bottom' }: Hel
 
   const handleClick = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     setTooltipPosition({ x: rect.left, y: rect.top });
     setShowTooltip(!showTooltip);
   };
 
-  const handleEnter = (e: React.MouseEvent | React.TouchEvent) => {
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    setTooltipPosition({ x: rect.left, y: rect.top });
+    setShowTooltip(true);
+  };
+
+  const handleEnter = (e: React.MouseEvent) => {
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     setTooltipPosition({ x: rect.left, y: rect.top });
     setShowTooltip(true);
@@ -52,7 +61,12 @@ export default function HelpTooltip({ text, children, position = 'bottom' }: Hel
       case 'bottom':
         return { ...baseStyle, top: `${tooltipPosition.y + 20}px` };
       case 'left':
-        return { ...baseStyle, right: `${window.innerWidth - tooltipPosition.x + 20}px`, top: `${tooltipPosition.y}px`, left: 'auto' };
+        return {
+          ...baseStyle,
+          right: `${window.innerWidth - tooltipPosition.x + 20}px`,
+          top: `${tooltipPosition.y}px`,
+          left: 'auto',
+        };
       case 'right':
         return { ...baseStyle, left: `${tooltipPosition.x + 20}px`, top: `${tooltipPosition.y}px` };
       default:
@@ -64,13 +78,10 @@ export default function HelpTooltip({ text, children, position = 'bottom' }: Hel
     <span
       className="help-tooltip-trigger"
       onClick={handleClick}
-      onTouchStart={handleEnter}
+      onTouchStart={handleTouchStart}
       onMouseEnter={handleEnter}
       onMouseLeave={() => setShowTooltip(false)}
-      onTouchEnd={(e) => {
-        // タッチ終了時も少し遅延して閉じる（スマホでのタップ確認）
-        setTimeout(() => setShowTooltip(false), 3000);
-      }}
+      style={{ userSelect: 'none', WebkitTapHighlightColor: 'transparent' }}
     >
       {children || '💡'}
       {showTooltip && (
@@ -81,4 +92,3 @@ export default function HelpTooltip({ text, children, position = 'bottom' }: Hel
     </span>
   );
 }
-

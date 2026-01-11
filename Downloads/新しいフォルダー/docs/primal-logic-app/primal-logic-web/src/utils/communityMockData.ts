@@ -93,4 +93,3 @@ export const mockCommunityPatterns: CommunityPattern[] = [
     sampleSize: 420,
   },
 ];
-

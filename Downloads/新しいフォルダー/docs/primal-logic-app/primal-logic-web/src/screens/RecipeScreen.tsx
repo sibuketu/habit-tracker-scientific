@@ -1,13 +1,19 @@
 /**
  * Primal Logic - Recipe Screen
- * 
+ *
  * レシピ登録・保存画面（CustomFoodScreenをベースに実装）
  * 2段階UI: 材料登録 → レシピ登録
  */
 
 import { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../context/AppContext';
-import { getRecipes, saveRecipe, updateRecipe, deleteRecipe, type Recipe } from '../utils/recipeStorage';
+import {
+  getRecipes,
+  saveRecipe,
+  updateRecipe,
+  deleteRecipe,
+  type Recipe,
+} from '../utils/recipeStorage';
 import { analyzeFoodName } from '../services/aiService';
 import { getRandomTip, getRandomTipExcluding, type Tip } from '../data/tips';
 import { saveTip, unsaveTip, isTipSaved } from '../utils/savedTips';
@@ -48,15 +54,15 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
-  
+
   // レシピ情報
   const [recipeName, setRecipeName] = useState('');
   const [recipeDescription, setRecipeDescription] = useState('');
   const [recipeFoods, setRecipeFoods] = useState<FoodItem[]>([]);
-  
+
   // 材料登録モード（true: 材料登録中, false: レシピ登録中）
   const [isIngredientMode, setIsIngredientMode] = useState(true);
-  
+
   // 現在の材料登録状態
   const [currentIngredient, setCurrentIngredient] = useState<IngredientState>({
     foodName: '',
@@ -74,10 +80,10 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     loadingTip: null,
     isTipSavedState: false,
   });
-  
+
   // 抗栄養素詳細表示用の状態
   const [showAdvancedAntiNutrients, setShowAdvancedAntiNutrients] = useState(false);
-  
+
   // Tips履歴管理
   const [previousTips, setPreviousTips] = useState<Tip[]>([]);
 
@@ -144,17 +150,17 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
   // 食品名から栄養素を推測（CustomFoodScreenと同じ）
   const handleAnalyze = async () => {
     if (!currentIngredient.foodName.trim()) {
-      setCurrentIngredient(prev => ({ ...prev, error: t('customFood.enterFoodName') }));
+      setCurrentIngredient((prev) => ({ ...prev, error: t('customFood.enterFoodName') }));
       return;
     }
 
-    setCurrentIngredient(prev => ({ ...prev, isAnalyzing: true, error: null }));
-    
+    setCurrentIngredient((prev) => ({ ...prev, isAnalyzing: true, error: null }));
+
     // ローディング中のTipsを表示
-    const randomTip = currentIngredient.loadingTip 
-      ? getRandomTipExcluding(currentIngredient.loadingTip.id) 
+    const randomTip = currentIngredient.loadingTip
+      ? getRandomTipExcluding(currentIngredient.loadingTip.id)
       : getRandomTip();
-    setCurrentIngredient(prev => ({
+    setCurrentIngredient((prev) => ({
       ...prev,
       loadingTip: randomTip,
       isTipSavedState: isTipSaved(randomTip.id),
@@ -163,11 +169,11 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     try {
       const result = await analyzeFoodName(
         currentIngredient.foodName,
-        Object.keys(currentIngredient.followupAnswers).length > 0 
-          ? currentIngredient.followupAnswers 
+        Object.keys(currentIngredient.followupAnswers).length > 0
+          ? currentIngredient.followupAnswers
           : undefined
       );
-      
+
       const ratio = currentIngredient.amount / 100;
       const nutrients: Record<string, number> = {};
       if (result.nutrients) {
@@ -175,31 +181,36 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
           nutrients[key] = (value as number) * ratio;
         });
       }
-      
-      setCurrentIngredient(prev => ({
+
+      setCurrentIngredient((prev) => ({
         ...prev,
         foodName: result.foodName,
         displayName: result.foodName,
-        type: (result.type === 'plant' ? 'animal' : result.type) as 'animal' | 'trash' | 'ruminant' | 'dairy',
+        type: (result.type === 'plant' ? 'animal' : result.type) as
+          | 'animal'
+          | 'trash'
+          | 'ruminant'
+          | 'dairy',
         nutrients,
         aiFollowupQuestions: result.followupQuestions || [],
-        showFollowupInput: (result.followupQuestions && result.followupQuestions.length > 0) || false,
+        showFollowupInput:
+          (result.followupQuestions && result.followupQuestions.length > 0) || false,
         loadingTip: null,
       }));
     } catch (err) {
-      setCurrentIngredient(prev => ({
+      setCurrentIngredient((prev) => ({
         ...prev,
         error: err instanceof Error ? err.message : t('customFood.analyzeFailed'),
       }));
     } finally {
-      setCurrentIngredient(prev => ({ ...prev, isAnalyzing: false }));
+      setCurrentIngredient((prev) => ({ ...prev, isAnalyzing: false }));
     }
   };
 
   // 材料を追加（連続登録可能）
   const handleAddIngredient = () => {
     if (!currentIngredient.foodName.trim()) {
-      setCurrentIngredient(prev => ({ ...prev, error: t('customFood.enterFoodName') }));
+      setCurrentIngredient((prev) => ({ ...prev, error: t('customFood.enterFoodName') }));
       return;
     }
 
@@ -218,7 +229,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     };
 
     setRecipeFoods([...recipeFoods, food]);
-    
+
     // 材料登録状態をリセット（連続登録のため）
     setCurrentIngredient({
       foodName: '',
@@ -299,7 +310,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
   };
 
   const handleUseRecipe = (recipe: Recipe) => {
-    recipe.foods.forEach(food => {
+    recipe.foods.forEach((food) => {
       addFood(food);
     });
     alert(t('recipe.added', { name: recipe.name }));
@@ -308,7 +319,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
 
   // 栄養素の値を更新
   const updateNutrient = (key: string, value: number | undefined) => {
-    setCurrentIngredient(prev => ({
+    setCurrentIngredient((prev) => ({
       ...prev,
       nutrients: {
         ...prev.nutrients,
@@ -352,19 +363,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
       userProfile?.bodyComposition,
       userProfile?.weight,
       userProfile?.metabolicStressIndicators,
-      userProfile?.customNutrientTargets ? Object.fromEntries(
-        Object.entries(userProfile.customNutrientTargets).map(([key, value]) => [
-          key,
-          typeof value === 'number' ? { mode: 'manual' as const, value } : value
-        ])
-      ) : undefined
+      userProfile?.customNutrientTargets
+        ? Object.fromEntries(
+            Object.entries(userProfile.customNutrientTargets).map(([key, value]) => [
+              key,
+              typeof value === 'number' ? { mode: 'manual' as const, value } : value,
+            ])
+          )
+        : undefined
     );
   }, [userProfile]);
 
   // 栄養素ゲージの設定
   const nutrientGauges = useMemo(() => {
     if (!recipeMetrics || !dynamicTargets) return [];
-    
+
     const getNutrientColor = (key: string): string => {
       const colors: Record<string, string> = {
         protein: '#ef4444',
@@ -428,7 +441,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
         unit: 'mg',
         color: getNutrientColor('potassium'),
       },
-    ].filter(config => config.target > 0);
+    ].filter((config) => config.target > 0);
   }, [recipeMetrics, dynamicTargets]);
 
   const handleRemoveFoodFromRecipe = (index: number) => {
@@ -459,7 +472,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
               </p>
             </div>
           ) : (
-            recipes.map(recipe => (
+            recipes.map((recipe) => (
               <div key={recipe.id} className="recipe-screen-item">
                 <div className="recipe-screen-item-header">
                   <h3 className="recipe-screen-item-name">{recipe.name}</h3>
@@ -488,11 +501,14 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                   <p className="recipe-screen-item-description">{recipe.description}</p>
                 )}
                 <div className="recipe-screen-item-foods">
-                  <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.5rem' }}>{t('recipe.containsFoods')}</p>
+                  <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.5rem' }}>
+                    {t('recipe.containsFoods')}
+                  </p>
                   <ul>
                     {recipe.foods.map((food, index) => (
                       <li key={index} style={{ fontSize: '14px', marginBottom: '0.25rem' }}>
-                        {food.item} - {food.amount}{food.unit}
+                        {food.item} - {food.amount}
+                        {food.unit}
                       </li>
                     ))}
                   </ul>
@@ -504,23 +520,37 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
 
         {/* 作成/編集モーダル */}
         {(showCreateModal || showEditModal) && (
-          <div className="recipe-screen-modal-overlay" onClick={() => {
-            setShowCreateModal(false);
-            setShowEditModal(false);
-            setIsIngredientMode(true);
-          }}>
+          <div
+            className="recipe-screen-modal-overlay"
+            onClick={() => {
+              setShowCreateModal(false);
+              setShowEditModal(false);
+              setIsIngredientMode(true);
+            }}
+          >
             <div className="recipe-screen-modal" onClick={(e) => e.stopPropagation()}>
               <h2 className="recipe-screen-modal-title">
-                {isIngredientMode 
-                  ? (showEditModal ? t('recipe.editTitle') : t('recipe.createTitle'))
-                  : (showEditModal ? t('recipe.editTitle') : t('recipe.createTitle'))
-                }
+                {isIngredientMode
+                  ? showEditModal
+                    ? t('recipe.editTitle')
+                    : t('recipe.createTitle')
+                  : showEditModal
+                    ? t('recipe.editTitle')
+                    : t('recipe.createTitle')}
               </h2>
 
               {isIngredientMode ? (
                 /* 材料登録モード */
                 <div className="recipe-screen-modal-form">
-                  <div style={{ marginBottom: '1rem', padding: '0.75rem', backgroundColor: '#eff6ff', borderRadius: '8px', border: '1px solid #3b82f6' }}>
+                  <div
+                    style={{
+                      marginBottom: '1rem',
+                      padding: '0.75rem',
+                      backgroundColor: '#eff6ff',
+                      borderRadius: '8px',
+                      border: '1px solid #3b82f6',
+                    }}
+                  >
                     <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.5rem' }}>
                       📝 材料登録モード（{recipeFoods.length}個の材料を登録済み）
                     </p>
@@ -530,7 +560,16 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                   </div>
 
                   {currentIngredient.error && (
-                    <div className="error-message" style={{ color: '#dc2626', padding: '0.75rem', marginBottom: '1rem', backgroundColor: '#fef2f2', borderRadius: '8px' }}>
+                    <div
+                      className="error-message"
+                      style={{
+                        color: '#dc2626',
+                        padding: '0.75rem',
+                        marginBottom: '1rem',
+                        backgroundColor: '#fef2f2',
+                        borderRadius: '8px',
+                      }}
+                    >
                       {currentIngredient.error}
                     </div>
                   )}
@@ -539,7 +578,14 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                   <div className="custom-food-section">
                     <label>
                       <strong>{t('customFood.foodName')}</strong>
-                      <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+                      <div
+                        style={{
+                          fontSize: '12px',
+                          color: '#6b7280',
+                          marginTop: '0.25rem',
+                          marginBottom: '0.5rem',
+                        }}
+                      >
                         {t('customFood.foodNameDescription')}
                       </div>
                       <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
@@ -548,18 +594,25 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           value={currentIngredient.foodName}
                           onChange={(e) => {
                             const newFoodName = e.target.value;
-                            setCurrentIngredient(prev => ({
+                            setCurrentIngredient((prev) => ({
                               ...prev,
                               foodName: newFoodName,
                               displayName: newFoodName,
                             }));
                           }}
                           placeholder={t('customFood.foodNamePlaceholder')}
-                          style={{ flex: 1, padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                          style={{
+                            flex: 1,
+                            padding: '0.75rem',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '8px',
+                          }}
                         />
                         <button
                           onClick={handleAnalyze}
-                          disabled={currentIngredient.isAnalyzing || !currentIngredient.foodName.trim()}
+                          disabled={
+                            currentIngredient.isAnalyzing || !currentIngredient.foodName.trim()
+                          }
                           style={{
                             padding: '0.75rem 1.5rem',
                             backgroundColor: currentIngredient.isAnalyzing ? '#9ca3af' : '#3b82f6',
@@ -570,41 +623,86 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             fontWeight: '600',
                           }}
                         >
-                          {currentIngredient.isAnalyzing ? t('customFood.analyzing') : t('customFood.aiSuggest')}
+                          {currentIngredient.isAnalyzing
+                            ? t('customFood.analyzing')
+                            : t('customFood.aiSuggest')}
                         </button>
                       </div>
                     </label>
-                    
+
                     <label style={{ marginTop: '1rem', display: 'block' }}>
                       <strong>{t('customFood.displayName')}</strong>
-                      <div style={{ fontSize: '12px', color: '#6b7280', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+                      <div
+                        style={{
+                          fontSize: '12px',
+                          color: '#6b7280',
+                          marginTop: '0.25rem',
+                          marginBottom: '0.5rem',
+                        }}
+                      >
                         {t('customFood.displayNameDescription')}
                       </div>
                       <input
                         type="text"
                         value={currentIngredient.displayName}
-                        onChange={(e) => setCurrentIngredient(prev => ({ ...prev, displayName: e.target.value }))}
-                        placeholder={currentIngredient.foodName || t('customFood.displayNamePlaceholder')}
-                        style={{ width: '100%', padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '8px', marginTop: '0.5rem' }}
+                        onChange={(e) =>
+                          setCurrentIngredient((prev) => ({ ...prev, displayName: e.target.value }))
+                        }
+                        placeholder={
+                          currentIngredient.foodName || t('customFood.displayNamePlaceholder')
+                        }
+                        style={{
+                          width: '100%',
+                          padding: '0.75rem',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          marginTop: '0.5rem',
+                        }}
                       />
                     </label>
 
                     {/* 数量入力 */}
                     <label style={{ marginTop: '1rem', display: 'block' }}>
                       <strong>数量</strong>
-                      <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', alignItems: 'center' }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: '0.5rem',
+                          marginTop: '0.5rem',
+                          alignItems: 'center',
+                        }}
+                      >
                         <input
                           type="number"
                           value={currentIngredient.amount}
-                          onChange={(e) => setCurrentIngredient(prev => ({ ...prev, amount: Number(e.target.value) }))}
+                          onChange={(e) =>
+                            setCurrentIngredient((prev) => ({
+                              ...prev,
+                              amount: Number(e.target.value),
+                            }))
+                          }
                           min="0"
                           step="10"
-                          style={{ flex: 1, padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                          style={{
+                            flex: 1,
+                            padding: '0.75rem',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '8px',
+                          }}
                         />
                         <select
                           value={currentIngredient.unit}
-                          onChange={(e) => setCurrentIngredient(prev => ({ ...prev, unit: e.target.value as 'g' | '個' }))}
-                          style={{ padding: '0.75rem', border: '1px solid #e5e7eb', borderRadius: '8px' }}
+                          onChange={(e) =>
+                            setCurrentIngredient((prev) => ({
+                              ...prev,
+                              unit: e.target.value as 'g' | '個',
+                            }))
+                          }
+                          style={{
+                            padding: '0.75rem',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '8px',
+                          }}
                         >
                           <option value="g">g</option>
                           <option value="個">個</option>
@@ -614,8 +712,23 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
 
                     {/* AIローディング中のTips表示 */}
                     {currentIngredient.isAnalyzing && currentIngredient.loadingTip && (
-                      <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#fef3c7', border: '1px solid #fbbf24', borderRadius: '8px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                      <div
+                        style={{
+                          marginTop: '1rem',
+                          padding: '1rem',
+                          backgroundColor: '#fef3c7',
+                          border: '1px solid #fbbf24',
+                          borderRadius: '8px',
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-start',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           <div style={{ fontWeight: '600', color: '#92400e', flex: 1 }}>
                             💡 {currentIngredient.loadingTip.title}
                           </div>
@@ -626,11 +739,16 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                               } else {
                                 saveTip(currentIngredient.loadingTip!.id);
                               }
-                              setCurrentIngredient(prev => ({ ...prev, isTipSavedState: !prev.isTipSavedState }));
+                              setCurrentIngredient((prev) => ({
+                                ...prev,
+                                isTipSavedState: !prev.isTipSavedState,
+                              }));
                             }}
                             style={{
                               background: currentIngredient.isTipSavedState ? '#fef3c7' : 'none',
-                              border: currentIngredient.isTipSavedState ? '1px solid #f59e0b' : '1px solid #d1d5db',
+                              border: currentIngredient.isTipSavedState
+                                ? '1px solid #f59e0b'
+                                : '1px solid #d1d5db',
                               borderRadius: '4px',
                               fontSize: '16px',
                               cursor: 'pointer',
@@ -643,7 +761,14 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             ⭐
                           </button>
                         </div>
-                        <div style={{ fontSize: '12px', color: '#78350f', lineHeight: '1.5', marginBottom: '0.5rem' }}>
+                        <div
+                          style={{
+                            fontSize: '12px',
+                            color: '#78350f',
+                            lineHeight: '1.5',
+                            marginBottom: '0.5rem',
+                          }}
+                        >
                           {currentIngredient.loadingTip.content.substring(0, 150)}...
                         </div>
                         <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
@@ -651,8 +776,8 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             <button
                               onClick={() => {
                                 const prevTip = previousTips[previousTips.length - 1];
-                                setPreviousTips(prev => prev.slice(0, -1));
-                                setCurrentIngredient(prev => ({
+                                setPreviousTips((prev) => prev.slice(0, -1));
+                                setCurrentIngredient((prev) => ({
                                   ...prev,
                                   loadingTip: prevTip,
                                   isTipSavedState: isTipSaved(prevTip.id),
@@ -675,10 +800,12 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <button
                             onClick={() => {
                               if (currentIngredient.loadingTip) {
-                                setPreviousTips(prev => [...prev, currentIngredient.loadingTip!]);
+                                setPreviousTips((prev) => [...prev, currentIngredient.loadingTip!]);
                               }
-                              const nextTip = getRandomTipExcluding(currentIngredient.loadingTip!.id);
-                              setCurrentIngredient(prev => ({
+                              const nextTip = getRandomTipExcluding(
+                                currentIngredient.loadingTip!.id
+                              );
+                              setCurrentIngredient((prev) => ({
                                 ...prev,
                                 loadingTip: nextTip,
                                 isTipSavedState: isTipSaved(nextTip.id),
@@ -704,19 +831,59 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                   </div>
 
                   {/* 食品タイプ */}
-                  <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                      <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>2</span>
+                  <div
+                    className="custom-food-section"
+                    style={{
+                      backgroundColor: '#f9fafb',
+                      padding: '1rem',
+                      borderRadius: '8px',
+                      marginBottom: '1rem',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        marginBottom: '0.75rem',
+                      }}
+                    >
+                      <span
+                        style={{
+                          backgroundColor: '#3b82f6',
+                          color: 'white',
+                          borderRadius: '50%',
+                          width: '24px',
+                          height: '24px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '14px',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        2
+                      </span>
                       <strong style={{ fontSize: '16px' }}>{t('customFood.foodType')}</strong>
                     </div>
-                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: '0.5rem',
+                        marginTop: '0.5rem',
+                        flexWrap: 'wrap',
+                      }}
+                    >
                       {(['animal', 'trash'] as const).map((foodType) => (
                         <button
                           key={foodType}
-                          onClick={() => setCurrentIngredient(prev => ({ ...prev, type: foodType }))}
+                          onClick={() =>
+                            setCurrentIngredient((prev) => ({ ...prev, type: foodType }))
+                          }
                           style={{
                             padding: '0.5rem 1rem',
-                            backgroundColor: currentIngredient.type === foodType ? '#3b82f6' : '#f3f4f6',
+                            backgroundColor:
+                              currentIngredient.type === foodType ? '#3b82f6' : '#f3f4f6',
                             color: currentIngredient.type === foodType ? 'white' : '#374151',
                             border: 'none',
                             borderRadius: '8px',
@@ -724,22 +891,67 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             fontSize: '14px',
                           }}
                         >
-                          {foodType === 'animal' ? t('customFood.foodTypeAnimal') : t('customFood.foodTypeTrash')}
+                          {foodType === 'animal'
+                            ? t('customFood.foodTypeAnimal')
+                            : t('customFood.foodTypeTrash')}
                         </button>
                       ))}
                     </div>
                   </div>
 
                   {/* ステップ3: 栄養素（必須） */}
-                  <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                      <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>3</span>
-                      <strong style={{ fontSize: '16px' }}>{t('customFood.nutrientsRequired')}</strong>
+                  <div
+                    className="custom-food-section"
+                    style={{
+                      backgroundColor: '#f9fafb',
+                      padding: '1rem',
+                      borderRadius: '8px',
+                      marginBottom: '1rem',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        marginBottom: '0.75rem',
+                      }}
+                    >
+                      <span
+                        style={{
+                          backgroundColor: '#3b82f6',
+                          color: 'white',
+                          borderRadius: '50%',
+                          width: '24px',
+                          height: '24px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '14px',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        3
+                      </span>
+                      <strong style={{ fontSize: '16px' }}>
+                        {t('customFood.nutrientsRequired')}
+                      </strong>
                     </div>
                     <div style={{ fontSize: '12px', color: '#6b7280', marginBottom: '0.75rem' }}>
                       {t('customFood.nutrientsPer100g')}
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '400px', overflowY: 'auto', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.75rem',
+                        maxHeight: '400px',
+                        overflowY: 'auto',
+                        padding: '1rem',
+                        backgroundColor: '#f9fafb',
+                        borderRadius: '8px',
+                      }}
+                    >
                       {/* タンパク質 */}
                       <div>
                         <MiniNutrientGauge
@@ -754,13 +966,24 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                         <input
                           type="number"
                           value={currentIngredient.nutrients?.protein || ''}
-                          onChange={(e) => updateNutrient('protein', e.target.value ? parseFloat(e.target.value) : undefined)}
+                          onChange={(e) =>
+                            updateNutrient(
+                              'protein',
+                              e.target.value ? parseFloat(e.target.value) : undefined
+                            )
+                          }
                           placeholder="0"
                           step="0.1"
-                          style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                          style={{
+                            width: '100%',
+                            padding: '0.5rem',
+                            marginTop: '0.5rem',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '4px',
+                          }}
                         />
                       </div>
-                      
+
                       {/* 脂質 */}
                       <div>
                         <MiniNutrientGauge
@@ -775,13 +998,24 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                         <input
                           type="number"
                           value={currentIngredient.nutrients?.fat || ''}
-                          onChange={(e) => updateNutrient('fat', e.target.value ? parseFloat(e.target.value) : undefined)}
+                          onChange={(e) =>
+                            updateNutrient(
+                              'fat',
+                              e.target.value ? parseFloat(e.target.value) : undefined
+                            )
+                          }
                           placeholder="0"
                           step="0.1"
-                          style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                          style={{
+                            width: '100%',
+                            padding: '0.5rem',
+                            marginTop: '0.5rem',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '4px',
+                          }}
                         />
                       </div>
-                      
+
                       {/* 炭水化物 */}
                       <div>
                         <MiniNutrientGauge
@@ -795,27 +1029,77 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                         <input
                           type="number"
                           value={currentIngredient.nutrients?.carbs || ''}
-                          onChange={(e) => updateNutrient('carbs', e.target.value ? parseFloat(e.target.value) : undefined)}
+                          onChange={(e) =>
+                            updateNutrient(
+                              'carbs',
+                              e.target.value ? parseFloat(e.target.value) : undefined
+                            )
+                          }
                           placeholder="0"
                           step="0.1"
-                          style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                          style={{
+                            width: '100%',
+                            padding: '0.5rem',
+                            marginTop: '0.5rem',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '4px',
+                          }}
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* ステップ4: 栄養素（詳細） */}
-                  <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                  <div
+                    className="custom-food-section"
+                    style={{
+                      backgroundColor: '#f9fafb',
+                      padding: '1rem',
+                      borderRadius: '8px',
+                      marginBottom: '1rem',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: '0.75rem',
+                      }}
+                    >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>4</span>
-                        <strong style={{ fontSize: '16px' }}>{t('customFood.nutrientsDetailed')}</strong>
+                        <span
+                          style={{
+                            backgroundColor: '#3b82f6',
+                            color: 'white',
+                            borderRadius: '50%',
+                            width: '24px',
+                            height: '24px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          4
+                        </span>
+                        <strong style={{ fontSize: '16px' }}>
+                          {t('customFood.nutrientsDetailed')}
+                        </strong>
                       </div>
                       <button
-                        onClick={() => setCurrentIngredient(prev => ({ ...prev, showAdvancedNutrients: !prev.showAdvancedNutrients }))}
+                        onClick={() =>
+                          setCurrentIngredient((prev) => ({
+                            ...prev,
+                            showAdvancedNutrients: !prev.showAdvancedNutrients,
+                          }))
+                        }
                         style={{
                           padding: '0.5rem 1rem',
-                          backgroundColor: currentIngredient.showAdvancedNutrients ? '#3b82f6' : '#f3f4f6',
+                          backgroundColor: currentIngredient.showAdvancedNutrients
+                            ? '#3b82f6'
+                            : '#f3f4f6',
                           color: currentIngredient.showAdvancedNutrients ? 'white' : '#374151',
                           border: 'none',
                           borderRadius: '8px',
@@ -824,11 +1108,19 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           fontWeight: '500',
                         }}
                       >
-                        {currentIngredient.showAdvancedNutrients ? t('customFood.hideDetails') : t('customFood.showDetails')}
+                        {currentIngredient.showAdvancedNutrients
+                          ? t('customFood.hideDetails')
+                          : t('customFood.showDetails')}
                       </button>
                     </div>
                     {currentIngredient.showAdvancedNutrients && (
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                      <div
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                          gap: '1rem',
+                        }}
+                      >
                         {/* CustomFoodScreenと同じ詳細栄養素フィールドを追加 */}
                         <label>
                           {t('customFood.sodium')} (mg/100g)
@@ -844,10 +1136,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.sodium || ''}
-                            onChange={(e) => updateNutrient('sodium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'sodium',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -864,10 +1167,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.magnesium || ''}
-                            onChange={(e) => updateNutrient('magnesium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'magnesium',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -884,10 +1198,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.potassium || ''}
-                            onChange={(e) => updateNutrient('potassium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'potassium',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -904,17 +1229,31 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.zinc || ''}
-                            onChange={(e) => updateNutrient('zinc', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'zinc',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.01"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
                           {t('customFood.iron')} (mg/100g)
                           <MiniNutrientGauge
                             label={t('customFood.iron')}
-                            currentDailyTotal={(currentIngredient.nutrients?.hemeIron || 0) + (currentIngredient.nutrients?.nonHemeIron || 0)}
+                            currentDailyTotal={
+                              (currentIngredient.nutrients?.hemeIron || 0) +
+                              (currentIngredient.nutrients?.nonHemeIron || 0)
+                            }
                             previewAmount={0}
                             target={8}
                             color="#64748b"
@@ -923,7 +1262,10 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           />
                           <input
                             type="number"
-                            value={(currentIngredient.nutrients?.hemeIron || 0) + (currentIngredient.nutrients?.nonHemeIron || 0) || ''}
+                            value={
+                              (currentIngredient.nutrients?.hemeIron || 0) +
+                                (currentIngredient.nutrients?.nonHemeIron || 0) || ''
+                            }
                             onChange={(e) => {
                               const totalIron = e.target.value ? parseFloat(e.target.value) : 0;
                               updateNutrient('hemeIron', totalIron);
@@ -931,7 +1273,13 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             }}
                             placeholder="0"
                             step="0.01"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -948,10 +1296,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.vitaminA || ''}
-                            onChange={(e) => updateNutrient('vitaminA', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'vitaminA',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -968,10 +1327,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.vitaminD || ''}
-                            onChange={(e) => updateNutrient('vitaminD', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'vitaminD',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -988,10 +1358,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.vitaminK2 || ''}
-                            onChange={(e) => updateNutrient('vitaminK2', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'vitaminK2',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1008,10 +1389,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.vitaminB12 || ''}
-                            onChange={(e) => updateNutrient('vitaminB12', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'vitaminB12',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.01"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1028,10 +1420,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.omega3 || ''}
-                            onChange={(e) => updateNutrient('omega3', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'omega3',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.01"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1048,10 +1451,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.omega6 || ''}
-                            onChange={(e) => updateNutrient('omega6', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'omega6',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.01"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1068,10 +1482,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.calcium || ''}
-                            onChange={(e) => updateNutrient('calcium', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'calcium',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1088,10 +1513,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.phosphorus || ''}
-                            onChange={(e) => updateNutrient('phosphorus', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'phosphorus',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1108,10 +1544,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.glycine || ''}
-                            onChange={(e) => updateNutrient('glycine', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'glycine',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.01"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1128,10 +1575,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.methionine || ''}
-                            onChange={(e) => updateNutrient('methionine', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'methionine',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.01"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1148,10 +1606,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.taurine || ''}
-                            onChange={(e) => updateNutrient('taurine', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'taurine',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                       </div>
@@ -1159,13 +1628,51 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                   </div>
 
                   {/* ステップ5: 抗栄養素 */}
-                  {(
-                    <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                        <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>5</span>
-                        <strong style={{ fontSize: '16px' }}>{t('customFood.antiNutrients')}</strong>
+                  {
+                    <div
+                      className="custom-food-section"
+                      style={{
+                        backgroundColor: '#f9fafb',
+                        padding: '1rem',
+                        borderRadius: '8px',
+                        marginBottom: '1rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          marginBottom: '0.75rem',
+                        }}
+                      >
+                        <span
+                          style={{
+                            backgroundColor: '#3b82f6',
+                            color: 'white',
+                            borderRadius: '50%',
+                            width: '24px',
+                            height: '24px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          5
+                        </span>
+                        <strong style={{ fontSize: '16px' }}>
+                          {t('customFood.antiNutrients')}
+                        </strong>
                       </div>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.5rem' }}>
+                      <div
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                          gap: '0.5rem',
+                        }}
+                      >
                         <label>
                           {t('customFood.phytates')} (mg/100g)
                           <MiniNutrientGauge
@@ -1180,10 +1687,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.phytates || ''}
-                            onChange={(e) => updateNutrient('phytates', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'phytates',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1200,10 +1718,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.oxalates || ''}
-                            onChange={(e) => updateNutrient('oxalates', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'oxalates',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                         <label>
@@ -1220,22 +1749,63 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           <input
                             type="number"
                             value={currentIngredient.nutrients?.lectins || ''}
-                            onChange={(e) => updateNutrient('lectins', e.target.value ? parseFloat(e.target.value) : undefined)}
+                            onChange={(e) =>
+                              updateNutrient(
+                                'lectins',
+                                e.target.value ? parseFloat(e.target.value) : undefined
+                              )
+                            }
                             placeholder="0"
                             step="0.1"
-                            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              marginTop: '0.25rem',
+                              border: '1px solid #e5e7eb',
+                              borderRadius: '4px',
+                            }}
                           />
                         </label>
                       </div>
                     </div>
-                  )}
+                  }
 
                   {/* ステップ6: 抗栄養素（詳細） */}
-                  {(
-                    <div className="custom-food-section" style={{ backgroundColor: '#f9fafb', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                  {
+                    <div
+                      className="custom-food-section"
+                      style={{
+                        backgroundColor: '#f9fafb',
+                        padding: '1rem',
+                        borderRadius: '8px',
+                        marginBottom: '1rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          marginBottom: '0.75rem',
+                        }}
+                      >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                          <span style={{ backgroundColor: '#3b82f6', color: 'white', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold' }}>6</span>
+                          <span
+                            style={{
+                              backgroundColor: '#3b82f6',
+                              color: 'white',
+                              borderRadius: '50%',
+                              width: '24px',
+                              height: '24px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '14px',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            6
+                          </span>
                           <strong style={{ fontSize: '16px' }}>抗栄養素（詳細）</strong>
                         </div>
                         <button
@@ -1255,16 +1825,33 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                         </button>
                       </div>
                       {showAdvancedAntiNutrients && (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                        <div
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                            gap: '1rem',
+                          }}
+                        >
                           <label>
                             {t('customFood.polyphenols')} (mg/100g)
                             <input
                               type="number"
                               value={currentIngredient.nutrients?.polyphenols || ''}
-                              onChange={(e) => updateNutrient('polyphenols', e.target.value ? parseFloat(e.target.value) : undefined)}
+                              onChange={(e) =>
+                                updateNutrient(
+                                  'polyphenols',
+                                  e.target.value ? parseFloat(e.target.value) : undefined
+                                )
+                              }
                               placeholder="0"
                               step="0.1"
-                              style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                              style={{
+                                width: '100%',
+                                padding: '0.5rem',
+                                marginTop: '0.25rem',
+                                border: '1px solid #e5e7eb',
+                                borderRadius: '4px',
+                              }}
                             />
                           </label>
                           <label>
@@ -1272,10 +1859,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             <input
                               type="number"
                               value={currentIngredient.nutrients?.flavonoids || ''}
-                              onChange={(e) => updateNutrient('flavonoids', e.target.value ? parseFloat(e.target.value) : undefined)}
+                              onChange={(e) =>
+                                updateNutrient(
+                                  'flavonoids',
+                                  e.target.value ? parseFloat(e.target.value) : undefined
+                                )
+                              }
                               placeholder="0"
                               step="0.1"
-                              style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                              style={{
+                                width: '100%',
+                                padding: '0.5rem',
+                                marginTop: '0.25rem',
+                                border: '1px solid #e5e7eb',
+                                borderRadius: '4px',
+                              }}
                             />
                           </label>
                           <label>
@@ -1283,10 +1881,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             <input
                               type="number"
                               value={currentIngredient.nutrients?.saponins || ''}
-                              onChange={(e) => updateNutrient('saponins', e.target.value ? parseFloat(e.target.value) : undefined)}
+                              onChange={(e) =>
+                                updateNutrient(
+                                  'saponins',
+                                  e.target.value ? parseFloat(e.target.value) : undefined
+                                )
+                              }
                               placeholder="0"
                               step="0.1"
-                              style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                              style={{
+                                width: '100%',
+                                padding: '0.5rem',
+                                marginTop: '0.25rem',
+                                border: '1px solid #e5e7eb',
+                                borderRadius: '4px',
+                              }}
                             />
                           </label>
                           <label>
@@ -1294,10 +1903,21 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             <input
                               type="number"
                               value={currentIngredient.nutrients?.goitrogens || ''}
-                              onChange={(e) => updateNutrient('goitrogens', e.target.value ? parseFloat(e.target.value) : undefined)}
+                              onChange={(e) =>
+                                updateNutrient(
+                                  'goitrogens',
+                                  e.target.value ? parseFloat(e.target.value) : undefined
+                                )
+                              }
                               placeholder="0"
                               step="0.1"
-                              style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                              style={{
+                                width: '100%',
+                                padding: '0.5rem',
+                                marginTop: '0.25rem',
+                                border: '1px solid #e5e7eb',
+                                borderRadius: '4px',
+                              }}
                             />
                           </label>
                           <label>
@@ -1305,28 +1925,58 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             <input
                               type="number"
                               value={currentIngredient.nutrients?.tannins || ''}
-                              onChange={(e) => updateNutrient('tannins', e.target.value ? parseFloat(e.target.value) : undefined)}
+                              onChange={(e) =>
+                                updateNutrient(
+                                  'tannins',
+                                  e.target.value ? parseFloat(e.target.value) : undefined
+                                )
+                              }
                               placeholder="0"
                               step="0.1"
-                              style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem', border: '1px solid #e5e7eb', borderRadius: '4px' }}
+                              style={{
+                                width: '100%',
+                                padding: '0.5rem',
+                                marginTop: '0.25rem',
+                                border: '1px solid #e5e7eb',
+                                borderRadius: '4px',
+                              }}
                             />
                           </label>
                         </div>
                       )}
                     </div>
-                  )}
+                  }
 
                   {/* 登録済み材料一覧 */}
                   {recipeFoods.length > 0 && (
-                    <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+                    <div
+                      style={{
+                        marginBottom: '1rem',
+                        padding: '1rem',
+                        backgroundColor: '#f9fafb',
+                        borderRadius: '8px',
+                      }}
+                    >
                       <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.5rem' }}>
                         登録済み材料 ({recipeFoods.length}個)
                       </p>
                       <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                         {recipeFoods.map((food, index) => (
-                          <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem', marginBottom: '0.25rem', backgroundColor: 'white', borderRadius: '4px' }}>
+                          <li
+                            key={index}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              padding: '0.5rem',
+                              marginBottom: '0.25rem',
+                              backgroundColor: 'white',
+                              borderRadius: '4px',
+                            }}
+                          >
                             <span style={{ fontSize: '14px' }}>
-                              {food.item} - {food.amount}{food.unit}
+                              {food.item} - {food.amount}
+                              {food.unit}
                             </span>
                             <button
                               onClick={() => handleRemoveFoodFromRecipe(index)}
@@ -1349,7 +1999,14 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                   )}
 
                   {/* ボタン */}
-                  <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', justifyContent: 'flex-end' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: '1rem',
+                      marginTop: '2rem',
+                      justifyContent: 'flex-end',
+                    }}
+                  >
                     <button
                       onClick={() => {
                         setShowCreateModal(false);
@@ -1403,7 +2060,15 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
               ) : (
                 /* レシピ登録モード */
                 <div className="recipe-screen-modal-form">
-                  <div style={{ marginBottom: '1rem', padding: '0.75rem', backgroundColor: '#f0fdf4', borderRadius: '8px', border: '1px solid #10b981' }}>
+                  <div
+                    style={{
+                      marginBottom: '1rem',
+                      padding: '0.75rem',
+                      backgroundColor: '#f0fdf4',
+                      borderRadius: '8px',
+                      border: '1px solid #10b981',
+                    }}
+                  >
                     <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.5rem' }}>
                       ✅ レシピ登録モード（{recipeFoods.length}個の材料を登録済み）
                     </p>
@@ -1432,17 +2097,36 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                       rows={3}
                     />
                   </label>
-                  
+
                   {/* 登録済み材料一覧 */}
-                  <div style={{ marginBottom: '1rem', padding: '1rem', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+                  <div
+                    style={{
+                      marginBottom: '1rem',
+                      padding: '1rem',
+                      backgroundColor: '#f9fafb',
+                      borderRadius: '8px',
+                    }}
+                  >
                     <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.5rem' }}>
                       {t('recipe.containsFoods')} ({recipeFoods.length}個)
                     </p>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                       {recipeFoods.map((food, index) => (
-                        <li key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem', marginBottom: '0.25rem', backgroundColor: 'white', borderRadius: '4px' }}>
+                        <li
+                          key={index}
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            padding: '0.5rem',
+                            marginBottom: '0.25rem',
+                            backgroundColor: 'white',
+                            borderRadius: '4px',
+                          }}
+                        >
                           <span style={{ fontSize: '14px' }}>
-                            {food.item} - {food.amount}{food.unit}
+                            {food.item} - {food.amount}
+                            {food.unit}
                           </span>
                           <button
                             onClick={() => handleRemoveFoodFromRecipe(index)}
@@ -1465,10 +2149,19 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
 
                   {/* 栄養素ゲージ */}
                   {nutrientGauges.length > 0 && (
-                    <div style={{ marginBottom: '16px', padding: '12px', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
-                      <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>栄養素プレビュー</p>
+                    <div
+                      style={{
+                        marginBottom: '16px',
+                        padding: '12px',
+                        backgroundColor: '#f9fafb',
+                        borderRadius: '8px',
+                      }}
+                    >
+                      <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>
+                        栄養素プレビュー
+                      </p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {nutrientGauges.map(config => (
+                        {nutrientGauges.map((config) => (
                           <MiniNutrientGauge
                             key={config.key}
                             label={config.label}
@@ -1502,10 +2195,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                     >
                       {t('recipe.cancel')}
                     </button>
-                    <button
-                      onClick={handleSaveRecipe}
-                      className="recipe-screen-modal-save"
-                    >
+                    <button onClick={handleSaveRecipe} className="recipe-screen-modal-save">
                       {t('recipe.save')}
                     </button>
                   </div>

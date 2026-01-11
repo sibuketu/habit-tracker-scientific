@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Transition Guide Data
- * 
+ *
  * Phase 1: 移行期間サポート - 症状と対処法のデータ構造
  */
 
@@ -115,9 +115,7 @@ export function calculateTransitionProgress(
   } else if (carnivoreStartDate) {
     const startDate = new Date(carnivoreStartDate);
     const today = new Date();
-    daysInTransition = Math.floor(
-      (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
+    daysInTransition = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
   } else {
     return null;
   }
@@ -138,4 +136,3 @@ export function calculateTransitionProgress(
     remainingDays,
   };
 }
-

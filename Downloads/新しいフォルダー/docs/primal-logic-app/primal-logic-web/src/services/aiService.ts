@@ -1,6 +1,6 @@
 /**
- * Primal Logic - AI Service (Gemini API)
- * 
+ * CarnivOS (カーニボス) - AI Service (Gemini API)
+ *
  * Google Generative AI SDKを使用したAI機能の実装
  */
 
@@ -29,9 +29,9 @@ export const isGeminiAvailable = (): boolean => {
 
 /**
  * AIチャット機能: カーニボアダイエットに関する質問に回答
- * 
+ *
  * 情報源を限定し、専門家の主張や科学的根拠に基づいた回答を生成します。
- * 
+ *
  * @param userMessage ユーザーのメッセージ
  * @param chatHistory 会話履歴（文脈を理解するため）
  * @returns AIの応答メッセージ
@@ -87,8 +87,8 @@ function parseStructuredResponse(text: string): AIResponse {
     if (planMatch && planMatch[1]) {
       const planItems = planMatch[1]
         .split('\n')
-        .map(line => line.trim())
-        .filter(line => line.length > 0 && line.match(/^[-•\d]/));
+        .map((line) => line.trim())
+        .filter((line) => line.length > 0 && line.match(/^[-•\d]/));
       response.verification = {
         plan: planItems,
         execution: [],
@@ -100,7 +100,7 @@ function parseStructuredResponse(text: string): AIResponse {
     const executionMatch = verificationText.match(/<execution>([\s\S]*?)<\/execution>/i);
     if (executionMatch && executionMatch[1]) {
       const executionText = executionMatch[1].trim();
-      const qaPairs = executionText.split(/Q:|A:/i).filter(item => item.trim().length > 0);
+      const qaPairs = executionText.split(/Q:|A:/i).filter((item) => item.trim().length > 0);
       const execution: Array<{ question: string; answer: string }> = [];
 
       for (let i = 0; i < qaPairs.length; i += 2) {
@@ -118,9 +118,14 @@ function parseStructuredResponse(text: string): AIResponse {
     }
 
     // 検証ステータスを抽出
-    const statusMatch = verificationText.match(/<status>(verified|uncertain|needs_human_review)<\/status>/i);
+    const statusMatch = verificationText.match(
+      /<status>(verified|uncertain|needs_human_review)<\/status>/i
+    );
     if (statusMatch && response.verification) {
-      response.verification.status = statusMatch[1] as 'verified' | 'uncertain' | 'needs_human_review';
+      response.verification.status = statusMatch[1] as
+        | 'verified'
+        | 'uncertain'
+        | 'needs_human_review';
     }
   }
 
@@ -131,9 +136,9 @@ function parseStructuredResponse(text: string): AIResponse {
     const citationItems: Array<{ sentence: string; source: string; confidence: number }> = [];
 
     // 各引用を抽出（形式: sentence|source|confidence）
-    const citationLines = citationsText.split('\n').filter(line => line.trim().length > 0);
+    const citationLines = citationsText.split('\n').filter((line) => line.trim().length > 0);
     for (const line of citationLines) {
-      const parts = line.split('|').map(p => p.trim());
+      const parts = line.split('|').map((p) => p.trim());
       if (parts.length >= 2) {
         citationItems.push({
           sentence: parts[0] || '',
@@ -155,9 +160,9 @@ function parseStructuredResponse(text: string): AIResponse {
     const todoItems: TodoItem[] = [];
 
     // 各Todoを抽出（形式: title|description|action_type|action_params）
-    const todoLines = todosText.split('\n').filter(line => line.trim().length > 0);
+    const todoLines = todosText.split('\n').filter((line) => line.trim().length > 0);
     for (const line of todoLines) {
-      const parts = line.split('|').map(p => p.trim());
+      const parts = line.split('|').map((p) => p.trim());
       if (parts.length >= 1) {
         const actionType = (parts[2] as TodoItem['actionType']) || 'custom';
         const todo: TodoItem = {
@@ -196,6 +201,36 @@ export interface ChatAIResponse {
 }
 
 export async function chatWithAI(
+  userMessage: string,
+  chatHistory: Array<{ role: 'user' | 'assistant'; content: string }> = [],
+  enableVerification: boolean = false,
+  enableCitations: boolean = true,
+  aiMode: 'purist' | 'realist' = 'purist',
+  thinkingMode: 'fast' | 'thinking' | 'pro' = 'fast',
+  diaryAndFoodData?: { logs: Array<{ date: string; diary?: string; foods: string[] }> },
+  userProfile?: {
+    height?: number;
+    weight?: number;
+    age?: number;
+    gender?: 'male' | 'female';
+    [key: string]: unknown;
+  }
+): Promise<string> {
+  const response = await chatWithAIStructured(
+    userMessage,
+    chatHistory,
+    enableVerification,
+    enableCitations,
+    aiMode,
+    thinkingMode,
+    diaryAndFoodData,
+    userProfile
+  );
+  return response.answer;
+}
+
+// Deprecated: Internal implementation retained for reference
+async function original_chatWithAI(
   userMessage: string,
   chatHistory: Array<{ role: 'user' | 'assistant'; content: string }> = [],
   enableVerification: boolean = false,
@@ -319,8 +354,9 @@ export async function chatWithAI(
 `;
 
     // 症状と対処法のデータベース
-    const remedyContext = REMEDY_LOGIC.map(remedy =>
-      `症状: ${remedy.symptom}\n論理: ${remedy.logic}\n対処法: ${remedy.remedies.join(', ')}`
+    const remedyContext = REMEDY_LOGIC.map(
+      (remedy) =>
+        `症状: ${remedy.symptom}\n論理: ${remedy.logic}\n対処法: ${remedy.remedies.join(', ')}`
     ).join('\n\n');
 
     // 知識ベースの重要なポイント
@@ -333,17 +369,25 @@ export async function chatWithAI(
 `;
 
     // 会話履歴をコンテキストとして含める
-    const historyContext = chatHistory.length > 0
-      ? `\n【これまでの会話履歴】\n${chatHistory
-        .slice(-5) // 直近5件のみ
-        .map(msg => `${msg.role === 'user' ? 'ユーザー' : 'アシスタント'}: ${msg.content}`)
-        .join('\n')}\n`
-      : '';
+    const historyContext =
+      chatHistory.length > 0
+        ? `\n【これまでの会話履歴】\n${chatHistory
+          .slice(-5) // 直近5件のみ
+          .map((msg) => `${msg.role === 'user' ? 'ユーザー' : 'アシスタント'}: ${msg.content}`)
+          .join('\n')}\n`
+        : '';
 
     // 構造化プロンプト（XML形式）とCoT言語分離を適用
     const prompt = `<system_prompt>
   <role_definition>
     あなたはカーニボアダイエットの専門家として行動してください。情報源だけでなく、推論方法、思考パターン、主張の仕方、口調、論証の構造まで専門家の視点を真似してください。論理的整合性を最優先してください。専門家の名前は出さず、研究名や論文名のみを参照してください。
+    
+    **【最重要】論理的根拠の必須化**:
+    - 「カーニボアだから」という理由だけでは説明しない。必ずメカニズムや科学的根拠を含める。
+    - なぜその結論に至るのか、因果関係を明確に説明する。
+    - 単純な断言（「〜は必要です」「〜は避けるべきです」）だけではなく、理由を必ず含める。
+    - 例（悪い回答）: 「野菜は避けるべきです。カーニボアだからです。」
+    - 例（良い回答）: 「野菜には植物毒（オキサレート、レクチン、フィチン酸など）が含まれています。これらは消化器系に炎症を引き起こし、栄養素の吸収を阻害する可能性があります。人類の進化の過程で、私たちの祖先は主に動物性食品に依存してきたため、植物毒に対する耐性が限定的です。」
   </role_definition>
   <behavioral_guidelines>
     <default_to_action>
@@ -383,18 +427,22 @@ ${historyContext}
 
 <instruction>
   思考プロセスは&lt;thinking&gt;タグ内で日本語で行い、最終回答は&lt;answer&gt;タグ内で日本語で提供してください。
-  ${enableVerification ? `
+  ${enableVerification
+        ? `
   さらに、以下のステップでChain of Verification (CoVe)を実行してください：
   1. まずベースライン回答を作成
   2. 回答内の検証が必要な事実を特定
   3. 具体的な質問を含む検証計画を作成
   4. 各質問に独立して回答することで検証を実行
   5. 検証結果に基づいて最終回答を提供
-  ` : ''}
+  `
+        : ''
+      }
   
   <thinking>
   [日本語で論理的に思考してください。以下を考慮：
   1. **ユーザーの意図を判定する（最重要）**:
+     - **食品摂取の報告**（例：「肉食べた」「塩摂取した」「サーモン200g食べた」「バター10g使った」）→ **必ずadd_foodアクションを生成する**。ユーザーが「記録して」と言わなくても、食品摂取の報告から自動的に記録アクションを生成する。
      - シンプルな感想（例：「やさいまずすぎ」）→ 感想のみ、質問なし → 1文で共感のみ
      - 質問形式（例：「今日は何を食べるべき？」）→ 「？」を含む、または疑問詞 → 2-3文で簡潔に回答
      - 「なぜ？」を含む（例：「なぜ野菜がまずいの？」）→ 「なぜ」「どうして」「理由」を含む → 4-5文で解説
@@ -405,7 +453,8 @@ ${historyContext}
   **重要**: シンプルな感想には長い説明は不要。共感して簡潔に答えるだけ。]
   </thinking>
   
-  ${enableVerification ? `
+  ${enableVerification
+        ? `
   <verification>
     <baseline>
     [まず、ここに日本語でベースライン回答を提供してください]
@@ -423,7 +472,9 @@ ${historyContext}
     [ステータスを設定: 全ての事実が確認された場合は"verified"、一部の事実が不明確な場合は"uncertain"、検証で重大な不確実性が明らかになった場合は"needs_human_review"]
     </status>
   </verification>
-  ` : ''}
+  `
+        : ''
+      }
   
   <answer>
   [日本語で簡潔に回答してください。${enableVerification ? '検証が行われた場合は、検証結果を最終回答に組み込んでください。' : ''} 会話的で親しみやすい口調を使用してください。
@@ -451,14 +502,22 @@ ${historyContext}
      - 回答: 4-5文。4ステップ論証スタイルを適用（検証 → 脱構築 → 再構築 → 引用）。
   
   **厳守事項**: 
-  - 無駄な前置き（「Primal Logicへようこそ」など）は不要。
+  - 無駄な前置き（「CarnivOSへようこそ」など）は不要。
   - 学術的な長文は避ける。要点のみ伝える。
   - シンプルな質問には簡潔に答える。
   - カーニボアダイエットの原則に基づいて回答（肉、魚、卵、内臓のみ；植物性食品は避ける）
-  - 専門家の名前は出さない。論文や研究名は出して良いが、「～もいうように」という表現は使わない]
+  - 専門家の名前は出さない。論文や研究名は出して良いが、「～もいうように」という表現は使わない
+  
+  **【最重要】論理的説明の必須化**:
+  - 「カーニボアだから」「肉食だから」という理由だけでは説明しない。
+  - 必ずメカニズム、科学的根拠、因果関係を含める。
+  - 単純な断言ではなく、理由を明確に示す。
+  - 例: 「ナトリウムが必要」→「ナトリウムがなぜ必要か（電解質バランス、水分保持、神経伝達など）」を説明
+  - 例: 「植物性食品は避ける」→「植物毒の種類と影響、なぜ問題になるか」を説明]
   </answer>
   
-  ${enableCitations ? `
+  ${enableCitations
+        ? `
   <citations>
   [回答内の専門知識や研究を参照する各センテンスについて、以下の形式で引用情報を提供してください：
   センテンス|情報源|信頼度
@@ -466,7 +525,9 @@ ${historyContext}
   カーニボアダイエットではビタミンCの必要量が大幅に減少します|Glucose-Ascorbate Antagonism理論|0.9
   肉のみの食事で1年間健康だったという研究があります|Stefansson (1928) Bellevue Hospital Study|0.95]
   </citations>
-  ` : ''}
+  `
+        : ''
+      }
   
   <todos>
   [回答内で実行可能なアクション（Todo）がある場合、以下の形式で提供してください：
@@ -474,15 +535,35 @@ ${historyContext}
   
   アクションタイプ:
   - timer: タイマー開始（例：16時間断食タイマー）
-  - add_food: 食品追加（例：塩を2g追加）
+  - add_food: 食品追加（例：塩を2g追加、サーモン200g食べた、卵3個食べた）
   - set_protocol: リカバリープロトコル設定
   - open_screen: 画面を開く（例：設定画面）
+  - update_input: 日次入力データの更新（例：睡眠、太陽光、排泄状態など）
   - custom: カスタムアクション
+  
+  **【最重要】食品摂取の報告を自動検出**:
+  - ユーザーが「肉食べた」「塩摂取した」「サーモン200g食べた」「バター10g使った」など、食品摂取を報告した場合、**必ずadd_foodアクションを生成する**。
+  - 「記録して」という明示的な指示がなくても、食品摂取の報告から自動的に記録アクションを生成する。
+  - 量が不明な場合は、推測値（例：肉300g、塩2g）を使用するか、フォローアップ質問を生成する。
+  
+  **【重要】食品追加（add_food）のパラメータ形式**:
+  - item: 食品名（日本語可、例：「サーモン」「牛肉」「卵」「塩」「バター」）
+  - amount: 量（数値、例：200、3、2。不明な場合は推測値を使用）
+  - unit: 単位（"g"または"個"、例："g"、"個"）
+  
+  食品名は、ユーザーが話した通りの名前で良い（「サーモン」「肉」「卵」「塩」「バター」など）。
+  **重要**: ユーザーが「肉」と言った場合は「牛肉」と勝手に判断せず、「肉」のまま記録する。具体的な種類（牛肉、豚肉、鶏肉など）が不明な場合は、フォローアップ質問を生成する。
+  **重要**: 塩、バター、部位などの詳細が不明な場合も、フォローアップ質問を生成する。
+  データベースに存在しない場合は、空の栄養素データで追加される。
   
   例:
   16時間断食タイマーを開始|前日の糖質摂取をリセットするため|timer|{"hours":16}
-  塩を2g摂取|電解質バランスを整えるため|add_food|{"item":"塩","amount":2,"unit":"g"}
-  リカバリープロトコルを設定|糖質摂取後の回復のため|set_protocol|{"violationType":"sugar_carbs"}]
+  塩を2g摂取||add_food|{"item":"塩","amount":2,"unit":"g"}
+  サーモン200g食べた||add_food|{"item":"サーモン","amount":200,"unit":"g"}
+  肉300g食べた||add_food|{"item":"肉","amount":300,"unit":"g"}
+  卵3個食べた||add_food|{"item":"卵","amount":3,"unit":"個"}
+  リカバリープロトコルを設定|糖質摂取後の回復のため|set_protocol|{"violationType":"sugar_carbs"}
+  日次入力を更新|睡眠・太陽光・排泄状態を記録|update_input|{"sleepScore":95,"sleepHours":8,"sunMinutes":30,"bowelMovement":{"status":"normal"},"activityLevel":"moderate"}]
   </todos>
 </instruction>`;
 
@@ -513,7 +594,11 @@ ${historyContext}
     }
 
     // 引用がない回答を検出（Phase 3: RAGと引用の強制）
-    if (enableCitations && parsedResponse.answer && (!parsedResponse.citations || parsedResponse.citations.length === 0)) {
+    if (
+      enableCitations &&
+      parsedResponse.answer &&
+      (!parsedResponse.citations || parsedResponse.citations.length === 0)
+    ) {
       if (import.meta.env.DEV) {
         console.warn('警告: 回答が提供されましたが引用がありません。幻覚の可能性があります。');
       }
@@ -580,8 +665,15 @@ export async function chatWithAIStructured(
   enableVerification: boolean = false,
   enableCitations: boolean = true,
   aiMode: 'purist' | 'realist' = 'purist',
+  thinkingMode: 'fast' | 'thinking' | 'pro' = 'fast',
   diaryAndFoodData?: { logs: Array<{ date: string; diary?: string; foods: string[] }> }, // Detective AI用データ
-  userProfile?: { height?: number; weight?: number; age?: number; gender?: 'male' | 'female';[key: string]: unknown } // ユーザープロファイル
+  userProfile?: {
+    height?: number;
+    weight?: number;
+    age?: number;
+    gender?: 'male' | 'female';
+    [key: string]: unknown;
+  } // ユーザープロファイル
 ): Promise<ChatAIResponse> {
   if (import.meta.env.DEV) {
     console.log('chatWithAIStructured called with message:', userMessage);
@@ -596,13 +688,30 @@ export async function chatWithAIStructured(
   }
 
   try {
-    const model = genAI!.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    // 思考モードに応じてモデルを選択
+    let modelName: string;
+    switch (thinkingMode) {
+      case 'fast':
+        modelName = 'gemini-2.5-flash';
+        break;
+      case 'thinking':
+        // 思考モード: より深い思考が必要な場合
+        modelName = 'gemini-2.0-flash-exp'; // または 'gemini-2.0-flash-thinking-exp' が利用可能な場合
+        break;
+      case 'pro':
+        // Pro: 高度な数学とコードについて、さらに深く思考
+        modelName = 'gemini-2.0-pro-exp'; // または 'gemini-2.0-pro' が利用可能な場合
+        break;
+      default:
+        modelName = 'gemini-2.5-flash';
+    }
+    const model = genAI!.getGenerativeModel({ model: modelName });
 
     // ユーザープロファイル情報を追加
-    const userProfileContext = userProfile ? `
+    const userProfileContext = userProfile
+      ? `
 【ユーザープロファイル情報】
-以下のユーザー情報を参照して回答してください。ユーザーが「身長は？」「体重は？」「年齢は？」などの質問をした場合、この情報を参照して回答してください。
-
+以下のユーザー情報を参照して回答してください。
 ${userProfile.height ? `- 身長: ${userProfile.height}cm` : ''}
 ${userProfile.weight ? `- 体重: ${userProfile.weight}kg` : ''}
 ${userProfile.age ? `- 年齢: ${userProfile.age}歳` : ''}
@@ -615,17 +724,25 @@ ${userProfile.sleepHours ? `- 睡眠時間: ${userProfile.sleepHours}時間/日`
 ${userProfile.exerciseIntensity ? `- 運動強度: ${userProfile.exerciseIntensity}` : ''}
 ${userProfile.exerciseFrequency ? `- 運動頻度: ${userProfile.exerciseFrequency}回/週` : ''}
 ${userProfile.thyroidFunction ? `- 甲状腺機能: ${userProfile.thyroidFunction}` : ''}
-${userProfile.sunExposureFrequency ? `- 日光暴露頻度: ${userProfile.sunExposureFrequency}` : ''}
-${userProfile.digestiveIssues ? `- 消化器系の問題: あり` : ''}
-${userProfile.inflammationLevel ? `- 炎症レベル: ${userProfile.inflammationLevel}` : ''}
-${userProfile.mentalHealthStatus ? `- メンタルヘルス状態: ${userProfile.mentalHealthStatus}` : ''}
-${userProfile.dairyTolerance !== undefined ? `- 乳糖耐性: ${userProfile.dairyTolerance ? 'あり' : 'なし'}` : ''}
 ${userProfile.metabolicStatus ? `- 代謝状態: ${userProfile.metabolicStatus === 'adapted' ? '適応済み' : '移行中'}` : ''}
 ${userProfile.daysOnCarnivore ? `- カーニボア開始からの日数: ${userProfile.daysOnCarnivore}日` : ''}
-` : '';
+`
+      : '';
+
+    // ソーシャルプロトコルの定義を追加
+    const socialProtocolContext = `
+【ソーシャルプロトコル（Social Protocols）】
+- **孤独 vs 毒**: 過度な孤独によるコルチゾール上昇は、たまの「不適切な食事（ピザ等）」よりも代謝に悪影響を与える可能性がある。
+- **戦略的逸脱**: 友人との食事（ピザ等）は「失敗」ではなく「戦略的コスト」として扱う。
+- **理想**: 肉食の友人とステーキに行くのがベスト。
+- **次善**: 避けられない社交での食事は楽しみ、翌日に「リカバリープロトコル（16時間断食 + 厳格なカーニボア）」を実行する。
+- **アドバイス方針**: ガチガチの禁止ではなく、「食べてしまった後のリカバリー」と「孤独の回避」をバランス良く提案する。
+`;
 
     // Detective AI: 日記と食生活のリンク分析データを追加
-    const detectiveContext = diaryAndFoodData && diaryAndFoodData.logs.length > 0 ? `
+    const detectiveContext =
+      diaryAndFoodData && diaryAndFoodData.logs.length > 0
+        ? `
 【Detective AI: 日記と食生活のリンク分析データ】
 
 以下の日記と食生活のデータを分析し、因果関係を特定してください。
@@ -633,25 +750,30 @@ ${userProfile.daysOnCarnivore ? `- カーニボア開始からの日数: ${userP
 
 **データ期間**: 過去${diaryAndFoodData.logs.length}日分のデータを分析します。
 
-${diaryAndFoodData.logs.map((log, idx) => {
-      const date = new Date(log.date);
-      const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
-      const foods = log.foods.join('、');
-      const diary = log.diary || '（日記なし）';
-      return `【${dateStr}】
+${diaryAndFoodData.logs
+          .map((log, idx) => {
+            const date = new Date(log.date);
+            const dateStr = `${date.getMonth() + 1}/${date.getDate()}`;
+            const foods = log.foods.join('、');
+            const diary = log.diary || '（日記なし）';
+            return `【${dateStr}】
 食べたもの: ${foods || '（記録なし）'}
 日記: ${diary}`;
-    }).join('\n\n')}
+          })
+          .join('\n\n')}
 
 【分析のポイント】
 - 特定の食品を食べた後、24-48時間以内に症状や体調不良が記録されているか確認
 - 繰り返し現れるパターンを特定（例：「乳製品を食べた翌々日に頭痛」）
 - 日記に記載されている症状（頭痛、便秘、関節痛、疲労感など）と食生活の関連性
 - 遅延型食物アレルギーや不耐症の可能性も考慮
-` : '';
+`
+        : '';
 
     // AIモードに応じて情報源を変更
-    const expertContext = aiMode === 'purist' ? `
+    const expertContext =
+      aiMode === 'purist'
+        ? `
 【カーニボアダイエットの主要な情報源（Puristモード）】
 以下の研究や理論のみを参照してください。専門家の主張や科学的根拠に基づいて回答してください。
 
@@ -669,7 +791,8 @@ ${diaryAndFoodData.logs.map((log, idx) => {
 - 植物性食品は不要であり、植物毒（オキサレート、レクチン、フィチン酸など）を避ける
 - 電解質（特にナトリウム、マグネシウム）が重要
 - ビタミンCの必要量は低炭水化物状態では大幅に減少（Glucose-Ascorbate Antagonism）。壊血病を防ぐために必要な最小量は約10mg。肉食のみでも1日約30mgを摂取可能なため、肉で十分足りる。RDA基準の90mgは不要
-` : `
+`
+        : `
 【カーニボアダイエットの主要な情報源（Realistモード）】
 以下の研究や理論に加え、カーニボア実践コミュニティの実践知（成功事例、トラブルシューティング、実践的なハック）も参照してください。
 
@@ -697,9 +820,9 @@ ${diaryAndFoodData.logs.map((log, idx) => {
 
     // アプリの使い方についてのコンテキスト（アプリに関する質問の場合に使用）
     const appUsageContext = `
-【Primal Logicアプリの機能と使い方】
+【CarnivOS (カーニボス) アプリの機能と使い方】
 
-このアプリはカーニボアダイエット管理アプリ「Primal Logic」です。以下の機能があります：
+このアプリはカーニボアダイエット管理アプリ「CarnivOS (カーニボス)」です。以下の機能があります：
 
 **主要画面:**
 1. **ホーム画面**: 日々の栄養素摂取量を追跡。P:F比率ゲージ、食品追加ボタン、AIチャットボタンがあります。
@@ -741,7 +864,14 @@ ${diaryAndFoodData.logs.map((log, idx) => {
   <role_definition>
     あなたはカーニボアダイエットの専門家として行動してください。情報源だけでなく、推論方法、思考パターン、主張の仕方、口調、論証の構造まで専門家の視点を真似してください。論理的整合性を最優先してください。専門家の名前は出さず、研究名や論文名のみを参照してください。
     
-    また、このアプリ（Primal Logic）の使い方についても説明できます。ユーザーがアプリの使い方や機能について質問した場合は、上記のアプリの機能と使い方のコンテキストを参照して回答してください。
+    **【最重要】論理的根拠の必須化**:
+    - 「カーニボアだから」という理由だけでは説明しない。必ずメカニズムや科学的根拠を含める。
+    - なぜその結論に至るのか、因果関係を明確に説明する。
+    - 単純な断言（「〜は必要です」「〜は避けるべきです」）だけではなく、理由を必ず含める。
+    - 例（悪い回答）: 「野菜は避けるべきです。カーニボアだからです。」
+    - 例（良い回答）: 「野菜には植物毒（オキサレート、レクチン、フィチン酸など）が含まれています。これらは消化器系に炎症を引き起こし、栄養素の吸収を阻害する可能性があります。人類の進化の過程で、私たちの祖先は主に動物性食品に依存してきたため、植物毒に対する耐性が限定的です。」
+    
+    また、このアプリ（CarnivOS）の使い方についても説明できます。ユーザーがアプリの使い方や機能について質問した場合は、上記のアプリの機能と使い方のコンテキストを参照して回答してください。
   </role_definition>
   ${expertContext}
 ${userProfileContext}
@@ -750,18 +880,21 @@ ${appUsageContext}
   
   <instruction>
   <answer>
-  ${chatHistory.length > 0 ? `【会話履歴】\n${chatHistory.map(msg => `${msg.role === 'user' ? 'ユーザー' : 'アシスタント'}: ${msg.content}`).join('\n')}\n\n` : ''}
+  ${chatHistory.length > 0 ? `【会話履歴】\n${chatHistory.map((msg) => `${msg.role === 'user' ? 'ユーザー' : 'アシスタント'}: ${msg.content}`).join('\n')}\n\n` : ''}
   
   【ユーザーの質問】
 ${userMessage}
-${diaryAndFoodData && diaryAndFoodData.logs.length > 0 ? `
+${diaryAndFoodData && diaryAndFoodData.logs.length > 0
+        ? `
 
 【Detective AI分析モード】
 上記の質問に対して、提供された日記と食生活のデータを分析し、因果関係を特定してください。
 特に以下のような質問の場合（「なぜ」「原因」「犯人」「何が原因」など）、日記と食生活のデータからパターンを発見し、具体的な原因を特定してください。
 
 分析の際は、24-48時間の遅延反応を考慮し、食べた日の翌日・翌々日に症状が出る可能性を考慮してください。
-` : ''}
+`
+        : ''
+      }
   
   【回答形式】
   上記の質問に対して、カーニボアダイエットの専門家として回答してください。
@@ -787,16 +920,25 @@ ${diaryAndFoodData && diaryAndFoodData.logs.length > 0 ? `
      - 回答: 4-5文。4ステップ論証スタイルを適用（検証 → 脱構築 → 再構築 → 引用）。
   
   **厳守事項**: 
-  - 無駄な前置き（「Primal Logicへようこそ」など）は不要。直接答える。
+  - 無駄な前置き（「CarnivOSへようこそ」など）は不要。直接答える。
   - 学術的な長文は避ける。要点のみ伝える。
   - シンプルな質問には簡潔に答える（2-3文）。
   - 「なぜ？」には要点のみ（3-4文）。長文禁止。
   - 症状や問題には実践的な対処法を提示（2-3文）。
   - カーニボアダイエットの原則に基づいて回答（肉、魚、卵、内臓のみ；植物性食品は避ける）
-  - 専門家の名前は出さない。論文や研究名は出して良いが、「～もいうように」という表現は使わない]
+  - 専門家の名前は出さない。論文や研究名は出して良いが、「～もいうように」という表現は使わない
+  
+  **【最重要】論理的説明の必須化**:
+  - 「カーニボアだから」「肉食だから」という理由だけでは説明しない。
+  - 必ずメカニズム、科学的根拠、因果関係を含める。
+  - 単純な断言ではなく、理由を明確に示す。
+  - 例: 「ナトリウムが必要」→「ナトリウムがなぜ必要か（電解質バランス、水分保持、神経伝達など）」を説明
+  - 例: 「植物性食品は避ける」→「植物毒の種類と影響、なぜ問題になるか」を説明
+]
   </answer>
   
-  ${enableCitations ? `
+  ${enableCitations
+        ? `
   <citations>
   [回答内の専門知識や研究を参照する各センテンスについて、以下の形式で引用情報を提供してください：
   センテンス|情報源|信頼度
@@ -804,7 +946,9 @@ ${diaryAndFoodData && diaryAndFoodData.logs.length > 0 ? `
   カーニボアダイエットではビタミンCの必要量が大幅に減少します|Glucose-Ascorbate Antagonism理論|0.9
   肉のみの食事で1年間健康だったという研究があります|Stefansson (1928) Bellevue Hospital Study|0.95]
   </citations>
-  ` : ''}
+  `
+        : ''
+      }
   
   <todos>
   [回答内で実行可能なアクション（Todo）がある場合、以下の形式で提供してください：
@@ -812,15 +956,35 @@ ${diaryAndFoodData && diaryAndFoodData.logs.length > 0 ? `
   
   アクションタイプ:
   - timer: タイマー開始（例：16時間断食タイマー）
-  - add_food: 食品追加（例：塩を2g追加）
+  - add_food: 食品追加（例：塩を2g追加、サーモン200g食べた、卵3個食べた）
   - set_protocol: リカバリープロトコル設定
   - open_screen: 画面を開く（例：設定画面）
+  - update_input: 日次入力データの更新（例：睡眠、太陽光、排泄状態など）
   - custom: カスタムアクション
+  
+  **【最重要】食品摂取の報告を自動検出**:
+  - ユーザーが「肉食べた」「塩摂取した」「サーモン200g食べた」「バター10g使った」など、食品摂取を報告した場合、**必ずadd_foodアクションを生成する**。
+  - 「記録して」という明示的な指示がなくても、食品摂取の報告から自動的に記録アクションを生成する。
+  - 量が不明な場合は、推測値（例：肉300g、塩2g）を使用するか、フォローアップ質問を生成する。
+  
+  **【重要】食品追加（add_food）のパラメータ形式**:
+  - item: 食品名（日本語可、例：「サーモン」「牛肉」「卵」「塩」「バター」）
+  - amount: 量（数値、例：200、3、2。不明な場合は推測値を使用）
+  - unit: 単位（"g"または"個"、例："g"、"個"）
+  
+  食品名は、ユーザーが話した通りの名前で良い（「サーモン」「肉」「卵」「塩」「バター」など）。
+  **重要**: ユーザーが「肉」と言った場合は「牛肉」と勝手に判断せず、「肉」のまま記録する。具体的な種類（牛肉、豚肉、鶏肉など）が不明な場合は、フォローアップ質問を生成する。
+  **重要**: 塩、バター、部位などの詳細が不明な場合も、フォローアップ質問を生成する。
+  データベースに存在しない場合は、空の栄養素データで追加される。
   
   例:
   16時間断食タイマーを開始|前日の糖質摂取をリセットするため|timer|{"hours":16}
-  塩を2g摂取|電解質バランスを整えるため|add_food|{"item":"塩","amount":2,"unit":"g"}
-  リカバリープロトコルを設定|糖質摂取後の回復のため|set_protocol|{"violationType":"sugar_carbs"}]
+  塩を2g摂取||add_food|{"item":"塩","amount":2,"unit":"g"}
+  サーモン200g食べた||add_food|{"item":"サーモン","amount":200,"unit":"g"}
+  肉300g食べた||add_food|{"item":"肉","amount":300,"unit":"g"}
+  卵3個食べた||add_food|{"item":"卵","amount":3,"unit":"個"}
+  リカバリープロトコルを設定|糖質摂取後の回復のため|set_protocol|{"violationType":"sugar_carbs"}
+  日次入力を更新|睡眠・太陽光・排泄状態を記録|update_input|{"sleepScore":95,"sleepHours":8,"sunMinutes":30,"bowelMovement":{"status":"normal"},"activityLevel":"moderate"}]
   </todos>
 </instruction>`;
 
@@ -858,10 +1022,9 @@ ${diaryAndFoodData && diaryAndFoodData.logs.length > 0 ? `
   }
 }
 
-
 /**
  * 写真解析機能: 食品写真から栄養素を推測
- * 
+ *
  * @param imageFile 画像ファイル（File または Blob）
  * @returns 推測された食品情報
  */
@@ -944,6 +1107,7 @@ export async function analyzeFoodImage(imageFile: File | Blob): Promise<{
 - カーニボアダイエットで重要な栄養素（タンパク質、脂質、ナトリウム、マグネシウム、ビタミンB12、オメガ3/6比率など）を優先的に含める
 - 可能な限り多くの栄養素を含める（特にビタミンB群、ミネラル、アミノ酸）
 - 写真から判断しにくい場合（調理油の使用有無、ソースの中身、肉の具体的な部位、隠し味、付け合わせの下にあるものなど）は必ずfollowupQuestionsに質問を追加してください。
+- **最重要**: 食品名が「肉」や「魚」など曖昧な場合は、必ずfollowupQuestionsに具体的な種類を尋ねる質問を追加してください（例：「これは牛肉ですか？豚肉ですか？鶏肉ですか？」「これはサーモンですか？マグロですか？」）。
 - 質問は「バターや油を使いましたか？」だけでなく、文脈に合わせて多様に生成してください（例：「このソースは自家製ですか？砂糖は入っていますか？」「肉の部位はバラ肉ですか、ロースですか？」「卵はLサイズですか？」「衣に小麦粉を使っていますか？」など）。
 - 質問は最大3つまでとしてください。`;
 
@@ -970,11 +1134,15 @@ export async function analyzeFoodImage(imageFile: File | Blob): Promise<{
           estimatedWeight: Math.round((parsed.estimatedWeight || 300) / 10) * 10, // 10g単位で丸める
           type: parsed.type || 'animal',
           nutrients: parsed.nutrients || {},
-          followupQuestions: parsed.followupQuestions || []
+          followupQuestions: parsed.followupQuestions || [],
         };
       }
     } catch (parseError) {
-      logError(parseError, { component: 'aiService', action: 'analyzeFoodImage', step: 'parseJSON' });
+      logError(parseError, {
+        component: 'aiService',
+        action: 'analyzeFoodImage',
+        step: 'parseJSON',
+      });
     }
 
     // JSONパースに失敗した場合、テキストから情報を抽出
@@ -986,7 +1154,7 @@ export async function analyzeFoodImage(imageFile: File | Blob): Promise<{
       estimatedWeight: Math.round(extractedWeight / 10) * 10, // 10g単位で丸める
       type: 'animal' as const,
       nutrients: {},
-      followupQuestions: []
+      followupQuestions: [],
     };
   } catch (error) {
     logError(error, { component: 'aiService', action: 'analyzeFoodImage' });
@@ -1026,7 +1194,9 @@ export async function refineFoodAnalysis(
 - タイプ: ${originalResult.type}
 
 ユーザーからの追加情報:
-${Object.entries(userAnswers).map(([q, a]) => `- 質問: "${q}" -> 回答: "${a}"`).join('\n')}
+${Object.entries(userAnswers)
+        .map(([q, a]) => `- 質問: "${q}" -> 回答: "${a}"`)
+        .join('\n')}
 
 以下の情報をJSON形式で返してください：
 {
@@ -1063,12 +1233,11 @@ ${Object.entries(userAnswers).map(([q, a]) => `- 質問: "${q}" -> 回答: "${a}
         foodName: parsed.foodName,
         estimatedWeight: parsed.estimatedWeight,
         type: parsed.type || 'animal',
-        nutrients: parsed.nutrients || {}
+        nutrients: parsed.nutrients || {},
       };
     }
 
     throw new Error('再計算結果のパースに失敗しました');
-
   } catch (error) {
     logError(error, { component: 'aiService', action: 'refineFoodAnalysis' });
     throw new Error('再計算に失敗しました。');
@@ -1116,7 +1285,7 @@ function extractWeight(text: string): number {
 
 /**
  * 食品名から栄養素を推測（半自動カスタム食品登録用）
- * 
+ *
  * @param foodName 食品名（日本語または英語）
  * @returns 推測された栄養素データ（100gあたり）
  */
@@ -1175,10 +1344,15 @@ export async function analyzeFoodName(
     const prompt = `以下の食品名から、栄養素データを推測してください。
 
 食品名: ${foodName}
-${followupAnswers && Object.keys(followupAnswers).length > 0 ? `
+${followupAnswers && Object.keys(followupAnswers).length > 0
+        ? `
 追加情報:
-${Object.entries(followupAnswers).map(([question, answer]) => `- ${question}: ${answer}`).join('\n')}
-` : ''}
+${Object.entries(followupAnswers)
+          .map(([question, answer]) => `- ${question}: ${answer}`)
+          .join('\n')}
+`
+        : ''
+      }
 
 以下の情報をJSON形式で返してください：
 {
@@ -1230,7 +1404,7 @@ ${Object.entries(followupAnswers).map(([question, answer]) => `- ${question}: ${
     "oxalates": シュウ酸（mg/100g、植物性食品の場合のみ）,
     "lectins": レクチン（mg/100g、植物性食品の場合のみ）
   },
-  "followupQuestions": 追加で必要な情報がある場合、質問の配列（例: ["部位は？", "調理方法は？"]）。食品名だけでは推測が難しい場合のみ。
+  "followupQuestions": 追加で必要な情報がある場合、質問の配列（例: ["これは牛肉ですか？豚肉ですか？鶏肉ですか？", "部位はどれですか？（サーロイン、ロース、モモなど）", "バターや塩を使いましたか？"]）。食品名だけでは推測が難しい場合のみ。
 }
 
 重要:
@@ -1239,6 +1413,9 @@ ${Object.entries(followupAnswers).map(([question, answer]) => `- ${question}: ${
 - 数値は100gあたりの値で返してください
 - 不明な栄養素は省略してください（nullではなく、キー自体を省略）
 - 一般的な食品データベース（USDA FoodData Centralなど）の値を参考にしてください
+- **最重要**: 食品名が「肉」や「魚」など曖昧な場合は、必ずfollowupQuestionsに具体的な種類を尋ねる質問を追加してください（例: ["これは牛肉ですか？豚肉ですか？鶏肉ですか？"]）。
+- **最重要**: 肉の場合、部位が不明な場合は必ずfollowupQuestionsに部位を尋ねる質問を追加してください（例: ["部位はどれですか？（サーロイン、ロース、モモ、バラ肉など）"]）。
+- **最重要**: 調理にバターや塩を使った可能性がある場合は、必ずfollowupQuestionsに質問を追加してください（例: ["バターや塩を使いましたか？", "調理油は使いましたか？"]）。
 - 食品名だけでは推測が難しい場合（例: "肉"、"魚"など）、followupQuestionsに追加質問を入れてください（例: ["部位は？", "調理方法は？"]）`;
 
     const result = await model.generateContent(prompt);
@@ -1258,7 +1435,11 @@ ${Object.entries(followupAnswers).map(([question, answer]) => `- ${question}: ${
         };
       }
     } catch (parseError) {
-      logError(parseError, { component: 'aiService', action: 'estimateNutrientsFromFoodName', step: 'parseJSON' });
+      logError(parseError, {
+        component: 'aiService',
+        action: 'estimateNutrientsFromFoodName',
+        step: 'parseJSON',
+      });
     }
 
     // JSONパースに失敗した場合、デフォルト値を返す
@@ -1277,4 +1458,3 @@ ${Object.entries(followupAnswers).map(([question, answer]) => `- ${question}: ${
     throw new Error('栄養素推測に失敗しました。もう一度お試しください。');
   }
 }
-

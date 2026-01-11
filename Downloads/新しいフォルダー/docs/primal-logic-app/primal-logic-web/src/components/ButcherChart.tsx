@@ -1,12 +1,17 @@
 /**
  * Primal Logic - Butcher Chart Component
- * 
+ *
  * ビジュアル（解剖図）選択: 牛・豚・鶏の部位をクリックで選択
  * 数量入力: スマートプリセット + Pack & Portion スライダー
  */
 
 import { useState, useEffect } from 'react';
-import { getFoodsByPart, type AnimalType, type PartLocation, type DeepFoodItem } from '../data/deepNutritionData';
+import {
+  getFoodsByPart,
+  type AnimalType,
+  type PartLocation,
+  type DeepFoodItem,
+} from '../data/deepNutritionData';
 import { getRecommendedAmount } from '../utils/foodHistory';
 import './ButcherChart.css';
 
@@ -17,7 +22,10 @@ interface ButcherChartProps {
 }
 
 // 部位の定義（SVG座標またはクリッカブルマップ用）
-const PART_AREAS: Record<AnimalType, Array<{ location: PartLocation; label: string; foods: string[] }>> = {
+const PART_AREAS: Record<
+  AnimalType,
+  Array<{ location: PartLocation; label: string; foods: string[] }>
+> = {
   beef: [
     { location: 'rib', label: '背中', foods: ['beef_ribeye'] },
     { location: 'belly', label: 'お腹', foods: ['beef_belly'] },
@@ -36,9 +44,7 @@ const PART_AREAS: Record<AnimalType, Array<{ location: PartLocation; label: stri
     { location: 'internal', label: '内臓', foods: ['chicken_liver'] },
     { location: 'whole', label: '丸ごと', foods: [] },
   ],
-  egg: [
-    { location: 'whole', label: '全卵', foods: [] },
-  ],
+  egg: [{ location: 'whole', label: '全卵', foods: [] }],
   fish: [
     { location: 'body', label: '身', foods: ['salmon'] },
     { location: 'internal', label: '内臓', foods: [] },
@@ -69,14 +75,16 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
   const [portion, setPortion] = useState<number | null>(null); // 割合（1/4, 1/2, 1, 2など）
 
   const parts = PART_AREAS[animalType] || [];
-  const availableFoods = selectedPart
-    ? getFoodsByPart(animalType, selectedPart)
-    : [];
+  const availableFoods = selectedPart ? getFoodsByPart(animalType, selectedPart) : [];
 
   // 食品選択時にヒストリーレコメンドを取得
   useEffect(() => {
     if (selectedFood) {
-      getRecommendedAmount(selectedFood.name_ja, selectedFood.part_location, selectedFood.animal_type).then((recommended) => {
+      getRecommendedAmount(
+        selectedFood.name_ja,
+        selectedFood.part_location,
+        selectedFood.animal_type
+      ).then((recommended) => {
         setAmount(recommended.amount);
         setUnit(recommended.unit);
         if (recommended.unit === 'g') {
@@ -126,14 +134,24 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
         ← 戻る
       </button>
       <h2 className="butcher-chart-title">
-        {animalType === 'beef' ? '牛肉' : 
-         animalType === 'pork' ? '豚肉' : 
-         animalType === 'chicken' ? '鶏肉' : 
-         animalType === 'egg' ? '卵' : 
-         animalType === 'fish' ? '魚' :
-         animalType === 'lamb' ? '羊/山羊' :
-         animalType === 'duck' ? '鳥類' :
-         animalType === 'game' ? 'ゲーム' : '動物'}の部位を選択
+        {animalType === 'beef'
+          ? '牛肉'
+          : animalType === 'pork'
+            ? '豚肉'
+            : animalType === 'chicken'
+              ? '鶏肉'
+              : animalType === 'egg'
+                ? '卵'
+                : animalType === 'fish'
+                  ? '魚'
+                  : animalType === 'lamb'
+                    ? '羊/山羊'
+                    : animalType === 'duck'
+                      ? '鳥類'
+                      : animalType === 'game'
+                        ? 'ゲーム'
+                        : '動物'}
+        の部位を選択
       </h2>
 
       {/* 簡易的な部位選択UI（将来的にSVGクリッカブルマップに置き換え） */}
@@ -201,7 +219,8 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
                     setPortion(null);
                   }}
                 >
-                  {preset}{animalType === 'egg' ? '個' : 'g'}
+                  {preset}
+                  {animalType === 'egg' ? '個' : 'g'}
                 </button>
               ))}
             </div>
@@ -280,17 +299,15 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
 
           {/* 確認ボタン */}
           <button className="butcher-chart-confirm-button" onClick={handleConfirm}>
-            {selectedFood.name_ja} {amount}{unit} を追加
+            {selectedFood.name_ja} {amount}
+            {unit} を追加
           </button>
         </div>
       )}
 
       {selectedPart && availableFoods.length === 0 && (
-        <div className="butcher-chart-empty">
-          この部位のデータはまだありません
-        </div>
+        <div className="butcher-chart-empty">この部位のデータはまだありません</div>
       )}
     </div>
   );
 }
-

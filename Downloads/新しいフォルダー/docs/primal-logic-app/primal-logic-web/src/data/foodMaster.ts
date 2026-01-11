@@ -1,6 +1,6 @@
 /**
  * Fuzzy Data Master - 栄養素の「幅」を持つマスターデータ
- * 
+ *
  * 栄養素は「100~130g」のような幅（Range）として保持するが、
  * メイン画面では中央値のみシンプルに表示する。
  */
@@ -10,8 +10,8 @@
  */
 export type FuzzyNutrient = {
   value: number; // UI表示用（中央値）
-  min: number;   // 最小値
-  max: number;   // 最大値
+  min: number; // 最小値
+  max: number; // 最大値
 };
 
 /**
@@ -24,9 +24,9 @@ export interface FoodMasterItem {
   name_fr?: string; // フランス語名（オプション）
   name_de?: string; // ドイツ語名（オプション）
   protein: FuzzyNutrient; // per 100g
-  fat: FuzzyNutrient;     // per 100g
-  carbs: FuzzyNutrient;   // per 100g
-  default_unit: number;  // デフォルトの量（g）
+  fat: FuzzyNutrient; // per 100g
+  carbs: FuzzyNutrient; // per 100g
+  default_unit: number; // デフォルトの量（g）
   // 追加栄養素（オプション）
   saturated_fat?: FuzzyNutrient;
   omega_6?: FuzzyNutrient;
@@ -507,7 +507,7 @@ export const FOOD_MASTER: FoodMaster = {
       id: 'egg_yolk',
       name: 'Egg Yolk',
       name_ja: '卵黄',
-      name_fr: 'Jaune d\'œuf',
+      name_fr: "Jaune d'œuf",
       name_de: 'Eigelb',
       protein: { value: 16.0, min: 14, max: 18 },
       fat: { value: 26.5, min: 24, max: 29 },
@@ -533,7 +533,7 @@ export const FOOD_MASTER: FoodMaster = {
       id: 'egg_white',
       name: 'Egg White',
       name_ja: '卵白',
-      name_fr: 'Blanc d\'œuf',
+      name_fr: "Blanc d'œuf",
       name_de: 'Eiweiß',
       protein: { value: 10.9, min: 9.5, max: 12 },
       fat: { value: 0.2, min: 0.1, max: 0.3 },
@@ -920,14 +920,16 @@ export function getFoodMasterItemById(id: string): FoodMasterItem | undefined {
 /**
  * 動物タイプごとの部位リストを取得
  */
-export function getPartsByAnimal(animal: 'beef' | 'pork' | 'chicken' | 'egg' | 'fish' | 'dairy' | 'fat' | 'plant'): string[] {
+export function getPartsByAnimal(
+  animal: 'beef' | 'pork' | 'chicken' | 'egg' | 'fish' | 'dairy' | 'fat' | 'plant'
+): string[] {
   return Object.keys(FOOD_MASTER[animal] || {});
 }
 
 /**
  * 食品名（日本語・英語対応）から食品マスターデータを検索
  * 部分一致で検索し、最も一致度の高いものを返す
- * 
+ *
  * 検索優先順位:
  * 1. 完全一致（英語名・日本語名）
  * 2. キーワードマッピング（日本語・英語）
@@ -937,148 +939,148 @@ export function getPartsByAnimal(animal: 'beef' | 'pork' | 'chicken' | 'egg' | '
 export function searchFoodMasterByName(foodName: string): FoodMasterItem | undefined {
   const lowerName = foodName.toLowerCase().trim();
   if (lowerName.length === 0) return undefined;
-  
+
   // キーワードマッピング（日本語・英語対応）
   const keywordMap: Record<string, { animal: keyof FoodMaster; part: string }> = {
     // 牛肉（日本語）
-    'リブアイ': { animal: 'beef', part: 'ribeye' },
-    'リブ': { animal: 'beef', part: 'ribeye' },
-    'サーロイン': { animal: 'beef', part: 'sirloin' },
-    'ステーキ': { animal: 'beef', part: 'ribeye' },
-    '牛': { animal: 'beef', part: 'ribeye' },
-    '牛肉': { animal: 'beef', part: 'ribeye' },
-    'ひき肉': { animal: 'beef', part: 'ground' },
-    '牛肉バラ': { animal: 'beef', part: 'brisket' },
-    'ブリスケット': { animal: 'beef', part: 'brisket' },
-    '牛肉肩ロース': { animal: 'beef', part: 'chuck' },
-    'レバー': { animal: 'beef', part: 'liver' },
+    リブアイ: { animal: 'beef', part: 'ribeye' },
+    リブ: { animal: 'beef', part: 'ribeye' },
+    サーロイン: { animal: 'beef', part: 'sirloin' },
+    ステーキ: { animal: 'beef', part: 'ribeye' },
+    牛: { animal: 'beef', part: 'ribeye' },
+    牛肉: { animal: 'beef', part: 'ribeye' },
+    ひき肉: { animal: 'beef', part: 'ground' },
+    牛肉バラ: { animal: 'beef', part: 'brisket' },
+    ブリスケット: { animal: 'beef', part: 'brisket' },
+    牛肉肩ロース: { animal: 'beef', part: 'chuck' },
+    レバー: { animal: 'beef', part: 'liver' },
     // 牛肉（英語）
-    'ribeye': { animal: 'beef', part: 'ribeye' },
-    'rib': { animal: 'beef', part: 'ribeye' },
-    'sirloin': { animal: 'beef', part: 'sirloin' },
-    'steak': { animal: 'beef', part: 'ribeye' },
-    'beef': { animal: 'beef', part: 'ribeye' },
-    'ground': { animal: 'beef', part: 'ground' },
-    'brisket': { animal: 'beef', part: 'brisket' },
-    'chuck': { animal: 'beef', part: 'chuck' },
-    'liver': { animal: 'beef', part: 'liver' },
+    ribeye: { animal: 'beef', part: 'ribeye' },
+    rib: { animal: 'beef', part: 'ribeye' },
+    sirloin: { animal: 'beef', part: 'sirloin' },
+    steak: { animal: 'beef', part: 'ribeye' },
+    beef: { animal: 'beef', part: 'ribeye' },
+    ground: { animal: 'beef', part: 'ground' },
+    brisket: { animal: 'beef', part: 'brisket' },
+    chuck: { animal: 'beef', part: 'chuck' },
+    liver: { animal: 'beef', part: 'liver' },
     // 牛肉（フランス語）
-    'entrecôte': { animal: 'beef', part: 'ribeye' },
-    'bœuf': { animal: 'beef', part: 'ribeye' },
-    'foie': { animal: 'beef', part: 'liver' },
+    entrecôte: { animal: 'beef', part: 'ribeye' },
+    bœuf: { animal: 'beef', part: 'ribeye' },
+    foie: { animal: 'beef', part: 'liver' },
     // 牛肉（ドイツ語）
-    'rippensteak': { animal: 'beef', part: 'ribeye' },
-    'rindfleisch': { animal: 'beef', part: 'ribeye' },
-    'leber': { animal: 'beef', part: 'liver' },
+    rippensteak: { animal: 'beef', part: 'ribeye' },
+    rindfleisch: { animal: 'beef', part: 'ribeye' },
+    leber: { animal: 'beef', part: 'liver' },
     // 豚肉（日本語）
-    '豚バラ': { animal: 'pork', part: 'belly' },
-    'バラ': { animal: 'pork', part: 'belly' },
-    '豚': { animal: 'pork', part: 'belly' },
-    '豚肉': { animal: 'pork', part: 'belly' },
-    'ロース': { animal: 'pork', part: 'loin' },
-    '肩ロース': { animal: 'pork', part: 'shoulder' },
-    'スペアリブ': { animal: 'pork', part: 'ribs' },
-    '豚レバー': { animal: 'pork', part: 'liver' },
+    豚バラ: { animal: 'pork', part: 'belly' },
+    バラ: { animal: 'pork', part: 'belly' },
+    豚: { animal: 'pork', part: 'belly' },
+    豚肉: { animal: 'pork', part: 'belly' },
+    ロース: { animal: 'pork', part: 'loin' },
+    肩ロース: { animal: 'pork', part: 'shoulder' },
+    スペアリブ: { animal: 'pork', part: 'ribs' },
+    豚レバー: { animal: 'pork', part: 'liver' },
     // 豚肉（英語）
-    'pork': { animal: 'pork', part: 'belly' },
-    'belly': { animal: 'pork', part: 'belly' },
-    'loin': { animal: 'pork', part: 'loin' },
-    'shoulder': { animal: 'pork', part: 'shoulder' },
-    'ribs': { animal: 'pork', part: 'ribs' },
+    pork: { animal: 'pork', part: 'belly' },
+    belly: { animal: 'pork', part: 'belly' },
+    loin: { animal: 'pork', part: 'loin' },
+    shoulder: { animal: 'pork', part: 'shoulder' },
+    ribs: { animal: 'pork', part: 'ribs' },
     // 豚肉（フランス語）
-    'porc': { animal: 'pork', part: 'belly' },
-    'ventre': { animal: 'pork', part: 'belly' },
+    porc: { animal: 'pork', part: 'belly' },
+    ventre: { animal: 'pork', part: 'belly' },
     // 豚肉（ドイツ語）
-    'schweinefleisch': { animal: 'pork', part: 'belly' },
-    'bauch': { animal: 'pork', part: 'belly' },
+    schweinefleisch: { animal: 'pork', part: 'belly' },
+    bauch: { animal: 'pork', part: 'belly' },
     // 鶏肉（日本語）
-    '鶏もも': { animal: 'chicken', part: 'thigh' },
-    'もも': { animal: 'chicken', part: 'thigh' },
-    '鶏': { animal: 'chicken', part: 'thigh' },
-    '鶏肉': { animal: 'chicken', part: 'thigh' },
-    '胸肉': { animal: 'chicken', part: 'breast' },
-    '手羽': { animal: 'chicken', part: 'wing' },
-    '鶏レバー': { animal: 'chicken', part: 'liver' },
-    '丸ごと': { animal: 'chicken', part: 'whole' },
+    鶏もも: { animal: 'chicken', part: 'thigh' },
+    もも: { animal: 'chicken', part: 'thigh' },
+    鶏: { animal: 'chicken', part: 'thigh' },
+    鶏肉: { animal: 'chicken', part: 'thigh' },
+    胸肉: { animal: 'chicken', part: 'breast' },
+    手羽: { animal: 'chicken', part: 'wing' },
+    鶏レバー: { animal: 'chicken', part: 'liver' },
+    丸ごと: { animal: 'chicken', part: 'whole' },
     // 鶏肉（英語）
-    'chicken': { animal: 'chicken', part: 'thigh' },
-    'thigh': { animal: 'chicken', part: 'thigh' },
-    'breast': { animal: 'chicken', part: 'breast' },
-    'wing': { animal: 'chicken', part: 'wing' },
-    'whole': { animal: 'chicken', part: 'whole' },
+    chicken: { animal: 'chicken', part: 'thigh' },
+    thigh: { animal: 'chicken', part: 'thigh' },
+    breast: { animal: 'chicken', part: 'breast' },
+    wing: { animal: 'chicken', part: 'wing' },
+    whole: { animal: 'chicken', part: 'whole' },
     // 鶏肉（フランス語）
-    'poulet': { animal: 'chicken', part: 'thigh' },
-    'cuisse': { animal: 'chicken', part: 'thigh' },
-    'blanc_poulet': { animal: 'chicken', part: 'breast' },
+    poulet: { animal: 'chicken', part: 'thigh' },
+    cuisse: { animal: 'chicken', part: 'thigh' },
+    blanc_poulet: { animal: 'chicken', part: 'breast' },
     // 鶏肉（ドイツ語）
-    'huhn': { animal: 'chicken', part: 'thigh' },
-    'hähnchen': { animal: 'chicken', part: 'thigh' },
-    'schenkel': { animal: 'chicken', part: 'thigh' },
-    'brust': { animal: 'chicken', part: 'breast' },
+    huhn: { animal: 'chicken', part: 'thigh' },
+    hähnchen: { animal: 'chicken', part: 'thigh' },
+    schenkel: { animal: 'chicken', part: 'thigh' },
+    brust: { animal: 'chicken', part: 'breast' },
     // 魚（日本語）
-    'サーモン': { animal: 'fish', part: 'salmon' },
-    'サケ': { animal: 'fish', part: 'salmon' },
-    'マグロ': { animal: 'fish', part: 'tuna' },
-    'サバ': { animal: 'fish', part: 'mackerel' },
+    サーモン: { animal: 'fish', part: 'salmon' },
+    サケ: { animal: 'fish', part: 'salmon' },
+    マグロ: { animal: 'fish', part: 'tuna' },
+    サバ: { animal: 'fish', part: 'mackerel' },
     // 魚（英語）
-    'salmon': { animal: 'fish', part: 'salmon' },
-    'tuna': { animal: 'fish', part: 'tuna' },
-    'mackerel': { animal: 'fish', part: 'mackerel' },
-    'fish': { animal: 'fish', part: 'salmon' },
+    salmon: { animal: 'fish', part: 'salmon' },
+    tuna: { animal: 'fish', part: 'tuna' },
+    mackerel: { animal: 'fish', part: 'mackerel' },
+    fish: { animal: 'fish', part: 'salmon' },
     // 魚（フランス語）
-    'saumon': { animal: 'fish', part: 'salmon' },
-    'thon': { animal: 'fish', part: 'tuna' },
-    'maquereau': { animal: 'fish', part: 'mackerel' },
-    'poisson': { animal: 'fish', part: 'salmon' },
+    saumon: { animal: 'fish', part: 'salmon' },
+    thon: { animal: 'fish', part: 'tuna' },
+    maquereau: { animal: 'fish', part: 'mackerel' },
+    poisson: { animal: 'fish', part: 'salmon' },
     // 魚（ドイツ語）
-    'lachs': { animal: 'fish', part: 'salmon' },
-    'thunfisch': { animal: 'fish', part: 'tuna' },
-    'makrele': { animal: 'fish', part: 'mackerel' },
-    'fisch': { animal: 'fish', part: 'salmon' },
+    lachs: { animal: 'fish', part: 'salmon' },
+    thunfisch: { animal: 'fish', part: 'tuna' },
+    makrele: { animal: 'fish', part: 'mackerel' },
+    fisch: { animal: 'fish', part: 'salmon' },
     // 卵（日本語）
-    '卵': { animal: 'egg', part: 'whole' },
-    'たまご': { animal: 'egg', part: 'whole' },
-    '全卵': { animal: 'egg', part: 'whole' },
-    '卵黄': { animal: 'egg', part: 'yolk' },
-    '卵白': { animal: 'egg', part: 'white' },
+    卵: { animal: 'egg', part: 'whole' },
+    たまご: { animal: 'egg', part: 'whole' },
+    全卵: { animal: 'egg', part: 'whole' },
+    卵黄: { animal: 'egg', part: 'yolk' },
+    卵白: { animal: 'egg', part: 'white' },
     // 卵（英語）
-    'egg': { animal: 'egg', part: 'whole' },
-    'yolk': { animal: 'egg', part: 'yolk' },
-    'white': { animal: 'egg', part: 'white' },
+    egg: { animal: 'egg', part: 'whole' },
+    yolk: { animal: 'egg', part: 'yolk' },
+    white: { animal: 'egg', part: 'white' },
     // 卵（フランス語）
-    'œuf': { animal: 'egg', part: 'whole' },
-    'oeuf': { animal: 'egg', part: 'whole' },
-    'jaune': { animal: 'egg', part: 'yolk' },
-    'blanc': { animal: 'egg', part: 'white' },
+    œuf: { animal: 'egg', part: 'whole' },
+    oeuf: { animal: 'egg', part: 'whole' },
+    jaune: { animal: 'egg', part: 'yolk' },
+    blanc: { animal: 'egg', part: 'white' },
     // 卵（ドイツ語）
-    'ei': { animal: 'egg', part: 'whole' },
-    'eigelb': { animal: 'egg', part: 'yolk' },
-    'eiweiß': { animal: 'egg', part: 'white' },
+    ei: { animal: 'egg', part: 'whole' },
+    eigelb: { animal: 'egg', part: 'yolk' },
+    eiweiß: { animal: 'egg', part: 'white' },
     // 乳製品（日本語）
-    'チーズ': { animal: 'dairy', part: 'cheese' },
-    '生クリーム': { animal: 'dairy', part: 'heavy_cream' },
-    'バター': { animal: 'dairy', part: 'butter' },
+    チーズ: { animal: 'dairy', part: 'cheese' },
+    生クリーム: { animal: 'dairy', part: 'heavy_cream' },
+    バター: { animal: 'dairy', part: 'butter' },
     // 乳製品（英語）
-    'cheese': { animal: 'dairy', part: 'cheese' },
-    'cream': { animal: 'dairy', part: 'heavy_cream' },
-    'butter': { animal: 'dairy', part: 'butter' },
+    cheese: { animal: 'dairy', part: 'cheese' },
+    cream: { animal: 'dairy', part: 'heavy_cream' },
+    butter: { animal: 'dairy', part: 'butter' },
     // 乳製品（フランス語）
-    'fromage': { animal: 'dairy', part: 'cheese' },
-    'crème': { animal: 'dairy', part: 'heavy_cream' },
-    'beurre': { animal: 'dairy', part: 'butter' },
+    fromage: { animal: 'dairy', part: 'cheese' },
+    crème: { animal: 'dairy', part: 'heavy_cream' },
+    beurre: { animal: 'dairy', part: 'butter' },
     // 乳製品（ドイツ語）
-    'käse': { animal: 'dairy', part: 'cheese' },
-    'sahne': { animal: 'dairy', part: 'heavy_cream' },
+    käse: { animal: 'dairy', part: 'cheese' },
+    sahne: { animal: 'dairy', part: 'heavy_cream' },
     // 脂質（日本語）
-    '牛脂': { animal: 'fat', part: 'tallow' },
-    'ギー': { animal: 'fat', part: 'ghee' },
-    '塩': { animal: 'fat', part: 'salt' },
+    牛脂: { animal: 'fat', part: 'tallow' },
+    ギー: { animal: 'fat', part: 'ghee' },
+    塩: { animal: 'fat', part: 'salt' },
     // 脂質（英語）
-    'tallow': { animal: 'fat', part: 'tallow' },
-    'ghee': { animal: 'fat', part: 'ghee' },
-    'salt': { animal: 'fat', part: 'salt' },
+    tallow: { animal: 'fat', part: 'tallow' },
+    ghee: { animal: 'fat', part: 'ghee' },
+    salt: { animal: 'fat', part: 'salt' },
   };
-  
+
   // 1. 完全一致検索（優先度最高）
   for (const animal of Object.keys(FOOD_MASTER) as Array<keyof FoodMaster>) {
     const animalData = FOOD_MASTER[animal];
@@ -1086,7 +1088,7 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
     for (const part of Object.keys(animalData)) {
       const item = animalData[part];
       if (!item) continue;
-      
+
       // 英語名・日本語名・フランス語名・ドイツ語名の完全一致
       if (
         item.name.toLowerCase() === lowerName ||
@@ -1099,7 +1101,7 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
       }
     }
   }
-  
+
   // 2. キーワードマッピングで検索
   for (const [keyword, mapping] of Object.entries(keywordMap)) {
     if (lowerName.includes(keyword) || keyword.includes(lowerName)) {
@@ -1107,51 +1109,72 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
       if (item) return item;
     }
   }
-  
+
   // 3. 部分一致検索（英語名・日本語名）
   let bestMatch: FoodMasterItem | undefined;
   let bestScore = 0;
-  
+
   for (const animal of Object.keys(FOOD_MASTER) as Array<keyof FoodMaster>) {
     const animalData = FOOD_MASTER[animal];
     if (!animalData) continue;
     for (const part of Object.keys(animalData)) {
       const item = animalData[part];
       if (!item) continue;
-      
+
       const nameLower = item.name.toLowerCase();
       const nameJaLower = item.name_ja.toLowerCase();
       const nameFrLower = item.name_fr?.toLowerCase() || '';
       const nameDeLower = item.name_de?.toLowerCase() || '';
       const idLower = item.id.toLowerCase();
-      
+
       // スコアリングシステム: 検索語と食品名の一致度を数値化し、最も一致度の高い食品を返す
       // スコアが高いほど、検索語と食品名の一致度が高いことを意味する
       let score = 0;
-      
+
       // 完全一致（最高スコア: 100点）
-      if (nameLower === lowerName || nameJaLower === lowerName || idLower === lowerName ||
-          nameFrLower === lowerName || nameDeLower === lowerName) {
+      if (
+        nameLower === lowerName ||
+        nameJaLower === lowerName ||
+        idLower === lowerName ||
+        nameFrLower === lowerName ||
+        nameDeLower === lowerName
+      ) {
         score = 100;
       }
       // 前方一致（80点）
-      else if (nameLower.startsWith(lowerName) || nameJaLower.startsWith(lowerName) ||
-               nameFrLower.startsWith(lowerName) || nameDeLower.startsWith(lowerName)) {
+      else if (
+        nameLower.startsWith(lowerName) ||
+        nameJaLower.startsWith(lowerName) ||
+        nameFrLower.startsWith(lowerName) ||
+        nameDeLower.startsWith(lowerName)
+      ) {
         score = 80;
       }
       // 後方一致（70点）
-      else if (nameLower.endsWith(lowerName) || nameJaLower.endsWith(lowerName) ||
-               nameFrLower.endsWith(lowerName) || nameDeLower.endsWith(lowerName)) {
+      else if (
+        nameLower.endsWith(lowerName) ||
+        nameJaLower.endsWith(lowerName) ||
+        nameFrLower.endsWith(lowerName) ||
+        nameDeLower.endsWith(lowerName)
+      ) {
         score = 70;
       }
       // 部分一致（60点）
-      else if (nameLower.includes(lowerName) || nameJaLower.includes(lowerName) ||
-               nameFrLower.includes(lowerName) || nameDeLower.includes(lowerName)) {
+      else if (
+        nameLower.includes(lowerName) ||
+        nameJaLower.includes(lowerName) ||
+        nameFrLower.includes(lowerName) ||
+        nameDeLower.includes(lowerName)
+      ) {
         score = 60;
       }
       // 逆方向の部分一致（検索語が食品名を含む、50点）
-      else if (lowerName.includes(nameLower) || lowerName.includes(nameJaLower) ||
-               lowerName.includes(nameFrLower) || lowerName.includes(nameDeLower)) {
+      else if (
+        lowerName.includes(nameLower) ||
+        lowerName.includes(nameJaLower) ||
+        lowerName.includes(nameFrLower) ||
+        lowerName.includes(nameDeLower)
+      ) {
         score = 50;
       }
       // 単語単位の部分一致（30点/単語）
@@ -1161,30 +1184,29 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
         const nameFrWords = nameFrLower.split(/[\s\-_]+/);
         const nameDeWords = nameDeLower.split(/[\s\-_]+/);
         const searchWords = lowerName.split(/[\s\-_]+/);
-        
+
         for (const searchWord of searchWords) {
-          if (nameWords.some(w => w.includes(searchWord) || searchWord.includes(w))) {
+          if (nameWords.some((w) => w.includes(searchWord) || searchWord.includes(w))) {
             score += 30;
           }
-          if (nameJaWords.some(w => w.includes(searchWord) || searchWord.includes(w))) {
+          if (nameJaWords.some((w) => w.includes(searchWord) || searchWord.includes(w))) {
             score += 30;
           }
-          if (nameFrWords.some(w => w.includes(searchWord) || searchWord.includes(w))) {
+          if (nameFrWords.some((w) => w.includes(searchWord) || searchWord.includes(w))) {
             score += 30;
           }
-          if (nameDeWords.some(w => w.includes(searchWord) || searchWord.includes(w))) {
+          if (nameDeWords.some((w) => w.includes(searchWord) || searchWord.includes(w))) {
             score += 30;
           }
         }
       }
-      
+
       if (score > bestScore) {
         bestScore = score;
         bestMatch = item;
       }
     }
   }
-  
+
   return bestMatch;
 }
-

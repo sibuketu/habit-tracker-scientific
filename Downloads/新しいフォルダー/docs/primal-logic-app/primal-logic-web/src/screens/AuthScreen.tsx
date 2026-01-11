@@ -1,6 +1,6 @@
 /**
  * Primal Logic - 認証画面
- * 
+ *
  * ログイン・登録・パスワードリセット機能
  */
 
@@ -190,25 +190,13 @@ export default function AuthScreen({ onAuthSuccess }: { onAuthSuccess?: () => vo
           {mode === 'reset' && 'パスワードリセット'}
         </h2>
 
-        {error && (
-          <div className="auth-error">
-            {error}
-          </div>
-        )}
+        {error && <div className="auth-error">{error}</div>}
 
-        {message && (
-          <div className="auth-message">
-            {message}
-          </div>
-        )}
+        {message && <div className="auth-message">{message}</div>}
 
         <form
           onSubmit={
-            mode === 'login'
-              ? handleLogin
-              : mode === 'signup'
-              ? handleSignup
-              : handleResetPassword
+            mode === 'login' ? handleLogin : mode === 'signup' ? handleSignup : handleResetPassword
           }
           className="auth-form"
         >
@@ -263,45 +251,35 @@ export default function AuthScreen({ onAuthSuccess }: { onAuthSuccess?: () => vo
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="auth-button auth-button-primary"
-          >
-            {loading ? '処理中...' : mode === 'login' ? 'ログイン' : mode === 'signup' ? '登録' : '送信'}
+          <button type="submit" disabled={loading} className="auth-button auth-button-primary">
+            {loading
+              ? '処理中...'
+              : mode === 'login'
+                ? 'ログイン'
+                : mode === 'signup'
+                  ? '登録'
+                  : '送信'}
           </button>
         </form>
 
         <div className="auth-links">
           {mode === 'login' && (
             <>
-              <button
-                onClick={() => setMode('signup')}
-                className="auth-link-button"
-              >
+              <button onClick={() => setMode('signup')} className="auth-link-button">
                 新規登録
               </button>
-              <button
-                onClick={() => setMode('reset')}
-                className="auth-link-button"
-              >
+              <button onClick={() => setMode('reset')} className="auth-link-button">
                 パスワードを忘れた場合
               </button>
             </>
           )}
           {mode === 'signup' && (
-            <button
-              onClick={() => setMode('login')}
-              className="auth-link-button"
-            >
+            <button onClick={() => setMode('login')} className="auth-link-button">
               ログインに戻る
             </button>
           )}
           {mode === 'reset' && (
-            <button
-              onClick={() => setMode('login')}
-              className="auth-link-button"
-            >
+            <button onClick={() => setMode('login')} className="auth-link-button">
               ログインに戻る
             </button>
           )}
@@ -310,4 +288,3 @@ export default function AuthScreen({ onAuthSuccess }: { onAuthSuccess?: () => vo
     </div>
   );
 }
-

@@ -1,8 +1,8 @@
 /**
  * Primal Logic - Health Device Screen
- * 
+ *
  * ウェアラブルデバイス連携画面
- * 
+ *
  * 注意: Webアプリでは直接的な連携は難しいため、手動入力機能を提供
  */
 
@@ -44,7 +44,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
         if (data) {
           setGoogleFitData(data);
           // Google FitデータをhealthDataに反映
-          setHealthData(prev => ({
+          setHealthData((prev) => ({
             ...prev,
             steps: data.steps,
             heartRate: data.heartRate,
@@ -134,7 +134,12 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
               <input
                 type="number"
                 value={healthData.steps || ''}
-                onChange={(e) => setHealthData({ ...healthData, steps: e.target.value ? Number(e.target.value) : undefined })}
+                onChange={(e) =>
+                  setHealthData({
+                    ...healthData,
+                    steps: e.target.value ? Number(e.target.value) : undefined,
+                  })
+                }
                 placeholder="例: 10000"
                 min="0"
                 className="health-device-input"
@@ -148,7 +153,12 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
               <input
                 type="number"
                 value={healthData.heartRate || ''}
-                onChange={(e) => setHealthData({ ...healthData, heartRate: e.target.value ? Number(e.target.value) : undefined })}
+                onChange={(e) =>
+                  setHealthData({
+                    ...healthData,
+                    heartRate: e.target.value ? Number(e.target.value) : undefined,
+                  })
+                }
                 placeholder="例: 70"
                 min="0"
                 max="220"
@@ -163,7 +173,12 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
               <input
                 type="number"
                 value={healthData.activeMinutes || ''}
-                onChange={(e) => setHealthData({ ...healthData, activeMinutes: e.target.value ? Number(e.target.value) : undefined })}
+                onChange={(e) =>
+                  setHealthData({
+                    ...healthData,
+                    activeMinutes: e.target.value ? Number(e.target.value) : undefined,
+                  })
+                }
                 placeholder="例: 30"
                 min="0"
                 className="health-device-input"
@@ -177,7 +192,12 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
               <input
                 type="number"
                 value={healthData.caloriesBurned || ''}
-                onChange={(e) => setHealthData({ ...healthData, caloriesBurned: e.target.value ? Number(e.target.value) : undefined })}
+                onChange={(e) =>
+                  setHealthData({
+                    ...healthData,
+                    caloriesBurned: e.target.value ? Number(e.target.value) : undefined,
+                  })
+                }
                 placeholder="例: 200"
                 min="0"
                 className="health-device-input"
@@ -202,4 +222,3 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
     </div>
   );
 }
-

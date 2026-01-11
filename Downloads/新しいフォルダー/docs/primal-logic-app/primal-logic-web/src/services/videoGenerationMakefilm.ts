@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Makefilm API Integration
- * 
+ *
  * Makefilm APIを使用して動画を生成
  * API仕様: https://makefilm.jp/ (要確認)
  */
@@ -38,15 +38,15 @@ export async function generateVideoWithMakefilm(script: VideoScript): Promise<st
 
   // 言語を取得（scriptから、またはデフォルトで'ja'）
   const language = script.language || 'ja';
-  
+
   // 言語コードをMakefilm APIの形式に変換
   const languageMap: Record<string, string> = {
-    'ja': 'ja',
-    'en': 'en',
-    'fr': 'fr',
-    'de': 'de',
+    ja: 'ja',
+    en: 'en',
+    fr: 'fr',
+    de: 'de',
   };
-  
+
   const request: MakefilmVideoRequest = {
     script: script.script,
     title: script.title,
@@ -60,7 +60,7 @@ export async function generateVideoWithMakefilm(script: VideoScript): Promise<st
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${MAKEFILM_API_KEY}`,
+        Authorization: `Bearer ${MAKEFILM_API_KEY}`,
       },
       body: JSON.stringify(request),
     });
@@ -90,14 +90,18 @@ export async function generateVideoWithMakefilm(script: VideoScript): Promise<st
 /**
  * 動画生成のステータスをポーリング
  */
-async function pollVideoStatus(videoId: string, maxAttempts = 60, intervalMs = 5000): Promise<string> {
+async function pollVideoStatus(
+  videoId: string,
+  maxAttempts = 60,
+  intervalMs = 5000
+): Promise<string> {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    await new Promise(resolve => setTimeout(resolve, intervalMs));
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
 
     try {
       const response = await fetch(`${MAKEFILM_API_URL}/videos/${videoId}`, {
         headers: {
-          'Authorization': `Bearer ${MAKEFILM_API_KEY}`,
+          Authorization: `Bearer ${MAKEFILM_API_KEY}`,
         },
       });
 
@@ -124,4 +128,3 @@ async function pollVideoStatus(videoId: string, maxAttempts = 60, intervalMs = 5
 
   throw new Error('Video generation timeout');
 }
-

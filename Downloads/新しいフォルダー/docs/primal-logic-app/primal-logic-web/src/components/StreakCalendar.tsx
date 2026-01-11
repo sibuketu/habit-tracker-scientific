@@ -1,6 +1,6 @@
 /**
  * Streak Calendar Component
- * 
+ *
  * 習慣トラッカーのカレンダー表示
  * - 月表示
  * - ログがある日をハイライト（違反なし = 緑、違反あり = 赤）
@@ -46,7 +46,7 @@ export default function StreakCalendar({ logs, onDayClick }: StreakCalendarProps
   // 日付文字列をキーとしてログをマッピング
   const logsByDate = useMemo(() => {
     const map = new Map<string, DailyLog>();
-    logs.forEach(log => {
+    logs.forEach((log) => {
       map.set(log.date, log);
     });
     return map;
@@ -56,16 +56,16 @@ export default function StreakCalendar({ logs, onDayClick }: StreakCalendarProps
   const getStreakDays = useMemo(() => {
     const streakDays = new Set<string>();
     const sortedLogs = [...logs]
-      .filter(log => !log.calculatedMetrics?.hasViolation)
+      .filter((log) => !log.calculatedMetrics?.hasViolation)
       .sort((a, b) => b.date.localeCompare(a.date));
-    
+
     if (sortedLogs.length === 0) return streakDays;
 
     const today = new Date().toISOString().split('T')[0];
-    let expectedDate = sortedLogs[0].date === today || 
-                       sortedLogs[0].date === addDays(today, -1)
-      ? sortedLogs[0].date
-      : null;
+    let expectedDate =
+      sortedLogs[0].date === today || sortedLogs[0].date === addDays(today, -1)
+        ? sortedLogs[0].date
+        : null;
 
     if (expectedDate) {
       for (const log of sortedLogs) {
@@ -96,15 +96,15 @@ export default function StreakCalendar({ logs, onDayClick }: StreakCalendarProps
     const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
     const dateStr = date.toISOString().split('T')[0];
     const log = logsByDate.get(dateStr);
-    
+
     if (getStreakDays.has(dateStr)) {
       return 'inStreak';
     }
-    
+
     if (log) {
       return log.calculatedMetrics?.hasViolation ? 'hasViolation' : 'hasLog';
     }
-    
+
     return 'normal';
   };
 
@@ -115,8 +115,20 @@ export default function StreakCalendar({ logs, onDayClick }: StreakCalendarProps
     return getStreakDays.has(dateStr);
   };
 
-
-  const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+  const monthNames = [
+    '1月',
+    '2月',
+    '3月',
+    '4月',
+    '5月',
+    '6月',
+    '7月',
+    '8月',
+    '9月',
+    '10月',
+    '11月',
+    '12月',
+  ];
   const dayNames = ['日', '月', '火', '水', '木', '金', '土'];
 
   // 空白セルを生成（月初めの空白）
@@ -141,7 +153,7 @@ export default function StreakCalendar({ logs, onDayClick }: StreakCalendarProps
 
       {/* 曜日ヘッダー */}
       <div className="streak-calendar-weekdays">
-        {dayNames.map(day => (
+        {dayNames.map((day) => (
           <div key={day} className="streak-calendar-weekday">
             {day}
           </div>
@@ -166,7 +178,7 @@ export default function StreakCalendar({ logs, onDayClick }: StreakCalendarProps
             const nextInStreak = getStreakDays.has(nextDateStr);
 
             const hasLog = logsByDate.has(dateStr);
-            
+
             return (
               <div
                 key={day}
@@ -233,7 +245,10 @@ export default function StreakCalendar({ logs, onDayClick }: StreakCalendarProps
           <span>連続記録中</span>
         </div>
         <div className="streak-calendar-legend-item">
-          <div className="streak-calendar-legend-color" style={{ backgroundColor: '#f9fafb', borderColor: '#e5e7eb' }} />
+          <div
+            className="streak-calendar-legend-color"
+            style={{ backgroundColor: '#f9fafb', borderColor: '#e5e7eb' }}
+          />
           <span>記録なし</span>
         </div>
         <div className="streak-calendar-legend-item">
@@ -244,4 +259,3 @@ export default function StreakCalendar({ logs, onDayClick }: StreakCalendarProps
     </div>
   );
 }
-

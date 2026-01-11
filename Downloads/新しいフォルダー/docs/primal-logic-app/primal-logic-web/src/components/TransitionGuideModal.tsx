@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Transition Guide Modal Component
- * 
+ *
  * Phase 1: 移行期間サポート - 移行期間ガイド画面（モーダル）
  */
 
@@ -13,10 +13,7 @@ interface TransitionGuideModalProps {
   onClose: () => void;
 }
 
-export default function TransitionGuideModal({
-  progress,
-  onClose,
-}: TransitionGuideModalProps) {
+export default function TransitionGuideModal({ progress, onClose }: TransitionGuideModalProps) {
   const [selectedSymptom, setSelectedSymptom] = useState<TransitionSymptom | null>(null);
 
   return (
@@ -58,9 +55,7 @@ export default function TransitionGuideModal({
             marginBottom: '1.5rem',
           }}
         >
-          <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 'bold' }}>
-            移行期間ガイド
-          </h2>
+          <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 'bold' }}>移行期間ガイド</h2>
           <button
             onClick={onClose}
             style={{
@@ -143,19 +138,14 @@ export default function TransitionGuideModal({
                   padding: '0.75rem',
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
-                  backgroundColor:
-                    selectedSymptom?.id === symptom.id ? '#f3f4f6' : 'white',
+                  backgroundColor: selectedSymptom?.id === symptom.id ? '#f3f4f6' : 'white',
                   cursor: 'pointer',
                   textAlign: 'left',
                   fontSize: '14px',
                 }}
               >
-                <div style={{ fontWeight: 'bold', marginBottom: '0.25rem' }}>
-                  {symptom.name}
-                </div>
-                <div style={{ fontSize: '12px', color: '#6b7280' }}>
-                  {symptom.description}
-                </div>
+                <div style={{ fontWeight: 'bold', marginBottom: '0.25rem' }}>{symptom.name}</div>
+                <div style={{ fontSize: '12px', color: '#6b7280' }}>{symptom.description}</div>
               </button>
             ))}
           </div>
@@ -189,12 +179,10 @@ export default function TransitionGuideModal({
                       remedy.nutrient === 'potassium'
                         ? 'mg'
                         : remedy.nutrient === 'fat'
-                        ? 'g'
-                        : 'L'}
+                          ? 'g'
+                          : 'L'}
                     </div>
-                    <div style={{ color: '#6b7280', fontSize: '12px' }}>
-                      {remedy.explanation}
-                    </div>
+                    <div style={{ color: '#6b7280', fontSize: '12px' }}>{remedy.explanation}</div>
                   </div>
                 ))}
               </div>
@@ -266,4 +254,3 @@ export default function TransitionGuideModal({
     </div>
   );
 }
-

@@ -1,18 +1,18 @@
 /**
  * Primal Logic - Vitamin D Calculator
- * 
+ *
  * Solar Charge (太陽光暴露) から Vitamin D 合成量を計算
  * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
  */
 
 /**
  * Calculate Vitamin D synthesis from sun exposure
- * 
+ *
  * Simplified calculation based on:
  * - Time of exposure (minutes)
  * - Skin exposure area (simplified to "full body" vs "arms/face")
  * - UV index (simplified to "sunny" vs "cloudy")
- * 
+ *
  * Note: This is a simplified model. Real calculation would consider:
  * - Latitude
  * - Time of day
@@ -31,14 +31,21 @@ export interface SunExposure {
 
 /**
  * Calculate Vitamin D synthesis (IU)
- * 
+ *
  * Rough estimates:
  * - Full body, sunny, 30 min: ~10,000-20,000 IU
  * - Arms/face, sunny, 30 min: ~2,000-4,000 IU
  * - Cloudy reduces by ~50-70%
  */
 export function calculateVitaminDSynthesis(exposure: SunExposure): number {
-  const { minutes, isSunny, exposureArea = 'partial', weatherFactor, uvIndex, cloudCover } = exposure;
+  const {
+    minutes,
+    isSunny,
+    exposureArea = 'partial',
+    weatherFactor,
+    uvIndex,
+    cloudCover,
+  } = exposure;
 
   // Base synthesis rate (IU per minute)
   // Full body exposure: ~500-700 IU/min (sunny)
@@ -54,7 +61,7 @@ export function calculateVitaminDSynthesis(exposure: SunExposure): number {
     // 従来の方法（isSunnyのみ）
     // Cloudy conditions reduce synthesis by ~60%
     rate = isSunny ? baseRate : baseRate * 0.4;
-    
+
     // UV指数と雲量が提供されている場合はより正確に計算
     if (uvIndex !== undefined && cloudCover !== undefined) {
       // UV指数による影響（0-11+を0.3-1.5の範囲にマッピング）
@@ -81,7 +88,7 @@ export function calculateVitaminDSynthesis(exposure: SunExposure): number {
 
 /**
  * Get recommended sun exposure based on current Vitamin D status
- * 
+ *
  * Note: This is a simplified recommendation. Real recommendations
  * would consider current blood levels, latitude, season, etc.
  */
@@ -118,4 +125,3 @@ export function getRecommendedSunExposure(
     frequency: '2-3 times per week',
   };
 }
-

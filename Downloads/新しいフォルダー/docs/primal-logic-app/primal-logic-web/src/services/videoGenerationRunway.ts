@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Runway API Integration
- * 
+ *
  * Runway APIを使用して動画を生成
  * API仕様: https://docs.runwayml.com/ (要確認)
  */
@@ -42,14 +42,12 @@ export async function generateVideoWithRunway(script: VideoScript): Promise<stri
 
   // プラットフォームに応じてアスペクト比を決定
   const aspectRatioMap: Record<string, '16:9' | '9:16' | '1:1'> = {
-    'youtube': '16:9',
-    'tiktok': '9:16',
-    'instagram': script.duration <= 60 ? '9:16' : '1:1', // ショート動画は9:16、ロング動画は1:1
+    youtube: '16:9',
+    tiktok: '9:16',
+    instagram: script.duration <= 60 ? '9:16' : '1:1', // ショート動画は9:16、ロング動画は1:1
   };
-  
-  const aspectRatio = script.platform 
-    ? aspectRatioMap[script.platform] || '16:9'
-    : '16:9'; // デフォルトは16:9（YouTube用）
+
+  const aspectRatio = script.platform ? aspectRatioMap[script.platform] || '16:9' : '16:9'; // デフォルトは16:9（YouTube用）
 
   const request: RunwayVideoRequest = {
     prompt,
@@ -63,7 +61,7 @@ export async function generateVideoWithRunway(script: VideoScript): Promise<stri
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${RUNWAY_API_KEY}`,
+        Authorization: `Bearer ${RUNWAY_API_KEY}`,
       },
       body: JSON.stringify(request),
     });
@@ -93,14 +91,18 @@ export async function generateVideoWithRunway(script: VideoScript): Promise<stri
 /**
  * 動画生成のステータスをポーリング
  */
-async function pollVideoStatus(videoId: string, maxAttempts = 60, intervalMs = 5000): Promise<string> {
+async function pollVideoStatus(
+  videoId: string,
+  maxAttempts = 60,
+  intervalMs = 5000
+): Promise<string> {
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    await new Promise(resolve => setTimeout(resolve, intervalMs));
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
 
     try {
       const response = await fetch(`${RUNWAY_API_URL}/video/${videoId}`, {
         headers: {
-          'Authorization': `Bearer ${RUNWAY_API_KEY}`,
+          Authorization: `Bearer ${RUNWAY_API_KEY}`,
         },
       });
 
@@ -127,4 +129,3 @@ async function pollVideoStatus(videoId: string, maxAttempts = 60, intervalMs = 5
 
   throw new Error('Video generation timeout');
 }
-

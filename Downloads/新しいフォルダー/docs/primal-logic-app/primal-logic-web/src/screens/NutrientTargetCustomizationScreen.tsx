@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Nutrient Target Customization Screen
- * 
+ *
  * 栄養素目標値のカスタマイズ画面
  */
 
@@ -44,29 +44,37 @@ const NUTRIENT_LABELS: Record<string, { name: string; unit: string }> = {
   vitaminK2: { name: 'ビタミンK2', unit: 'μg' },
 };
 
-export default function NutrientTargetCustomizationScreen({ onBack }: NutrientTargetCustomizationScreenProps) {
+export default function NutrientTargetCustomizationScreen({
+  onBack,
+}: NutrientTargetCustomizationScreenProps) {
   const { t } = useTranslation();
   const { userProfile, loadUserProfile } = useApp();
   const [customNutrientTargets, setCustomNutrientTargets] = useState<
     Record<string, { mode: 'auto' | 'manual'; value?: number }>
-  >(userProfile?.customNutrientTargets ? Object.fromEntries(
-    Object.entries(userProfile.customNutrientTargets).map(([key, value]) => [
-      key,
-      typeof value === 'number' ? { mode: 'manual' as const, value } : value
-    ])
-  ) : {});
+  >(
+    userProfile?.customNutrientTargets
+      ? Object.fromEntries(
+          Object.entries(userProfile.customNutrientTargets).map(([key, value]) => [
+            key,
+            typeof value === 'number' ? { mode: 'manual' as const, value } : value,
+          ])
+        )
+      : {}
+  );
 
   // 自動保存用のタイマー
   const saveTimerRef = useState<NodeJS.Timeout | null>(null)[0];
 
   useEffect(() => {
     if (userProfile?.customNutrientTargets) {
-      setCustomNutrientTargets(Object.fromEntries(
-        Object.entries(userProfile.customNutrientTargets).map(([key, value]) => [
-          key,
-          typeof value === 'number' ? { mode: 'manual' as const, value } : value
-        ])
-      ));
+      setCustomNutrientTargets(
+        Object.fromEntries(
+          Object.entries(userProfile.customNutrientTargets).map(([key, value]) => [
+            key,
+            typeof value === 'number' ? { mode: 'manual' as const, value } : value,
+          ])
+        )
+      );
     }
   }, [userProfile]);
 
@@ -113,12 +121,17 @@ export default function NutrientTargetCustomizationScreen({ onBack }: NutrientTa
       if (userProfile) {
         const updatedProfile: UserProfile = {
           ...userProfile,
-          customNutrientTargets: Object.keys(customNutrientTargets).length > 0 ? Object.fromEntries(
-            Object.entries(customNutrientTargets).map(([key, value]) => [
-              key,
-              value.mode === 'auto' ? { mode: 'auto' } : { mode: 'manual', value: value.value }
-            ])
-          ) : undefined,
+          customNutrientTargets:
+            Object.keys(customNutrientTargets).length > 0
+              ? Object.fromEntries(
+                  Object.entries(customNutrientTargets).map(([key, value]) => [
+                    key,
+                    value.mode === 'auto'
+                      ? { mode: 'auto' }
+                      : { mode: 'manual', value: value.value },
+                  ])
+                )
+              : undefined,
         };
         try {
           await saveUserProfile(updatedProfile);
@@ -141,7 +154,7 @@ export default function NutrientTargetCustomizationScreen({ onBack }: NutrientTa
     if (mode === 'auto') {
       delete newTargets[nutrient];
     } else {
-              const autoValue = (autoTargets as Record<string, number>)[nutrient] || 0;
+      const autoValue = (autoTargets as Record<string, number>)[nutrient] || 0;
       newTargets[nutrient] = { mode: 'manual', value: autoValue };
     }
     setCustomNutrientTargets(newTargets);
@@ -179,9 +192,12 @@ export default function NutrientTargetCustomizationScreen({ onBack }: NutrientTa
                 <div key={nutrient} className="nutrient-target-customization-screen-item">
                   <div className="nutrient-target-customization-screen-item-header">
                     <div className="nutrient-target-customization-screen-item-info">
-                      <div className="nutrient-target-customization-screen-item-name">{label.name}</div>
+                      <div className="nutrient-target-customization-screen-item-name">
+                        {label.name}
+                      </div>
                       <div className="nutrient-target-customization-screen-item-auto-value">
-                        推奨値: {autoValue.toFixed(1)}{label.unit}
+                        推奨値: {autoValue.toFixed(1)}
+                        {label.unit}
                       </div>
                     </div>
                     <div className="nutrient-target-customization-screen-item-buttons">
@@ -215,13 +231,17 @@ export default function NutrientTargetCustomizationScreen({ onBack }: NutrientTa
                           type="number"
                           className="nutrient-target-customization-screen-item-manual-input"
                           value={current.value ?? autoValue}
-                          onChange={(e) => handleValueChange(nutrient, parseFloat(e.target.value) || undefined)}
+                          onChange={(e) =>
+                            handleValueChange(nutrient, parseFloat(e.target.value) || undefined)
+                          }
                           placeholder={autoValue.toString()}
                           min="0"
                           step="0.1"
                           aria-label={`${label.name}の手動目標値`}
                         />
-                        <span className="nutrient-target-customization-screen-item-manual-unit">{label.unit}</span>
+                        <span className="nutrient-target-customization-screen-item-manual-unit">
+                          {label.unit}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -234,4 +254,3 @@ export default function NutrientTargetCustomizationScreen({ onBack }: NutrientTa
     </div>
   );
 }
-

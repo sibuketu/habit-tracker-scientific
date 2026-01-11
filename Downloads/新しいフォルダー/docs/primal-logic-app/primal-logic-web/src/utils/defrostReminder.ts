@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Defrost Reminder Utility (Web版)
- * 
+ *
  * Phase 5: Defrost Reminder (Inventory Lite)
  * Browser Notification APIを使用
  */
@@ -56,9 +56,7 @@ export async function requestNotificationPermission(): Promise<boolean> {
 /**
  * Schedule defrost reminder for 8:00 PM today
  */
-export async function scheduleDefrostReminder(
-  meatItem?: string
-): Promise<string | null> {
+export async function scheduleDefrostReminder(meatItem?: string): Promise<string | null> {
   try {
     const hasPermission = await requestNotificationPermission();
     if (!hasPermission) {
@@ -107,13 +105,13 @@ export async function scheduleDefrostReminder(
 /**
  * Cancel defrost reminder
  */
-export async function cancelDefrostReminder(
-  reminderId: string
-): Promise<void> {
+export async function cancelDefrostReminder(reminderId: string): Promise<void> {
   try {
-    const reminders: DefrostReminder[] = JSON.parse(localStorage.getItem('defrost_reminders') || '[]');
+    const reminders: DefrostReminder[] = JSON.parse(
+      localStorage.getItem('defrost_reminders') || '[]'
+    );
     const reminder = reminders.find((r) => r.id === reminderId);
-    
+
     if (reminder && reminder.timeoutId) {
       clearTimeout(reminder.timeoutId);
     }
@@ -130,7 +128,9 @@ export async function cancelDefrostReminder(
  */
 export async function getScheduledDefrostReminders(): Promise<DefrostReminder[]> {
   try {
-    const reminders: DefrostReminder[] = JSON.parse(localStorage.getItem('defrost_reminders') || '[]');
+    const reminders: DefrostReminder[] = JSON.parse(
+      localStorage.getItem('defrost_reminders') || '[]'
+    );
     return reminders.filter((r) => {
       const reminderTime = new Date(r.time);
       return reminderTime > new Date();
@@ -140,4 +140,3 @@ export async function getScheduledDefrostReminders(): Promise<DefrostReminder[]>
     return [];
   }
 }
-

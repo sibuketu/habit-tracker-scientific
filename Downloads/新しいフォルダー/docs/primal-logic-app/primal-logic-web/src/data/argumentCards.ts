@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Argument Cards Database
- * 
+ *
  * 論破カードのネタ帳: 3-tier情報表示用のコンテンツ
  * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
  */
@@ -52,7 +52,7 @@ export const ARGUMENT_CARDS: Record<string, ArgumentCard> = {
   redMeatCancer: {
     topic: 'Red Meat & Cancer (赤肉と癌)',
     nutrient: 'protein',
-    level1: 'Healthy User Bias. Studies didn\'t separate burger buns/fries from the meat.',
+    level1: "Healthy User Bias. Studies didn't separate burger buns/fries from the meat.",
     level2:
       'Observational studies against meat are invalid due to "Healthy User Bias" and poor data (FFQ). Blaming the passenger (Meat) for the drunk driver\'s (Sugar/Smoking) crash.',
     level3:
@@ -99,9 +99,7 @@ export const ARGUMENT_CARDS: Record<string, ArgumentCard> = {
  * Get argument card by nutrient name
  */
 export function getArgumentCardByNutrient(nutrient: string): ArgumentCard | null {
-  const card = Object.values(ARGUMENT_CARDS).find(
-    (c) => c.nutrient === nutrient
-  );
+  const card = Object.values(ARGUMENT_CARDS).find((c) => c.nutrient === nutrient);
   return card || null;
 }
 
@@ -118,4 +116,3 @@ export function getArgumentCardByTopic(topic: string): ArgumentCard | null {
 export function getAllArgumentCards(): ArgumentCard[] {
   return Object.values(ARGUMENT_CARDS);
 }
-

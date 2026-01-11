@@ -1,6 +1,6 @@
 /**
  * Primal Logic - My Foods Storage Utility
- * 
+ *
  * 「いつもの食品」をユーザーが明示的に登録したものだけを管理
  */
 
@@ -101,9 +101,8 @@ export function addMyFood(food: MyFoodItem): void {
     const current = getMyFoods();
     // 既に存在するかチェック（食品名、量、単位が全て同じ場合は追加しない）
     const exists = current.some(
-      item => item.foodName === food.foodName && 
-              item.amount === food.amount && 
-              item.unit === food.unit
+      (item) =>
+        item.foodName === food.foodName && item.amount === food.amount && item.unit === food.unit
     );
     if (!exists) {
       current.push(food);
@@ -121,9 +120,8 @@ export function removeMyFood(food: MyFoodItem): void {
   try {
     const current = getMyFoods();
     const filtered = current.filter(
-      item => !(item.foodName === food.foodName && 
-                item.amount === food.amount && 
-                item.unit === food.unit)
+      (item) =>
+        !(item.foodName === food.foodName && item.amount === food.amount && item.unit === food.unit)
     );
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   } catch (error) {
@@ -148,7 +146,7 @@ export function clearMyFoods(): void {
 export function getCustomFoodById(id: string): MyFoodItem | null {
   try {
     const foods = getMyFoods();
-    return foods.find(food => food.id === id) || null;
+    return foods.find((food) => food.id === id) || null;
   } catch (error) {
     logError(error, { component: 'myFoodsStorage', action: 'getCustomFoodById', id });
     return null;
@@ -161,7 +159,7 @@ export function getCustomFoodById(id: string): MyFoodItem | null {
 export function updateCustomFood(id: string, updatedFood: MyFoodItem): void {
   try {
     const current = getMyFoods();
-    const index = current.findIndex(food => food.id === id);
+    const index = current.findIndex((food) => food.id === id);
     if (index !== -1) {
       current[index] = { ...updatedFood, id }; // IDを保持
       localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
@@ -177,7 +175,7 @@ export function updateCustomFood(id: string, updatedFood: MyFoodItem): void {
 export function deleteCustomFood(id: string): void {
   try {
     const current = getMyFoods();
-    const filtered = current.filter(food => food.id !== id);
+    const filtered = current.filter((food) => food.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   } catch (error) {
     logError(error, { component: 'myFoodsStorage', action: 'deleteCustomFood', id });
@@ -198,4 +196,3 @@ export function addCustomFood(food: Omit<MyFoodItem, 'id'>): string {
     throw error;
   }
 }
-

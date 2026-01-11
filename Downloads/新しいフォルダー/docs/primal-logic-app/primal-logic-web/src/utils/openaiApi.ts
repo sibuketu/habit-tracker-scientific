@@ -1,6 +1,6 @@
 /**
  * Primal Logic - OpenAI API Integration
- * 
+ *
  * Recovery Protocol生成用のAI API統合
  * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
  */
@@ -30,14 +30,14 @@ export interface OpenAIResponse {
 
 /**
  * Generate recovery protocol using OpenAI API
- * 
+ *
  * Fallback: If API fails, use static algorithm
  */
 export async function generateRecoveryProtocolWithAI(
   request: OpenAIRequest
 ): Promise<OpenAIResponse | null> {
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-  
+
   if (!apiKey) {
     console.warn('OpenAI API key not found. Using static algorithm.');
     return null;
@@ -69,7 +69,7 @@ Generate a recovery protocol.`;
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: 'gpt-4o',
@@ -88,7 +88,7 @@ Generate a recovery protocol.`;
 
     const data = await response.json();
     const content = data.choices[0]?.message?.content;
-    
+
     if (!content) {
       throw new Error('No content in OpenAI response');
     }
@@ -105,4 +105,3 @@ Generate a recovery protocol.`;
     return null;
   }
 }
-

@@ -16,6 +16,7 @@ import AuthScreen from './screens/AuthScreen';
 import ConsentScreen from './screens/ConsentScreen';
 import OnboardingScreen from './screens/OnboardingScreen';
 import AISpeedDial from './components/dashboard/AISpeedDial';
+import Toast from './components/common/Toast';
 import { getFeatureDisplaySettings } from './utils/featureDisplaySettings';
 import './App.css';
 import './styles/common.css';
@@ -70,6 +71,17 @@ function AppContent() {
   const [isPixelArtEnabled, setIsPixelArtEnabled] = useState(() => {
     return localStorage.getItem('primal_logic_dot_ui_enabled') === 'true';
   });
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // グローバルなToast表示関数を設定
+  useEffect(() => {
+    (window as any).showToast = (message: string) => {
+      setToastMessage(message);
+    };
+    return () => {
+      delete (window as any).showToast;
+    };
+  }, []);
 
   // 認証状態の確認
   useEffect(() => {
@@ -223,6 +235,14 @@ function AppContent() {
           <span className="animate-spin">⏳</span>
           <span>処理中...</span>
         </div>
+      )}
+
+      {/* トースト通知 */}
+      {toastMessage && (
+        <Toast
+          message={toastMessage}
+          onClose={() => setToastMessage(null)}
+        />
       )}
 
       <div className="app-container" key={languageChangeKey}>

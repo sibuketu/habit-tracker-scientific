@@ -1,6 +1,6 @@
 /**
  * Primal Logic - User Profile Screen (Web版)
- * 
+ *
  * ユーザープロファイル設定画面: 基本情報、目標、設定
  */
 
@@ -23,7 +23,7 @@ export default function ProfileScreen() {
     (userProfile?.language as Language) || getLanguage()
   );
   const [showCustomFoodScreen, setShowCustomFoodScreen] = useState(false);
-  
+
   // 言語切り替えハンドラー（アプリ全体を再レンダリング）
   const handleLanguageChange = (lang: Language) => {
     setLanguage(lang); // i18nのsetLanguageを呼び出し
@@ -52,7 +52,7 @@ export default function ProfileScreen() {
 
         {/* ユーザー設定（画面遷移） */}
         <div className="profile-screen-section">
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -64,17 +64,15 @@ export default function ProfileScreen() {
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                window.dispatchEvent(new CustomEvent('navigateToScreen', { detail: 'userSettings' }));
+                window.dispatchEvent(
+                  new CustomEvent('navigateToScreen', { detail: 'userSettings' })
+                );
               }
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                {t('profile.userSettings')}
-              </h2>
-              <p className="nav-item-description">
-                {t('profile.userSettingsDescription')}
-              </p>
+              <h2 className="nav-item-title">{t('profile.userSettings')}</h2>
+              <p className="nav-item-description">{t('profile.userSettingsDescription')}</p>
             </div>
             <span className="nav-item-arrow">→</span>
           </div>
@@ -82,7 +80,7 @@ export default function ProfileScreen() {
 
         {/* 言語設定（遷移式） */}
         <div className="profile-screen-section">
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -99,11 +97,18 @@ export default function ProfileScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                {t('profile.languageSettings')}
-              </h2>
+              <h2 className="nav-item-title">{t('profile.languageSettings')}</h2>
               <p className="nav-item-description">
-                {t('common.current')}: {languageState === 'ja' ? t('language.japanese') : languageState === 'en' ? t('language.english') : languageState === 'fr' ? t('language.french') : languageState === 'de' ? t('language.german') : t('language.chinese')}
+                {t('common.current')}:{' '}
+                {languageState === 'ja'
+                  ? t('language.japanese')
+                  : languageState === 'en'
+                    ? t('language.english')
+                    : languageState === 'fr'
+                      ? t('language.french')
+                      : languageState === 'de'
+                        ? t('language.german')
+                        : t('language.chinese')}
               </p>
             </div>
             <span className="nav-item-arrow">→</span>
@@ -115,29 +120,21 @@ export default function ProfileScreen() {
           <h2 className="profile-screen-section-title">{t('profile.debugMode')}</h2>
           <div className="switch-container">
             <div className="switch-row">
-              <span className="switch-label">
-                {t('profile.debugModeDescription')}
-              </span>
+              <span className="switch-label">{t('profile.debugModeDescription')}</span>
               <label className="profile-screen-switch">
-                <input
-                  type="checkbox"
-                  checked={debugMode}
-                  onChange={toggleDebugMode}
-                />
+                <input type="checkbox" checked={debugMode} onChange={toggleDebugMode} />
                 <span className="profile-screen-switch-slider"></span>
               </label>
             </div>
             <div className="switch-status">
-              {debugMode 
-                ? t('profile.debugModeOn')
-                : t('profile.debugModeOff')}
+              {debugMode ? t('profile.debugModeOn') : t('profile.debugModeOff')}
             </div>
           </div>
         </div>
 
         {/* カスタム食品登録 */}
         <div className="profile-screen-section">
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -151,12 +148,8 @@ export default function ProfileScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                {t('profile.customFood')}
-              </h2>
-              <p className="nav-item-description">
-                {t('profile.customFoodDescription')}
-              </p>
+              <h2 className="nav-item-title">{t('profile.customFood')}</h2>
+              <p className="nav-item-description">{t('profile.customFoodDescription')}</p>
             </div>
             <span className="nav-item-arrow">→</span>
           </div>
@@ -164,7 +157,7 @@ export default function ProfileScreen() {
 
         {/* UI設定（画面遷移） */}
         <div className="profile-screen-section">
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -181,12 +174,8 @@ export default function ProfileScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                {t('profile.uiSettings')}
-              </h2>
-              <p className="nav-item-description">
-                {t('profile.uiSettingsDescription')}
-              </p>
+              <h2 className="nav-item-title">{t('profile.uiSettings')}</h2>
+              <p className="nav-item-description">{t('profile.uiSettingsDescription')}</p>
             </div>
             <span className="nav-item-arrow">→</span>
           </div>
@@ -194,7 +183,7 @@ export default function ProfileScreen() {
 
         {/* 塩ミルの設定（遷移式） */}
         <div className="profile-screen-section">
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -210,11 +199,17 @@ export default function ProfileScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                {t('profile.saltSettings')}
-              </h2>
+              <h2 className="nav-item-title">{t('profile.saltSettings')}</h2>
               <p className="nav-item-description">
-                {t('profile.saltType')}: {config.saltType === 'table_salt' ? t('profile.tableSalt') : config.saltType === 'sea_salt' ? t('profile.seaSalt') : config.saltType === 'himalayan_salt' ? t('profile.himalayanSalt') : t('profile.celticSalt')} / {config.saltUnitWeight}g/{t('profile.perShave')}
+                {t('profile.saltType')}:{' '}
+                {config.saltType === 'table_salt'
+                  ? t('profile.tableSalt')
+                  : config.saltType === 'sea_salt'
+                    ? t('profile.seaSalt')
+                    : config.saltType === 'himalayan_salt'
+                      ? t('profile.himalayanSalt')
+                      : t('profile.celticSalt')}{' '}
+                / {config.saltUnitWeight}g/{t('profile.perShave')}
               </p>
             </div>
             <span className="nav-item-arrow">→</span>
@@ -223,7 +218,7 @@ export default function ProfileScreen() {
 
         {/* 炭水化物ターゲット設定（遷移式） */}
         <div className="profile-screen-section">
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -239,9 +234,7 @@ export default function ProfileScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                {t('profile.carbTargetSettings')}
-              </h2>
+              <h2 className="nav-item-title">{t('profile.carbTargetSettings')}</h2>
               <p className="nav-item-description">
                 {t('common.current')}: {config.targetCarbs}g/{t('common.perDay')}
               </p>
@@ -252,7 +245,14 @@ export default function ProfileScreen() {
 
         {/* データエクスポート/インポート */}
         <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #e5e7eb' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: '600', marginBottom: '1rem', color: '#1f2937' }}>
+          <h3
+            style={{
+              fontSize: '1.1rem',
+              fontWeight: '600',
+              marginBottom: '1rem',
+              color: '#1f2937',
+            }}
+          >
             {t('profile.dataManagement')}
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -271,7 +271,9 @@ export default function ProfileScreen() {
                   URL.revokeObjectURL(url);
                   alert(t('profile.exportSuccess'));
                 } catch (error) {
-                  alert(t('profile.exportFailed') + ': ' + (error instanceof Error ? error.message : ''));
+                  alert(
+                    t('profile.exportFailed') + ': ' + (error instanceof Error ? error.message : '')
+                  );
                 }
               }}
               style={{
@@ -295,7 +297,7 @@ export default function ProfileScreen() {
                 input.onchange = async (e) => {
                   const file = (e.target as HTMLInputElement).files?.[0];
                   if (!file) return;
-                  
+
                   try {
                     const text = await file.text();
                     if (window.confirm(t('profile.importConfirm'))) {
@@ -304,7 +306,11 @@ export default function ProfileScreen() {
                       alert(t('profile.importSuccess'));
                     }
                   } catch (error) {
-                    alert(t('profile.importFailed') + ': ' + (error instanceof Error ? error.message : ''));
+                    alert(
+                      t('profile.importFailed') +
+                        ': ' +
+                        (error instanceof Error ? error.message : '')
+                    );
                   }
                 };
                 input.click();
@@ -328,7 +334,7 @@ export default function ProfileScreen() {
         {/* アカウント */}
         {isSupabaseAvailable() && (
           <div className="profile-screen-section">
-            <div 
+            <div
               className="nav-item"
               role="button"
               tabIndex={0}
@@ -344,12 +350,8 @@ export default function ProfileScreen() {
               }}
             >
               <div className="nav-item-content">
-                <h2 className="nav-item-title">
-                  {t('profile.account')}
-                </h2>
-                <p className="nav-item-description">
-                  {t('profile.accountDescription')}
-                </p>
+                <h2 className="nav-item-title">{t('profile.account')}</h2>
+                <p className="nav-item-description">{t('profile.accountDescription')}</p>
               </div>
               <span className="nav-item-arrow">→</span>
             </div>
@@ -358,7 +360,7 @@ export default function ProfileScreen() {
 
         {/* データ管理 */}
         <div className="profile-screen-section">
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -374,16 +376,12 @@ export default function ProfileScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                {t('profile.exportData')}
-              </h2>
-              <p className="nav-item-description">
-                {t('profile.exportDescription')}
-              </p>
+              <h2 className="nav-item-title">{t('profile.exportData')}</h2>
+              <p className="nav-item-description">{t('profile.exportDescription')}</p>
             </div>
             <span className="nav-item-arrow">→</span>
           </div>
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -400,12 +398,8 @@ export default function ProfileScreen() {
             style={{ color: '#dc2626' }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                {t('profile.deleteData')}
-              </h2>
-              <p className="nav-item-description">
-                {t('profile.deleteDescription')}
-              </p>
+              <h2 className="nav-item-title">{t('profile.deleteData')}</h2>
+              <p className="nav-item-description">{t('profile.deleteDescription')}</p>
             </div>
             <span className="nav-item-arrow">→</span>
           </div>
@@ -413,7 +407,7 @@ export default function ProfileScreen() {
 
         {/* ヘルプとサポート */}
         <div className="profile-screen-section">
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -429,12 +423,8 @@ export default function ProfileScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                フィードバックを送信
-              </h2>
-              <p className="nav-item-description">
-                バグ報告、機能リクエスト、ご意見
-              </p>
+              <h2 className="nav-item-title">フィードバックを送信</h2>
+              <p className="nav-item-description">バグ報告、機能リクエスト、ご意見</p>
             </div>
             <span className="nav-item-arrow">→</span>
           </div>
@@ -442,7 +432,7 @@ export default function ProfileScreen() {
 
         {/* 法的情報 */}
         <div className="profile-screen-section">
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -458,16 +448,12 @@ export default function ProfileScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                プライバシーポリシー
-              </h2>
-              <p className="nav-item-description">
-                個人情報の取り扱いについて
-              </p>
+              <h2 className="nav-item-title">プライバシーポリシー</h2>
+              <p className="nav-item-description">個人情報の取り扱いについて</p>
             </div>
             <span className="nav-item-arrow">→</span>
           </div>
-          <div 
+          <div
             className="nav-item"
             role="button"
             tabIndex={0}
@@ -483,12 +469,8 @@ export default function ProfileScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">
-                利用規約
-              </h2>
-              <p className="nav-item-description">
-                サービスの利用条件
-              </p>
+              <h2 className="nav-item-title">利用規約</h2>
+              <p className="nav-item-description">サービスの利用条件</p>
             </div>
             <span className="nav-item-arrow">→</span>
           </div>
@@ -496,7 +478,10 @@ export default function ProfileScreen() {
 
         {/* アプリ情報 */}
         <div className="profile-screen-section">
-          <div className="profile-screen-section-title" style={{ marginBottom: '0.5rem', fontSize: '0.9rem', color: '#6b7280' }}>
+          <div
+            className="profile-screen-section-title"
+            style={{ marginBottom: '0.5rem', fontSize: '0.9rem', color: '#6b7280' }}
+          >
             アプリ情報
           </div>
           <div style={{ padding: '0.75rem 1rem', fontSize: '0.875rem', color: '#6b7280' }}>

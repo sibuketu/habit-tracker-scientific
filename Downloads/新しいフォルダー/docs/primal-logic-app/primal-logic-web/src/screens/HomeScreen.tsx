@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Home Screen (Web版)
- * 
+ *
  * 栄養素ゲージの表示と基本的なナビゲーション
  */
 
@@ -10,7 +10,6 @@ import { useTranslation } from '../utils/i18n';
 import MiniNutrientGauge from '../components/MiniNutrientGauge';
 import OmegaRatioGauge from '../components/OmegaRatioGauge';
 import CalciumPhosphorusRatioGauge from '../components/CalciumPhosphorusRatioGauge';
-import GlycineMethionineRatioGauge from '../components/GlycineMethionineRatioGauge';
 import ArgumentCard from '../components/ArgumentCard';
 import RecoveryProtocolScreen from './RecoveryProtocolScreen';
 import ButcherSelect from '../components/butcher/ButcherSelect';
@@ -36,7 +35,8 @@ import type { AnimalType } from '../data/deepNutritionData';
 import type { FoodItem } from '../types';
 import { logError, getUserFriendlyErrorMessage } from '../utils/errorHandler';
 import PhotoAnalysisModal from '../components/PhotoAnalysisModal';
-import './HomeScreen.css';
+import FoodEditModal from '../components/dashboard/FoodEditModal';
+// import './HomeScreen.css';
 
 interface HomeScreenProps {
   onOpenFatTabReady?: (callback: () => void) => void;
@@ -79,12 +79,14 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
       userProfile?.bodyComposition, // Phase 3: 体組成設定
       userProfile?.weight, // Phase 3: 体重（LBM計算用）
       userProfile?.metabolicStressIndicators, // Phase 4: 代謝ストレス指標
-      userProfile?.customNutrientTargets ? Object.fromEntries(
-        Object.entries(userProfile.customNutrientTargets).map(([key, value]) => [
-          key,
-          typeof value === 'number' ? { mode: 'manual' as const, value } : value
-        ])
-      ) : undefined // Phase 5: 栄養素目標値のカスタマイズ
+      userProfile?.customNutrientTargets
+        ? Object.fromEntries(
+          Object.entries(userProfile.customNutrientTargets).map(([key, value]) => [
+            key,
+            typeof value === 'number' ? { mode: 'manual' as const, value } : value,
+          ])
+        )
+        : undefined // Phase 5: 栄養素目標値のカスタマイズ
     );
   }, [userProfile]);
   const [selectedArgumentCard, setSelectedArgumentCard] = useState<string | null>(null);
@@ -95,17 +97,25 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
   const [showMyFoods, setShowMyFoods] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [myFoodsList, setMyFoodsList] = useState<MyFoodItem[]>([]);
-  const [historyList, setHistoryList] = useState<Array<{ foodName: string; amount: number; unit: 'g' | '個'; date: string }>>([]);
+  const [historyList, setHistoryList] = useState<
+    Array<{ foodName: string; amount: number; unit: 'g' | '個'; date: string }>
+  >([]);
   const [streakData, setStreakData] = useState<StreakData | null>(null);
   const [showTransitionGuide, setShowTransitionGuide] = useState(false);
   const [showAmountModal, setShowAmountModal] = useState(false);
-  const [selectedHistoryFood, setSelectedHistoryFood] = useState<{ foodName: string; amount: number; unit: 'g' | '個'; date: string } | null>(null);
+  const [selectedHistoryFood, setSelectedHistoryFood] = useState<{
+    foodName: string;
+    amount: number;
+    unit: 'g' | '個';
+    date: string;
+  } | null>(null);
   const [amountInput, setAmountInput] = useState<string>('');
   const [showMyFoodAmountModal, setShowMyFoodAmountModal] = useState(false);
   const [selectedMyFood, setSelectedMyFood] = useState<MyFoodItem | null>(null);
   const [myFoodAmountInput, setMyFoodAmountInput] = useState<string>('');
   const [myFoodsSearchQuery, setMyFoodsSearchQuery] = useState<string>('');
   const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
+  const [showPhotoOrBarcodeModal, setShowPhotoOrBarcodeModal] = useState(false);
 
   // AI写真解析確認モーダル用ステート
   const [showPhotoConfirmation, setShowPhotoConfirmation] = useState(false);
@@ -117,7 +127,11 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
     followupQuestions?: string[];
   } | null>(null);
   const [followupAnswers, setFollowupAnswers] = useState<Record<string, string>>({});
-  const [isAIProcessing, setIsAIProcessing] = useState(false); // 解析中・再計算中フラグ  // Phase 1: 移行期間の進捗を計算
+  const [isAIProcessing, setIsAIProcessing] = useState(false);
+
+  // 統一確認画面 (FoodEditModal) 用ステート
+  const [showFoodEditModal, setShowFoodEditModal] = useState(false);
+  const [editingFood, setEditingFood] = useState<FoodItem | null>(null);
   const transitionProgress = useMemo(() => {
     return calculateTransitionProgress(
       userProfile?.daysOnCarnivore,
@@ -135,13 +149,16 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
   }, [dailyLog?.date]); // dailyLogの日付が変更されたら再計算
 
   // プレビュー変更ハンドラ（無限ループ防止のためuseCallbackでメモ化）
-  const handlePreviewChange = useCallback((preview: PreviewData | null) => {
-    if (preview) {
-      setPreview(preview);
-    } else {
-      clearPreview();
-    }
-  }, [setPreview, clearPreview]);
+  const handlePreviewChange = useCallback(
+    (preview: PreviewData | null) => {
+      if (preview) {
+        setPreview(preview);
+      } else {
+        clearPreview();
+      }
+    },
+    [setPreview, clearPreview]
+  );
 
   // AISpeedDialから呼び出されるコールバックを登録（無限ループ防止のため、useRefで初回のみ実行）
   const hasRegisteredCallbacks = useRef(false);
@@ -182,15 +199,16 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
     const myFoods = getMyFoods();
     // 履歴からも取得してマージ（dateプロパティを追加）
     const history = await getAllFoodHistory();
-    const historyWithDate = history.map(food => ({
+    const historyWithDate = history.map((food) => ({
       ...food,
       date: new Date().toISOString().split('T')[0], // 最新の日付を設定
     }));
     // 既存のmyFoodsと履歴をマージ（重複を除去）
     const merged = [...myFoods];
-    historyWithDate.forEach(historyFood => {
+    historyWithDate.forEach((historyFood) => {
       const exists = merged.some(
-        item => item.foodName === historyFood.foodName &&
+        (item) =>
+          item.foodName === historyFood.foodName &&
           item.amount === historyFood.amount &&
           item.unit === historyFood.unit
       );
@@ -206,15 +224,20 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
     const logs = await getDailyLogs();
 
     // 過去30日分の食品を時系列で取得
-    const historyItems: Array<{ foodName: string; amount: number; unit: 'g' | '個'; date: string }> = [];
+    const historyItems: Array<{
+      foodName: string;
+      amount: number;
+      unit: 'g' | '個';
+      date: string;
+    }> = [];
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     logs
-      .filter(log => new Date(log.date) >= thirtyDaysAgo)
+      .filter((log) => new Date(log.date) >= thirtyDaysAgo)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .forEach(log => {
-        log.fuel.forEach(food => {
+      .forEach((log) => {
+        log.fuel.forEach((food) => {
           historyItems.push({
             foodName: food.item,
             amount: food.amount,
@@ -228,26 +251,40 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
   };
 
   // 履歴から食品を追加（量選択モーダルを表示）
-  const handleAddHistoryFoodClick = (historyItem: { foodName: string; amount: number; unit: 'g' | '個'; date: string }) => {
+  const handleAddHistoryFoodClick = (historyItem: {
+    foodName: string;
+    amount: number;
+    unit: 'g' | '個';
+    date: string;
+  }) => {
     setSelectedHistoryFood(historyItem);
     setAmountInput(historyItem.amount.toString());
     setShowAmountModal(true);
   };
 
   // 履歴から食品を追加（実際の追加処理）
-  const handleAddHistoryFood = async (historyItem: { foodName: string; amount: number; unit: 'g' | '個'; date: string }) => {
+  const handleAddHistoryFood = async (historyItem: {
+    foodName: string;
+    amount: number;
+    unit: 'g' | '個';
+    date: string;
+  }) => {
     // 既存のログから該当する食品の栄養素データを検索
     // これにより、カスタム食品や日本語名の食品にも対応
     const allLogs = await getDailyLogs();
     let existingFoodItem: FoodItem | null = null;
 
     // 該当する日付のログから検索（最も正確）
-    const targetLog = allLogs.find(log => log.date === historyItem.date);
+    const targetLog = allLogs.find((log) => log.date === historyItem.date);
     if (targetLog) {
       // 完全一致（食品名、量、単位）を検索
-      existingFoodItem = targetLog.fuel.find(
-        (f) => f.item === historyItem.foodName && f.amount === historyItem.amount && f.unit === historyItem.unit
-      ) || null;
+      existingFoodItem =
+        targetLog.fuel.find(
+          (f) =>
+            f.item === historyItem.foodName &&
+            f.amount === historyItem.amount &&
+            f.unit === historyItem.unit
+        ) || null;
 
       // 完全一致が見つからない場合は、食品名のみで検索
       if (!existingFoodItem) {
@@ -264,7 +301,11 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
     }
 
     // 既存の栄養素データがある場合は、それを使用
-    if (existingFoodItem && existingFoodItem.nutrients && Object.keys(existingFoodItem.nutrients).length > 0) {
+    if (
+      existingFoodItem &&
+      existingFoodItem.nutrients &&
+      Object.keys(existingFoodItem.nutrients).length > 0
+    ) {
       const ratio = historyItem.amount / existingFoodItem.amount;
       const foodItem: FoodItem = {
         item: historyItem.foodName,
@@ -272,7 +313,10 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
         unit: historyItem.unit,
         type: existingFoodItem.type,
         nutrients: Object.fromEntries(
-          Object.entries(existingFoodItem.nutrients || {}).map(([key, value]) => [key, (value || 0) * ratio])
+          Object.entries(existingFoodItem.nutrients || {}).map(([key, value]) => [
+            key,
+            (value || 0) * ratio,
+          ])
         ) as FoodItem['nutrients'],
       };
       addFood(foodItem);
@@ -361,7 +405,11 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
     }
 
     // 既存の栄養素データがある場合は、それを使用
-    if (existingFoodItem && existingFoodItem.nutrients && Object.keys(existingFoodItem.nutrients).length > 0) {
+    if (
+      existingFoodItem &&
+      existingFoodItem.nutrients &&
+      Object.keys(existingFoodItem.nutrients).length > 0
+    ) {
       const ratio = amountToUse / existingFoodItem.amount;
       const foodItem: FoodItem = {
         item: food.foodName,
@@ -369,7 +417,10 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
         unit: food.unit,
         type: existingFoodItem.type,
         nutrients: Object.fromEntries(
-          Object.entries(existingFoodItem.nutrients || {}).map(([key, value]) => [key, (value || 0) * ratio])
+          Object.entries(existingFoodItem.nutrients || {}).map(([key, value]) => [
+            key,
+            (value || 0) * ratio,
+          ])
         ) as FoodItem['nutrients'],
       };
       addFood(foodItem);
@@ -435,9 +486,6 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
     setShowMyFoods(false);
   };
 
-
-
-
   // プレビューゲージを生成（既に食べたもの + プレビューを分けて表示）
   const previewGauges = useMemo(() => {
     if (!previewData) return [];
@@ -463,16 +511,19 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
     const safeEffectiveProtein = calculatedMetrics.effectiveProtein ?? 0;
     const safeProteinRequirement = calculatedMetrics.proteinRequirement ?? 100;
 
-    const configs: Record<string, {
-      key: NutrientKey;
-      label: string;
-      current: number;
-      previewValue: number;
-      target: number;
-      unit: string;
-      nutrient: string;
-      status: 'optimal' | 'low' | 'warning';
-    }> = {
+    const configs: Record<
+      string,
+      {
+        key: NutrientKey;
+        label: string;
+        current: number;
+        previewValue: number;
+        target: number;
+        unit: string;
+        nutrient: string;
+        status: 'optimal' | 'low' | 'warning';
+      }
+    > = {
       protein: {
         key: 'protein',
         label: 'タンパク質（有効）',
@@ -492,7 +543,12 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
         target: 150,
         unit: 'g',
         nutrient: 'fat',
-        status: (calculatedMetrics.fatTotal ?? 0) >= 150 ? 'optimal' : (calculatedMetrics.fatTotal ?? 0) < 100 ? 'warning' : 'low',
+        status:
+          (calculatedMetrics.fatTotal ?? 0) >= 150
+            ? 'optimal'
+            : (calculatedMetrics.fatTotal ?? 0) < 100
+              ? 'warning'
+              : 'low',
       },
       zinc: {
         key: 'zinc',
@@ -512,7 +568,10 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
         target: calculatedMetrics.ironRequirement || 8,
         unit: 'mg',
         nutrient: 'iron',
-        status: calculatedMetrics.effectiveIron >= (calculatedMetrics.ironRequirement || 8) ? 'optimal' : 'low',
+        status:
+          calculatedMetrics.effectiveIron >= (calculatedMetrics.ironRequirement || 8)
+            ? 'optimal'
+            : 'low',
       },
       magnesium: {
         key: 'magnesium',
@@ -532,7 +591,12 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
         target: 5000,
         unit: 'mg',
         nutrient: 'sodium',
-        status: calculatedMetrics.sodiumTotal >= 5000 ? 'optimal' : calculatedMetrics.sodiumTotal < 3000 ? 'warning' : 'low',
+        status:
+          calculatedMetrics.sodiumTotal >= 5000
+            ? 'optimal'
+            : calculatedMetrics.sodiumTotal < 3000
+              ? 'warning'
+              : 'low',
       },
     };
 
@@ -550,8 +614,8 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
     };
 
     return Object.values(configs)
-      .filter(config => config.current > 0 || config.previewValue > 0)
-      .map(config => (
+      .filter((config) => config.current > 0 || config.previewValue > 0)
+      .map((config) => (
         <MiniNutrientGauge
           key={config.key}
           label={config.label}
@@ -579,15 +643,10 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
   return (
     <div className="home-screen-container">
       {/* PとFの充分な摂取量ゲージ（Master Specification準拠: ホーム画面の最上部に常時表示） */}
-      <PFRatioGauge
-        previewData={previewData}
-        showPreview={showNutrientPreview}
-      />
-
+      <PFRatioGauge previewData={previewData} showPreview={showNutrientPreview} />
 
       {/* コンテンツエリア */}
       <div className="home-screen-content" style={{ paddingTop: '100px' }}>
-
         {/* Phase 1: 移行期間バナー（移行期間中のみ表示） */}
         {transitionProgress && (
           <TransitionBanner
@@ -610,9 +669,75 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
 
         {/* Symptom Checker removed - replaced with AI Prompt Chips in Magic Input */}
 
+        {/* 通知設定（常に表示） */}
+        <div
+          style={{
+            padding: '0.75rem',
+            marginBottom: '1rem',
+            backgroundColor: '#fef3c7',
+            border: '1px solid #fbbf24',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '0.5rem',
+          }}
+        >
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ fontSize: '20px' }}>🔔</span>
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.25rem' }}>
+                通知設定
+              </div>
+              <div style={{ fontSize: '12px', color: '#92400e' }}>
+                電解質アラート、脂質不足リマインダーなどの通知を受け取れます
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={async () => {
+              const notificationPermission = 'Notification' in window ? Notification.permission : 'default';
+              if (notificationPermission === 'denied') {
+                alert('通知が拒否されています。ブラウザの設定から通知を許可してください。\n\n設定画面からも通知設定を変更できます。');
+                const event = new CustomEvent('navigateToScreen', { detail: 'settings' });
+                window.dispatchEvent(event);
+                return;
+              }
+              const { requestNotificationPermission } = await import('../utils/defrostReminder');
+              const permission = await requestNotificationPermission();
+              if (permission) {
+                localStorage.setItem('settings_notification_enabled', JSON.stringify(true));
+                window.location.reload(); // 状態を更新するため再読み込み
+              }
+            }}
+            style={{
+              padding: '0.5rem 1rem',
+              backgroundColor: '#f59e0b',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: 'pointer',
+            }}
+          >
+            有効にする
+          </button>
+        </div>
+
         {/* 食品追加ボタン */}
         <div className="home-screen-section" style={{ position: 'relative', zIndex: 10 }}>
-          <div className="flex items-center justify-center gap-2 mb-4">
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.25rem',
+              marginBottom: '1rem',
+              flexWrap: 'wrap',
+            }}
+          >
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -622,26 +747,75 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                 setShowMyFoods(false);
                 setShowHistory(false);
               }}
+              title={t('home.addFood')}
               style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: '#dc2626',
-                color: 'white',
+                width: '44px',
+                height: '44px',
+                padding: 0,
+                backgroundColor: selectedAnimal ? '#b91c1c' : '#f3f4f6',
+                color: selectedAnimal ? 'white' : '#374151',
                 fontWeight: 600,
                 borderRadius: '8px',
                 border: 'none',
                 cursor: 'pointer',
-                fontSize: '16px',
+                fontSize: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 zIndex: 1000,
                 position: 'relative',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#b91c1c';
+                if (!selectedAnimal) {
+                  e.currentTarget.style.backgroundColor = '#e5e7eb';
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#dc2626';
+                if (!selectedAnimal) {
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                }
               }}
             >
-              + {t('home.addFood')}
+              +
+            </button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowHistory(!showHistory);
+                setShowMyFoods(false);
+                setSelectedAnimal(null);
+              }}
+              title={t('home.history')}
+              style={{
+                width: '44px',
+                height: '44px',
+                padding: 0,
+                backgroundColor: showHistory ? '#b91c1c' : '#f3f4f6',
+                color: showHistory ? 'white' : '#374151',
+                fontWeight: 600,
+                borderRadius: '8px',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 1000,
+                position: 'relative',
+              }}
+              onMouseEnter={(e) => {
+                if (!showHistory) {
+                  e.currentTarget.style.backgroundColor = '#e5e7eb';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!showHistory) {
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                }
+              }}
+            >
+              📋
             </button>
             <button
               onClick={(e) => {
@@ -653,14 +827,19 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
               }}
               title={t('home.myFoods')}
               style={{
-                padding: '0.75rem 1.5rem',
+                width: '44px',
+                height: '44px',
+                padding: 0,
                 backgroundColor: showMyFoods ? '#b91c1c' : '#f3f4f6',
                 color: showMyFoods ? 'white' : '#374151',
                 fontWeight: 600,
                 borderRadius: '8px',
                 border: 'none',
                 cursor: 'pointer',
-                fontSize: '16px',
+                fontSize: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 zIndex: 1000,
                 position: 'relative',
               }}
@@ -675,55 +854,28 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                 }
               }}
             >
-              ⭐ {t('home.myFoods')}
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowHistory(!showHistory);
-                setShowMyFoods(false);
-                setSelectedAnimal(null);
-              }}
-              style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: showHistory ? '#b91c1c' : '#f3f4f6',
-                color: showHistory ? 'white' : '#374151',
-                fontWeight: 600,
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '16px',
-                zIndex: 1000,
-                position: 'relative',
-              }}
-              onMouseEnter={(e) => {
-                if (!showHistory) {
-                  e.currentTarget.style.backgroundColor = '#e5e7eb';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!showHistory) {
-                  e.currentTarget.style.backgroundColor = '#f3f4f6';
-                }
-              }}
-            >
-              📋 {t('home.history')}
+              ⭐
             </button>
             <button
               onClick={() => {
                 const event = new CustomEvent('navigateToScreen', { detail: 'customFood' });
                 window.dispatchEvent(event);
               }}
+              title={t('customFood.title')}
               style={{
-                padding: '0.75rem 1.5rem',
+                width: '44px',
+                height: '44px',
+                padding: 0,
                 backgroundColor: '#f3f4f6',
                 color: '#374151',
                 fontWeight: 600,
                 borderRadius: '8px',
                 border: 'none',
                 cursor: 'pointer',
-                fontSize: '16px',
+                fontSize: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 zIndex: 1000,
                 position: 'relative',
               }}
@@ -734,47 +886,28 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                 e.currentTarget.style.backgroundColor = '#f3f4f6';
               }}
             >
-              + {t('customFood.title')}
-            </button>
-            <button
-              onClick={() => {
-                setShowBarcodeScanner(true);
-              }}
-              style={{
-                padding: '0.75rem 1.5rem',
-                backgroundColor: '#f3f4f6',
-                color: '#374151',
-                fontWeight: 600,
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '16px',
-                zIndex: 1000,
-                position: 'relative',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#e5e7eb';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#f3f4f6';
-              }}
-            >
-              📷 {t('home.barcodeScan')}
+              ✏️
             </button>
             <button
               onClick={() => {
                 const event = new CustomEvent('navigateToScreen', { detail: 'recipe' });
                 window.dispatchEvent(event);
               }}
+              title={t('home.recipe')}
               style={{
-                padding: '0.75rem 1.5rem',
+                width: '44px',
+                height: '44px',
+                padding: 0,
                 backgroundColor: '#f3f4f6',
                 color: '#374151',
                 fontWeight: 600,
                 borderRadius: '8px',
                 border: 'none',
                 cursor: 'pointer',
-                fontSize: '16px',
+                fontSize: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 zIndex: 1000,
                 position: 'relative',
               }}
@@ -785,80 +918,40 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                 e.currentTarget.style.backgroundColor = '#f3f4f6';
               }}
             >
-              🍽️ {t('home.recipe')}
+              🍽️
             </button>
             {featureDisplaySettings.photoUpload && (
               <button
-                onClick={async () => {
-                  const input = document.createElement('input');
-                  input.type = 'file';
-                  input.accept = 'image/*';
-                  input.capture = 'environment';
-                  input.style.display = 'none';
-                  document.body.appendChild(input);
-
-                  input.onchange = async (e) => {
-                    const file = (e.target as HTMLInputElement).files?.[0];
-                    if (!file) {
-                      document.body.removeChild(input);
-                      return;
-                    }
-
-                    try {
-                      // ローディング表示
-                      const loadingMessage = document.createElement('div');
-                      loadingMessage.textContent = '写真を解析中...';
-                      loadingMessage.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10000;';
-                      document.body.appendChild(loadingMessage);
-
-                      const { analyzeFoodImage } = await import('../services/aiService');
-                      const result = await analyzeFoodImage(file);
-
-                      // ローディング表示を削除
-                      document.body.removeChild(loadingMessage);
-
-                      // 結果をセットして確認モーダルを表示
-                      setPhotoAnalysisResult(result);
-                      setFollowupAnswers({});
-                      setShowPhotoConfirmation(true);
-
-                      document.body.removeChild(input);
-                    } catch (error) {
-                      // ローディング表示を削除
-                      const loadingMessage = document.querySelector('div[style*="写真を解析中"]');
-                      if (loadingMessage) {
-                        document.body.removeChild(loadingMessage);
-                      }
-
-                      logError(error, { component: 'HomeScreen', action: 'handlePhotoUpload' });
-                      const { getUserFriendlyErrorMessage } = await import('../utils/errorHandler');
-                      alert(getUserFriendlyErrorMessage(error) || '写真の解析に失敗しました。もう一度お試しください。');
-                      document.body.removeChild(input);
-                    }
-                  };
-
-                  input.click();
+                onClick={() => {
+                  // モーダルを表示
+                  setShowPhotoOrBarcodeModal(true);
                 }}
+                title={t('home.addFromPhoto') + ' / ' + t('home.barcodeScan')}
                 style={{
-                  padding: '0.75rem 1.5rem',
-                  backgroundColor: '#f59e0b',
-                  color: 'white',
+                  width: '44px',
+                  height: '44px',
+                  padding: 0,
+                  backgroundColor: '#f3f4f6',
+                  color: '#374151',
                   fontWeight: 600,
                   borderRadius: '8px',
                   border: 'none',
                   cursor: 'pointer',
-                  fontSize: '16px',
+                  fontSize: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   zIndex: 1000,
                   position: 'relative',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#d97706';
+                  e.currentTarget.style.backgroundColor = '#e5e7eb';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#f59e0b';
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
                 }}
               >
-                📷 {t('home.addFromPhoto')}
+                📷
               </button>
             )}
           </div>
@@ -867,7 +960,14 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
         {/* 「いつもの」タブ（Master Specification準拠: History Copy機能） */}
         {featureDisplaySettings.myFoodsTab && showMyFoods && (
           <div className="home-screen-section" style={{ marginTop: '1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '1rem',
+              }}
+            >
               <h2 className="home-screen-section-title">{t('home.myFoodsTitle')}</h2>
               <button
                 onClick={() => {
@@ -876,7 +976,7 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                 }}
                 style={{
                   padding: '0.5rem 1rem',
-                  backgroundColor: '#dc2626',
+                  backgroundColor: '#b91c1c',
                   color: 'white',
                   border: 'none',
                   borderRadius: '8px',
@@ -915,7 +1015,10 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                     .filter((food) => {
                       const searchLower = myFoodsSearchQuery.toLowerCase();
                       const displayName = food.displayName || food.foodName;
-                      return displayName.toLowerCase().includes(searchLower) || food.foodName.toLowerCase().includes(searchLower);
+                      return (
+                        displayName.toLowerCase().includes(searchLower) ||
+                        food.foodName.toLowerCase().includes(searchLower)
+                      );
                     })
                     .map((food, index) => (
                       <div
@@ -941,11 +1044,14 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                             padding: 0,
                           }}
                         >
-                          <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '0.25rem' }}>
+                          <div
+                            style={{ fontWeight: 600, fontSize: '16px', marginBottom: '0.25rem' }}
+                          >
                             {food.displayName || food.foodName}
                           </div>
                           <div style={{ fontSize: '14px', color: '#6b7280' }}>
-                            {food.amount}{food.unit === 'g' ? 'g' : '個'}
+                            {food.amount}
+                            {food.unit === 'g' ? 'g' : '個'}
                           </div>
                         </button>
                         <button
@@ -1008,13 +1114,20 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                       e.currentTarget.style.borderColor = '#e5e7eb';
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
                       <div>
                         <div style={{ fontWeight: 600, fontSize: '16px', marginBottom: '0.25rem' }}>
                           {food.foodName}
                         </div>
                         <div style={{ fontSize: '14px', color: '#6b7280' }}>
-                          {food.amount}{food.unit === 'g' ? 'g' : '個'}
+                          {food.amount}
+                          {food.unit === 'g' ? 'g' : '個'}
                         </div>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -1039,7 +1152,7 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                           }}
                           style={{
                             padding: '0.25rem 0.5rem',
-                            backgroundColor: '#dc2626',
+                            backgroundColor: '#b91c1c',
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
@@ -1052,7 +1165,10 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                           ⭐
                         </button>
                         <div style={{ fontSize: '12px', color: '#9ca3af' }}>
-                          {new Date(food.date).toLocaleDateString('ja-JP', { month: 'short', day: 'numeric' })}
+                          {new Date(food.date).toLocaleDateString('ja-JP', {
+                            month: 'short',
+                            day: 'numeric',
+                          })}
                         </div>
                       </div>
                     </div>
@@ -1068,9 +1184,14 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
           <div className="home-screen-section">
             <div className="flex items-center justify-between mb-3">
               <h2 className="home-screen-section-title">
-                {selectedAnimal === 'beef' ? t('home.beef') :
-                  selectedAnimal === 'pork' ? t('home.pork') :
-                    selectedAnimal === 'chicken' ? t('home.chicken') : t('home.food')} {t('home.select')}
+                {selectedAnimal === 'beef'
+                  ? t('home.beef')
+                  : selectedAnimal === 'pork'
+                    ? t('home.pork')
+                    : selectedAnimal === 'chicken'
+                      ? t('home.chicken')
+                      : t('home.food')}{' '}
+                {t('home.select')}
               </h2>
               <button
                 onClick={() => setSelectedAnimal(null)}
@@ -1088,52 +1209,54 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
               }}
               onPreviewChange={handlePreviewChange}
               onFoodAdd={(foodItem) => {
-                addFood(foodItem);
-                clearPreview();
-                // ButcherSelectは開いたままにする（連続追加を可能にする）
-                // setSelectedAnimal(null); // 削除：連続追加できるようにするため
+                // ButcherSelectからの追加もFoodEditModalを経由する
+                setEditingFood(foodItem);
+                setShowFoodEditModal(true);
+                // ButcherSelectは開いたままにしない（モーダルが出るので閉じる）
+                setSelectedAnimal(null);
               }}
-              currentDailyTotal={dailyLog?.calculatedMetrics ? {
-                protein: dailyLog.calculatedMetrics.effectiveProtein || 0,
-                fat: dailyLog.calculatedMetrics.fatTotal || 0,
-                zinc: dailyLog.calculatedMetrics.effectiveZinc || 0,
-                magnesium: dailyLog.calculatedMetrics.magnesiumTotal || 0,
-                iron: dailyLog.calculatedMetrics.effectiveIron || 0,
-                vitamin_b12: dailyLog.calculatedMetrics.vitaminB12Total || 0,
-                sodium: dailyLog.calculatedMetrics.sodiumTotal || 0,
-                potassium: dailyLog.calculatedMetrics.potassiumTotal || 0,
-                vitamin_a: dailyLog.calculatedMetrics.vitaminATotal || 0,
-                vitamin_d: dailyLog.calculatedMetrics.vitaminDTotal || 0,
-                vitamin_k2: dailyLog.calculatedMetrics.vitaminK2Total || 0,
-                choline: dailyLog.calculatedMetrics.cholineTotal || 0,
-                iodine: dailyLog.calculatedMetrics.iodineTotal || 0,
-                calcium: dailyLog.calculatedMetrics.calciumTotal || 0,
-                phosphorus: dailyLog.calculatedMetrics.phosphorusTotal || 0,
-                glycine: dailyLog.calculatedMetrics.glycineTotal || 0,
-                methionine: dailyLog.calculatedMetrics.methionineTotal || 0,
-                // Avoid Zone（避けるべきもの）
-                plantProtein: dailyLog.calculatedMetrics.plantProteinTotal || 0,
-                vegetableOil: dailyLog.calculatedMetrics.vegetableOilTotal || 0,
-                fiber: dailyLog.calculatedMetrics.fiberTotal || 0,
-                netCarbs: dailyLog.calculatedMetrics.netCarbs || 0,
-                phytates: dailyLog.calculatedMetrics.phytatesTotal || 0,
-                polyphenols: dailyLog.calculatedMetrics.polyphenolsTotal || 0,
-                flavonoids: dailyLog.calculatedMetrics.flavonoidsTotal || 0,
-                oxalates: dailyLog.calculatedMetrics.oxalatesTotal || 0,
-                lectins: dailyLog.calculatedMetrics.lectinsTotal || 0,
-                saponins: dailyLog.calculatedMetrics.saponinsTotal || 0,
-                goitrogens: dailyLog.calculatedMetrics.goitrogensTotal || 0,
-                tannins: dailyLog.calculatedMetrics.tanninsTotal || 0,
-              } : {}}
+              currentDailyTotal={
+                dailyLog?.calculatedMetrics
+                  ? {
+                    protein: dailyLog.calculatedMetrics.effectiveProtein || 0,
+                    fat: dailyLog.calculatedMetrics.fatTotal || 0,
+                    zinc: dailyLog.calculatedMetrics.effectiveZinc || 0,
+                    magnesium: dailyLog.calculatedMetrics.magnesiumTotal || 0,
+                    iron: dailyLog.calculatedMetrics.effectiveIron || 0,
+                    vitamin_b12: dailyLog.calculatedMetrics.vitaminB12Total || 0,
+                    sodium: dailyLog.calculatedMetrics.sodiumTotal || 0,
+                    potassium: dailyLog.calculatedMetrics.potassiumTotal || 0,
+                    vitamin_a: dailyLog.calculatedMetrics.vitaminATotal || 0,
+                    vitamin_d: dailyLog.calculatedMetrics.vitaminDTotal || 0,
+                    vitamin_k2: dailyLog.calculatedMetrics.vitaminK2Total || 0,
+                    choline: dailyLog.calculatedMetrics.cholineTotal || 0,
+                    iodine: dailyLog.calculatedMetrics.iodineTotal || 0,
+                    calcium: dailyLog.calculatedMetrics.calciumTotal || 0,
+                    phosphorus: dailyLog.calculatedMetrics.phosphorusTotal || 0,
+                    glycine: dailyLog.calculatedMetrics.glycineTotal || 0,
+                    methionine: dailyLog.calculatedMetrics.methionineTotal || 0,
+                    // Avoid Zone（避けるべきもの）
+                    plantProtein: dailyLog.calculatedMetrics.plantProteinTotal || 0,
+                    vegetableOil: dailyLog.calculatedMetrics.vegetableOilTotal || 0,
+                    fiber: dailyLog.calculatedMetrics.fiberTotal || 0,
+                    netCarbs: dailyLog.calculatedMetrics.netCarbs || 0,
+                    phytates: dailyLog.calculatedMetrics.phytatesTotal || 0,
+                    polyphenols: dailyLog.calculatedMetrics.polyphenolsTotal || 0,
+                    flavonoids: dailyLog.calculatedMetrics.flavonoidsTotal || 0,
+                    oxalates: dailyLog.calculatedMetrics.oxalatesTotal || 0,
+                    lectins: dailyLog.calculatedMetrics.lectinsTotal || 0,
+                    saponins: dailyLog.calculatedMetrics.saponinsTotal || 0,
+                    goitrogens: dailyLog.calculatedMetrics.goitrogensTotal || 0,
+                    tannins: dailyLog.calculatedMetrics.tanninsTotal || 0,
+                  }
+                  : {}
+              }
             />
           </div>
         )}
 
         {featureDisplaySettings.recoveryProtocol && dailyLog?.recoveryProtocol && (
-          <div
-            className="home-screen-recovery"
-            onClick={() => setShowRecoveryProtocol(true)}
-          >
+          <div className="home-screen-recovery" onClick={() => setShowRecoveryProtocol(true)}>
             <div className="home-screen-recovery-title">⚠️ Recovery Protocol Active</div>
             <div className="home-screen-recovery-text">
               Fasting: {dailyLog?.recoveryProtocol?.fastingTargetHours}h
@@ -1156,16 +1279,18 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
         )}
 
         {/* Recovery Protocol Screen */}
-        {featureDisplaySettings.recoveryProtocol && showRecoveryProtocol && dailyLog?.recoveryProtocol && (
-          <RecoveryProtocolScreen
-            protocol={dailyLog.recoveryProtocol}
-            onClose={() => setShowRecoveryProtocol(false)}
-            onSetProtocol={(protocol) => {
-              setRecoveryProtocol(protocol);
-              setShowRecoveryProtocol(false);
-            }}
-          />
-        )}
+        {featureDisplaySettings.recoveryProtocol &&
+          showRecoveryProtocol &&
+          dailyLog?.recoveryProtocol && (
+            <RecoveryProtocolScreen
+              protocol={dailyLog.recoveryProtocol}
+              onClose={() => setShowRecoveryProtocol(false)}
+              onSetProtocol={(protocol) => {
+                setRecoveryProtocol(protocol);
+                setShowRecoveryProtocol(false);
+              }}
+            />
+          )}
 
         {/* All Nutrients Modal */}
         {showAllNutrients && dailyLog && dailyLog.calculatedMetrics && (
@@ -1213,54 +1338,98 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
               <h2 style={{ marginBottom: '1rem' }}>全栄養素レポート</h2>
               {(() => {
                 const calculatedMetrics = dailyLog.calculatedMetrics;
+                if (!calculatedMetrics) return null;
                 return (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                      gap: '1rem',
+                    }}
+                  >
                     {/* 主要マクロ */}
                     <div>
                       <h3 style={{ marginBottom: '0.5rem', color: '#333' }}>主要マクロ</h3>
-                      <div>タンパク質（有効）: {calculatedMetrics.effectiveProtein.toFixed(1)} / {calculatedMetrics.proteinRequirement.toFixed(1)} g</div>
+                      <div>
+                        タンパク質（有効）: {calculatedMetrics.effectiveProtein.toFixed(1)} /{' '}
+                        {calculatedMetrics.proteinRequirement.toFixed(1)} g
+                      </div>
                       <div>脂質: {calculatedMetrics.fatTotal.toFixed(1)} g</div>
-                      <div>正味炭水化物: {calculatedMetrics.netCarbs.toFixed(1)} g <span style={{ color: '#999', fontSize: '0.9rem' }}>(不要)</span></div>
+                      <div>
+                        正味炭水化物: {calculatedMetrics.netCarbs.toFixed(1)} g{' '}
+                        <span style={{ color: '#999', fontSize: '0.9rem' }}>(不要)</span>
+                      </div>
                     </div>
                     {/* カーニボア重要項目 */}
                     <div>
                       <h3 style={{ marginBottom: '0.5rem', color: '#333' }}>カーニボア重要項目</h3>
-                      <div>ビタミンB12: {calculatedMetrics.vitaminB12Total?.toFixed(1) || '0.0'} μg</div>
-                      <div>亜鉛（有効）: {calculatedMetrics.effectiveZinc.toFixed(1)} / 11.0 mg</div>
-                      <div>鉄分（有効）: {calculatedMetrics.effectiveIron.toFixed(1)} / {calculatedMetrics.ironRequirement.toFixed(1)} mg</div>
+                      <div>
+                        ビタミンB12: {calculatedMetrics.vitaminB12Total?.toFixed(1) || '0.0'} μg
+                      </div>
+                      <div>
+                        亜鉛（有効）: {calculatedMetrics.effectiveZinc.toFixed(1)} / 11.0 mg
+                      </div>
+                      <div>
+                        鉄分（有効）: {calculatedMetrics.effectiveIron.toFixed(1)} /{' '}
+                        {calculatedMetrics.ironRequirement.toFixed(1)} mg
+                      </div>
                       <div>ビタミンA: {calculatedMetrics.effectiveVitC > 0 ? 'あり' : '0'} μg</div>
                     </div>
                     {/* ビタミンB群 */}
                     <div>
                       <h3 style={{ marginBottom: '0.5rem', color: '#333' }}>ビタミンB群</h3>
-                      <div>ビタミンB1: {calculatedMetrics.vitaminB1Total?.toFixed(2) || '0.00'} mg</div>
-                      <div>ビタミンB2: {calculatedMetrics.vitaminB2Total?.toFixed(2) || '0.00'} mg</div>
-                      <div>ビタミンB3: {calculatedMetrics.vitaminB3Total?.toFixed(2) || '0.00'} mg</div>
-                      <div>ビタミンB6: {calculatedMetrics.vitaminB6Total?.toFixed(2) || '0.00'} mg</div>
-                      <div>ビタミンB12: {calculatedMetrics.vitaminB12Total?.toFixed(1) || '0.0'} μg</div>
+                      <div>
+                        ビタミンB1: {calculatedMetrics.vitaminB1Total?.toFixed(2) || '0.00'} mg
+                      </div>
+                      <div>
+                        ビタミンB2: {calculatedMetrics.vitaminB2Total?.toFixed(2) || '0.00'} mg
+                      </div>
+                      <div>
+                        ビタミンB3: {calculatedMetrics.vitaminB3Total?.toFixed(2) || '0.00'} mg
+                      </div>
+                      <div>
+                        ビタミンB6: {calculatedMetrics.vitaminB6Total?.toFixed(2) || '0.00'} mg
+                      </div>
+                      <div>
+                        ビタミンB12: {calculatedMetrics.vitaminB12Total?.toFixed(1) || '0.0'} μg
+                      </div>
                     </div>
                     {/* ビタミン */}
                     <div>
                       <h3 style={{ marginBottom: '0.5rem', color: '#333' }}>ビタミン</h3>
-                      <div>ビタミンC: {calculatedMetrics.effectiveVitC.toFixed(1)} / {calculatedMetrics.vitCRequirement.toFixed(1)} mg</div>
-                      <div>ビタミンK（有効）: {calculatedMetrics.effectiveVitK.toFixed(1)} / 120.0 μg</div>
-                      <div>ビタミンE: {calculatedMetrics.vitaminETotal?.toFixed(2) || '0.00'} mg</div>
+                      <div>
+                        ビタミンC: {calculatedMetrics.effectiveVitC.toFixed(1)} /{' '}
+                        {calculatedMetrics.vitCRequirement.toFixed(1)} mg
+                      </div>
+                      <div>
+                        ビタミンK（有効）: {calculatedMetrics.effectiveVitK.toFixed(1)} / 120.0 μg
+                      </div>
+                      <div>
+                        ビタミンE: {calculatedMetrics.vitaminETotal?.toFixed(2) || '0.00'} mg
+                      </div>
                     </div>
                     {/* ミネラル */}
                     <div>
                       <h3 style={{ marginBottom: '0.5rem', color: '#333' }}>ミネラル</h3>
                       <div>ナトリウム: {calculatedMetrics.sodiumTotal.toFixed(0)} / 5000 mg</div>
-                      <div>マグネシウム: {calculatedMetrics.magnesiumTotal.toFixed(0)} / 400 mg</div>
+                      <div>
+                        マグネシウム: {calculatedMetrics.magnesiumTotal.toFixed(0)} / 400 mg
+                      </div>
                       <div>カルシウム: {calculatedMetrics.calciumTotal?.toFixed(0) || '0'} mg</div>
                       <div>リン: {calculatedMetrics.phosphorusTotal?.toFixed(0) || '0'} mg</div>
                       <div>セレン: {calculatedMetrics.seleniumTotal?.toFixed(1) || '0.0'} μg</div>
                       <div>銅: {calculatedMetrics.copperTotal?.toFixed(2) || '0.00'} mg</div>
-                      <div>マンガン: {calculatedMetrics.manganeseTotal?.toFixed(2) || '0.00'} mg</div>
+                      <div>
+                        マンガン: {calculatedMetrics.manganeseTotal?.toFixed(2) || '0.00'} mg
+                      </div>
                     </div>
                     {/* 要注意項目 */}
                     <div>
                       <h3 style={{ marginBottom: '0.5rem', color: '#333' }}>要注意項目</h3>
-                      <div>食物繊維: {calculatedMetrics.fiberTotal.toFixed(1)} g <span style={{ color: '#999', fontSize: '0.9rem' }}>(0が理想)</span></div>
+                      <div>
+                        食物繊維: {calculatedMetrics.fiberTotal.toFixed(1)} g{' '}
+                        <span style={{ color: '#999', fontSize: '0.9rem' }}>(0が理想)</span>
+                      </div>
                     </div>
                   </div>
                 );
@@ -1304,7 +1473,8 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
 
               <div style={{ marginBottom: '1.5rem' }}>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
-                  {selectedHistoryFood.foodName} ({selectedHistoryFood.amount}{selectedHistoryFood.unit})
+                  {selectedHistoryFood.foodName} ({selectedHistoryFood.amount}
+                  {selectedHistoryFood.unit})
                 </label>
                 <input
                   type="number"
@@ -1355,7 +1525,7 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                   }}
                   style={{
                     padding: '0.75rem 1.5rem',
-                    backgroundColor: '#dc2626',
+                    backgroundColor: '#b91c1c',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
@@ -1405,11 +1575,19 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
               </h2>
 
               <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '16px' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontWeight: '600',
+                    fontSize: '16px',
+                  }}
+                >
                   {selectedMyFood.foodName}
                 </label>
                 <div style={{ marginBottom: '1rem', fontSize: '14px', color: '#6b7280' }}>
-                  {t('home.originalAmount')}: {selectedMyFood.amount}{selectedMyFood.unit}
+                  {t('home.originalAmount')}: {selectedMyFood.amount}
+                  {selectedMyFood.unit}
                 </div>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>
                   {t('home.changeAmount')}
@@ -1458,14 +1636,28 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                       setSelectedMyFood(null);
                     }
                   }}
-                  disabled={!myFoodAmountInput || isNaN(Number(myFoodAmountInput)) || Number(myFoodAmountInput) <= 0}
+                  disabled={
+                    !myFoodAmountInput ||
+                    isNaN(Number(myFoodAmountInput)) ||
+                    Number(myFoodAmountInput) <= 0
+                  }
                   style={{
                     padding: '0.75rem 1.5rem',
-                    backgroundColor: (!myFoodAmountInput || isNaN(Number(myFoodAmountInput)) || Number(myFoodAmountInput) <= 0) ? '#d1d5db' : '#dc2626',
+                    backgroundColor:
+                      !myFoodAmountInput ||
+                        isNaN(Number(myFoodAmountInput)) ||
+                        Number(myFoodAmountInput) <= 0
+                        ? '#d1d5db'
+                        : '#b91c1c',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
-                    cursor: (!myFoodAmountInput || isNaN(Number(myFoodAmountInput)) || Number(myFoodAmountInput) <= 0) ? 'not-allowed' : 'pointer',
+                    cursor:
+                      !myFoodAmountInput ||
+                        isNaN(Number(myFoodAmountInput)) ||
+                        Number(myFoodAmountInput) <= 0
+                        ? 'not-allowed'
+                        : 'pointer',
                     fontSize: '16px',
                     fontWeight: '600',
                     transition: 'background-color 0.2s',
@@ -1493,41 +1685,72 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
       />
       {/* 旧コード（無効化） */}
       {false && showPhotoConfirmation && photoAnalysisResult && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 9999,
-        }} onClick={() => setShowPhotoConfirmation(false)}>
-          <div style={{
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            padding: '1.5rem',
-            width: '90%',
-            maxWidth: '500px',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-          }} onClick={e => e.stopPropagation()}>
-            <h2 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '1.5rem', display: 'flex', alignItems: 'center' }}>
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+          }}
+          onClick={() => setShowPhotoConfirmation(false)}
+        >
+          <div
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '16px',
+              padding: '1.5rem',
+              width: '90%',
+              maxWidth: '500px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2
+              style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
               📸 解析結果の確認
             </h2>
 
-            <div style={{ marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div
+              style={{
+                marginBottom: '1.5rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
+              }}
+            >
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '14px', color: '#374151' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    color: '#374151',
+                  }}
+                >
                   食品名
                 </label>
                 <input
                   type="text"
                   value={photoAnalysisResult.foodName}
-                  onChange={(e) => setPhotoAnalysisResult({ ...photoAnalysisResult, foodName: e.target.value })}
+                  onChange={(e) =>
+                    setPhotoAnalysisResult({ ...photoAnalysisResult, foodName: e.target.value })
+                  }
                   style={{
                     width: '100%',
                     padding: '0.75rem',
@@ -1539,14 +1762,27 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
               </div>
 
               <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', fontSize: '14px', color: '#374151' }}>
+                <label
+                  style={{
+                    display: 'block',
+                    marginBottom: '0.5rem',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    color: '#374151',
+                  }}
+                >
                   量 (g)
                 </label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <input
                     type="number"
                     value={photoAnalysisResult.estimatedWeight}
-                    onChange={(e) => setPhotoAnalysisResult({ ...photoAnalysisResult, estimatedWeight: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setPhotoAnalysisResult({
+                        ...photoAnalysisResult,
+                        estimatedWeight: Number(e.target.value),
+                      })
+                    }
                     style={{
                       width: '100%',
                       padding: '0.75rem',
@@ -1560,71 +1796,112 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
               </div>
 
               {/* フォローアップ質問（詳細確認） */}
-              {photoAnalysisResult.followupQuestions && photoAnalysisResult.followupQuestions.length > 0 && (
-                <div style={{ marginTop: '1rem', padding: '1rem', backgroundColor: '#f0f9ff', borderRadius: '8px', border: '1px solid #bae6fd' }}>
-                  <h3 style={{ fontSize: '15px', fontWeight: 'bold', color: '#0369a1', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    🤖 AIからの確認
-                    <span style={{ fontSize: '12px', fontWeight: 'normal', color: '#0c4a6e' }}>（より正確に計算します）</span>
-                  </h3>
-                  {photoAnalysisResult.followupQuestions.map((question, index) => (
-                    <div key={index} style={{ marginBottom: '1rem' }}>
-                      <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '14px', fontWeight: '500', color: '#0c4a6e' }}>
-                        {question}
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="例: はい、10g / いいえ / 目玉焼き2個"
-                        value={followupAnswers[question] || ''}
-                        onChange={(e) => setFollowupAnswers({ ...followupAnswers, [question]: e.target.value })}
-                        style={{
-                          width: '100%',
-                          padding: '0.6rem',
-                          border: '1px solid #bae6fd',
-                          borderRadius: '6px',
-                          fontSize: '14px',
-                        }}
-                      />
-                    </div>
-                  ))}
-
-                  <button
-                    onClick={async () => {
-                      if (isAIProcessing) return;
-                      try {
-                        setIsAIProcessing(true);
-                        const { refineFoodAnalysis } = await import('../services/aiService');
-                        const refined = await refineFoodAnalysis(photoAnalysisResult, followupAnswers);
-                        setPhotoAnalysisResult({ ...refined, followupQuestions: [] }); // 質問完了とする
-                        // followupAnswersはクリアしない（何と答えたか残してもいいが、今回はクリアせずそのまま次へ）
-                      } catch (e) {
-                        alert('再計算に失敗しました');
-                      } finally {
-                        setIsAIProcessing(false);
-                      }
-                    }}
-                    disabled={isAIProcessing || Object.keys(followupAnswers).length === 0}
+              {photoAnalysisResult.followupQuestions &&
+                photoAnalysisResult.followupQuestions.length > 0 && (
+                  <div
                     style={{
-                      width: '100%',
-                      padding: '0.6rem',
-                      backgroundColor: isAIProcessing ? '#cbd5e1' : '#0ea5e9',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '6px',
-                      fontWeight: '600',
-                      cursor: isAIProcessing ? 'not-allowed' : 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.5rem',
+                      marginTop: '1rem',
+                      padding: '1rem',
+                      backgroundColor: '#f0f9ff',
+                      borderRadius: '8px',
+                      border: '1px solid #bae6fd',
                     }}
                   >
-                    {isAIProcessing ? '計算中...' : '🔄 回答を反映して再計算'}
-                  </button>
-                </div>
-              )}
+                    <h3
+                      style={{
+                        fontSize: '15px',
+                        fontWeight: 'bold',
+                        color: '#0369a1',
+                        marginBottom: '0.75rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                      }}
+                    >
+                      🤖 AIからの確認
+                      <span style={{ fontSize: '12px', fontWeight: 'normal', color: '#0c4a6e' }}>
+                        （より正確に計算します）
+                      </span>
+                    </h3>
+                    {photoAnalysisResult.followupQuestions.map((question, index) => (
+                      <div key={index} style={{ marginBottom: '1rem' }}>
+                        <label
+                          style={{
+                            display: 'block',
+                            marginBottom: '0.5rem',
+                            fontSize: '14px',
+                            fontWeight: '500',
+                            color: '#0c4a6e',
+                          }}
+                        >
+                          {question}
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="例: はい、10g / いいえ / 目玉焼き2個"
+                          value={followupAnswers[question] || ''}
+                          onChange={(e) =>
+                            setFollowupAnswers({ ...followupAnswers, [question]: e.target.value })
+                          }
+                          style={{
+                            width: '100%',
+                            padding: '0.6rem',
+                            border: '1px solid #bae6fd',
+                            borderRadius: '6px',
+                            fontSize: '14px',
+                          }}
+                        />
+                      </div>
+                    ))}
+
+                    <button
+                      onClick={async () => {
+                        if (isAIProcessing) return;
+                        try {
+                          setIsAIProcessing(true);
+                          const { refineFoodAnalysis } = await import('../services/aiService');
+                          const refined = await refineFoodAnalysis(
+                            photoAnalysisResult,
+                            followupAnswers
+                          );
+                          setPhotoAnalysisResult({ ...refined, followupQuestions: [] }); // 質問完了とする
+                          // followupAnswersはクリアしない（何と答えたか残してもいいが、今回はクリアせずそのまま次へ）
+                        } catch (e) {
+                          alert('再計算に失敗しました');
+                        } finally {
+                          setIsAIProcessing(false);
+                        }
+                      }}
+                      disabled={isAIProcessing || Object.keys(followupAnswers).length === 0}
+                      style={{
+                        width: '100%',
+                        padding: '0.6rem',
+                        backgroundColor: isAIProcessing ? '#cbd5e1' : '#0ea5e9',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '6px',
+                        fontWeight: '600',
+                        cursor: isAIProcessing ? 'not-allowed' : 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                      }}
+                    >
+                      {isAIProcessing ? '計算中...' : '🔄 回答を反映して再計算'}
+                    </button>
+                  </div>
+                )}
             </div>
 
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: '1rem',
+                justifyContent: 'flex-end',
+                marginTop: '1rem',
+              }}
+            >
               <button
                 onClick={() => setShowPhotoConfirmation(false)}
                 style={{
@@ -1642,13 +1919,12 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
               </button>
               <button
                 onClick={() => {
-                  // 最終的に追加
+                  // 最終的に追加 -> FoodEditModalへ
                   const ratio = photoAnalysisResult.estimatedWeight / 100;
                   const nutrients: Record<string, number> = {};
 
                   if (photoAnalysisResult.nutrients) {
                     Object.entries(photoAnalysisResult.nutrients).forEach(([key, value]) => {
-                      // 簡易マッピング（既にAIサービス側で整えている前提だが念のため）
                       nutrients[key] = (value as number) * ratio;
                     });
                   }
@@ -1661,7 +1937,8 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
                     nutrients: Object.keys(nutrients).length > 0 ? nutrients : undefined,
                   };
 
-                  addFood(foodItem);
+                  setEditingFood(foodItem);
+                  setShowFoodEditModal(true);
                   setShowPhotoConfirmation(false);
                   setPhotoAnalysisResult(null);
                 }}
@@ -1684,6 +1961,135 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
         </div>
       )}
 
+      {/* 写真/バーコード選択モーダル */}
+      {showPhotoOrBarcodeModal && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10000,
+            padding: '1rem',
+          }}
+          onClick={() => setShowPhotoOrBarcodeModal(false)}
+        >
+          <div
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '16px',
+              padding: '1.5rem',
+              maxWidth: '400px',
+              width: '100%',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 style={{ margin: '0 0 1rem 0', fontSize: '18px', fontWeight: '600' }}>
+              追加方法を選択
+            </h3>
+            <p style={{ margin: '0 0 1.5rem 0', fontSize: '14px', color: '#6b7280' }}>
+              写真から追加するか、バーコードを読み取りますか？
+            </p>
+            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => {
+                  setShowPhotoOrBarcodeModal(false);
+                  setShowBarcodeScanner(true);
+                }}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: '#e5e7eb',
+                  color: '#374151',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  fontWeight: '500',
+                }}
+              >
+                バーコード読み取り
+              </button>
+              <button
+                onClick={async () => {
+                  setShowPhotoOrBarcodeModal(false);
+                  // 写真から追加
+                  const input = document.createElement('input');
+                  input.type = 'file';
+                  input.accept = 'image/*';
+                  input.capture = 'environment';
+                  input.style.display = 'none';
+                  document.body.appendChild(input);
+
+                  input.onchange = async (e) => {
+                    const file = (e.target as HTMLInputElement).files?.[0];
+                    if (!file) {
+                      document.body.removeChild(input);
+                      return;
+                    }
+
+                    try {
+                      // ローディング表示
+                      const loadingMessage = document.createElement('div');
+                      loadingMessage.textContent = '写真を解析中...';
+                      loadingMessage.style.cssText =
+                        'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10000;';
+                      document.body.appendChild(loadingMessage);
+
+                      const { analyzeFoodImage } = await import('../services/aiService');
+                      const result = await analyzeFoodImage(file);
+
+                      // ローディング表示を削除
+                      document.body.removeChild(loadingMessage);
+
+                      // 結果をセットして確認モーダルを表示
+                      setPhotoAnalysisResult(result);
+                      setFollowupAnswers({});
+                      setShowPhotoConfirmation(true);
+
+                      document.body.removeChild(input);
+                    } catch (error) {
+                      // ローディング表示を削除
+                      const loadingMessage = document.querySelector('div[style*="写真を解析中"]');
+                      if (loadingMessage) {
+                        document.body.removeChild(loadingMessage);
+                      }
+
+                      logError(error, { component: 'HomeScreen', action: 'handlePhotoUpload' });
+                      const { getUserFriendlyErrorMessage } = await import('../utils/errorHandler');
+                      alert(
+                        getUserFriendlyErrorMessage(error) ||
+                        '写真の解析に失敗しました。もう一度お試しください。'
+                      );
+                      document.body.removeChild(input);
+                    }
+                  };
+
+                  input.click();
+                }}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  backgroundColor: '#dc2626',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  fontWeight: '500',
+                }}
+              >
+                写真から追加
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* バーコードスキャナーモーダル */}
       <BarcodeScannerModal
         isOpen={showBarcodeScanner}
@@ -1695,11 +2101,27 @@ export default function HomeScreen({ onOpenFatTabReady, onAddFoodReady }: HomeSc
             unit: 'g',
             type: 'animal', // デフォルト（後で変更可能）
           };
-          addFood(foodItem);
+          // バーコードもFoodEditModalへ
+          setEditingFood(foodItem);
+          setShowFoodEditModal(true);
           setShowBarcodeScanner(false);
         }}
       />
+
+      {/* 統一確認画面 (FoodEditModal) */}
+      {showFoodEditModal && editingFood && (
+        <FoodEditModal
+          isOpen={showFoodEditModal}
+          initialFood={editingFood}
+          onClose={() => setShowFoodEditModal(false)}
+          onSave={async (food) => {
+            await addFood(food);
+            setShowFoodEditModal(false);
+            setEditingFood(null);
+            clearPreview();
+          }}
+        />
+      )}
     </div>
   );
 }
-

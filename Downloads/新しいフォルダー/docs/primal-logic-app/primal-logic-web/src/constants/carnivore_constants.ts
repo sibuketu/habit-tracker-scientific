@@ -1,6 +1,6 @@
 /**
  * Primal Logic - Carnivore Diet Constants
- * 
+ *
  * バイオアベイラビリティ係数と動的必要量の定義
  * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
  */
@@ -126,4 +126,3 @@ export const DIET_MODES = {
   KETOVORE: 'ketovore',
   LION_DIET: 'lion_diet',
 } as const;
-

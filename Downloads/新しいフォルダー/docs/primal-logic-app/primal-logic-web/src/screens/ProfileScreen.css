@@ -113,7 +113,7 @@
 
 .profile-screen-switch-slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 20px;
   width: 20px;
   left: 4px;
@@ -184,17 +184,17 @@
 }
 
 .profile-screen-priority-required {
-  background-color: #FF3B30;
+  background-color: #ff3b30;
   color: #fff;
 }
 
 .profile-screen-priority-recommended {
-  background-color: #FF9500;
+  background-color: #ff9500;
   color: #fff;
 }
 
 .profile-screen-priority-optional {
-  background-color: #8E8E93;
+  background-color: #8e8e93;
   color: #fff;
 }
 
@@ -221,7 +221,10 @@
   font-size: 16px;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .profile-screen-unit {
@@ -262,7 +265,9 @@
 }
 
 .profile-screen-collapse-icon {
-  transition: transform 0.3s, color 0.3s ease;
+  transition:
+    transform 0.3s,
+    color 0.3s ease;
   font-size: 18px;
   color: var(--color-text-secondary);
 }
@@ -289,10 +294,11 @@
   padding: 4px 8px;
   border-radius: 4px;
   background-color: var(--color-bg-secondary);
-  transition: background-color 0.2s, color 0.3s ease;
+  transition:
+    background-color 0.2s,
+    color 0.3s ease;
 }
 
 .profile-screen-section-visibility-toggle:hover {
   background-color: var(--color-bg-tertiary);
 }
-

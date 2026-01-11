@@ -11,8 +11,9 @@ test.describe('Phase 1: 移行期間サポート機能', () => {
     // アプリを開く
     await page.goto('http://localhost:5174');
     
-    // ページが読み込まれるまで待機
-    await page.waitForLoadState('networkidle');
+    // ページが読み込まれるまで待機（networkidleの代わりに、より具体的な要素を待つ）
+    await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(500);
   });
 
   test('移行期間バナーが表示される（移行期間中の場合）', async ({ page }) => {
@@ -30,7 +31,8 @@ test.describe('Phase 1: 移行期間サポート機能', () => {
 
     // ページをリロード
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(500);
 
     // 移行期間バナーが表示されることを確認
     const banner = page.getByText('移行期間:', { exact: false });
@@ -56,7 +58,8 @@ test.describe('Phase 1: 移行期間サポート機能', () => {
 
     // ページをリロード
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(500);
 
     // 移行期間バナーが表示されないことを確認
     const banner = page.getByText('移行期間:', { exact: false });
@@ -78,7 +81,8 @@ test.describe('Phase 1: 移行期間サポート機能', () => {
 
     // ページをリロード
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(500);
 
     // バナーをタップ
     const banner = page.getByText('移行期間:', { exact: false });
@@ -106,7 +110,8 @@ test.describe('Phase 1: 移行期間サポート機能', () => {
 
     // ページをリロード
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(500);
 
     // バナーをタップしてガイド画面を開く
     const banner = page.getByText('移行期間:', { exact: false });
@@ -138,7 +143,8 @@ test.describe('Phase 1: 移行期間サポート機能', () => {
 
     // ページをリロード
     await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(500);
 
     // ナトリウムゲージが移行期間中の目標値（7000mg）を表示していることを確認
     // 注: 実際のゲージ表示を確認する必要があるため、セレクターは要調整

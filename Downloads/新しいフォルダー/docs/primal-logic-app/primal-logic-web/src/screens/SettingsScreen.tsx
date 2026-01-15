@@ -1,5 +1,5 @@
 /**
- * Primal Logic - Settings Screen
+ * CarnivoreOS - Settings Screen
  *
  * ユーザー設定画面: 文字サイズ、表示設定など
  */
@@ -10,6 +10,8 @@ import { saveUserProfile } from '../utils/storage';
 import { isSupabaseAvailable } from '../lib/supabaseClient';
 import { requestNotificationPermission } from '../utils/defrostReminder';
 import HelpTooltip from '../components/common/HelpTooltip';
+import type { NutrientDisplayMode } from '../utils/nutrientPriority';
+import { getNutrientDisplayModeDescription } from '../utils/nutrientPriority';
 import './SettingsScreen.css';
 
 interface SettingsScreenProps {
@@ -30,6 +32,8 @@ export default function SettingsScreen({ onShowOnboarding }: SettingsScreenProps
     toggleTips,
     debugMode,
     toggleDebugMode,
+    nutrientDisplayMode,
+    setNutrientDisplayMode,
   } = useSettings();
 
   const [fontSizeLocal, setFontSizeLocal] = useState(fontSize || 'medium');
@@ -117,9 +121,153 @@ export default function SettingsScreen({ onShowOnboarding }: SettingsScreenProps
           </div>
         </div>
 
+        {/* 栄養素表示設定 */}
+        <div className="settings-screen-section">
+          <h2 className="settings-screen-section-title">栄養素表示設定</h2>
+          <div style={{ marginBottom: '1rem' }}>
+            <label
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                marginBottom: '0.5rem',
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#374151',
+              }}
+            >
+              表示モード
+              <HelpTooltip text="カーニボアでは細かい数値管理は不要です。身体の声を聞きながら、必要に応じて詳細データを確認できます。" />
+            </label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {/* シンプルモード */}
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '0.75rem',
+                  padding: '0.75rem',
+                  backgroundColor:
+                    nutrientDisplayMode === 'simple' ? '#dbeafe' : 'transparent',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  border:
+                    nutrientDisplayMode === 'simple' ? '2px solid #3b82f6' : '2px solid #e5e7eb',
+                }}
+              >
+                <input
+                  type="radio"
+                  name="nutrientDisplayMode"
+                  checked={nutrientDisplayMode === 'simple'}
+                  onChange={() => setNutrientDisplayMode('simple')}
+                  style={{ marginTop: '0.25rem', cursor: 'pointer' }}
+                />
+                <div style={{ flex: 1 }}>
+                  <div
+                    style={{
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      color: '#1f2937',
+                      marginBottom: '0.25rem',
+                    }}
+                  >
+                    シンプルモード（推奨）
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#6b7280', lineHeight: '1.4' }}>
+                    {getNutrientDisplayModeDescription('simple')}
+                  </div>
+                </div>
+              </label>
+
+              {/* 標準モード */}
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '0.75rem',
+                  padding: '0.75rem',
+                  backgroundColor:
+                    nutrientDisplayMode === 'standard' ? '#dbeafe' : 'transparent',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  border:
+                    nutrientDisplayMode === 'standard'
+                      ? '2px solid #3b82f6'
+                      : '2px solid #e5e7eb',
+                }}
+              >
+                <input
+                  type="radio"
+                  name="nutrientDisplayMode"
+                  checked={nutrientDisplayMode === 'standard'}
+                  onChange={() => setNutrientDisplayMode('standard')}
+                  style={{ marginTop: '0.25rem', cursor: 'pointer' }}
+                />
+                <div style={{ flex: 1 }}>
+                  <div
+                    style={{
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      color: '#1f2937',
+                      marginBottom: '0.25rem',
+                    }}
+                  >
+                    標準モード
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#6b7280', lineHeight: '1.4' }}>
+                    {getNutrientDisplayModeDescription('standard')}
+                  </div>
+                </div>
+              </label>
+
+              {/* 詳細モード */}
+              <label
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '0.75rem',
+                  padding: '0.75rem',
+                  backgroundColor:
+                    nutrientDisplayMode === 'detailed' ? '#dbeafe' : 'transparent',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  border:
+                    nutrientDisplayMode === 'detailed'
+                      ? '2px solid #3b82f6'
+                      : '2px solid #e5e7eb',
+                }}
+              >
+                <input
+                  type="radio"
+                  name="nutrientDisplayMode"
+                  checked={nutrientDisplayMode === 'detailed'}
+                  onChange={() => setNutrientDisplayMode('detailed')}
+                  style={{ marginTop: '0.25rem', cursor: 'pointer' }}
+                />
+                <div style={{ flex: 1 }}>
+                  <div
+                    style={{
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      color: '#1f2937',
+                      marginBottom: '0.25rem',
+                    }}
+                  >
+                    詳細モード
+                  </div>
+                  <div style={{ fontSize: '12px', color: '#6b7280', lineHeight: '1.4' }}>
+                    {getNutrientDisplayModeDescription('detailed')}
+                  </div>
+                </div>
+              </label>
+
+            </div>
+          </div>
+        </div>
+
         {/* 表示設定 */}
         <div className="settings-screen-section">
-          <h2 className="settings-screen-section-title">表示設定</h2>
+          <h2 className="settings-screen-section-title">その他の表示設定</h2>
           <div className="settings-screen-switch-row">
             <div className="settings-screen-switch-label-group">
               <label className="settings-screen-switch-label">

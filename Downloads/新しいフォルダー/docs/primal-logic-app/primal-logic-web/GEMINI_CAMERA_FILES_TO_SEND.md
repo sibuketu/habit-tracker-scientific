@@ -1,61 +1,62 @@
 # Geminiに送るファイル一覧
 
-以下のファイルをGeminiに送信してください：
+以下�EファイルをGeminiに送信してください�E�E
 
 ## 📄 送信するファイル
 
-### メインファイル（必須）
+### メインファイル�E�忁E��！E
 **ファイルパス**: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\GEMINI_CAMERA_PROMPT_COMPLETE.md`
 
-- 完全版の要件定義プロンプト
-- プロジェクト概要、技術スタック、デザイン原則、既存の決定事項、整合性チェックと推論を含む
+- 完�E版�E要件定義プロンプト
+- プロジェクト概要、技術スタチE��、デザイン原則、既存�E決定事頁E��整合性チェチE��と推論を含む
 
-### 参考ファイル（オプション）
+### 参老E��ァイル�E�オプション�E�E
 
-必要に応じて、以下のファイルも送信できます：
+忁E��に応じて、以下�Eファイルも送信できます！E
 
-1. **機能の意図と目的**
+1. **機�Eの意図と目皁E*
    - ファイルパス: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\FEATURE_INTENTS.md`
 
-2. **プロジェクト概要**
+2. **プロジェクト概要E*
    - ファイルパス: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\README.md`
 
-3. **現在の実装（HomeScreen.tsx）**
+3. **現在の実裁E��EomeScreen.tsx�E�E*
    - ファイルパス: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\src\screens\HomeScreen.tsx`
-   - 該当箇所: 917-1008行目（カメラ機能の実装）
+   - 該当箁E��: 917-1008行目�E�カメラ機�Eの実裁E��E
 
-4. **バーコード読み取りコンポーネント**
+4. **バ�Eコード読み取りコンポ�EネンチE*
    - ファイルパス: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\src\components\BarcodeScannerModal.tsx`
 
-5. **写真解析コンポーネント**
+5. **写真解析コンポ�EネンチE*
    - ファイルパス: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\src\components\PhotoAnalysisModal.tsx`
 
-6. **バーコード読み取りユーティリティ**
+6. **バ�Eコード読み取りユーチE��リチE��**
    - ファイルパス: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\src\utils\barcodeScanner.ts`
 
-7. **AIサービス（写真解析）**
+7. **AIサービス�E��E真解析！E*
    - ファイルパス: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\src\services\aiService.ts`
 
 ---
 
-## 💬 Geminiへの送信メッセージ例
+## 💬 Geminiへの送信メチE��ージ侁E
 
 ```
-以下のファイルを送信します。カメラ機能統合の要件定義をお願いします。
+以下�Eファイルを送信します。カメラ機�E統合�E要件定義をお願いします、E
 
-送信ファイル：
+送信ファイル�E�E
 - GEMINI_CAMERA_PROMPT_COMPLETE.md
-  （ファイルパス: C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\GEMINI_CAMERA_PROMPT_COMPLETE.md）
+  �E�ファイルパス: C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\GEMINI_CAMERA_PROMPT_COMPLETE.md�E�E
 
-このファイルには、プロジェクト概要、技術スタック、デザイン原則、既存の決定事項、整合性チェックと推論が含まれています。
+こ�Eファイルには、�Eロジェクト概要、技術スタチE��、デザイン原則、既存�E決定事頁E��整合性チェチE��と推論が含まれてぁE��す、E
 
-よろしくお願いします。
+よろしくお願いします、E
 ```
 
 ---
 
-## 📝 注意事項
+## 📝 注意事頁E
 
-- ファイルを送信する際は、実際のファイルシステムのパス（フルパス）を記載してください
-- Geminiにファイルを送る場合は、ファイルを直接アップロードするか、ファイルパスを記載してください
-- 必要に応じて、参考ファイルも一緒に送信することで、より詳細な分析が可能になります
+- ファイルを送信する際�E、実際のファイルシスチE��のパス�E�フルパス�E�を記載してください
+- Geminiにファイルを送る場合�E、ファイルを直接アチE�Eロードするか、ファイルパスを記載してください
+- 忁E��に応じて、参老E��ァイルも一緒に送信することで、より詳細な刁E��が可能になりまぁE
+

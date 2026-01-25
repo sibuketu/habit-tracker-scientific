@@ -1,55 +1,56 @@
 # アプリ起動URL
 
-## 開発サーバーのURL
+## 開発サーバ�EのURL
 
 ### ローカルアクセス
 ```
 http://localhost:5174
 ```
 
-### ネットワークアクセス（同一ネットワーク内の他のデバイスから）
+### ネットワークアクセス�E�同一ネットワーク冁E�E他�EチE��イスから�E�E
 ```
-http://[あなたのPCのIPアドレス]:5174
+http://[あなた�EPCのIPアドレス]:5174
 ```
 
-## ポート番号
-- **ポート**: `5174`
-- **設定ファイル**: `vite.config.ts` の `server.port` で設定されています
+## ポ�Eト番号
+- **ポ�EチE*: `5174`
+- **設定ファイル**: `vite.config.ts` の `server.port` で設定されてぁE��ぁE
 
-## 開発サーバーの起動方法
+## 開発サーバ�Eの起動方況E
 
-### 方法1: バッチファイルから起動（推奨）
-1. エクスプローラーを開く（Windowsキー + E）
-2. アドレスバーに以下を貼り付けてEnter:
+### 方況E: バッチファイルから起動（推奨�E�E
+1. エクスプローラーを開く！Eindowsキー + E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-3. `start-dev-server.bat` をダブルクリック
+3. `start-dev-server.bat` をダブルクリチE��
 
-### 方法2: PowerShellから起動
-1. PowerShellを開く（Windowsキー → 「PowerShell」と入力 → Enter）
-2. 以下のコマンドを実行:
+### 方況E: PowerShellから起勁E
+1. PowerShellを開く！Eindowsキー ↁE「PowerShell」と入劁EↁEEnter�E�E
+2. 以下�Eコマンドを実衁E
    ```powershell
    cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
    npm run dev
    ```
 
-## 開発サーバーが起動しているか確認
+## 開発サーバ�Eが起動してぁE��か確誁E
 
-### ブラウザで確認
-ブラウザで以下のURLにアクセス:
+### ブラウザで確誁E
+ブラウザで以下�EURLにアクセス:
 ```
 http://localhost:5174
 ```
 
-### コマンドで確認
-PowerShellで以下のコマンドを実行:
+### コマンドで確誁E
+PowerShellで以下�Eコマンドを実衁E
 ```powershell
 netstat -ano | findstr :5174
 ```
-ポート5174が使用されている場合、開発サーバーが起動しています。
+ポ�EチE174が使用されてぁE��場合、E��発サーバ�Eが起動してぁE��す、E
 
-## 注意事項
-- 開発サーバーが起動していない場合、URLにアクセスしてもエラーになります
-- 開発サーバーを停止する場合は、ターミナルで `Ctrl + C` を押してください
+## 注意事頁E
+- 開発サーバ�Eが起動してぁE��ぁE��合、URLにアクセスしてもエラーになりまぁE
+- 開発サーバ�Eを停止する場合�E、ターミナルで `Ctrl + C` を押してください
+
 

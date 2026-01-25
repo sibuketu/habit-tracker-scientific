@@ -1,0 +1,26 @@
+REM Cloud Runデプロイコマンド（コピペ用）
+
+REM 1. GCPプロジェクトIDを確認
+gcloud config get-value project
+
+REM 2. 環境変数を設定（プロジェクトIDを置き換える）
+set GCP_PROJECT_ID=your-project-id
+set CLOUD_RUN_REGION=asia-northeast1
+
+REM 3. Dockerイメージをビルド
+docker build -t gcr.io/%GCP_PROJECT_ID%/video-editor .
+
+REM 4. GCRにプッシュ
+docker push gcr.io/%GCP_PROJECT_ID%/video-editor
+
+REM 5. Cloud Runにデプロイ
+gcloud run deploy video-editor --image gcr.io/%GCP_PROJECT_ID%/video-editor --platform managed --region asia-northeast1 --allow-unauthenticated --memory 2Gi --cpu 2 --timeout 300
+
+REM 6. Cloud Run URLを取得
+gcloud run services describe video-editor --region asia-northeast1 --format "value(status.url)"
+
+REM 7. Supabase Secretsに設定（URLを置き換える）
+npx supabase secrets set CLOUD_RUN_VIDEO_EDITOR_URL=https://video-editor-xxxxx.run.app
+
+REM 8. データベースマイグレーション実行
+supabase db push

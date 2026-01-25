@@ -1,7 +1,7 @@
 /**
- * Primal Logic - Transition Guide Data
+ * CarnivoreOS - Transition Guide Data
  *
- * Phase 1: 移行期間サポート - 症状と対処法のデータ構造
+ * Phase 1: Transition period support - Data structure for symptoms and remedies
  */
 
 export interface TransitionSymptom {
@@ -10,99 +10,99 @@ export interface TransitionSymptom {
   description: string;
   remedies: {
     nutrient: 'sodium' | 'magnesium' | 'potassium' | 'fat' | 'water';
-    adjustment: number; // 調整値（+2000mgなど）
-    explanation: string; // 説明文
+    adjustment: number; // Adjustment value (e.g., +2000mg)
+    explanation: string; // Explanation text
   }[];
-  recommendedFoods: string[]; // 推奨食品リスト
+  recommendedFoods: string[]; // Recommended food list
 }
 
 export const TRANSITION_SYMPTOMS: TransitionSymptom[] = [
   {
     id: 'headache',
-    name: '頭痛',
-    description: '移行期間中によくある症状',
+    name: 'Headache',
+    description: 'Common symptom during transition period',
     remedies: [
       {
         nutrient: 'sodium',
         adjustment: 2000,
-        explanation: 'ナトリウムを+2000mg増やすことで、電解質バランスが改善されます',
+        explanation: 'Increasing sodium by +2000mg improves electrolyte balance',
       },
     ],
-    recommendedFoods: ['塩', '肉汁', '骨スープ'],
+    recommendedFoods: ['Salt', 'Meat juice', 'Bone broth'],
   },
   {
     id: 'cramp',
-    name: 'こむら返り',
-    description: 'マグネシウム不足の可能性があります',
+    name: 'Muscle Cramps',
+    description: 'Possible magnesium deficiency',
     remedies: [
       {
         nutrient: 'magnesium',
         adjustment: 200,
-        explanation: 'マグネシウムを+200mg増やすことで、筋肉のけいれんが改善されます',
+        explanation: 'Increasing magnesium by +200mg improves muscle cramps',
       },
     ],
-    recommendedFoods: ['マグネシウムサプリメント', '骨スープ'],
+    recommendedFoods: ['Magnesium supplement', 'Bone broth'],
   },
   {
     id: 'fatigue',
-    name: '疲労感',
-    description: 'エネルギー不足の可能性があります',
+    name: 'Fatigue',
+    description: 'Possible energy deficiency',
     remedies: [
       {
         nutrient: 'fat',
         adjustment: 50,
-        explanation: '脂質を増やすことで、エネルギー供給が改善されます',
+        explanation: 'Increasing fat improves energy supply',
       },
       {
         nutrient: 'sodium',
         adjustment: 1000,
-        explanation: '塩分を増やすことで、電解質バランスが改善されます',
+        explanation: 'Increasing salt improves electrolyte balance',
       },
     ],
-    recommendedFoods: ['脂身の多い肉（リブアイ、バラ肉）', 'バター', '卵黄'],
+    recommendedFoods: ['Fatty cuts of meat (ribeye, belly)', 'Butter', 'Egg yolk'],
   },
   {
     id: 'constipation',
-    name: '便秘',
-    description: 'マグネシウムと水分不足の可能性があります',
+    name: 'Constipation',
+    description: 'Possible magnesium and water deficiency',
     remedies: [
       {
         nutrient: 'magnesium',
         adjustment: 200,
-        explanation: 'マグネシウムを+200mg増やすことで、便通が改善されます',
+        explanation: 'Increasing magnesium by +200mg improves bowel movements',
       },
       {
         nutrient: 'water',
         adjustment: 1,
-        explanation: '水分を1L増やすことで、便通が改善されます',
+        explanation: 'Increasing water by 1L improves bowel movements',
       },
     ],
-    recommendedFoods: ['マグネシウムサプリメント', '骨スープ'],
+    recommendedFoods: ['Magnesium supplement', 'Bone broth'],
   },
   {
     id: 'diarrhea',
-    name: '下痢',
-    description: '脂質の摂取量を調整する必要があります',
+    name: 'Diarrhea',
+    description: 'Need to adjust fat intake',
     remedies: [
       {
         nutrient: 'fat',
         adjustment: -30,
-        explanation: '脂質を減らすことで、消化器系への負担が軽減されます',
+        explanation: 'Reducing fat reduces burden on the digestive system',
       },
     ],
-    recommendedFoods: ['消化の良い肉（鶏胸肉、魚）', '卵'],
+    recommendedFoods: ['Easily digestible meat (chicken breast, fish)', 'Eggs'],
   },
 ];
 
 export interface TransitionProgress {
-  daysInTransition: number; // 移行期間中の日数（0-30）
-  totalDays: number; // 移行期間の総日数（30）
-  progress: number; // 進捗率（0-100）
-  remainingDays: number; // 残り日数
+  daysInTransition: number; // Days in transition period (0-30)
+  totalDays: number; // Total days in transition period (30)
+  progress: number; // Progress rate (0-100)
+  remainingDays: number; // Remaining days
 }
 
 /**
- * 移行期間の進捗を計算
+ * Calculate transition period progress
  */
 export function calculateTransitionProgress(
   daysOnCarnivore?: number,
@@ -124,7 +124,7 @@ export function calculateTransitionProgress(
   const progress = Math.min((daysInTransition / totalDays) * 100, 100);
   const remainingDays = Math.max(totalDays - daysInTransition, 0);
 
-  // 移行期間中（30日未満）の場合のみ返す
+  // Return only if within transition period (less than 30 days)
   if (daysInTransition >= totalDays) {
     return null;
   }
@@ -136,3 +136,4 @@ export function calculateTransitionProgress(
     remainingDays,
   };
 }
+

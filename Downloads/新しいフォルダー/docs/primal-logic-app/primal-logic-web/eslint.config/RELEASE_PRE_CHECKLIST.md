@@ -1,11 +1,11 @@
-# リリース前テストチェックリスト（簡易版）
+# リリース前テストチェチE��リスト（簡易版�E�E
 
-> 【メモ】将来のリリース前に使用するチェックリスト
-> リリース前に必ず全てのテストを実行し、全て合格することを確認してください。
+> 【メモ】封E��のリリース前に使用するチェチE��リスチE
+> リリース前に忁E��全てのチE��トを実行し、�Eて合格することを確認してください、E
 
-## 🚀 クイック実行
+## 🚀 クイチE��実衁E
 
-### 全テストを自動実行（推奨）
+### 全チE��トを自動実行（推奨�E�E
 
 **Windows:**
 ```bash
@@ -13,7 +13,7 @@ cd primal-logic-app/primal-logic-web
 run-all-tests.bat
 ```
 
-**コマンド:**
+**コマンチE**
 ```bash
 cd primal-logic-app/primal-logic-web
 npm run test:all
@@ -21,136 +21,137 @@ npm run test:all
 
 ---
 
-## 📋 テスト実行チェックリスト
+## 📋 チE��ト実行チェチE��リスチE
 
-### ✅ 1. E2Eテスト（動作テスト）【必須】
+### ✁E1. E2EチE��ト（動作テスト）【忁E��、E
 
-**実行方法:**
+**実行方況E**
 ```bash
 cd primal-logic-app/primal-logic-web
 npm test
 ```
 
-**確認項目:**
-- [ ] 全てのテストがPassed（失敗0件）
-- [ ] Flakyテストが最小限（目標: 50件以下）
-- [ ] テスト実行時間が10分以内
+**確認頁E��:**
+- [ ] 全てのチE��トがPassed�E�失敁E件�E�E
+- [ ] FlakyチE��トが最小限�E�目樁E 50件以下！E
+- [ ] チE��ト実行時間が10刁E��冁E
 
-**対象テスト:**
-- `test-items-1-28.spec.ts` - 基本機能テスト（1-28項目）
-- `test-items-29-120.spec.ts` - 拡張機能テスト（29-120項目）
-- `phase1-transition-check.spec.ts` - 移行期間機能テスト
-- `ui-check.spec.ts` - UI要素表示テスト
+**対象チE��チE**
+- `test-items-1-28.spec.ts` - 基本機�EチE��ト！E-28頁E���E�E
+- `test-items-29-120.spec.ts` - 拡張機�EチE��ト！E9-120頁E���E�E
+- `phase1-transition-check.spec.ts` - 移行期間機�EチE��チE
+- `ui-check.spec.ts` - UI要素表示チE��チE
 
 ---
 
-### ✅ 2. Visual Regression Test（UI見た目テスト）【必須】
+### ✁E2. Visual Regression Test�E�EI見た目チE��ト）【忁E��、E
 
-**実行方法:**
+**実行方況E**
 ```bash
 cd primal-logic-app/primal-logic-web
 npm run test:visual
 ```
 
-**確認項目:**
-- [ ] 全てのスクリーンショットが一致
-- [ ] 意図しないUI変更がない
-- [ ] 差分がある場合は、意図的な変更か確認
+**確認頁E��:**
+- [ ] 全てのスクリーンショチE��が一致
+- [ ] 意図しないUI変更がなぁE
+- [ ] 差刁E��ある場合�E、意図皁E��変更か確誁E
 
 **対象画面:**
-- [ ] ホーム画面（デスクトップ/モバイル）
-- [ ] 入力画面（ButcherSelect）（デスクトップ/モバイル）
-- [ ] 履歴画面（デスクトップ/モバイル）
-- [ ] Labs画面（デスクトップ）
-- [ ] 設定画面（デスクトップ）
-- [ ] AIチャットモーダル（デスクトップ）
-- [ ] 栄養素ゲージ（詳細表示）
+- [ ] ホ�Eム画面�E�デスクトッチEモバイル�E�E
+- [ ] 入力画面�E�EutcherSelect�E�（デスクトッチEモバイル�E�E
+- [ ] 履歴画面�E�デスクトッチEモバイル�E�E
+- [ ] Labs画面�E�デスクトップ！E
+- [ ] 設定画面�E�デスクトップ！E
+- [ ] AIチャチE��モーダル�E�デスクトップ！E
+- [ ] 栁E��素ゲージ�E�詳細表示�E�E
 - [ ] Argument Card表示
 
 **初回実行時:**
 ```bash
-npm run test:visual:update  # ベースライン作成
+npm run test:visual:update  # ベ�Eスライン作�E
 ```
 
 ---
 
-### ✅ 3. iOS版テスト（Maestro）【推奨】
+### ✁E3. iOS版テスト！Eaestro�E�【推奨、E
 
-**実行方法:**
+**実行方況E**
 ```bash
-# 1. Maestroのインストール（初回のみ）
+# 1. Maestroのインスト�Eル�E��E回�Eみ�E�E
 iwr https://get.maestro.mobile.dev -UseBasicParsing | iex
 
-# 2. アプリを起動（別ターミナル）
+# 2. アプリを起動（別ターミナル�E�E
 cd primal-logic-app
 npx expo start --ios
 
-# 3. テスト実行（別ターミナル）
+# 3. チE��ト実行（別ターミナル�E�E
 cd primal-logic-app
 npm run test:e2e
 ```
 
-**確認項目:**
+**確認頁E��:**
 - [ ] アプリ起動テストが成功
-- [ ] ナビゲーションテストが成功
-- [ ] 食品追加テストが成功
-- [ ] 栄養素表示テストが成功
-- [ ] AIチャットテストが成功
+- [ ] ナビゲーションチE��トが成功
+- [ ] 食品追加チE��トが成功
+- [ ] 栁E��素表示チE��トが成功
+- [ ] AIチャチE��チE��トが成功
 
-**対象テスト:**
-- [ ] `app-launch.yaml` - アプリ起動
+**対象チE��チE**
+- [ ] `app-launch.yaml` - アプリ起勁E
 - [ ] `navigation-basic.yaml` - ナビゲーション
 - [ ] `food-add-basic.yaml` - 食品追加
-- [ ] `nutrients-display.yaml` - 栄養素表示
-- [ ] `ai-chat-basic.yaml` - AIチャット
+- [ ] `nutrients-display.yaml` - 栁E��素表示
+- [ ] `ai-chat-basic.yaml` - AIチャチE��
 
 ---
 
-## ⚠️ リリース前の注意事項
+## ⚠�E�Eリリース前�E注意事頁E
 
-1. **全てのテストが合格するまでリリースしない**
-2. **Flakyテストが多い場合は、原因を調査して修正**
-3. **Visual Regression Testで差分がある場合は、意図的な変更か確認**
-4. **iOS版テストが失敗する場合は、実機で確認**
+1. **全てのチE��トが合格するまでリリースしなぁE*
+2. **FlakyチE��トが多い場合�E、原因を調査して修正**
+3. **Visual Regression Testで差刁E��ある場合�E、意図皁E��変更か確誁E*
+4. **iOS版テストが失敗する場合�E、実機で確誁E*
 
 ---
 
-## 📊 テスト結果の記録
+## 📊 チE��ト結果の記録
 
-リリース前に、以下の情報を記録してください：
+リリース前に、以下�E惁E��を記録してください�E�E
 
-- **テスト実行日時**: 
-- **E2Eテスト結果**: Passed / Failed / Flaky
+- **チE��ト実行日晁E*: 
+- **E2EチE��ト結果**: Passed / Failed / Flaky
 - **Visual Regression Test結果**: Passed / Failed
 - **iOS版テスト結果**: Passed / Failed
-- **テスト実行時間**: 
-- **発見した問題**: 
+- **チE��ト実行時閁E*: 
+- **発見した問顁E*: 
 
 ---
 
-## 🔄 詳細なチェックリスト
+## 🔄 詳細なチェチE��リスチE
 
-より詳細なチェックリストは `RELEASE_CHECKLIST.md` を参照してください。
+より詳細なチェチE��リスト�E `RELEASE_CHECKLIST.md` を参照してください、E
 
 ---
 
 最終更新: 2026-01-03
 
-## 📊 現在の実装状況（2026-01-03）
+## 📊 現在の実裁E��況E��E026-01-03�E�E
 
-### ✅ 実装完了機能
-- ✅ グリシン:メチオニン比率ゲージ（ホーム画面に表示）
-- ✅ ボーンブロス提案機能（グリシン:メチオニン比が低い場合に表示）
-- ✅ Visual Regression Test（全画面・全ブラウザ対応）
-- ✅ E2Eテスト（Playwright）
+### ✁E実裁E��亁E���E
+- ✁Eグリシン:メチオニン比率ゲージ�E��Eーム画面に表示�E�E
+- ✁Eボ�Eンブロス提案機�E�E�グリシン:メチオニン比が低い場合に表示�E�E
+- ✁EVisual Regression Test�E��E画面・全ブラウザ対応！E
+- ✁EE2EチE��ト！Elaywright�E�E
 
-### ⚠️ テスト状況
-- ✅ Visual Regression Test: 実行済み（一部失敗あり、要確認）
-- ✅ E2Eテスト: 実行済み（結果要確認）
-- ⏸️ iOS版テスト（Maestro）: 後回し（Apple Developer Programが必要・ネットが不安定）
+### ⚠�E�EチE��ト状況E
+- ✁EVisual Regression Test: 実行済み�E�一部失敗あり、要確認！E
+- ✁EE2EチE��チE 実行済み�E�結果要確認！E
+- ⏸�E�EiOS版テスト！Eaestro�E�E 後回し！Epple Developer Programが忁E���Eネットが不安定！E
 
-### 📝 次のステップ
+### 📝 次のスチE��チE
 1. Visual Regression Testの失敗原因を特定して修正
-2. E2Eテスト結果の確認と修正
-3. コード品質チェック（lint、型チェック）
-4. ドキュメントの最終更新
+2. E2EチE��ト結果の確認と修正
+3. コード品質チェチE���E�Eint、型チェチE���E�E
+4. ドキュメント�E最終更新
+

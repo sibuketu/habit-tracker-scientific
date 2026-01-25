@@ -1,10 +1,9 @@
 /**
- * Primal Logic - Health Device Screen
+ * CarnivoreOS - Health Device Screen
  *
- * ウェアラブルデバイス連携画面
+ * ウェアラブルチE��イス連携画面
  *
- * 注意: Webアプリでは直接的な連携は難しいため、手動入力機能を提供
- */
+ * 注愁E Webアプリでは直接皁E��連携は難しいため、手動�E力機�Eを提侁E */
 
 import { useState, useEffect } from 'react';
 import { saveHealthData, getHealthData, type HealthData } from '../utils/healthDeviceSync';
@@ -35,15 +34,14 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
     }
   }, [today]);
 
-  // Google Fitからデータを取得（初回ロード時）
-  useEffect(() => {
+  // Google FitからチE�Eタを取得（�E回ロード時�E�E  useEffect(() => {
     const loadGoogleFitData = async () => {
       setIsLoadingGoogleFit(true);
       try {
         const data = await getGoogleFitData(today);
         if (data) {
           setGoogleFitData(data);
-          // Google FitデータをhealthDataに反映
+          // Google FitチE�EタをhealthDataに反映
           setHealthData((prev) => ({
             ...prev,
             steps: data.steps,
@@ -53,8 +51,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
           }));
         }
       } catch (error) {
-        // エラーは無視（手動入力にフォールバック）
-        if (import.meta.env.DEV) {
+        // エラーは無視（手動�E力にフォールバック�E�E        if (import.meta.env.DEV) {
           console.log('Google Fit data fetch failed:', error);
         }
       } finally {
@@ -71,7 +68,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
       setTimeout(() => setSaved(false), 2000);
     } catch (error) {
       logError(error, { component: 'HealthDeviceScreen', action: 'handleSave' });
-      alert('データの保存に失敗しました');
+      alert('チE�Eタの保存に失敗しました');
     }
   };
 
@@ -79,13 +76,10 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
     <div className="health-device-screen">
       <div className="health-device-container">
         <button onClick={onBack} className="health-device-back-button">
-          ← 戻る
-        </button>
-        <h1 className="health-device-title">健康デバイス連携</h1>
+          ↁE戻めE        </button>
+        <h1 className="health-device-title">健康チE��イス連携</h1>
         <p className="health-device-description">
-          Webアプリでは直接的な連携は難しいため、手動で入力できます。
-          将来的にモバイルアプリ（Expo）でApple Health、Google Fitとの連携を実装予定です。
-        </p>
+          Webアプリでは直接皁E��連携は難しいため、手動で入力できます、E          封E��皁E��モバイルアプリ�E�Expo�E�でApple Health、Google Fitとの連携を実裁E��定です、E        </p>
         <div style={{ marginBottom: '1rem' }}>
           <button
             onClick={async () => {
@@ -102,8 +96,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
                   });
                 }
               } catch (error) {
-                // エラーは無視
-              } finally {
+                // エラーは無要E              } finally {
                 setIsLoadingGoogleFit(false);
               }
             }}
@@ -118,11 +111,11 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
               fontSize: '0.875rem',
             }}
           >
-            {isLoadingGoogleFit ? '読み込み中...' : '🔄 Google Fitから取得'}
+            {isLoadingGoogleFit ? '読み込み中...' : '🔄 Google Fitから取征E}
           </button>
           {googleFitData && (
             <div style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#666' }}>
-              Google Fitデータを取得しました
+              Google FitチE�Eタを取得しました
             </div>
           )}
         </div>
@@ -140,7 +133,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
                     steps: e.target.value ? Number(e.target.value) : undefined,
                   })
                 }
-                placeholder="例: 10000"
+                placeholder="侁E 10000"
                 min="0"
                 className="health-device-input"
               />
@@ -149,7 +142,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
 
           <div className="health-device-input-group">
             <label className="health-device-label">
-              心拍数 (bpm)
+              忁E��数 (bpm)
               <input
                 type="number"
                 value={healthData.heartRate || ''}
@@ -159,7 +152,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
                     heartRate: e.target.value ? Number(e.target.value) : undefined,
                   })
                 }
-                placeholder="例: 70"
+                placeholder="侁E 70"
                 min="0"
                 max="220"
                 className="health-device-input"
@@ -169,7 +162,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
 
           <div className="health-device-input-group">
             <label className="health-device-label">
-              活動時間 (分)
+              活動時閁E(刁E
               <input
                 type="number"
                 value={healthData.activeMinutes || ''}
@@ -179,7 +172,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
                     activeMinutes: e.target.value ? Number(e.target.value) : undefined,
                   })
                 }
-                placeholder="例: 30"
+                placeholder="侁E 30"
                 min="0"
                 className="health-device-input"
               />
@@ -198,7 +191,7 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
                     caloriesBurned: e.target.value ? Number(e.target.value) : undefined,
                   })
                 }
-                placeholder="例: 200"
+                placeholder="侁E 200"
                 min="0"
                 className="health-device-input"
               />
@@ -206,15 +199,15 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
           </div>
 
           <button onClick={handleSave} className="health-device-save-button">
-            {saved ? '✓ 保存しました' : '保存'}
+            {saved ? '✁E保存しました' : '保孁E}
           </button>
         </div>
 
         <div className="health-device-info">
-          <h3>将来実装予定</h3>
+          <h3>封E��実裁E��宁E/h3>
           <ul>
-            <li>Apple Health連携（iOS）</li>
-            <li>Google Fit連携（Android）</li>
+            <li>Apple Health連携�E�EOS�E�E/li>
+            <li>Google Fit連携�E�Endroid�E�E/li>
             <li>自動データ同期</li>
           </ul>
         </div>
@@ -222,3 +215,4 @@ export default function HealthDeviceScreen({ onBack }: HealthDeviceScreenProps) 
     </div>
   );
 }
+

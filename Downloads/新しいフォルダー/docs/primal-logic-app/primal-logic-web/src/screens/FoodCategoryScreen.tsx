@@ -1,8 +1,7 @@
 /**
- * Primal Logic - Food Category Screen
+ * CarnivoreOS - Food Category Screen
  *
- * 巨大アイコン5つ（牛・豚・鶏・卵・魚）で食品を選択
- */
+ * 巨大アイコン5つ�E�牛・豚�E鶏�E卵・魚）で食品を選抁E */
 
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
@@ -22,39 +21,34 @@ const CATEGORIES: CategoryInfo[] = [
   { id: 'beef', name: '牛肉', emoji: '🐄', color: '#8B4513' },
   { id: 'pork', name: '豚肉', emoji: '🐷', color: '#FFB6C1' },
   { id: 'chicken', name: '鶏肉', emoji: '🐔', color: '#FFD700' },
-  { id: 'egg', name: '卵', emoji: '🥚', color: '#FFF8DC' },
-  { id: 'fish', name: '魚', emoji: '🐟', color: '#4682B4' },
+  { id: 'egg', name: '卵', emoji: '🥁E, color: '#FFF8DC' },
+  { id: 'fish', name: '魁E, emoji: '🐟', color: '#4682B4' },
 ];
 
 export default function FoodCategoryScreen() {
   const { addFood } = useApp();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [selectedFood, setSelectedFood] = useState<FoodData | null>(null);
-  const [amount, setAmount] = useState('300'); // カーニボアサイズのデフォルト
-  const [unit, setUnit] = useState<'g' | '個'>('g');
+  const [amount, setAmount] = useState('300'); // カーニ�EアサイズのチE��ォルチE  const [unit, setUnit] = useState<'g' | '倁E>('g');
 
   const foods = selectedCategory ? searchFoodsByCategory(selectedCategory) : [];
 
   const handleCategorySelect = (category: Category) => {
     setSelectedCategory(category);
     setSelectedFood(null);
-    setAmount('300'); // カーニボアサイズのデフォルト
-    setUnit('g');
+    setAmount('300'); // カーニ�EアサイズのチE��ォルチE    setUnit('g');
   };
 
   const handleFoodSelect = (food: FoodData) => {
     setSelectedFood(food);
-    // 食品に応じてデフォルト値を設定
-    if (food.preferredUnit === 'piece' && food.pieceWeight) {
+    // 食品に応じてチE��ォルト値を設宁E    if (food.preferredUnit === 'piece' && food.pieceWeight) {
       setAmount('1');
-      setUnit('個');
+      setUnit('倁E);
     } else {
-      // カーニボアサイズのデフォルト（ステーキは300g、ひき肉は450gなど）
-      if (food.id.includes('ribeye') || food.id.includes('sirloin')) {
+      // カーニ�EアサイズのチE��ォルト（スチE�Eキは300g、�Eき肉は450gなど�E�E      if (food.id.includes('ribeye') || food.id.includes('sirloin')) {
         setAmount('300');
       } else if (food.id.includes('ground')) {
-        setAmount('450'); // 1ポンド
-      } else {
+        setAmount('450'); // 1ポンチE      } else {
         setAmount('300');
       }
       setUnit('g');
@@ -64,13 +58,13 @@ export default function FoodCategoryScreen() {
   const handleAddFood = () => {
     if (!selectedFood) return;
 
-    const inputAmount = Number(amount) || (unit === '個' ? 1 : 300);
+    const inputAmount = Number(amount) || (unit === '倁E ? 1 : 300);
     let actualAmount: number;
-    let displayUnit: 'g' | '個';
+    let displayUnit: 'g' | '倁E;
 
-    if (unit === '個' && selectedFood.pieceWeight) {
+    if (unit === '倁E && selectedFood.pieceWeight) {
       actualAmount = inputAmount * selectedFood.pieceWeight;
-      displayUnit = '個';
+      displayUnit = '倁E;
     } else {
       actualAmount = inputAmount;
       displayUnit = 'g';
@@ -79,7 +73,7 @@ export default function FoodCategoryScreen() {
     const ratio = actualAmount / 100;
     const foodItem = {
       item: selectedFood.name,
-      amount: unit === '個' ? inputAmount : actualAmount,
+      amount: unit === '倁E ? inputAmount : actualAmount,
       unit: displayUnit,
       type: selectedFood.type,
       nutrients: {
@@ -112,7 +106,7 @@ export default function FoodCategoryScreen() {
     };
 
     addFood(foodItem);
-    // リセット
+    // リセチE��
     setSelectedCategory(null);
     setSelectedFood(null);
     setAmount('300');
@@ -148,11 +142,9 @@ export default function FoodCategoryScreen() {
           setSelectedFood(null);
         }}
       >
-        ← 戻る
-      </button>
+        ↁE戻めE      </button>
       <h2 className="food-category-title">
-        {CATEGORIES.find((c) => c.id === selectedCategory)?.name}を選択
-      </h2>
+        {CATEGORIES.find((c) => c.id === selectedCategory)?.name}を選抁E      </h2>
       <div className="food-category-list">
         {foods.map((food) => (
           <button
@@ -174,15 +166,15 @@ export default function FoodCategoryScreen() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               min="0"
-              step={unit === '個' ? '1' : '1'}
+              step={unit === '倁E ? '1' : '1'}
             />
             <select
               className="food-category-unit-select"
               value={unit}
               onChange={(e) => {
-                const newUnit = e.target.value as 'g' | '個';
+                const newUnit = e.target.value as 'g' | '倁E;
                 setUnit(newUnit);
-                if (newUnit === '個') {
+                if (newUnit === '倁E) {
                   setAmount('1');
                 } else {
                   setAmount('300');
@@ -190,7 +182,7 @@ export default function FoodCategoryScreen() {
               }}
             >
               <option value="g">g</option>
-              <option value="個">個</option>
+              <option value="倁E>倁E/option>
             </select>
           </div>
           <button className="food-category-add-button" onClick={handleAddFood}>
@@ -201,3 +193,4 @@ export default function FoodCategoryScreen() {
     </div>
   );
 }
+

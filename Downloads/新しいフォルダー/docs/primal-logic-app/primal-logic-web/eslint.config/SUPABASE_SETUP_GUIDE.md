@@ -1,133 +1,134 @@
-# Supabase設定ガイド（完全版）
+# Supabase設定ガイド（完�E版！E
 
-## 📋 手順概要
+## 📋 手頁E��要E
 
-1. Supabaseプロジェクトを作成
-2. 環境変数を取得
-3. データベーススキーマを実行
-4. ローカルの.envファイルに設定
-5. Netlifyの環境変数に設定（既に完了）
+1. Supabaseプロジェクトを作�E
+2. 環墁E��数を取征E
+3. チE�Eタベ�Eススキーマを実衁E
+4. ローカルの.envファイルに設宁E
+5. Netlifyの環墁E��数に設定（既に完亁E��E
 
 ---
 
-## 1. Supabaseプロジェクトを作成
+## 1. Supabaseプロジェクトを作�E
 
 1. **[Supabase](https://supabase.com/)** にアクセス
-2. 「Start your project」をクリック（アカウントがない場合は作成）
-3. 「New Project」をクリック
-4. プロジェクト情報を入力：
-   - **Name**: `primal-logic` または任意の名前
-   - **Database Password**: 強力なパスワードを設定（後で必要）
-   - **Region**: 最寄りのリージョンを選択（例: `Northeast Asia (Tokyo)`）
-5. 「Create new project」をクリック
-6. プロジェクトの作成完了を待つ（1-2分）
+2. 「Start your project」をクリチE���E�アカウントがなぁE��合�E作�E�E�E
+3. 「New Project」をクリチE��
+4. プロジェクト情報を�E力！E
+   - **Name**: `primal-logic` また�E任意�E名前
+   - **Database Password**: 強力なパスワードを設定（後で忁E��E��E
+   - **Region**: 最寁E��のリージョンを選択（侁E `Northeast Asia (Tokyo)`�E�E
+5. 「Create new project」をクリチE��
+6. プロジェクト�E作�E完亁E��征E���E�E-2刁E��E
 
 ---
 
-## 2. 環境変数を取得
+## 2. 環墁E��数を取征E
 
-1. Supabaseダッシュボードで、左メニューから「Settings」→「API」を開く
-2. 以下の値をコピー：
-   - **Project URL** → `VITE_SUPABASE_URL`
-     - 例: `https://xxxxxxxxxxxxx.supabase.co`
-   - **anon public** キー → `VITE_SUPABASE_ANON_KEY`
-     - 例: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`（長い文字列）
+1. SupabaseダチE��ュボ�Eドで、左メニューから「Settings」�E「API」を開く
+2. 以下�E値をコピ�E�E�E
+   - **Project URL** ↁE`VITE_SUPABASE_URL`
+     - 侁E `https://xxxxxxxxxxxxx.supabase.co`
+   - **anon public** キー ↁE`VITE_SUPABASE_ANON_KEY`
+     - 侁E `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`�E�長ぁE��字�E�E�E
 
-**重要**: これらの値は後で使用するので、安全な場所に保存してください。
-
----
-
-## 3. データベーススキーマを実行
-
-1. Supabaseダッシュボードで、左メニューから「SQL Editor」を開く
-2. 「New query」をクリック
-3. `supabase_schema.sql` ファイルの内容をコピーして貼り付け
-4. 「Run」ボタンをクリック（または `Ctrl+Enter`）
-5. 成功メッセージが表示されることを確認
-
-**エラーが出た場合**:
-- 既にテーブルが存在する場合は、`CREATE TABLE IF NOT EXISTS` によりスキップされます
-- ポリシーが既に存在する場合は、エラーが出る可能性がありますが、無視してOKです
+**重要E*: これら�E値は後で使用するので、安�Eな場所に保存してください、E
 
 ---
 
-## 4. ローカルの.envファイルに設定
+## 3. チE�Eタベ�Eススキーマを実衁E
 
-1. `.env` ファイルを開く（`primal-logic-app/primal-logic-web/.env`）
-2. 以下の環境変数を追加（または既存のコメントを外して設定）：
+1. SupabaseダチE��ュボ�Eドで、左メニューから「SQL Editor」を開く
+2. 「New query」をクリチE��
+3. `supabase_schema.sql` ファイルの冁E��をコピ�Eして貼り付け
+4. 「Run」�EタンをクリチE���E�また�E `Ctrl+Enter`�E�E
+5. 成功メチE��ージが表示されることを確誁E
+
+**エラーが�Eた場吁E*:
+- 既にチE�Eブルが存在する場合�E、`CREATE TABLE IF NOT EXISTS` によりスキチE�EされまぁE
+- ポリシーが既に存在する場合�E、エラーが�Eる可能性がありますが、無視してOKでぁE
+
+---
+
+## 4. ローカルの.envファイルに設宁E
+
+1. `.env` ファイルを開く！Eprimal-logic-app/primal-logic-web/.env`�E�E
+2. 以下�E環墁E��数を追加�E�また�E既存�Eコメントを外して設定）！E
 
 ```env
-# Supabase（クラウドバックアップを使用する場合）
+# Supabase�E�クラウドバチE��アチE�Eを使用する場合！E
 VITE_SUPABASE_URL=https://xxxxxxxxxxxxx.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
-3. ファイルを保存
+3. ファイルを保孁E
 
-**重要**: 
-- `=` の前後にスペースを入れない
-- 実際の値に置き換える（`https://...` と `eyJ...` の部分）
-
----
-
-## 5. Netlifyの環境変数に設定（既に完了）
-
-✅ 既にNetlifyの環境変数設定は完了しています。
-
-確認:
-- `VITE_SUPABASE_URL` が設定されているか
-- `VITE_SUPABASE_ANON_KEY` が設定されているか
+**重要E*: 
+- `=` の前後にスペ�Eスを�EれなぁE
+- 実際の値に置き換える�E�Ehttps://...` と `eyJ...` の部刁E��E
 
 ---
 
-## 6. 動作確認
+## 5. Netlifyの環墁E��数に設定（既に完亁E��E
 
-### ローカル環境での確認
+✁E既にNetlifyの環墁E��数設定�E完亁E��てぁE��す、E
 
-1. 開発サーバーを再起動：
+確誁E
+- `VITE_SUPABASE_URL` が設定されてぁE��ぁE
+- `VITE_SUPABASE_ANON_KEY` が設定されてぁE��ぁE
+
+---
+
+## 6. 動作確誁E
+
+### ローカル環墁E��の確誁E
+
+1. 開発サーバ�Eを�E起動！E
    ```bash
    cd primal-logic-app/primal-logic-web
    npm run dev
    ```
 
-2. アプリを開いて、以下を確認：
-   - エラーが出ないこと
-   - データが保存されること
-   - ブラウザのコンソールにSupabase関連のエラーが出ないこと
+2. アプリを開ぁE��、以下を確認！E
+   - エラーが�EなぁE��と
+   - チE�Eタが保存されること
+   - ブラウザのコンソールにSupabase関連のエラーが�EなぁE��と
 
-### Netlifyでの確認
+### Netlifyでの確誁E
 
-1. Netlifyのデプロイが成功しているか確認
-2. デプロイされたアプリで、データが保存されることを確認
+1. NetlifyのチE�Eロイが�E功してぁE��か確誁E
+2. チE�Eロイされたアプリで、データが保存されることを確誁E
 
 ---
 
-## ❓ よくある質問
+## ❁Eよくある質啁E
 
-### Q: Supabaseは必須ですか？
+### Q: Supabaseは忁E��ですか�E�E
 
-**A: いいえ、オプションです。**
-- 設定されていない場合、`localStorage`のみを使用します
-- エラーは出ますが、アプリは動作します
-- クラウドバックアップ機能を使いたい場合のみ設定してください
+**A: ぁE��え、オプションです、E*
+- 設定されてぁE��ぁE��合、`localStorage`のみを使用しまぁE
+- エラーは出ますが、アプリは動作しまぁE
+- クラウドバチE��アチE�E機�Eを使ぁE��ぁE��合�Eみ設定してください
 
-### Q: RLSポリシーエラーが出る
+### Q: RLSポリシーエラーが�EめE
 
-**A: 既にポリシーが存在する場合は、エラーが出ますが無視してOKです。**
-- `CREATE POLICY IF NOT EXISTS` はPostgreSQLでは使えないため、手動で削除するか、エラーを無視してください
+**A: 既にポリシーが存在する場合�E、エラーが�Eますが無視してOKです、E*
+- `CREATE POLICY IF NOT EXISTS` はPostgreSQLでは使えなぁE��め、手動で削除するか、エラーを無視してください
 
-### Q: 認証機能は使えますか？
+### Q: 認証機�Eは使えますか�E�E
 
-**A: はい、使えます。**
-- Supabase Authを使用したログイン・登録・パスワードリセット機能が実装されています
-- ただし、認証なしでも動作します（ゲストモード）
+**A: はぁE��使えます、E*
+- Supabase Authを使用したログイン・登録・パスワードリセチE��機�Eが実裁E��れてぁE��ぁE
+- ただし、認証なしでも動作します（ゲストモード！E
 
 ---
 
 ## 🔗 関連ファイル
 
-- `supabase_schema.sql` - データベーススキーマ
-- `src/lib/supabaseClient.ts` - Supabaseクライアント設定
-- `src/types/supabase.ts` - データベース型定義
-- `ENV_SETUP_COMPLETE_GUIDE.md` - 環境変数設定ガイド
+- `supabase_schema.sql` - チE�Eタベ�EススキーチE
+- `src/lib/supabaseClient.ts` - Supabaseクライアント設宁E
+- `src/types/supabase.ts` - チE�Eタベ�Eス型定義
+- `ENV_SETUP_COMPLETE_GUIDE.md` - 環墁E��数設定ガイチE
+
 

@@ -1,0 +1,25 @@
+---
+description: Primal Logic Web プロジェクト固有のルール
+globs: **/*
+alwaysApply: true
+---
+
+# Primal Logic Web - プロジェクト固有ルール
+
+**⚠️ 重要: このルールファイルは`.cursor/rules/master_rule.mdc`と併用されます。**
+**`master_rule.mdc`の全ルール（全セクション）が優先されます。このファイルはプロジェクト固有の追加ルールです。**
+
+このファイルには、`primal-logic-web`プロジェクト固有のルールを記載します。
+
+## 7. Tech Stack (プロジェクト固有)
+
+- **Stack**: React (Vite), Tailwind CSS, TypeScript, Firebase, Supabase.
+- **Code Integrity**: コードの省略禁止。常に完全な動くコードを提示。
+- **Definition of Done**: フロントエンドでの表示確認まで終わって初めて「実装完了」とする。
+- **Backend**: FirebaseとSupabaseの両方をサポート。プロジェクトの要件に応じて適切な方を選択する。
+
+---
+
+## プロジェクト固有のルール
+
+このプロジェクト固有の追加ルールがある場合は、ここに記載してください。

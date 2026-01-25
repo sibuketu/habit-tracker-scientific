@@ -1,0 +1,3 @@
+gcloud config get-value account
+gcloud projects describe gen-lang-client-0090221486 --format="value(projectNumber)"
+Test-Path Dockerfile

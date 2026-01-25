@@ -1,37 +1,32 @@
 /**
- * Primal Logic - Barcode Scanner Utility
+ * CarnivoreOS - Barcode Scanner Utility
  *
- * バーコード読み取り機能
- * Web API: BarcodeDetector API（Chrome/Edge対応）
- * フォールバック: @zxing/library
+ * バ�Eコード読み取り機�E
+ * Web API: BarcodeDetector API�E�Ehrome/Edge対応！E * フォールバック: @zxing/library
  */
 
 import { logError } from './errorHandler';
 
 export interface BarcodeResult {
-  code: string; // バーコード値
-  format: string; // バーコード形式（EAN-13, UPC-A等）
-}
+  code: string; // バ�Eコード値
+  format: string; // バ�Eコード形式！EAN-13, UPC-A等！E}
 
 /**
- * BarcodeDetector APIが利用可能かチェック
- * モバイルブラウザ（特にiOS Safari）では利用できないため、より厳密にチェック
+ * BarcodeDetector APIが利用可能かチェチE��
+ * モバイルブラウザ�E�特にiOS Safari�E�では利用できなぁE��め、より厳寁E��チェチE��
  */
 export function isBarcodeDetectorAvailable(): boolean {
-  // モバイルブラウザの検出
+  // モバイルブラウザの検�E
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  // iOS SafariではBarcodeDetector APIが利用できない
-  if (isIOS) {
+  // iOS SafariではBarcodeDetector APIが利用できなぁE  if (isIOS) {
     return false;
   }
 
-  // Android Chromeでも、実際にAPIが利用可能か確認
-  if (isMobile && 'BarcodeDetector' in window) {
+  // Android Chromeでも、実際にAPIが利用可能か確誁E  if (isMobile && 'BarcodeDetector' in window) {
     try {
-      // 実際にBarcodeDetectorをインスタンス化して確認
-      const testDetector = new (
+      // 実際にBarcodeDetectorをインスタンス化して確誁E      const testDetector = new (
         window as typeof window & { BarcodeDetector: typeof BarcodeDetector }
       ).BarcodeDetector({ formats: ['qr_code'] });
       return !!testDetector;
@@ -40,13 +35,12 @@ export function isBarcodeDetectorAvailable(): boolean {
     }
   }
 
-  // デスクトップブラウザ（Chrome、Edge）では利用可能
+  // チE��クトップブラウザ�E�Ehrome、Edge�E�では利用可能
   return 'BarcodeDetector' in window;
 }
 
 /**
- * バーコードをスキャン（BarcodeDetector API使用）
- */
+ * バ�Eコードをスキャン�E�EarcodeDetector API使用�E�E */
 export async function scanBarcodeFromImage(file: File): Promise<BarcodeResult | null> {
   try {
     if (!isBarcodeDetectorAvailable()) {
@@ -92,11 +86,9 @@ export async function scanBarcodeFromImage(file: File): Promise<BarcodeResult | 
 }
 
 /**
- * カメラからバーコードをスキャン
+ * カメラからバ�Eコードをスキャン
  *
- * @param videoElement 既に初期化されたvideo要素（オプション）
- * @param onProgress スキャン中の進捗コールバック（オプション）
- */
+ * @param videoElement 既に初期化されたvideo要素�E�オプション�E�E * @param onProgress スキャン中の進捗コールバック�E�オプション�E�E */
 export async function scanBarcodeFromCamera(
   videoElement?: HTMLVideoElement,
   onProgress?: (progress: number) => void
@@ -115,8 +107,7 @@ export async function scanBarcodeFromCamera(
       video = videoElement;
       stream = video.srcObject as MediaStream;
     } else {
-      // 新しいカメラストリームを開始
-      stream = await navigator.mediaDevices.getUserMedia({
+      // 新しいカメラストリームを開姁E      stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment' },
       });
 
@@ -149,8 +140,7 @@ export async function scanBarcodeFromCamera(
 
     return new Promise((resolve, reject) => {
       let scanCount = 0;
-      const maxScans = 20; // 10秒間（500ms × 20回）
-
+      const maxScans = 20; // 10秒間�E�E00ms ÁE20回！E
       const scanInterval = setInterval(async () => {
         try {
           scanCount++;
@@ -170,8 +160,7 @@ export async function scanBarcodeFromCamera(
               format: barcodes[0].format,
             });
           } else if (scanCount >= maxScans) {
-            // タイムアウト
-            clearInterval(scanInterval);
+            // タイムアウチE            clearInterval(scanInterval);
             if (shouldCleanup) {
               stream.getTracks().forEach((track) => track.stop());
               video.remove();
@@ -179,8 +168,7 @@ export async function scanBarcodeFromCamera(
             resolve(null);
           }
         } catch (error) {
-          // スキャン中のエラーは無視（カメラが準備できていない場合など）
-          if (import.meta.env.DEV) {
+          // スキャン中のエラーは無視（カメラが準備できてぁE��ぁE��合など�E�E          if (import.meta.env.DEV) {
             console.log('Barcode scan attempt failed:', error);
           }
         }
@@ -189,15 +177,15 @@ export async function scanBarcodeFromCamera(
   } catch (error: unknown) {
     logError(error, { component: 'barcodeScanner', action: 'scanBarcodeFromCamera' });
 
-    // エラーの種類に応じて適切なメッセージを返す
+    // エラーの種類に応じて適刁E��メチE��ージを返す
     const err = error as { name?: string; message?: string };
     if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-      throw new Error('カメラの許可が必要です。ブラウザの設定からカメラを許可してください。');
+      throw new Error('カメラの許可が忁E��です。ブラウザの設定からカメラを許可してください、E);
     } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-      throw new Error('カメラが見つかりませんでした。');
+      throw new Error('カメラが見つかりませんでした、E);
     } else if (err.message?.includes('BarcodeDetector')) {
       throw new Error(
-        'このブラウザはバーコード読み取りに対応していません。ChromeまたはEdgeをご利用ください。'
+        'こ�Eブラウザはバ�Eコード読み取りに対応してぁE��せん、Ehromeまた�EEdgeをご利用ください、E
       );
     }
 
@@ -206,8 +194,7 @@ export async function scanBarcodeFromCamera(
 }
 
 /**
- * Open Food Facts APIから食品情報を取得
- */
+ * Open Food Facts APIから食品惁E��を取征E */
 export interface OpenFoodFactsProduct {
   product_name?: string;
   product_name_en?: string;
@@ -237,8 +224,7 @@ export async function getFoodInfoFromBarcode(
     const data = await response.json();
 
     if (data.status === 0) {
-      return null; // 商品が見つからない
-    }
+      return null; // 啁E��が見つからなぁE    }
 
     return data.product;
   } catch (error) {
@@ -246,3 +232,4 @@ export async function getFoodInfoFromBarcode(
     throw error;
   }
 }
+

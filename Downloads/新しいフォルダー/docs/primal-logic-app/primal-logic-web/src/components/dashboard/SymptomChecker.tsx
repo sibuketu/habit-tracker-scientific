@@ -1,8 +1,7 @@
 /**
- * Primal Logic - Symptom Checker (トラブルシューティング)
+ * CarnivoreOS - Symptom Checker (トラブルシューチE��ング)
  *
- * カーニボア実践中の症状をチェックし、対処法を提案するコンポーネント
- */
+ * カーニ�Eア実践中の痁E��をチェチE��し、対処法を提案するコンポ�EネンチE */
 
 import { useState } from 'react';
 import { REMEDY_LOGIC, type RemedyItem } from '../../data/remedyLogic';
@@ -25,8 +24,8 @@ export default function SymptomChecker() {
   return (
     <>
       <div className="symptom-checker-section">
-        <h3 className="symptom-checker-title">💊 体調はどう？</h3>
-        <p className="symptom-checker-subtitle">症状を選んで対処法を確認</p>
+        <h3 className="symptom-checker-title">💊 体調はどぁE��E/h3>
+        <p className="symptom-checker-subtitle">痁E��を選んで対処法を確誁E/p>
         <div className="symptom-buttons">
           {REMEDY_LOGIC.map((remedy) => (
             <button
@@ -45,12 +44,11 @@ export default function SymptomChecker() {
         <div className="symptom-modal-overlay" onClick={closeModal}>
           <div className="symptom-modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="symptom-modal-close" onClick={closeModal}>
-              ×
-            </button>
+              ÁE            </button>
             <h2 className="symptom-modal-title">{selectedSymptom.symptom}</h2>
 
             <div className="symptom-modal-section">
-              <h3 className="symptom-modal-section-title">🔍 考えられる原因</h3>
+              <h3 className="symptom-modal-section-title">🔍 老E��られる原因</h3>
               <ul className="symptom-modal-list">
                 {selectedSymptom.possibleCauses.map((cause, idx) => (
                   <li key={idx}>{cause}</li>
@@ -59,7 +57,7 @@ export default function SymptomChecker() {
             </div>
 
             <div className="symptom-modal-section">
-              <h3 className="symptom-modal-section-title">✅ 対処法</h3>
+              <h3 className="symptom-modal-section-title">✁E対処況E/h3>
               <ul className="symptom-modal-list">
                 {selectedSymptom.remedies.map((remedy, idx) => (
                   <li key={idx}>{remedy}</li>
@@ -68,7 +66,7 @@ export default function SymptomChecker() {
             </div>
 
             <div className="symptom-modal-section">
-              <h3 className="symptom-modal-section-title">📚 ロジック</h3>
+              <h3 className="symptom-modal-section-title">📚 ロジチE��</h3>
               <p className="symptom-modal-logic">{selectedSymptom.logic}</p>
             </div>
           </div>
@@ -77,3 +75,4 @@ export default function SymptomChecker() {
     </>
   );
 }
+

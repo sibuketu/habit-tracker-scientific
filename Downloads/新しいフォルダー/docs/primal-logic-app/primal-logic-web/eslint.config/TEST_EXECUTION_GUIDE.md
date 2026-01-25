@@ -1,69 +1,69 @@
-# テスト実行ガイド
+# チE��ト実行ガイチE
 
-## 同時並行で実行できるテスト
+## 同時並行で実行できるチE��チE
 
-### 1. Visual Regression Test（UI見た目テスト）【Web版】
+### 1. Visual Regression Test�E�EI見た目チE��ト）【Web版、E
 
-**実行方法:**
+**実行方況E**
 ```bash
 cd primal-logic-app/primal-logic-web
 run-visual-test.bat
 ```
 
-または:
+また�E:
 ```bash
 npm run test:visual
 ```
 
-**初回実行時（ベースライン作成）:**
+**初回実行時�E��Eースライン作�E�E�E**
 ```bash
 npm run test:visual:update
 ```
 
 **特徴:**
-- Webブラウザで実行（PCで完結）
-- スクリーンショットを比較してUIの変更を検出
-- 他のテストと同時実行可能
+- Webブラウザで実行！ECで完結！E
+- スクリーンショチE��を比輁E��てUIの変更を検�E
+- 他�EチE��トと同時実行可能
 
 ---
 
-### 2. iOS版テスト（Maestro）【iOS実機】
+### 2. iOS版テスト！Eaestro�E�【iOS実機、E
 
-**実行方法:**
+**実行方況E**
 ```bash
 cd primal-logic-app
 run-ios-test.bat
 ```
 
-または:
+また�E:
 ```bash
 npm run test:e2e
 ```
 
 **前提条件:**
-1. Maestroのインストール
+1. Maestroのインスト�Eル
    ```powershell
    iwr https://get.maestro.mobile.dev -UseBasicParsing | iex
    ```
 
-2. iOS実機の接続
-   - USBケーブルでPCに接続
-   - 「このコンピュータを信頼する」を選択
+2. iOS実機�E接綁E
+   - USBケーブルでPCに接綁E
+   - 「このコンピュータを信頼する」を選抁E
 
-3. アプリの起動（別ターミナル）
+3. アプリの起動（別ターミナル�E�E
    ```bash
    cd primal-logic-app
    npx expo start --ios
    ```
 
 **特徴:**
-- iOS実機で実行
-- 実機での動作を確認
+- iOS実機で実衁E
+- 実機での動作を確誁E
 - Visual Regression Testと同時実行可能
 
 ---
 
-## 同時実行の手順
+## 同時実行�E手頁E
 
 ### ターミナル1: Visual Regression Test
 
@@ -72,57 +72,58 @@ cd primal-logic-app/primal-logic-web
 run-visual-test.bat
 ```
 
-### ターミナル2: iOS版テスト
+### ターミナル2: iOS版テスチE
 
 ```bash
-# 1. アプリを起動
+# 1. アプリを起勁E
 cd primal-logic-app
 npx expo start --ios
 
-# 2. 別のターミナルでテスト実行
+# 2. 別のターミナルでチE��ト実衁E
 cd primal-logic-app
 run-ios-test.bat
 ```
 
 ---
 
-## テスト結果の確認
+## チE��ト結果の確誁E
 
 ### Visual Regression Test
 - 結果: `primal-logic-app/primal-logic-web/test-results/`
-- 差分画像: `*-diff.png`
-- 実際のスクリーンショット: `*-actual.png`
+- 差刁E��僁E `*-diff.png`
+- 実際のスクリーンショチE��: `*-actual.png`
 
-### iOS版テスト
+### iOS版テスチE
 - 結果: `primal-logic-app/.maestro/test-results/`
 - ログ: ターミナルに表示
 
 ---
 
-## トラブルシューティング
+## トラブルシューチE��ング
 
 ### Visual Regression Test
 
-**差分が検出された場合:**
-1. 意図的な変更か確認
-2. 意図的な場合は、ベースラインを更新:
+**差刁E��検�Eされた場吁E**
+1. 意図皁E��変更か確誁E
+2. 意図皁E��場合�E、�Eースラインを更新:
    ```bash
    npm run test:visual:update
    ```
 
-### iOS版テスト
+### iOS版テスチE
 
-**デバイスが見つからない場合:**
+**チE��イスが見つからなぁE��吁E**
 ```bash
 maestro devices
 ```
-- 実機が表示されない場合は、USB接続を確認
+- 実機が表示されなぁE��合�E、USB接続を確誁E
 
-**アプリが見つからない場合:**
-- アプリが起動しているか確認
-- appIdが正しいか確認（`com.primallogic.app`）
+**アプリが見つからなぁE��吁E**
+- アプリが起動してぁE��か確誁E
+- appIdが正しいか確認！Ecom.primallogic.app`�E�E
 
 ---
 
 最終更新: 2026-01-03
+
 

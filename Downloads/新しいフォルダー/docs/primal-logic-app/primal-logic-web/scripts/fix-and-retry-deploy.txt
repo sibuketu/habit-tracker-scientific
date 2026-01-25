@@ -1,0 +1,5 @@
+docker ps
+docker build -t gcr.io/gen-lang-client-0090221486/video-editor .
+docker push gcr.io/gen-lang-client-0090221486/video-editor
+gcloud run deploy video-editor --image gcr.io/gen-lang-client-0090221486/video-editor --platform managed --region asia-northeast1 --allow-unauthenticated --memory 2Gi --cpu 2 --timeout 300
+gcloud run services describe video-editor --region asia-northeast1 --format "value(status.url)"

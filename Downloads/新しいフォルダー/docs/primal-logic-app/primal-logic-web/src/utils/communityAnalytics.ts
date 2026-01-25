@@ -1,10 +1,9 @@
 /**
- * Community Analytics - コミュニティ分析ユーティリティ
+ * Community Analytics - コミュニティ刁E��ユーチE��リチE��
  *
- * ユーザーのログデータから実践データを分析
- */
+ * ユーザーのログチE�Eタから実践チE�Eタを�E极E */
 
-import type { DailyLog } from '../types';
+import type { DailyLog } from '../types/index';
 import { getDailyLogs } from './storage';
 
 export interface CommunityStats {
@@ -33,8 +32,7 @@ export interface PatternAnalysis {
 }
 
 /**
- * ユーザーの統計情報を計算
- */
+ * ユーザーの統計情報を計箁E */
 export async function calculateCommunityStats(): Promise<CommunityStats> {
   const logs = await getDailyLogs();
 
@@ -56,8 +54,7 @@ export async function calculateCommunityStats(): Promise<CommunityStats> {
   const totalDays = logs.length;
   const violationRate = totalDays > 0 ? (violationDays / totalDays) * 100 : 0;
 
-  // 栄養素の平均値を計算
-  let totalProtein = 0;
+  // 栁E��素の平坁E��を計箁E  let totalProtein = 0;
   let totalFat = 0;
   let totalSodium = 0;
   let totalMagnesium = 0;
@@ -78,8 +75,7 @@ export async function calculateCommunityStats(): Promise<CommunityStats> {
   const averageSodium = validDays > 0 ? totalSodium / validDays : 0;
   const averageMagnesium = validDays > 0 ? totalMagnesium / validDays : 0;
 
-  // 連続記録を計算（違反なしの連続日数）
-  const sortedLogs = [...logs].sort(
+  // 連続記録を計算（違反なし�E連続日数�E�E  const sortedLogs = [...logs].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
@@ -114,107 +110,105 @@ export async function calculateCommunityStats(): Promise<CommunityStats> {
 }
 
 /**
- * パターン分析（日記と栄養素の相関など）
- */
+ * パターン刁E���E�日記と栁E��素の相関など�E�E */
 export async function analyzePatterns(): Promise<PatternAnalysis> {
   const logs = await getDailyLogs();
 
-  // 日記から症状を抽出（完全実装版）
-  const symptomKeywords = [
+  // 日記から症状を抽出�E�完�E実裁E���E�E  const symptomKeywords = [
     '下痢',
-    '便秘',
-    '頭痛',
+    '便私E,
+    '頭痁E,
     '疲労',
-    '関節痛',
-    'こむら返り',
+    '関節痁E,
+    'こ�Eら返り',
     '不眠',
-    '吐き気',
-    'めまい',
+    '吐き氁E,
+    'めまぁE,
     '動悸',
-    '息切れ',
+    '息刁E��',
     '冷え性',
     'むくみ',
     '乾燥',
-    '肌荒れ',
-    '抜け毛',
-    '口内炎',
-    '目の疲れ',
+    '肌荒めE,
+    '抜け毁E,
+    '口冁E��',
+    '目の疲めE,
     '肩こり',
-    '腰痛',
-    '生理痛',
+    '腰痁E,
+    '生理痁E,
     'PMS',
     'イライラ',
-    '不安',
-    'うつ',
-    '集中力低下',
-    '記憶力低下',
+    '不宁E,
+    'ぁE��',
+    '雁E��力低丁E,
+    '記�E力低丁E,
     '食欲不振',
-    '過食',
-    '甘いものが欲しい',
-    '塩分が欲しい',
-    '筋肉痛',
+    '過飁E,
+    '甘いも�Eが欲しい',
+    '塩刁E��欲しい',
+    '筋肉痁E,
     'けいれん',
-    'しびれ',
+    'し�EめE,
     '感覚異常',
-    '睡眠の質が悪い',
-    '早朝覚醒',
-    '夜中に目が覚める',
+    '睡眠の質が悪ぁE,
+    '早朝覚�E',
+    '夜中に目が覚めめE,
     '悪夢',
     '朝起きるのが辛い',
-    '午後の眠気',
-    '食後の眠気',
+    '午後�E眠氁E,
+    '食後�E眠氁E,
     '低血糖症状',
-    '手の震え',
-    '発汗',
-    '冷や汗',
+    '手�E霁E��',
+    '発汁E,
+    '冷めE��E,
   ];
   const nutrientMap: Record<string, string> = {
     下痢: '脂質',
-    便秘: 'マグネシウム',
-    頭痛: 'ナトリウム',
+    便私E 'マグネシウム',
+    頭痁E 'ナトリウム',
     疲労: 'タンパク質',
-    関節痛: 'オメガ3',
-    こむら返り: 'マグネシウム',
+    関節痁E 'オメガ3',
+    こ�Eら返り: 'マグネシウム',
     不眠: 'マグネシウム',
-    吐き気: 'ナトリウム',
-    めまい: 'ナトリウム',
+    吐き氁E 'ナトリウム',
+    めまぁE 'ナトリウム',
     動悸: 'マグネシウム',
-    息切れ: '鉄分',
+    息刁E��: '鉁E�E',
     冷え性: 'タンパク質',
     むくみ: 'ナトリウム',
     乾燥: '脂質',
-    肌荒れ: 'ビタミンA',
-    抜け毛: 'タンパク質',
-    口内炎: 'ビタミンB12',
-    目の疲れ: 'ビタミンA',
+    肌荒めE 'ビタミンA',
+    抜け毁E 'タンパク質',
+    口冁E��: 'ビタミンB12',
+    目の疲めE 'ビタミンA',
     肩こり: 'マグネシウム',
-    腰痛: 'マグネシウム',
-    生理痛: 'オメガ3',
+    腰痁E 'マグネシウム',
+    生理痁E 'オメガ3',
     PMS: 'マグネシウム',
     イライラ: 'マグネシウム',
-    不安: 'マグネシウム',
-    うつ: 'オメガ3',
-    集中力低下: 'タンパク質',
-    記憶力低下: 'タンパク質',
+    不宁E 'マグネシウム',
+    ぁE��: 'オメガ3',
+    雁E��力低丁E 'タンパク質',
+    記�E力低丁E 'タンパク質',
     食欲不振: 'タンパク質',
-    過食: 'タンパク質',
-    甘いものが欲しい: 'タンパク質',
-    塩分が欲しい: 'ナトリウム',
-    筋肉痛: 'マグネシウム',
+    過飁E 'タンパク質',
+    甘いも�Eが欲しい: 'タンパク質',
+    塩刁E��欲しい: 'ナトリウム',
+    筋肉痁E 'マグネシウム',
     けいれん: 'マグネシウム',
-    しびれ: 'ビタミンB12',
+    し�EめE 'ビタミンB12',
     感覚異常: 'ビタミンB12',
-    睡眠の質が悪い: 'マグネシウム',
-    早朝覚醒: 'マグネシウム',
-    夜中に目が覚める: 'マグネシウム',
+    睡眠の質が悪ぁE 'マグネシウム',
+    早朝覚�E: 'マグネシウム',
+    夜中に目が覚めめE 'マグネシウム',
     悪夢: 'マグネシウム',
     朝起きるのが辛い: 'ナトリウム',
-    午後の眠気: 'タンパク質',
-    食後の眠気: 'タンパク質',
+    午後�E眠氁E 'タンパク質',
+    食後�E眠氁E 'タンパク質',
     低血糖症状: 'タンパク質',
-    手の震え: 'ナトリウム',
-    発汗: 'ナトリウム',
-    冷や汗: 'ナトリウム',
+    手�E霁E��: 'ナトリウム',
+    発汁E 'ナトリウム',
+    冷めE��E 'ナトリウム',
   };
 
   const correlations: PatternAnalysis['symptomNutritionCorrelation'] = [];
@@ -228,7 +222,7 @@ export async function analyzePatterns(): Promise<PatternAnalysis> {
         symptom,
         nutrient,
         correlation: logsWithSymptom.length / logs.length,
-        insight: `${symptom}が記録された日は${logsWithSymptom.length}日（全体の${Math.round((logsWithSymptom.length / logs.length) * 100)}%）`,
+        insight: `${symptom}が記録された日は${logsWithSymptom.length}日�E��E体�E${Math.round((logsWithSymptom.length / logs.length) * 100)}%�E�`,
       });
     }
   });
@@ -237,18 +231,16 @@ export async function analyzePatterns(): Promise<PatternAnalysis> {
   const violationLogs = logs.filter((log) => log.calculatedMetrics?.hasViolation);
   const recoveryDays: number[] = [];
 
-  // 違反からの回復パターンを分析（24-48時間の遅延反応を考慮）
-  for (let i = 0; i < logs.length - 1; i++) {
+  // 違反からの回復パターンを�E析！E4-48時間の遁E��反応を老E�E�E�E  for (let i = 0; i < logs.length - 1; i++) {
     const currentLog = logs[i];
 
     if (currentLog.calculatedMetrics?.hasViolation) {
-      // 違反があった日から、回復した日までの日数を計算
-      for (let j = i + 1; j < Math.min(i + 3, logs.length); j++) {
+      // 違反があった日から、回復した日までの日数を計箁E      for (let j = i + 1; j < Math.min(i + 3, logs.length); j++) {
         const nextLog = logs[j];
         if (!nextLog.calculatedMetrics?.hasViolation) {
           const daysToRecovery = j - i;
           recoveryDays.push(daysToRecovery);
-          break; // 最初の回復日を記録
+          break; // 最初�E回復日を記録
         }
       }
     }
@@ -261,14 +253,13 @@ export async function analyzePatterns(): Promise<PatternAnalysis> {
     symptomNutritionCorrelation: correlations,
     violationRecoveryPattern: {
       averageRecoveryDays: Math.round(averageRecoveryDays * 10) / 10,
-      mostEffectiveActions: ['16時間ファスティング', '脂質を減らす', '塩分を増やす'],
+      mostEffectiveActions: ['16時間ファスチE��ング', '脂質を減らぁE, '塩刁E��増やぁE],
     },
   };
 }
 
 /**
- * データエクスポート（専門医相談用）
- */
+ * チE�Eタエクスポ�Eト（専門医相諁E���E�E */
 export async function exportDataForConsultation(): Promise<string> {
   const logs = await getDailyLogs();
   const stats = await calculateCommunityStats();
@@ -290,3 +281,4 @@ export async function exportDataForConsultation(): Promise<string> {
 
   return JSON.stringify(exportData, null, 2);
 }
+

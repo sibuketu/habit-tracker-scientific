@@ -1,7 +1,7 @@
 /**
- * Primal Logic - 全画面スクリーンショット取得スクリプト
+ * CarnivOS - 全画面スクリーンショチE��取得スクリプト
  *
- * アプリの全画面のスクリーンショットを自動取得し、Geminiに共有するための画像を生成します。
+ * アプリの全画面のスクリーンショチE��を�E動取得し、Geminiに共有するため�E画像を生�Eします、E
  */
 
 import { test, expect, Page } from '@playwright/test';
@@ -11,7 +11,7 @@ import * as path from 'path';
 const SCREENSHOT_DIR = path.join(__dirname, '../screenshots-for-gemini');
 const BASE_URL = 'http://localhost:5173';
 
-// 全画面のリスト
+// 全画面のリスチE
 const SCREENS: Array<{
   name: string;
   screen: string;
@@ -37,7 +37,7 @@ const SCREENS: Array<{
   {
     name: 'onboarding',
     screen: 'onboarding',
-    description: 'オンボーディング画面',
+    description: 'オンボ�EチE��ング画面',
     setup: async (page) => {
       await page.evaluate(() => {
         localStorage.setItem('primal_logic_consent_accepted', 'true');
@@ -50,14 +50,14 @@ const SCREENS: Array<{
   {
     name: 'home',
     screen: 'home',
-    description: 'ホーム画面（メインダッシュボード）',
+    description: 'ホ�Eム画面�E�メインダチE��ュボ�Eド！E,
     setup: async (page) => {
       await page.evaluate(() => {
         localStorage.setItem('primal_logic_consent_accepted', 'true');
         localStorage.setItem('primal_logic_onboarding_completed', 'true');
       });
       await page.reload();
-      await page.waitForTimeout(2000); // データ読み込み待機
+      await page.waitForTimeout(2000); // チE�Eタ読み込み征E��E
     },
   },
   {
@@ -89,7 +89,7 @@ const SCREENS: Array<{
   {
     name: 'labs',
     screen: 'labs',
-    description: 'Labs画面（実験的機能）',
+    description: 'Labs画面�E�実験的機�E�E�E,
     setup: async (page) => {
       await page.evaluate(() => {
         localStorage.setItem('primal_logic_consent_accepted', 'true');
@@ -141,7 +141,7 @@ const SCREENS: Array<{
   {
     name: 'gift',
     screen: 'gift',
-    description: 'Gift画面（コミュニティ機能）',
+    description: 'Gift画面�E�コミュニティ機�E�E�E,
     setup: async (page) => {
       await page.evaluate(() => {
         localStorage.setItem('primal_logic_consent_accepted', 'true');
@@ -154,7 +154,7 @@ const SCREENS: Array<{
   {
     name: 'bioHack',
     screen: 'bioHack',
-    description: 'Bio-Hackダッシュボード画面',
+    description: 'Bio-HackダチE��ュボ�Eド画面',
     setup: async (page) => {
       await page.evaluate(() => {
         localStorage.setItem('primal_logic_consent_accepted', 'true');
@@ -179,20 +179,20 @@ const SCREENS: Array<{
   },
 ];
 
-// スクリーンショットディレクトリを作成
+// スクリーンショチE��チE��レクトリを作�E
 if (!fs.existsSync(SCREENSHOT_DIR)) {
   fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
 }
 
 test.describe('Capture All Screenshots', () => {
   test.beforeEach(async ({ page }) => {
-    // モバイルビューポートに設定（iPhone 15幅）
+    // モバイルビューポ�Eトに設定！EPhone 15幁E��E
     await page.setViewportSize({ width: 393, height: 852 });
   });
 
   for (const screenConfig of SCREENS) {
     test(`Capture screenshot: ${screenConfig.name}`, async ({ page }) => {
-      // 画面のセットアップ
+      // 画面のセチE��アチE�E
       if (screenConfig.setup) {
         await screenConfig.setup(page);
       } else {
@@ -200,19 +200,19 @@ test.describe('Capture All Screenshots', () => {
         await page.waitForTimeout(2000);
       }
 
-      // スクリーンショットを取得
+      // スクリーンショチE��を取征E
       const screenshotPath = path.join(SCREENSHOT_DIR, `${screenConfig.name}.png`);
       await page.screenshot({
         path: screenshotPath,
-        fullPage: true, // 全ページスクリーンショット
+        fullPage: true, // 全ペ�EジスクリーンショチE��
       });
 
-      console.log(`✓ Screenshot saved: ${screenshotPath}`);
+      console.log(`✁EScreenshot saved: ${screenshotPath}`);
     });
   }
 });
 
-// スクリーンショット一覧を生成
+// スクリーンショチE��一覧を生戁E
 test.afterAll(async () => {
   const screenshotListPath = path.join(SCREENSHOT_DIR, 'SCREENSHOT_LIST.md');
   const screenshots = SCREENS.map((s) => ({
@@ -221,11 +221,11 @@ test.afterAll(async () => {
     path: `screenshots-for-gemini/${s.name}.png`,
   }));
 
-  const markdown = `# スクリーンショット一覧
+  const markdown = `# スクリーンショチE��一覧
 
-以下のスクリーンショットをGeminiに送信してください。
+以下�EスクリーンショチE��をGeminiに送信してください、E
 
-## 📸 スクリーンショット一覧
+## 📸 スクリーンショチE��一覧
 
 ${screenshots
   .map(
@@ -233,26 +233,27 @@ ${screenshots
 ### ${index + 1}. ${s.description} (${s.name})
 
 - **ファイルパス**: \`C:\\Users\\susam\\Downloads\\新しいフォルダー\\docs\\primal-logic-app\\primal-logic-web\\${s.path}\`
-- **説明**: ${s.description}
+- **説昁E*: ${s.description}
 `
   )
   .join('\n')}
 
 ---
 
-## 💬 Geminiへの送信メッセージ例
+## 💬 Geminiへの送信メチE��ージ侁E
 
 \`\`\`
-以下のスクリーンショットを送信します。Primal Logicアプリの全画面のスクリーンショットです。
+以下�EスクリーンショチE��を送信します。Primal Logicアプリの全画面のスクリーンショチE��です、E
 
-送信ファイル：
+送信ファイル�E�E
 ${screenshots.map((s) => `- ${s.name}.png (${s.description})`).join('\n')}
 
-これらのスクリーンショットを参考に、カメラ機能統合の要件定義をお願いします。
+これら�EスクリーンショチE��を参老E��、カメラ機�E統合�E要件定義をお願いします、E
 \`\`\`
 `;
 
   fs.writeFileSync(screenshotListPath, markdown);
-  console.log(`✓ Screenshot list saved: ${screenshotListPath}`);
+  console.log(`✁EScreenshot list saved: ${screenshotListPath}`);
 });
+
 

@@ -1,23 +1,23 @@
-# Webアプリの起動方法
+# Webアプリの起動方況E
 
-> ブラウザでアプリを起動して動作確認する方法
+> ブラウザでアプリを起動して動作確認する方況E
 
 ---
 
-## 🚀 起動方法
+## 🚀 起動方況E
 
-### 方法1: バッチファイルを使用（推奨）
+### 方況E: バッチファイルを使用�E�推奨�E�E
 
 **エクスプローラーから:**
-1. エクスプローラーを開く（Windowsキー+E）
-2. アドレスバーに以下を貼り付けてEnter:
+1. エクスプローラーを開く！Eindowsキー+E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-3. `start-dev-server.bat` をダブルクリック
-4. ブラウザが自動的に開きます
+3. `start-dev-server.bat` をダブルクリチE��
+4. ブラウザが�E動的に開きまぁE
 
-### 方法2: 手動で実行
+### 方況E: 手動で実衁E
 
 **PowerShellから:**
 ```powershell
@@ -26,37 +26,38 @@ npm run dev
 ```
 
 **ブラウザで開く:**
-- 自動的にブラウザが開きます
-- 開かない場合は、手動で `http://localhost:5174` を開いてください
+- 自動的にブラウザが開きまぁE
+- 開かなぁE��合�E、手動で `http://localhost:5174` を開ぁE��ください
 
 ---
 
-## 🔍 動作確認項目
+## 🔍 動作確認頁E��
 
-### Recovery Protocolの確認
+### Recovery Protocolの確誁E
 
-1. **違反食品を追加**: 植物性食品（例：野菜、果物）を追加
-2. **Recovery Protocolが自動生成される**: 違反検出時に自動的にRecovery Protocolが生成されます
-3. **Recovery Protocolを表示**: ホーム画面にRecovery Protocolが表示されます
-4. **Recovery Protocolを設定**: Recovery Protocol画面で断食時間を調整できます
-5. **「明日のログに追加」**: SET PROTOCOLボタンをクリックすると、明日のログに追加されます
+1. **違反食品を追加**: 植物性食品�E�例：野菜、果物�E�を追加
+2. **Recovery Protocolが�E動生成される**: 違反検�E時に自動的にRecovery Protocolが生成されまぁE
+3. **Recovery Protocolを表示**: ホ�Eム画面にRecovery Protocolが表示されまぁE
+4. **Recovery Protocolを設宁E*: Recovery Protocol画面で断食時間を調整できまぁE
+5. **「�E日のログに追加、E*: SET PROTOCOLボタンをクリチE��すると、�E日のログに追加されまぁE
 
-### その他の機能確認
+### そ�E他�E機�E確誁E
 
-- ✅ 栄養素ゲージの表示
-- ✅ 食品追加機能
-- ✅ AIチャット機能
-- ✅ 履歴管理機能
+- ✁E栁E��素ゲージの表示
+- ✁E食品追加機�E
+- ✁EAIチャチE��機�E
+- ✁E履歴管琁E���E
 
 ---
 
-## 📝 注意事項
+## 📝 注意事頁E
 
-- **開発サーバー**: `npm run dev`を実行すると、開発サーバーが起動します
-- **ポート**: デフォルトで`http://localhost:5174`で起動します
-- **停止**: ターミナルで`Ctrl+C`を押すと停止します
+- **開発サーバ�E**: `npm run dev`を実行すると、E��発サーバ�Eが起動しまぁE
+- **ポ�EチE*: チE��ォルトで`http://localhost:5174`で起動しまぁE
+- **停止**: ターミナルで`Ctrl+C`を押すと停止しまぁE
 
 ---
 
 最終更新: 2026-01-03
+
 

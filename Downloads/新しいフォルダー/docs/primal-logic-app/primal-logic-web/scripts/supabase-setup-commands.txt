@@ -1,0 +1,10 @@
+REM Supabase設定コマンド（コピペ用）
+
+REM 1. Supabase SecretsにCloud Run URLを設定（URLを置き換える）
+npx supabase secrets set CLOUD_RUN_VIDEO_EDITOR_URL=https://video-editor-xxxxx.run.app
+
+REM 2. データベースマイグレーション実行
+supabase db push
+
+REM 3. Supabase Secrets確認
+npx supabase secrets list

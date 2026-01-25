@@ -5,16 +5,40 @@
 }
 
 .profile-screen-content {
-  padding: 8px;
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  word-break: normal;
+  overflow-wrap: normal;
+  white-space: normal;
+}
+
+.profile-screen-section h2 {
+  word-break: normal;
+  white-space: normal;
+  overflow-wrap: normal;
+}
+
+.profile-screen-section button {
+  word-break: normal;
+  white-space: normal;
+  overflow-wrap: normal;
+}
+
+.profile-screen-section label {
+  word-break: normal;
+  white-space: normal;
+  overflow-wrap: normal;
 }
 
 .profile-screen-title {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
-  margin-top: 12px;
-  margin-bottom: 8px;
+  margin: 16px 0 24px 0;
   color: var(--color-text-primary);
   transition: color 0.3s ease;
+  word-break: normal;
 }
 
 .profile-screen-section {

@@ -1,36 +1,36 @@
-# 家に帰ったら実行する手順（Androidネイティブアプリ化）
+# 家に帰ったら実行する手頁E��EndroidネイチE��ブアプリ化！E
 
-> 実機（Android）でネイティブアプリをテストする手順
+> 実機！Endroid�E�でネイチE��ブアプリをテストする手頁E
 
 ---
 
 ## 📱 前提条件
 
-- ✅ Android実機がある
-- ✅ USBケーブルがある
-- ✅ Android Studioがインストールされている（なければインストールが必要）
+- ✁EAndroid実機がある
+- ✁EUSBケーブルがあめE
+- ✁EAndroid Studioがインスト�EルされてぁE���E�なければインスト�Eルが忁E��E��E
 
 ---
 
-## 🚀 実行手順
+## 🚀 実行手頁E
 
-### 方法1: バッチファイルを使用（推奨・一番簡単）
+### 方況E: バッチファイルを使用�E�推奨・一番簡単！E
 
 **エクスプローラーから:**
-1. エクスプローラーを開く（Windowsキー+E）
-2. アドレスバーに以下を貼り付けてEnter:
+1. エクスプローラーを開く！Eindowsキー+E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-3. `setup-capacitor.bat` をダブルクリック
-4. 自動的にビルド、Androidプラットフォーム追加、同期が実行されます
-5. 完了後、Android Studioが自動的に開きます
+3. `setup-capacitor.bat` をダブルクリチE��
+4. 自動的にビルド、AndroidプラチE��フォーム追加、同期が実行されまぁE
+5. 完亁E��、Android Studioが�E動的に開きまぁE
 
-### 方法2: 手動で実行
+### 方況E: 手動で実衁E
 
 **PowerShellから:**
-1. 新しいPowerShellを開く（Windowsキー → 「PowerShell」と入力 → Enter）
-2. 以下のコマンドを順番に実行:
+1. 新しいPowerShellを開く！Eindowsキー ↁE「PowerShell」と入劁EↁEEnter�E�E
+2. 以下�Eコマンドを頁E��に実衁E
 
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
@@ -42,44 +42,45 @@ npx cap open android
 
 ---
 
-## 📱 実機でテスト
+## 📱 実機でチE��チE
 
-1. **Android Studioで開く**: `npx cap open android`（バッチファイル実行後は自動的に開きます）
-2. **実機をUSBで接続**: Android実機をUSBケーブルで接続
-3. **USBデバッグを有効化**: 実機で「USBデバッグ」を有効化（初回のみ）
-4. **実機を選択**: Android Studioのデバイス選択で実機を選択
-5. **実行**: 「Run」ボタン（緑の再生ボタン）をクリック
-6. **アプリが起動**: 実機でアプリが起動します
-
----
-
-## 🔍 Recovery Protocolの確認
-
-**実機で確認する項目:**
-- ✅ Recovery Protocol表示
-- ✅ Recovery Protocol生成（違反食品を追加した時）
-- ✅ Recovery Protocol設定
-- ✅ 「明日のログに追加」機能
-
-**全ての機能がそのまま動作します（心配なし）**
+1. **Android Studioで開く**: `npx cap open android`�E�バチE��ファイル実行後�E自動的に開きます！E
+2. **実機をUSBで接綁E*: Android実機をUSBケーブルで接綁E
+3. **USBチE��チE��を有効匁E*: 実機で「USBチE��チE��」を有効化（�E回�Eみ�E�E
+4. **実機を選抁E*: Android StudioのチE��イス選択で実機を選抁E
+5. **実衁E*: 「Run」�Eタン�E�緑�E再生ボタン�E�をクリチE��
+6. **アプリが起勁E*: 実機でアプリが起動しまぁE
 
 ---
 
-## 📝 注意事項
+## 🔍 Recovery Protocolの確誁E
 
-1. **ビルド**: ネイティブアプリを実行する前に、必ず`npm run build`を実行してください（バッチファイルで自動実行されます）
+**実機で確認する頁E��:**
+- ✁ERecovery Protocol表示
+- ✁ERecovery Protocol生�E�E�違反食品を追加した時！E
+- ✁ERecovery Protocol設宁E
+- ✁E「�E日のログに追加」機�E
+
+**全ての機�Eがそのまま動作します（忁E�Eなし！E*
+
+---
+
+## 📝 注意事頁E
+
+1. **ビルチE*: ネイチE��ブアプリを実行する前に、忁E��`npm run build`を実行してください�E�バチE��ファイルで自動実行されます！E
 2. **同期**: コードを変更したら、`npx cap sync`を実行してください
-3. **Android Studio**: Android開発にはAndroid Studioが必要です（なければインストールが必要）
+3. **Android Studio**: Android開発にはAndroid Studioが忁E��です（なければインスト�Eルが忁E��E��E
 
 ---
 
-## 🎯 完了後の確認
+## 🎯 完亁E���E確誁E
 
-- ✅ アプリが実機で起動する
-- ✅ Recovery Protocolが動作する
-- ✅ 全機能が動作する
+- ✁Eアプリが実機で起動すめE
+- ✁ERecovery Protocolが動作すめE
+- ✁E全機�Eが動作すめE
 
 ---
 
 最終更新: 2026-01-03
+
 

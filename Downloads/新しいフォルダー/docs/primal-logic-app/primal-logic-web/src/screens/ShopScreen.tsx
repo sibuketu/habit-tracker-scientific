@@ -1,13 +1,16 @@
 /**
- * Primal Logic - Shop Screen
+ * CarnivoreOS - Shop Screen
  *
- * ショップ画面: ドット絵UIやその他のカスタマイズアイテムを購入
+ * ショチE�E画面: ドット絵UIめE��の他�EカスタマイズアイチE��を購入
  */
 
 import { useState, useEffect } from 'react';
 import { useSettings } from '../hooks/useSettings';
 import { useTranslation } from '../utils/i18n';
 import { logError } from '../utils/errorHandler';
+import { httpsCallable } from 'firebase/functions';
+import { functions, auth } from '../lib/firebaseClient';
+import { signInAnonymously } from 'firebase/auth';
 import './ShopScreen.css';
 
 interface ShopScreenProps {
@@ -22,8 +25,7 @@ interface ShopItem {
   icon: string;
   category: 'ui' | 'theme' | 'other';
   isPurchased: boolean;
-  isDebugFree: boolean; // デバッグモードで無料
-}
+  isDebugFree: boolean; // チE��チE��モードで無斁E}
 
 export default function ShopScreen({ onBack }: ShopScreenProps) {
   const { t } = useTranslation();
@@ -39,7 +41,7 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
       isPurchased: false,
       isDebugFree: true,
     },
-    // 将来的に他のアイテムを追加可能
+    // 封E��皁E��他�EアイチE��を追加可能
   ]);
   const [isDotUIEnabled, setIsDotUIEnabled] = useState(() => {
     return localStorage.getItem('primal_logic_dot_ui_enabled') === 'true';
@@ -56,7 +58,7 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
     );
   }, []);
 
-  // ドット絵UI変更イベントをリッスン
+  // ドット絵UI変更イベントをリチE��ン
   useEffect(() => {
     const handleDotUIChange = () => {
       const enabled = localStorage.getItem('primal_logic_dot_ui_enabled') === 'true';
@@ -69,8 +71,7 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
   }, []);
 
   const handlePurchase = async (item: ShopItem) => {
-    // デバッグモードで無料アイテムの場合
-    if (debugMode && item.isDebugFree) {
+    // チE��チE��モードで無料アイチE��の場吁E    if (debugMode && item.isDebugFree) {
       const purchasedItems = JSON.parse(
         localStorage.getItem('primal_logic_shop_purchased') || '[]'
       );
@@ -85,39 +86,50 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
       return;
     }
 
-    // Stripe決済処理（環境変数が設定されている場合のみ実行）
-    const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+    // Stripe決済�E琁E��環墁E��数が設定されてぁE��場合�Eみ実行！E    const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
     if (stripeKey && typeof window !== 'undefined' && (window as any).Stripe) {
       try {
-        // Stripe Checkout Sessionを作成
-        const response = await fetch('/api/create-checkout-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        // Firebase Auth�E�匿名認証�E�E        if (auth && !auth.currentUser) {
+          await signInAnonymously(auth);
+        }
+
+        // Firebase Functions経由でStripe Checkout Sessionを作�E
+        if (functions) {
+          const currentUrl = window.location.origin;
+          const successUrl = `${currentUrl}/?payment_success=true&itemId=${item.id}`;
+          const cancelUrl = `${currentUrl}/?payment_cancel=true`;
+
+          const createCheckoutSession = httpsCallable(functions, 'createCheckoutSession');
+          const result = await createCheckoutSession({
             amount: item.price,
             currency: 'jpy',
             metadata: {
               itemId: item.id,
               itemName: item.name,
             },
-          }),
-        });
+            successUrl,
+            cancelUrl,
+          });
 
-        if (response.ok) {
-          const { sessionId } = await response.json();
-          const stripe = (window as any).Stripe(stripeKey);
-          await stripe.redirectToCheckout({ sessionId });
-          return; // リダイレクトされるため、ここで終了
+          const data = result.data as { sessionId?: string; url?: string };
+
+          if (data.url) {
+            // Stripe CheckoutにリダイレクチE            window.location.href = data.url;
+            return;
+          } else if (data.sessionId) {
+            // sessionIdが返された場合�EStripe.jsでリダイレクチE            const stripe = (window as any).Stripe(stripeKey);
+            await stripe.redirectToCheckout({ sessionId: data.sessionId });
+            return;
+          }
         }
       } catch (error) {
         logError(error, { action: 'handlePurchase', itemId: item.id });
-        // Stripe決済に失敗した場合は、モック処理にフォールバック
+        // Stripe決済に失敗した場合�E、モチE��処琁E��フォールバック
       }
     }
 
-    // Stripe決済が利用できない場合、または失敗した場合はモック処理
-    if (import.meta.env.DEV) {
-      // デバッグモードでは無料で購入可能
+    // Stripe決済が利用できなぁE��合、また�E失敗した場合�EモチE��処琁E    if (import.meta.env.DEV) {
+      // チE��チE��モードでは無料で購入可能
       const purchasedItems = JSON.parse(
         localStorage.getItem('primal_logic_shop_purchased') || '[]'
       );
@@ -136,8 +148,7 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
 
   const handleUse = (item: ShopItem) => {
     if (item.id === 'dot-ui') {
-      // ドット絵UIを有効化
-      localStorage.setItem('primal_logic_dot_ui_enabled', 'true');
+      // ドット絵UIを有効匁E      localStorage.setItem('primal_logic_dot_ui_enabled', 'true');
       setIsDotUIEnabled(true);
       window.dispatchEvent(new CustomEvent('dotUIChanged'));
       alert(t('shop.enablePixelArtUISuccess'));
@@ -147,8 +158,7 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
 
   const handleDisable = (item: ShopItem) => {
     if (item.id === 'dot-ui') {
-      // ドット絵UIを無効化
-      localStorage.removeItem('primal_logic_dot_ui_enabled');
+      // ドット絵UIを無効匁E      localStorage.removeItem('primal_logic_dot_ui_enabled');
       setIsDotUIEnabled(false);
       window.dispatchEvent(new CustomEvent('dotUIChanged'));
       alert(t('shop.disablePixelArtUISuccess'));
@@ -161,14 +171,13 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
       <div className="shop-screen-content">
         <div className="screen-header">
           <button className="back-button" onClick={onBack} aria-label={t('common.backAriaLabel')}>
-            ←
-          </button>
-          <h1 className="screen-header-title">🛍️ {t('shop.title')}</h1>
+            ↁE          </button>
+          <h1 className="screen-header-title">🛍�E�E{t('shop.title')}</h1>
         </div>
 
         {debugMode && (
           <div className="shop-debug-notice">
-            <p>⚠️ {t('shop.debugMode')}</p>
+            <p>⚠�E�E{t('shop.debugMode')}</p>
           </div>
         )}
 
@@ -208,7 +217,7 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
                             )}
                           </>
                         )}
-                        <span className="shop-item-purchased-badge">✓ {t('shop.purchased')}</span>
+                        <span className="shop-item-purchased-badge">✁E{t('shop.purchased')}</span>
                       </div>
                     ) : (
                       <div className="shop-item-purchase">
@@ -236,3 +245,4 @@ export default function ShopScreen({ onBack }: ShopScreenProps) {
     </div>
   );
 }
+

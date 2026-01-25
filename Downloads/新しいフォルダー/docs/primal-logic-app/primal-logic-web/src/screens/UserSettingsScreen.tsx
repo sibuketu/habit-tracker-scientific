@@ -1,7 +1,7 @@
 /**
- * Primal Logic - User Settings Screen
+ * CarnivoreOS - User Settings Screen
  *
- * ユーザー設定画面: 基本情報、目標、代謝状態など
+ * ユーザー設定画面: 基本惁E��、目標、代謝状態など
  */
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
@@ -32,7 +32,7 @@ import {
   type FeatureKey,
 } from '../utils/featureDisplaySettings';
 import { USER_GOALS, METABOLIC_STATUS, DIET_MODES } from '../constants/carnivore_constants';
-import type { UserProfile } from '../types';
+import type { UserProfile } from '../types/index';
 import { calculateCaffeineFromCoffee } from '../utils/coffeeCaffeineCalculator';
 import {
   calculateProfileCompletion,
@@ -55,52 +55,52 @@ interface ProfileField {
 const PROFILE_FIELDS: Record<string, ProfileField> = {
   gender: {
     key: 'gender',
-    label: '性別',
+    label: 'Gender',
     priority: 'required',
   },
   height: {
     key: 'height',
-    label: '身長',
+    label: 'Height',
     priority: 'recommended',
     description: 'cm',
   },
   weight: {
     key: 'weight',
-    label: '体重',
+    label: 'Weight',
     priority: 'recommended',
     description: 'kg',
   },
   goal: {
     key: 'goal',
-    label: '目標',
+    label: 'Goal',
     priority: 'required',
   },
   metabolicStatus: {
     key: 'metabolicStatus',
-    label: '代謝状態',
+    label: 'Metabolic Status',
     priority: 'required',
   },
   mode: {
     key: 'mode',
-    label: 'ダイエットモード',
+    label: 'Diet Mode',
     priority: 'recommended',
   },
   dairyTolerance: {
     key: 'dairyTolerance',
     label: '乳糖耐性',
     priority: 'optional',
-    description: '乳製品を摂取できますか？',
+    description: 'Can you consume dairy products?',
   },
 };
 
 const getPriorityLabel = (priority: FieldPriority): string => {
   switch (priority) {
     case 'required':
-      return '必須';
+      return 'Required';
     case 'recommended':
-      return '推奨';
+      return 'Recommended';
     case 'optional':
-      return '任意';
+      return 'Optional';
   }
 };
 
@@ -137,15 +137,15 @@ export default function UserSettingsScreen() {
   const [isPregnant, setIsPregnant] = useState(userProfile?.isPregnant ?? false);
   const [isBreastfeeding, setIsBreastfeeding] = useState(userProfile?.isBreastfeeding ?? false);
   const [isPostMenopause, setIsPostMenopause] = useState(userProfile?.isPostMenopause ?? false);
-  // ストレスレベルを0-10の数値で管理（内部的には文字列に変換）
+  // Manage stress level as 0-10 numeric value (internally converted to string)
   const [stressLevelNumeric, setStressLevelNumeric] = useState<number>(() => {
     if (userProfile?.stressLevel === 'low') return 3;
     if (userProfile?.stressLevel === 'moderate') return 5;
     if (userProfile?.stressLevel === 'high') return 8;
-    return 5; // デフォルト: 中程度
+    return 5; // Default: moderate
   });
 
-  // 数値を文字列に変換する関数
+  // Function to convert numeric value to string
   const getStressLevelString = (num: number): 'low' | 'moderate' | 'high' => {
     if (num <= 3) return 'low';
     if (num <= 7) return 'moderate';
@@ -154,7 +154,7 @@ export default function UserSettingsScreen() {
 
   const stressLevel = getStressLevelString(stressLevelNumeric);
 
-  // 追加の栄養素変動要因（推奨）
+  // Additional nutrient variation factors (recommended)
   const [sleepHours, setSleepHours] = useState<string>(userProfile?.sleepHours?.toString() || '');
   const [exerciseIntensity, setExerciseIntensity] = useState<UserProfile['exerciseIntensity']>(
     userProfile?.exerciseIntensity || 'none'
@@ -169,7 +169,7 @@ export default function UserSettingsScreen() {
     UserProfile['sunExposureFrequency']
   >(userProfile?.sunExposureFrequency || 'occasional');
 
-  // 追加の栄養素変動要因（任意）
+  // Additional nutrient variation factors (optional)
   const [nutrientDisplaySettings, setNutrientDisplaySettings] = useState<
     Record<NutrientKey, boolean>
   >(getNutrientDisplaySettings());
@@ -197,7 +197,7 @@ export default function UserSettingsScreen() {
     userProfile?.caffeineIntake || 'none'
   );
 
-  // Phase 3: 体組成設定（LBMベースのタンパク質計算）
+  // Phase 3: Body composition settings (LBM-based protein calculation)
   const [bodyComposition, setBodyComposition] = useState<UserProfile['bodyComposition']>(
     userProfile?.bodyComposition || 'average'
   );
@@ -209,13 +209,13 @@ export default function UserSettingsScreen() {
   );
   const [showBodyFatInput, setShowBodyFatInput] = useState(false);
 
-  // Phase 4: 代謝ストレス指標
+  // Phase 4: Metabolic stress indicators
   const [metabolicStressIndicators, setMetabolicStressIndicators] = useState<string[]>(
     userProfile?.metabolicStressIndicators || []
   );
-  const [coffeeInput, setCoffeeInput] = useState<string>(''); // コーヒー入力（例: "スタバのコーヒーShort", "コーヒー2杯"）
+  const [coffeeInput, setCoffeeInput] = useState<string>(''); // Coffee input (e.g., "Starbucks Coffee Short", "2 cups of coffee")
 
-  // Phase 5: 栄養素目標値のカスタマイズ
+  // Phase 5: Nutrient target customization
   const [customNutrientTargets, setCustomNutrientTargets] = useState<
     Record<string, { mode: 'auto' | 'manual'; value?: number }>
   >(
@@ -232,26 +232,21 @@ export default function UserSettingsScreen() {
   // プレビュー用のstate
   const [showPreview, setShowPreview] = useState(false);
 
-  // セクションの折りたたみ状態（必須項目はデフォルトで開く）
-  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>(() => {
+  // セクションの折りたたみ状態（忁E��頁E��はチE��ォルトで開く�E�E  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>(() => {
     const saved = localStorage.getItem('profile_collapsed_sections');
     return saved
       ? JSON.parse(saved)
       : {
-          basicInfo: false, // 必須: 開く
-          goal: false, // 必須: 開く
-          metabolicStatus: false, // 必須: 開く
+          basicInfo: false, // 忁E��E 開く
+          goal: false, // 忁E��E 開く
+          metabolicStatus: false, // 忁E��E 開く
           dietMode: false, // 推奨: 開く
-          dairyTolerance: true, // 任意: 閉じる
-          stressLevel: false, // 推奨: 開く
+          dairyTolerance: true, // 任愁E 閉じめE          stressLevel: false, // 推奨: 開く
           recommended: false, // 推奨: 開く
-          optional: true, // 任意: 閉じる
-          femaleSpecific: true, // 任意: 閉じる
-        };
+          optional: true, // 任愁E 閉じめE          femaleSpecific: true, // 任愁E 閉じめE        };
   });
 
-  // セクションの表示ON/OFF状態
-  const [hiddenSections, setHiddenSections] = useState<Record<string, boolean>>(() => {
+  // セクションの表示ON/OFF状慁E  const [hiddenSections, setHiddenSections] = useState<Record<string, boolean>>(() => {
     const saved = localStorage.getItem('profile_hidden_sections');
     return saved ? JSON.parse(saved) : {};
   });
@@ -272,15 +267,14 @@ export default function UserSettingsScreen() {
     });
   };
 
-  // 自動保存用のdebounceタイマー
+  // 自動保存用のdebounceタイマ�E
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     loadUserProfile();
   }, [loadUserProfile]);
 
-  // 自動保存関数（debounce付き、iOS設定アプリのパターン）
-  const autoSave = useCallback(async () => {
+  // 自動保存関数�E�Eebounce付き、iOS設定アプリのパターン�E�E  const autoSave = useCallback(async () => {
     if (saveTimerRef.current) {
       clearTimeout(saveTimerRef.current);
     }
@@ -368,8 +362,7 @@ export default function UserSettingsScreen() {
     customNutrientTargets,
   ]);
 
-  // 設定変更時に自動保存（初期ロード時は除外）
-  const isInitialLoad = useRef(true);
+  // 設定変更時に自動保存（�E期ロード時は除外！E  const isInitialLoad = useRef(true);
   useEffect(() => {
     if (isInitialLoad.current) {
       isInitialLoad.current = false;
@@ -412,15 +405,14 @@ export default function UserSettingsScreen() {
     }
   }, [userProfile]);
 
-  // 各設定変更時に自動保存をトリガー
+  // 吁E��定変更時に自動保存をトリガー
   useEffect(() => {
     if (userProfile) {
       autoSave();
     }
   }, [autoSave, userProfile]);
 
-  // 旧handleSave（削除予定、互換性のため残す）
-  const handleSave = async () => {
+  // 旧handleSave�E�削除予定、互換性のため残す�E�E  const handleSave = async () => {
     const profile: UserProfile = {
       gender,
       height: height ? parseFloat(height) : undefined,
@@ -448,15 +440,13 @@ export default function UserSettingsScreen() {
       supplementIodine,
       alcoholFrequency,
       caffeineIntake,
-      // Phase 3: 体組成設定
-      bodyComposition:
+      // Phase 3: 体絁E�E設宁E      bodyComposition:
         showBodyFatInput && bodyFatPercentage
           ? { bodyFatPercentage: parseFloat(bodyFatPercentage) }
           : bodyComposition,
-      // Phase 4: 代謝ストレス指標
-      metabolicStressIndicators:
+      // Phase 4: 代謝ストレス持E��E      metabolicStressIndicators:
         metabolicStressIndicators.length > 0 ? metabolicStressIndicators : undefined,
-      // Phase 5: 栄養素目標値のカスタマイズ
+      // Phase 5: 栁E��素目標値のカスタマイズ
       customNutrientTargets:
         Object.keys(customNutrientTargets).length > 0
           ? (Object.fromEntries(
@@ -472,8 +462,7 @@ export default function UserSettingsScreen() {
     await saveUserProfile(profile);
     await loadUserProfile();
 
-    // プロファイル画面に戻る
-    window.dispatchEvent(new CustomEvent('navigateToScreen', { detail: 'profile' }));
+    // プロファイル画面に戻めE    window.dispatchEvent(new CustomEvent('navigateToScreen', { detail: 'profile' }));
   };
 
   const renderFieldLabel = (field: ProfileField) => (
@@ -495,10 +484,9 @@ export default function UserSettingsScreen() {
             }
             className="back-button"
           >
-            ←
-          </button>
+            ←          </button>
           <div className="screen-header-content">
-            <h1 className="screen-header-title">ユーザー設定</h1>
+            <h1 className="screen-header-title">User Settings</h1>
             <div
               style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}
             >
@@ -506,19 +494,19 @@ export default function UserSettingsScreen() {
                 {calculateProfileCompletion(userProfile)}%
               </span>
               <span style={{ fontSize: '10px', color: '#9ca3af', lineHeight: '1.2' }}>
-                このアプリで最大限最適化されています
+                Optimized for this app
               </span>
             </div>
           </div>
         </div>
 
-        {/* 基本情報（必須） */}
+        {/* 基本惁E���E�忁E��！E*/}
         <div className="profile-screen-section">
           <div
             className="profile-screen-section-header"
             onClick={() => toggleSectionCollapse('basicInfo')}
           >
-            <h2 className="profile-screen-section-title">基本情報</h2>
+            <h2 className="profile-screen-section-title">Basic Information</h2>
             <div className="profile-screen-section-toggle">
               <span
                 className={`profile-screen-collapse-icon ${collapsedSections.basicInfo ? 'collapsed' : ''}`}
@@ -529,7 +517,7 @@ export default function UserSettingsScreen() {
           </div>
           {!collapsedSections.basicInfo && (
             <div className="profile-screen-section-content">
-              {/* 性別（必須） */}
+              {/* 性別�E�忁E��！E*/}
               <div className="profile-screen-input-group">
                 {renderFieldLabel(PROFILE_FIELDS.gender)}
                 <div className="profile-screen-button-row">
@@ -537,18 +525,18 @@ export default function UserSettingsScreen() {
                     className={`profile-screen-option-button ${gender === 'male' ? 'active' : ''}`}
                     onClick={() => setGender('male')}
                   >
-                    男性
+                    Male
                   </button>
                   <button
                     className={`profile-screen-option-button ${gender === 'female' ? 'active' : ''}`}
                     onClick={() => setGender('female')}
                   >
-                    女性
+                    Female
                   </button>
                 </div>
               </div>
 
-              {/* 身長（推奨） */}
+              {/* 身長�E�推奨�E�E*/}
               <div className="profile-screen-input-group">
                 {renderFieldLabel(PROFILE_FIELDS.height)}
                 <div className="profile-screen-number-input-row">
@@ -565,7 +553,7 @@ export default function UserSettingsScreen() {
                 </div>
               </div>
 
-              {/* 体重（推奨） */}
+              {/* 体重�E�推奨�E�E*/}
               <div className="profile-screen-input-group">
                 {renderFieldLabel(PROFILE_FIELDS.weight)}
                 <div className="profile-screen-number-input-row">
@@ -583,17 +571,17 @@ export default function UserSettingsScreen() {
                 </div>
               </div>
 
-              {/* Phase 3: 体組成設定（LBMベースのタンパク質計算） */}
+              {/* Phase 3: 体絁E�E設定！EBMベ�Eスのタンパク質計算！E*/}
               {weight && (
                 <div className="profile-screen-input-group" style={{ marginTop: '1rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">体組成（LBM計算用）</span>
+                    <span className="profile-screen-field-label">Body Composition (for LBM calculation)</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-recommended">
-                      推奨
+                      Recommended
                     </span>
                   </div>
                   <p style={{ fontSize: '0.85rem', color: '#666', marginBottom: '0.75rem' }}>
-                    タンパク質目標値 = LBM（除脂肪体重）× 2.2g
+                    Protein Target = LBM (Lean Body Mass) ÁE2.2g
                   </p>
                   <div className="profile-screen-button-row">
                     <button
@@ -603,7 +591,7 @@ export default function UserSettingsScreen() {
                         setShowBodyFatInput(false);
                       }}
                     >
-                      筋肉質/引き締まっている
+                      Muscular/Toned
                     </button>
                     <button
                       className={`profile-screen-option-button ${!showBodyFatInput && bodyComposition === 'average' ? 'active' : ''}`}
@@ -612,7 +600,7 @@ export default function UserSettingsScreen() {
                         setShowBodyFatInput(false);
                       }}
                     >
-                      平均的
+                      Average
                     </button>
                     <button
                       className={`profile-screen-option-button ${!showBodyFatInput && bodyComposition === 'high_fat' ? 'active' : ''}`}
@@ -621,7 +609,7 @@ export default function UserSettingsScreen() {
                         setShowBodyFatInput(false);
                       }}
                     >
-                      体脂肪多め
+                      Higher Body Fat
                     </button>
                   </div>
                   <div style={{ marginTop: '0.75rem' }}>
@@ -629,7 +617,7 @@ export default function UserSettingsScreen() {
                       onClick={() => setShowBodyFatInput(!showBodyFatInput)}
                       className={`toggle-button ${showBodyFatInput ? 'active' : ''}`}
                     >
-                      {showBodyFatInput ? '体脂肪率入力モード' : '体脂肪率を直接入力'}
+                      {showBodyFatInput ? 'Body Fat % Input Mode' : 'Enter Body Fat % Directly'}
                     </button>
                   </div>
                   {showBodyFatInput && (
@@ -642,7 +630,7 @@ export default function UserSettingsScreen() {
                           marginBottom: '0.5rem',
                         }}
                       >
-                        体脂肪率 (%)
+                        Body Fat % (%)
                       </label>
                       <div className="profile-screen-number-input-row">
                         <input
@@ -667,7 +655,7 @@ export default function UserSettingsScreen() {
                           )}
                           kg
                           <br />
-                          タンパク質目標値:{' '}
+                          Protein Target:{' '}
                           {(
                             parseFloat(weight) *
                             (1 - parseFloat(bodyFatPercentage) / 100) *
@@ -681,12 +669,12 @@ export default function UserSettingsScreen() {
                 </div>
               )}
 
-              {/* 年齢（推奨）- 栄養素の必要量に影響 */}
+              {/* 年齢�E�推奨�E�E 栁E��素の忁E��E��に影響 */}
               <div className="profile-screen-input-group">
                 <div className="profile-screen-field-header">
-                  <span className="profile-screen-field-label">年齢</span>
+                  <span className="profile-screen-field-label">Age</span>
                   <span className="profile-screen-priority-badge profile-screen-priority-recommended">
-                    推奨
+                    Recommended
                   </span>
                 </div>
                 <div className="profile-screen-number-input-row">
@@ -700,16 +688,16 @@ export default function UserSettingsScreen() {
                     max="120"
                     step="1"
                   />
-                  <span className="profile-screen-unit">歳</span>
+                  <span className="profile-screen-unit">years</span>
                 </div>
               </div>
 
-              {/* 活動量（推奨）- 栄養素の必要量に影響 */}
+              {/* 活動量�E�推奨�E�E 栁E��素の忁E��E��に影響 */}
               <div className="profile-screen-input-group">
                 <div className="profile-screen-field-header">
-                  <span className="profile-screen-field-label">活動量</span>
+                  <span className="profile-screen-field-label">Activity Level</span>
                   <span className="profile-screen-priority-badge profile-screen-priority-recommended">
-                    推奨
+                    Recommended
                   </span>
                 </div>
                 <div className="profile-screen-button-row">
@@ -717,33 +705,30 @@ export default function UserSettingsScreen() {
                     className={`profile-screen-option-button ${activityLevel === 'sedentary' ? 'active' : ''}`}
                     onClick={() => setActivityLevel('sedentary')}
                   >
-                    低い（デスクワーク中心）
-                  </button>
+                    低い�E�デスクワーク中忁E��E                  </button>
                   <button
                     className={`profile-screen-option-button ${activityLevel === 'moderate' ? 'active' : ''}`}
                     onClick={() => setActivityLevel('moderate')}
                   >
-                    中程度（週3-4回の運動）
-                  </button>
+                    中程度�E�週3-4回�E運動�E�E                  </button>
                   <button
                     className={`profile-screen-option-button ${activityLevel === 'active' ? 'active' : ''}`}
                     onClick={() => setActivityLevel('active')}
                   >
-                    高い（毎日運動）
-                  </button>
+                    高い�E�毎日運動�E�E                  </button>
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* 目標（必須） */}
+        {/* 目標（忁E��！E*/}
         <div className="profile-screen-section">
           <div
             className="profile-screen-section-header"
             onClick={() => toggleSectionCollapse('goal')}
           >
-            <h2 className="profile-screen-section-title">目標</h2>
+            <h2 className="profile-screen-section-title">Goals</h2>
             <div className="profile-screen-section-toggle">
               <span
                 className={`profile-screen-collapse-icon ${collapsedSections.goal ? 'collapsed' : ''}`}
@@ -757,12 +742,12 @@ export default function UserSettingsScreen() {
               {renderFieldLabel(PROFILE_FIELDS.goal)}
               <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '0.5rem' }}>
                 {goal === USER_GOALS.HEALING &&
-                  '炎症の軽減、腸の修復、慢性的な健康問題の改善を目指します。'}
+                  'Aim to reduce inflammation, repair the gut, and improve chronic health issues.'}
                 {goal === USER_GOALS.PERFORMANCE &&
-                  '筋力、持久力、認知機能の向上を最優先とします。'}
-                {goal === USER_GOALS.WEIGHT_LOSS && '代謝の最適化と体脂肪の減少を目指します。'}
+                  'Prioritize improvements in strength, endurance, and cognitive function.'}
+                {goal === USER_GOALS.WEIGHT_LOSS && 'Aim to optimize metabolism and reduce body fat.'}
                 {goal === USER_GOALS.AUTOIMMUNE_HEALING &&
-                  '自己免疫疾患の症状緩和と免疫システムの再調整を目指します。'}
+                  'Aim to alleviate autoimmune disease symptoms and recalibrate the immune system.'}
               </div>
               <div className="profile-screen-button-row">
                 {Object.values(USER_GOALS).map((g) => (
@@ -771,10 +756,10 @@ export default function UserSettingsScreen() {
                     className={`profile-screen-option-button ${goal === g ? 'active' : ''}`}
                     onClick={() => setGoal(g)}
                   >
-                    {g === USER_GOALS.HEALING && '治癒・回復'}
-                    {g === USER_GOALS.PERFORMANCE && 'パフォーマンス向上'}
-                    {g === USER_GOALS.WEIGHT_LOSS && '減量'}
-                    {g === USER_GOALS.AUTOIMMUNE_HEALING && '自己免疫疾患の改善'}
+                    {g === USER_GOALS.HEALING && 'Healing & Recovery'}
+                    {g === USER_GOALS.PERFORMANCE && 'Performance Enhancement'}
+                    {g === USER_GOALS.WEIGHT_LOSS && 'Weight Loss'}
+                    {g === USER_GOALS.AUTOIMMUNE_HEALING && 'Autoimmune Healing'}
                   </button>
                 ))}
               </div>
@@ -782,15 +767,15 @@ export default function UserSettingsScreen() {
           )}
         </div>
 
-        {/* 代謝状態（必須） */}
+        {/* 代謝状態（忁E��！E*/}
         <div className="profile-screen-section">
           <div
             className="profile-screen-section-header"
             onClick={() => toggleSectionCollapse('metabolicStatus')}
           >
             <h2 className="profile-screen-section-title">
-              代謝状態
-              <HelpTooltip text="適応済み: ケトーシスに完全適応済み。低炭水化物状態で安定。\n移行中: ケトーシスへの移行中。適応過程で一時的な不調の可能性。" />
+              Metabolic Status
+              <HelpTooltip text="Adapted: Fully adapted to ketosis. Stable in low-carb state.\nTransitioning: Transitioning to ketosis. Possible temporary discomfort during adaptation." />
             </h2>
             <div className="profile-screen-section-toggle">
               <span
@@ -805,9 +790,9 @@ export default function UserSettingsScreen() {
               {renderFieldLabel(PROFILE_FIELDS.metabolicStatus)}
               <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '0.5rem' }}>
                 {metabolicStatus === METABOLIC_STATUS.ADAPTED &&
-                  'ケトーシスに完全適応済み。低炭水化物状態で安定。'}
+                  'Fully adapted to ketosis. Stable in low-carb state.'}
                 {metabolicStatus === METABOLIC_STATUS.TRANSITIONING &&
-                  'ケトーシスへの移行中。適応過程で一時的な不調の可能性。'}
+                  'Transitioning to ketosis. Possible temporary discomfort during adaptation.'}
               </div>
               <div className="profile-screen-button-row">
                 {Object.values(METABOLIC_STATUS).map((status) => (
@@ -816,8 +801,8 @@ export default function UserSettingsScreen() {
                     className={`profile-screen-option-button ${metabolicStatus === status ? 'active' : ''}`}
                     onClick={() => setMetabolicStatus(status)}
                   >
-                    {status === METABOLIC_STATUS.ADAPTED && '適応済み'}
-                    {status === METABOLIC_STATUS.TRANSITIONING && '移行中'}
+                    {status === METABOLIC_STATUS.ADAPTED && 'Adapted'}
+                    {status === METABOLIC_STATUS.TRANSITIONING && 'Transitioning'}
                   </button>
                 ))}
               </div>
@@ -825,15 +810,15 @@ export default function UserSettingsScreen() {
           )}
         </div>
 
-        {/* ダイエットモード（推奨） */}
+        {/* ダイエチE��モード（推奨�E�E*/}
         <div className="profile-screen-section">
           <div
             className="profile-screen-section-header"
             onClick={() => toggleSectionCollapse('dietMode')}
           >
             <h2 className="profile-screen-section-title">
-              ダイエットモード
-              <HelpTooltip text="厳格な肉食: 動物性食品のみ。植物性食品は一切摂取しない。\nケトボア: 主に動物性食品。少量の低炭水化物植物（アボカド、ナッツなど）を許可。\nライオンダイエット: 牛肉と塩のみ。最も厳格な形式。" />
+              Diet Mode
+              <HelpTooltip text="Strict Carnivore: Animal foods only. No plant foods.\nKetovore: Primarily animal foods. Small amounts of low-carb plants (avocado, nuts, etc.) allowed.\nLion Diet: Beef and salt only. Most strict form." />
             </h2>
             <div className="profile-screen-section-toggle">
               <span
@@ -848,10 +833,10 @@ export default function UserSettingsScreen() {
               {renderFieldLabel(PROFILE_FIELDS.mode)}
               <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '0.5rem' }}>
                 {mode === DIET_MODES.STRICT_CARNIVORE &&
-                  '動物性食品のみ。植物性食品は一切摂取しない。'}
+                  'Animal foods only. No plant foods.'}
                 {mode === DIET_MODES.KETOVORE &&
-                  '主に動物性食品。少量の低炭水化物植物（アボカド、ナッツなど）を許可。'}
-                {mode === DIET_MODES.LION_DIET && '牛肉と塩のみ。最も厳格な形式。'}
+                  'Primarily animal foods. Small amounts of low-carb plants (avocado, nuts, etc.) allowed.'}
+                {mode === DIET_MODES.LION_DIET && 'Beef and salt only. Most strict form.'}
               </div>
               <div className="profile-screen-button-row">
                 {Object.values(DIET_MODES).map((m) => (
@@ -860,9 +845,9 @@ export default function UserSettingsScreen() {
                     className={`profile-screen-option-button ${mode === m ? 'active' : ''}`}
                     onClick={() => setMode(m)}
                   >
-                    {m === DIET_MODES.STRICT_CARNIVORE && '厳格な肉食'}
-                    {m === DIET_MODES.KETOVORE && 'ケトボア'}
-                    {m === DIET_MODES.LION_DIET && 'ライオンダイエット'}
+                    {m === DIET_MODES.STRICT_CARNIVORE && 'Strict Carnivore'}
+                    {m === DIET_MODES.KETOVORE && 'Ketovore'}
+                    {m === DIET_MODES.LION_DIET && 'Lion Diet'}
                   </button>
                 ))}
               </div>
@@ -870,13 +855,13 @@ export default function UserSettingsScreen() {
           )}
         </div>
 
-        {/* 乳糖耐性（任意） */}
+        {/* 乳糖耐性�E�任意！E*/}
         <div className="profile-screen-section">
           <div
             className="profile-screen-section-header"
             onClick={() => toggleSectionCollapse('dairyTolerance')}
           >
-            <h2 className="profile-screen-section-title">乳糖耐性</h2>
+            <h2 className="profile-screen-section-title">Lactose Tolerance</h2>
             <div className="profile-screen-section-toggle">
               <span
                 className={`profile-screen-collapse-icon ${collapsedSections.dairyTolerance ? 'collapsed' : ''}`}
@@ -902,14 +887,14 @@ export default function UserSettingsScreen() {
           )}
         </div>
 
-        {/* 女性特有の条件（栄養素の必要量に影響） */}
+        {/* 女性特有�E条件�E�栁E��素の忁E��E��に影響�E�E*/}
         {gender === 'female' && !hiddenSections.femaleSpecific && (
           <div className="profile-screen-section">
             <div
               className="profile-screen-section-header"
               onClick={() => toggleSectionCollapse('femaleSpecific')}
             >
-              <h2 className="profile-screen-section-title">女性特有の条件（検査不要）</h2>
+              <h2 className="profile-screen-section-title">Female-Specific Conditions (No test required)</h2>
               <div className="profile-screen-section-toggle">
                 <span
                   className="profile-screen-section-visibility-toggle"
@@ -931,14 +916,14 @@ export default function UserSettingsScreen() {
             {!collapsedSections.femaleSpecific && (
               <div className="profile-screen-section-content">
                 <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                  これらの条件は鉄分・タンパク質・マグネシウムの必要量に影響します（自己申告で分かります）
+                  These conditions affect iron, protein, and magnesium requirements (self-reported)
                 </p>
 
                 <div className="profile-screen-switch-row">
                   <div className="profile-screen-switch-label-group">
-                    <label className="profile-screen-switch-label">妊娠中</label>
+                    <label className="profile-screen-switch-label">Pregnant</label>
                     <p className="profile-screen-switch-description">
-                      タンパク質・鉄分・マグネシウムの必要量が増加します
+                      Protein, iron, and magnesium requirements increase
                     </p>
                   </div>
                   <label className="profile-screen-switch">
@@ -958,9 +943,9 @@ export default function UserSettingsScreen() {
 
                 <div className="profile-screen-switch-row" style={{ marginTop: '1rem' }}>
                   <div className="profile-screen-switch-label-group">
-                    <label className="profile-screen-switch-label">授乳中</label>
+                    <label className="profile-screen-switch-label">Breastfeeding</label>
                     <p className="profile-screen-switch-description">
-                      タンパク質・マグネシウムの必要量が増加します
+                      Protein and magnesium requirements increase
                     </p>
                   </div>
                   <label className="profile-screen-switch">
@@ -980,10 +965,9 @@ export default function UserSettingsScreen() {
 
                 <div className="profile-screen-switch-row" style={{ marginTop: '1rem' }}>
                   <div className="profile-screen-switch-label-group">
-                    <label className="profile-screen-switch-label">閉経後</label>
+                    <label className="profile-screen-switch-label">Post-menopausal</label>
                     <p className="profile-screen-switch-description">
-                      鉄分の必要量が8mgに減少します（月経がないため）
-                    </p>
+                      鉁E�Eの忁E��E��ぁEmgに減少します（月経がなぁE��めE��E                    </p>
                   </div>
                   <label className="profile-screen-switch">
                     <input
@@ -999,13 +983,13 @@ export default function UserSettingsScreen() {
           </div>
         )}
 
-        {/* ストレスレベル（マグネシウムの必要量に影響） */}
+        {/* ストレスレベル�E��Eグネシウムの忁E��E��に影響�E�E*/}
         <div className="profile-screen-section">
           <div
             className="profile-screen-section-header"
             onClick={() => toggleSectionCollapse('stressLevel')}
           >
-            <h2 className="profile-screen-section-title">ストレスレベル</h2>
+            <h2 className="profile-screen-section-title">Stress Level</h2>
             <div className="profile-screen-section-toggle">
               <span
                 className={`profile-screen-collapse-icon ${collapsedSections.stressLevel ? 'collapsed' : ''}`}
@@ -1020,7 +1004,7 @@ export default function UserSettingsScreen() {
                 {getFieldImpactDescription('stressLevel', stressLevel)}
               </p>
               <div className="profile-screen-input-group">
-                <label className="profile-screen-field-label">ストレスレベル (0-10)</label>
+                <label className="profile-screen-field-label">Stress Level (0-10)</label>
                 <div className="profile-screen-number-input-row">
                   <input
                     type="number"
@@ -1042,23 +1026,23 @@ export default function UserSettingsScreen() {
                   className="profile-screen-field-description"
                   style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666' }}
                 >
-                  {stressLevelNumeric <= 3 && '低いストレス'}
-                  {stressLevelNumeric > 3 && stressLevelNumeric <= 7 && '中程度のストレス'}
-                  {stressLevelNumeric > 7 && '高いストレス'}
+                  {stressLevelNumeric <= 3 && 'Low Stress'}
+                  {stressLevelNumeric > 3 && stressLevelNumeric <= 7 && 'Moderate Stress'}
+                  {stressLevelNumeric > 7 && 'High Stress'}
                 </p>
               </div>
             </div>
           )}
         </div>
 
-        {/* 推奨項目: 睡眠・運動・甲状腺・日光暴露 */}
+        {/* 推奨頁E��: 睡眠・運動・甲状腺・日光暴露 */}
         {!hiddenSections.recommended && (
           <div className="profile-screen-section">
             <div
               className="profile-screen-section-header"
               onClick={() => toggleSectionCollapse('recommended')}
             >
-              <h2 className="profile-screen-section-title">推奨項目（検査不要）</h2>
+              <h2 className="profile-screen-section-title">Recommended Items (No test required)</h2>
               <div className="profile-screen-section-toggle">
                 <span
                   className="profile-screen-section-visibility-toggle"
@@ -1080,15 +1064,14 @@ export default function UserSettingsScreen() {
             {!collapsedSections.recommended && (
               <div className="profile-screen-section-content">
                 <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                  これらの項目は栄養素の必要量に大きく影響します（自己申告で分かります）
-                </p>
+                  これら�E頁E��は栁E��素の忁E��E��に大きく影響します（�E己申告で刁E��ります！E                </p>
 
                 {/* 睡眠時間 */}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">睡眠時間</span>
+                    <span className="profile-screen-field-label">Sleep Hours</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-recommended">
-                      推奨
+                      Recommended
                     </span>
                     {getFieldImpactDescription('sleepHours', sleepHours) && (
                       <span className="profile-screen-field-description">
@@ -1107,16 +1090,16 @@ export default function UserSettingsScreen() {
                       max="24"
                       step="0.5"
                     />
-                    <span className="profile-screen-unit">時間/日</span>
+                    <span className="profile-screen-unit">hours/day</span>
                   </div>
                 </div>
 
                 {/* 運動強度 */}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">運動強度</span>
+                    <span className="profile-screen-field-label">Exercise Intensity</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-recommended">
-                      推奨
+                      Recommended
                     </span>
                     <span className="profile-screen-field-description">
                       {getFieldImpactDescription('exerciseIntensity', exerciseIntensity)}
@@ -1127,14 +1110,12 @@ export default function UserSettingsScreen() {
                       className={`profile-screen-option-button ${exerciseIntensity === 'none' ? 'active' : ''}`}
                       onClick={() => setExerciseIntensity('none')}
                     >
-                      なし
-                    </button>
+                      なぁE                    </button>
                     <button
                       className={`profile-screen-option-button ${exerciseIntensity === 'light' ? 'active' : ''}`}
                       onClick={() => setExerciseIntensity('light')}
                     >
-                      軽い
-                    </button>
+                      軽ぁE                    </button>
                     <button
                       className={`profile-screen-option-button ${exerciseIntensity === 'moderate' ? 'active' : ''}`}
                       onClick={() => setExerciseIntensity('moderate')}
@@ -1153,46 +1134,42 @@ export default function UserSettingsScreen() {
                 {/* 運動頻度 */}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">運動頻度</span>
+                    <span className="profile-screen-field-label">Exercise Frequency</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-recommended">
-                      推奨
+                      Recommended
                     </span>
-                    <span className="profile-screen-field-description">週あたりの運動回数</span>
+                    <span className="profile-screen-field-description">Exercise sessions per week</span>
                   </div>
                   <div className="profile-screen-button-row">
                     <button
                       className={`profile-screen-option-button ${exerciseFrequency === 'none' ? 'active' : ''}`}
                       onClick={() => setExerciseFrequency('none')}
                     >
-                      なし
-                    </button>
+                      なぁE                    </button>
                     <button
                       className={`profile-screen-option-button ${exerciseFrequency === '1-2' ? 'active' : ''}`}
                       onClick={() => setExerciseFrequency('1-2')}
                     >
-                      週1-2回
-                    </button>
+                      週1-2囁E                    </button>
                     <button
                       className={`profile-screen-option-button ${exerciseFrequency === '3-4' ? 'active' : ''}`}
                       onClick={() => setExerciseFrequency('3-4')}
                     >
-                      週3-4回
-                    </button>
+                      週3-4囁E                    </button>
                     <button
                       className={`profile-screen-option-button ${exerciseFrequency === '5+' ? 'active' : ''}`}
                       onClick={() => setExerciseFrequency('5+')}
                     >
-                      週5回以上
-                    </button>
+                      週5回以丁E                    </button>
                   </div>
                 </div>
 
-                {/* 甲状腺機能 */}
+                {/* 甲状腺機�E */}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">甲状腺機能</span>
+                    <span className="profile-screen-field-label">Thyroid Function</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-recommended">
-                      推奨
+                      Recommended
                     </span>
                     {getFieldImpactDescription('thyroidFunction', thyroidFunction) && (
                       <span className="profile-screen-field-description">
@@ -1211,13 +1188,12 @@ export default function UserSettingsScreen() {
                       className={`profile-screen-option-button ${thyroidFunction === 'hypothyroid' ? 'active' : ''}`}
                       onClick={() => setThyroidFunction('hypothyroid')}
                     >
-                      機能低下
-                    </button>
+                      機�E低丁E                    </button>
                     <button
                       className={`profile-screen-option-button ${thyroidFunction === 'hyperthyroid' ? 'active' : ''}`}
                       onClick={() => setThyroidFunction('hyperthyroid')}
                     >
-                      機能亢進
+                      機�E亢進
                     </button>
                   </div>
                 </div>
@@ -1225,9 +1201,9 @@ export default function UserSettingsScreen() {
                 {/* 日光暴露頻度 */}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">日光暴露頻度</span>
+                    <span className="profile-screen-field-label">Sun Exposure Frequency</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-recommended">
-                      推奨
+                      Recommended
                     </span>
                     <span className="profile-screen-field-description">
                       {getFieldImpactDescription('sunExposureFrequency', sunExposureFrequency)}
@@ -1238,20 +1214,17 @@ export default function UserSettingsScreen() {
                       className={`profile-screen-option-button ${sunExposureFrequency === 'none' ? 'active' : ''}`}
                       onClick={() => setSunExposureFrequency('none')}
                     >
-                      なし
-                    </button>
+                      なぁE                    </button>
                     <button
                       className={`profile-screen-option-button ${sunExposureFrequency === 'rare' ? 'active' : ''}`}
                       onClick={() => setSunExposureFrequency('rare')}
                     >
-                      まれ
-                    </button>
+                      まめE                    </button>
                     <button
                       className={`profile-screen-option-button ${sunExposureFrequency === 'occasional' ? 'active' : ''}`}
                       onClick={() => setSunExposureFrequency('occasional')}
                     >
-                      時々
-                    </button>
+                      時、E                    </button>
                     <button
                       className={`profile-screen-option-button ${sunExposureFrequency === 'daily' ? 'active' : ''}`}
                       onClick={() => setSunExposureFrequency('daily')}
@@ -1265,14 +1238,14 @@ export default function UserSettingsScreen() {
           </div>
         )}
 
-        {/* 任意項目: 消化器系・炎症・メンタルヘルス・サプリメント・生活習慣 */}
+        {/* 任意頁E��: 消化器系・炎症・メンタルヘルス・サプリメント�E生活習�E */}
         {!hiddenSections.optional && (
           <div className="profile-screen-section">
             <div
               className="profile-screen-section-header"
               onClick={() => toggleSectionCollapse('optional')}
             >
-              <h2 className="profile-screen-section-title">任意項目（検査不要）</h2>
+              <h2 className="profile-screen-section-title">Optional Items (No test required)</h2>
               <div className="profile-screen-section-toggle">
                 <span
                   className="profile-screen-section-visibility-toggle"
@@ -1294,13 +1267,13 @@ export default function UserSettingsScreen() {
             {!collapsedSections.optional && (
               <div className="profile-screen-section-content">
                 <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                  より詳細なパーソナライズのために任意で設定できます（自己申告で分かります）
+                  Optional settings for more detailed personalization (self-reported)
                 </p>
 
-                {/* 消化器系の問題 */}
+                {/* 消化器系の問顁E*/}
                 <div className="profile-screen-switch-row" style={{ marginBottom: '1rem' }}>
                   <div className="profile-screen-switch-label-group">
-                    <label className="profile-screen-switch-label">消化器系の問題</label>
+                    <label className="profile-screen-switch-label">Digestive Issues</label>
                     <p className="profile-screen-switch-description"></p>
                   </div>
                   <label className="profile-screen-switch">
@@ -1316,10 +1289,9 @@ export default function UserSettingsScreen() {
                 {/* 炎症レベル */}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">炎症レベル</span>
+                    <span className="profile-screen-field-label">Inflammation Level</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-optional">
-                      任意
-                    </span>
+                      任愁E                    </span>
                   </div>
                   <div className="profile-screen-button-row">
                     <button
@@ -1343,13 +1315,12 @@ export default function UserSettingsScreen() {
                   </div>
                 </div>
 
-                {/* メンタルヘルス状態 */}
+                {/* メンタルヘルス状慁E*/}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">メンタルヘルス状態</span>
+                    <span className="profile-screen-field-label">Mental Health Status</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-optional">
-                      任意
-                    </span>
+                      任愁E                    </span>
                   </div>
                   <div className="profile-screen-button-row">
                     <button
@@ -1373,18 +1344,17 @@ export default function UserSettingsScreen() {
                   </div>
                 </div>
 
-                {/* サプリメント摂取状況 */}
+                {/* サプリメント摂取状況E*/}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">サプリメント摂取状況</span>
+                    <span className="profile-screen-field-label">Supplement Intake</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-optional">
-                      任意
-                    </span>
+                      任愁E                    </span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     <div className="profile-screen-switch-row">
                       <div className="profile-screen-switch-label-group">
-                        <label className="profile-screen-switch-label">マグネシウム</label>
+                        <label className="profile-screen-switch-label">Magnesium</label>
                       </div>
                       <label className="profile-screen-switch">
                         <input
@@ -1397,7 +1367,7 @@ export default function UserSettingsScreen() {
                     </div>
                     <div className="profile-screen-switch-row">
                       <div className="profile-screen-switch-label-group">
-                        <label className="profile-screen-switch-label">ビタミンD</label>
+                        <label className="profile-screen-switch-label">Vitamin D</label>
                       </div>
                       <label className="profile-screen-switch">
                         <input
@@ -1410,7 +1380,7 @@ export default function UserSettingsScreen() {
                     </div>
                     <div className="profile-screen-switch-row">
                       <div className="profile-screen-switch-label-group">
-                        <label className="profile-screen-switch-label">ヨウ素</label>
+                        <label className="profile-screen-switch-label">Iodine</label>
                       </div>
                       <label className="profile-screen-switch">
                         <input
@@ -1427,30 +1397,26 @@ export default function UserSettingsScreen() {
                 {/* アルコール摂取頻度 */}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">アルコール摂取頻度</span>
+                    <span className="profile-screen-field-label">Alcohol Intake Frequency</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-optional">
-                      任意
-                    </span>
+                      任愁E                    </span>
                   </div>
                   <div className="profile-screen-button-row">
                     <button
                       className={`profile-screen-option-button ${alcoholFrequency === 'none' ? 'active' : ''}`}
                       onClick={() => setAlcoholFrequency('none')}
                     >
-                      なし
-                    </button>
+                      なぁE                    </button>
                     <button
                       className={`profile-screen-option-button ${alcoholFrequency === 'rare' ? 'active' : ''}`}
                       onClick={() => setAlcoholFrequency('rare')}
                     >
-                      まれ
-                    </button>
+                      まめE                    </button>
                     <button
                       className={`profile-screen-option-button ${alcoholFrequency === 'weekly' ? 'active' : ''}`}
                       onClick={() => setAlcoholFrequency('weekly')}
                     >
-                      週に数回
-                    </button>
+                      週に数囁E                    </button>
                     <button
                       className={`profile-screen-option-button ${alcoholFrequency === 'daily' ? 'active' : ''}`}
                       onClick={() => setAlcoholFrequency('daily')}
@@ -1460,21 +1426,19 @@ export default function UserSettingsScreen() {
                   </div>
                 </div>
 
-                {/* カフェイン摂取量 */}
+                {/* カフェイン摂取釁E*/}
                 <div className="profile-screen-input-group" style={{ marginBottom: '1.5rem' }}>
                   <div className="profile-screen-field-header">
-                    <span className="profile-screen-field-label">カフェイン摂取量</span>
+                    <span className="profile-screen-field-label">Caffeine Intake</span>
                     <span className="profile-screen-priority-badge profile-screen-priority-optional">
-                      任意
-                    </span>
+                      任愁E                    </span>
                   </div>
                   <div className="profile-screen-button-row">
                     <button
                       className={`profile-screen-option-button ${caffeineIntake === 'none' ? 'active' : ''}`}
                       onClick={() => setCaffeineIntake('none')}
                     >
-                      なし
-                    </button>
+                      なぁE                    </button>
                     <button
                       className={`profile-screen-option-button ${caffeineIntake === 'low' ? 'active' : ''}`}
                       onClick={() => setCaffeineIntake('low')}
@@ -1500,13 +1464,13 @@ export default function UserSettingsScreen() {
           </div>
         )}
 
-        {/* Phase 4: 代謝ストレス指標 */}
+        {/* Phase 4: 代謝ストレス持E��E*/}
         <div className="profile-screen-section">
           <div
             className="profile-screen-section-header"
             onClick={() => toggleSectionCollapse('metabolicStress')}
           >
-            <h2 className="profile-screen-section-title">代謝ストレス指標（Phase 4）</h2>
+            <h2 className="profile-screen-section-title">Metabolic Stress Indicators (Phase 4)</h2>
             <div className="profile-screen-section-toggle">
               <span
                 className="profile-screen-section-visibility-toggle"
@@ -1514,7 +1478,7 @@ export default function UserSettingsScreen() {
                   e.stopPropagation();
                   toggleSectionVisibility('metabolicStress');
                 }}
-                title="このセクションを非表示にする"
+                title="こ�Eセクションを非表示にする"
               >
                 非表示
               </span>
@@ -1528,29 +1492,28 @@ export default function UserSettingsScreen() {
           {!collapsedSections.metabolicStress && !hiddenSections.metabolicStress && (
             <div className="profile-screen-section-content">
               <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                該当する項目を選択すると、栄養素目標値が自動調整されます
-              </p>
+                該当する頁E��を選択すると、栁E��素目標値が�E動調整されまぁE              </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {[
                   {
                     id: 'morning_fatigue',
-                    label: '朝起きるのが辛い / 疲労感が抜けない',
-                    adjustment: 'ナトリウム +1500mg（副腎疲労疑い）',
+                    label: '朝起きるのが辛い / 疲労感が抜けなぁE,
+                    adjustment: 'ナトリウム +1500mg�E�副腎疲労疑い�E�E,
                   },
                   {
                     id: 'night_wake',
-                    label: '睡眠中に目が覚める / 悪夢を見る',
-                    adjustment: 'マグネシウム +200mg、夕食の脂質推奨（夜間低血糖疑い）',
+                    label: '睡眠中に目が覚めめE/ 悪夢を見る',
+                    adjustment: 'マグネシウム +200mg、夕食�E脂質推奨�E�夜間低血糖疑ぁE��E,
                   },
                   {
                     id: 'postmeal_sleepy',
-                    label: '食後に眠くなる',
-                    adjustment: 'インスリン抵抗性あり（フラグ保存）',
+                    label: '食後に眠くなめE,
+                    adjustment: 'インスリン抵抗性あり�E�フラグ保存！E,
                   },
                   {
                     id: 'coffee_high',
-                    label: 'コーヒーを毎日2杯以上飲む',
-                    adjustment: 'ナトリウム +500mg（Na排出増）',
+                    label: 'コーヒ�Eを毎日2杯以上飲む',
+                    adjustment: 'ナトリウム +500mg�E�Ea排�E増！E,
                     inputType: 'coffee' as const,
                   },
                 ].map((indicator) => {
@@ -1610,14 +1573,13 @@ export default function UserSettingsScreen() {
                                   marginBottom: '0.5rem',
                                 }}
                               >
-                                コーヒー入力（例:
-                                スタバのコーヒーShort、コーヒー2杯、コーヒー300ml）
-                              </label>
+                                コーヒ�E入力（侁E
+                                スタバ�Eコーヒ�EShort、コーヒ�E2杯、コーヒ�E300ml�E�E                              </label>
                               <input
                                 type="text"
                                 value={coffeeInput}
                                 onChange={(e) => setCoffeeInput(e.target.value)}
-                                placeholder="例: スタバのコーヒーShort、コーヒー2杯、コーヒー300ml"
+                                placeholder="侁E スタバ�Eコーヒ�EShort、コーヒ�E2杯、コーヒ�E300ml"
                                 style={{
                                   width: '100%',
                                   padding: '0.5rem',
@@ -1637,9 +1599,9 @@ export default function UserSettingsScreen() {
                                   {(() => {
                                     try {
                                       const result = calculateCaffeineFromCoffee(coffeeInput);
-                                      return `カフェイン量: ${result.description}`;
+                                      return `カフェイン釁E ${result.description}`;
                                     } catch {
-                                      return `コーヒー入力: ${coffeeInput}`;
+                                      return `コーヒ�E入劁E ${coffeeInput}`;
                                     }
                                   })()}
                                 </div>
@@ -1656,13 +1618,13 @@ export default function UserSettingsScreen() {
           )}
         </div>
 
-        {/* Phase 5: 栄養素目標値のカスタマイズ（遷移式） */}
+        {/* Phase 5: 栁E��素目標値のカスタマイズ�E��E移式！E*/}
         <div className="profile-screen-section">
           <div
             className="nav-item"
             role="button"
             tabIndex={0}
-            aria-label="栄養素目標値のカスタマイズ画面に遷移"
+            aria-label="Navigate to Nutrient Target Customization screen"
             onClick={() => {
               window.dispatchEvent(
                 new CustomEvent('navigateToScreen', { detail: 'nutrientCustom' })
@@ -1678,19 +1640,18 @@ export default function UserSettingsScreen() {
             }}
           >
             <div className="nav-item-content">
-              <h2 className="nav-item-title">栄養素目標値のカスタマイズ（Phase 5）</h2>
+              <h2 className="nav-item-title">Nutrient Target Customization (Phase 5)</h2>
               <p className="nav-item-description">
-                各栄養素の目標値を「推奨値（Auto）」か「手動入力（Manual）」かを選択できます
-              </p>
+                吁E��E��素の目標値を「推奨値�E�Euto�E�」か「手動�E力！Eanual�E�」かを選択できまぁE              </p>
             </div>
-            <span className="nav-item-arrow">→</span>
+            <span className="nav-item-arrow">←</span>
           </div>
         </div>
 
-        {/* 旧コード（コメントアウト） */}
+        {/* 旧コード（コメントアウト！E*/}
         {/* <div className="profile-screen-section">
           <div className="profile-screen-section-header" onClick={() => toggleSectionCollapse('nutrientCustom')}>
-            <h2 className="profile-screen-section-title">栄養素目標値のカスタマイズ（Phase 5）</h2>
+            <h2 className="profile-screen-section-title">Nutrient Target Customization (Phase 5)</h2>
             <div className="profile-screen-section-toggle">
               <span 
                 className="profile-screen-section-visibility-toggle"
@@ -1698,7 +1659,7 @@ export default function UserSettingsScreen() {
                   e.stopPropagation();
                   toggleSectionVisibility('nutrientCustom');
                 }}
-                title="このセクションを非表示にする"
+                title="こ�Eセクションを非表示にする"
               >
                 非表示
               </span>
@@ -1710,8 +1671,7 @@ export default function UserSettingsScreen() {
           {!collapsedSections.nutrientCustom && !hiddenSections.nutrientCustom && (
             <div className="profile-screen-section-content">
               <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1rem' }}>
-                各栄養素の目標値を「推奨値（Auto）」か「手動入力（Manual）」かを選択できます
-              </p>
+                吁E��E��素の目標値を「推奨値�E�Euto�E�」か「手動�E力！Eanual�E�」かを選択できまぁE              </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {['protein', 'fat', 'sodium', 'magnesium', 'potassium', 'zinc', 'iron', 'vitaminA', 'vitaminD', 'vitaminK2'].map((nutrient) => {
                   const current = customNutrientTargets[nutrient] || { mode: 'auto' };
@@ -1735,13 +1695,13 @@ export default function UserSettingsScreen() {
                              nutrient === 'magnesium' ? 'マグネシウム' :
                              nutrient === 'potassium' ? 'カリウム' :
                              nutrient === 'zinc' ? '亜鉛' :
-                             nutrient === 'iron' ? '鉄分' :
+                             nutrient === 'iron' ? '鉁E�E' :
                              nutrient === 'vitaminA' ? 'ビタミンA' :
                              nutrient === 'vitaminD' ? 'ビタミンD' :
                              nutrient === 'vitaminK2' ? 'ビタミンK2' : nutrient}
                           </div>
                           <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.25rem' }}>
-                            推奨値: {autoValue}{nutrient === 'protein' || nutrient === 'fat' ? 'g' : nutrient === 'sodium' || nutrient === 'magnesium' || nutrient === 'potassium' || nutrient === 'zinc' || nutrient === 'iron' ? 'mg' : nutrient === 'vitaminA' || nutrient === 'vitaminD' ? 'IU' : 'μg'}
+                            Recommended値: {autoValue}{nutrient === 'protein' || nutrient === 'fat' ? 'g' : nutrient === 'sodium' || nutrient === 'magnesium' || nutrient === 'potassium' || nutrient === 'zinc' || nutrient === 'iron' ? 'mg' : nutrient === 'vitaminA' || nutrient === 'vitaminD' ? 'IU' : 'μg'}
                           </div>
                         </div>
                         <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -1818,7 +1778,7 @@ export default function UserSettingsScreen() {
                         </div>
                       )}
                       {current.mode === 'manual' && (
-                        <span style={{ fontSize: '12px', color: '#9ca3af', marginLeft: '0.5rem' }}>✏️</span>
+                        <span style={{ fontSize: '12px', color: '#9ca3af', marginLeft: '0.5rem' }}>✏︁E/span>
                       )}
                     </div>
                   );
@@ -1827,7 +1787,7 @@ export default function UserSettingsScreen() {
               {Object.keys(customNutrientTargets).length > 0 && (
                 <button
                   onClick={() => {
-                    if (window.confirm('全てのカスタム目標値をリセットして、推奨値（Auto）に戻しますか？')) {
+                    if (window.confirm('全てのカスタム目標値をリセチE��して、推奨値�E�Euto�E�に戻しますか�E�E)) {
                       setCustomNutrientTargets({});
                     }
                   }}
@@ -1843,8 +1803,7 @@ export default function UserSettingsScreen() {
                     fontWeight: '500',
                   }}
                 >
-                  全てリセット（Autoに戻す）
-                </button>
+                  全てリセチE���E�Eutoに戻す！E                </button>
               )}
             </div>
           )}
@@ -1866,7 +1825,7 @@ export default function UserSettingsScreen() {
               width: '100%',
             }}
           >
-            {showPreview ? '📊 プレビューを閉じる' : '📊 栄養素目標値のプレビュー'}
+            {showPreview ? '📊 プレビューを閉じる' : '📊 栁E��素目標値のプレビュー'}
           </button>
 
           {showPreview && (
@@ -1880,7 +1839,7 @@ export default function UserSettingsScreen() {
               }}
             >
               <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '0.75rem' }}>
-                現在の設定による栄養素目標値
+                現在の設定による栁E��素目標値
               </h3>
               {(() => {
                 const explanations = getAllNutrientExplanations({
@@ -1945,7 +1904,7 @@ export default function UserSettingsScreen() {
                               <div
                                 style={{ fontSize: '12px', color: '#888', marginBottom: '0.25rem' }}
                               >
-                                調整内容:
+                                調整冁E��:
                               </div>
                               {explanation.adjustments.map((adj, i) => (
                                 <div
@@ -1971,7 +1930,7 @@ export default function UserSettingsScreen() {
           )}
         </div>
 
-        {/* Phase 6: 栄養素表示設定 */}
+        {/* Phase 6: 栁E��素表示設宁E*/}
         <div className="profile-screen-section section-container">
           <h2
             style={{
@@ -1981,8 +1940,7 @@ export default function UserSettingsScreen() {
               color: 'var(--color-text-primary)',
             }}
           >
-            栄養素表示設定
-          </h2>
+            栁E��素表示設宁E          </h2>
           <p
             style={{
               fontSize: '0.9rem',
@@ -1990,10 +1948,9 @@ export default function UserSettingsScreen() {
               marginBottom: '1rem',
             }}
           >
-            各栄養素の表示/非表示を切り替えられます。デフォルトは全部表示です。
-          </p>
+            吁E��E��素の表示/非表示を�Eり替えられます。デフォルト�E全部表示です、E          </p>
 
-          {/* 全選択/全解除 */}
+          {/* 全選抁E全解除 */}
           <div className="button-group" style={{ marginBottom: '1.5rem' }}>
             <button
               onClick={() => {
@@ -2015,7 +1972,7 @@ export default function UserSettingsScreen() {
             </button>
           </div>
 
-          {/* カテゴリごとの表示 */}
+          {/* カチE��リごとの表示 */}
           {(
             [
               'macro',
@@ -2034,13 +1991,13 @@ export default function UserSettingsScreen() {
             if (categoryConfigs.length === 0) return null;
 
             const categoryLabels: Record<typeof category, string> = {
-              macro: 'マクロ栄養素',
+              macro: 'マクロ栁E��素',
               mineral: 'ミネラル',
               fatSolubleVitamin: '脂溶性ビタミン',
               waterSolubleVitamin: '水溶性ビタミン',
-              other: 'その他',
+              other: 'そ�E仁E,
               ratio: '比率',
-              antiNutrient: '抗栄養素',
+              antiNutrient: '抗栁E��素',
               avoid: '避けるべき食品',
             };
 
@@ -2152,7 +2109,7 @@ export default function UserSettingsScreen() {
           })}
         </div>
 
-        {/* 機能表示設定（あらゆる機能のON/OFF） */}
+        {/* 機�E表示設定（あらゆる機�EのON/OFF�E�E*/}
         <div className="profile-screen-section section-container">
           <h2
             style={{
@@ -2162,8 +2119,7 @@ export default function UserSettingsScreen() {
               color: 'var(--color-text-primary)',
             }}
           >
-            機能表示設定
-          </h2>
+            機�E表示設宁E          </h2>
           <p
             style={{
               fontSize: '0.9rem',
@@ -2171,10 +2127,9 @@ export default function UserSettingsScreen() {
               marginBottom: '1rem',
             }}
           >
-            あらゆる機能の表示/非表示を切り替えられます。デフォルトは全部表示です。
-          </p>
+            あらめE��機�Eの表示/非表示を�Eり替えられます。デフォルト�E全部表示です、E          </p>
 
-          {/* 全選択/全解除 */}
+          {/* 全選抁E全解除 */}
           <div className="button-group" style={{ marginBottom: '1.5rem' }}>
             <button
               onClick={() => {
@@ -2214,7 +2169,7 @@ export default function UserSettingsScreen() {
             </button>
           </div>
 
-          {/* カテゴリごとの表示 */}
+          {/* カチE��リごとの表示 */}
           {(['screenElement', 'analysis', 'notification', 'other'] as const).map((category) => {
             const categoryConfigs = ALL_FEATURE_DISPLAY_CONFIGS.filter(
               (config) => config.category === category
@@ -2223,9 +2178,9 @@ export default function UserSettingsScreen() {
 
             const categoryLabels: Record<typeof category, string> = {
               screenElement: '画面要素',
-              analysis: '分析機能',
-              notification: '通知設定',
-              other: 'その他',
+              analysis: '刁E��機�E',
+              notification: '通知設宁E,
+              other: 'そ�E仁E,
             };
 
             const allVisible = categoryConfigs.every(
@@ -2346,7 +2301,7 @@ export default function UserSettingsScreen() {
           })}
         </div>
 
-        {/* 保存ボタン（常時表示） */}
+        {/* 保存�Eタン�E�常時表示�E�E*/}
         <div
           style={{
             position: 'sticky',
@@ -2378,10 +2333,10 @@ export default function UserSettingsScreen() {
               e.currentTarget.style.backgroundColor = '#dc2626';
             }}
           >
-            保存
-          </button>
+            保存          </button>
         </div>
       </div>
     </div>
   );
 }
+

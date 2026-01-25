@@ -1,11 +1,10 @@
 /**
- * Primal Logic - Butcher Chart Component
+ * CarnivoreOS - Butcher Chart Component
  *
- * ビジュアル（解剖図）選択: 牛・豚・鶏の部位をクリックで選択
- * 数量入力: スマートプリセット + Pack & Portion スライダー
+ * ビジュアル�E�解剖図�E�選抁E 牛�E豚�E鶏�E部位をクリチE��で選抁E * 数量�E劁E スマ�Eト�EリセチE�� + Pack & Portion スライダー
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   getFoodsByPart,
   type AnimalType,
@@ -13,56 +12,62 @@ import {
   type DeepFoodItem,
 } from '../data/deepNutritionData';
 import { getRecommendedAmount } from '../utils/foodHistory';
+import { useApp } from '../context/AppContext';
+import { getCarnivoreTargets } from '../data/carnivoreTargets';
+import {
+  getMissingNutrients,
+  isRecommendedFood,
+  sortFoodsByRecommendation,
+} from '../utils/foodRecommendation';
 import './ButcherChart.css';
 
 interface ButcherChartProps {
   animalType: AnimalType;
-  onFoodSelect: (food: DeepFoodItem, amount: number, unit: 'g' | '個') => void;
+  onFoodSelect: (food: DeepFoodItem, amount: number, unit: 'g' | '倁E) => void;
   onBack: () => void;
 }
 
-// 部位の定義（SVG座標またはクリッカブルマップ用）
-const PART_AREAS: Record<
+// 部位�E定義�E�EVG座標また�EクリチE��ブルマップ用�E�Econst PART_AREAS: Record<
   AnimalType,
   Array<{ location: PartLocation; label: string; foods: string[] }>
 > = {
   beef: [
     { location: 'rib', label: '背中', foods: ['beef_ribeye'] },
-    { location: 'belly', label: 'お腹', foods: ['beef_belly'] },
+    { location: 'belly', label: 'お�E', foods: ['beef_belly'] },
     { location: 'leg', label: 'もも', foods: [] },
-    { location: 'internal', label: '内臓', foods: [] },
+    { location: 'internal', label: '冁E��', foods: [] },
   ],
   pork: [
     { location: 'rib', label: 'ロース', foods: [] },
     { location: 'belly', label: 'バラ', foods: ['pork_belly'] },
     { location: 'leg', label: 'もも', foods: [] },
-    { location: 'internal', label: '内臓', foods: [] },
+    { location: 'internal', label: '冁E��', foods: [] },
   ],
   chicken: [
-    { location: 'body', label: '胸肉', foods: [] },
+    { location: 'body', label: '胸肁E, foods: [] },
     { location: 'leg', label: 'もも', foods: [] },
-    { location: 'internal', label: '内臓', foods: ['chicken_liver'] },
+    { location: 'internal', label: '冁E��', foods: ['chicken_liver'] },
     { location: 'whole', label: '丸ごと', foods: [] },
   ],
   egg: [{ location: 'whole', label: '全卵', foods: [] }],
   fish: [
     { location: 'body', label: '身', foods: ['salmon'] },
-    { location: 'internal', label: '内臓', foods: [] },
+    { location: 'internal', label: '冁E��', foods: [] },
   ],
   lamb: [
-    { location: 'rib', label: 'ラムチョップ', foods: [] },
+    { location: 'rib', label: 'ラムチョチE�E', foods: [] },
     { location: 'leg', label: 'もも', foods: [] },
-    { location: 'internal', label: '内臓', foods: [] },
+    { location: 'internal', label: '冁E��', foods: [] },
   ],
   duck: [
-    { location: 'body', label: '胸肉', foods: [] },
+    { location: 'body', label: '胸肁E, foods: [] },
     { location: 'leg', label: 'もも', foods: [] },
-    { location: 'internal', label: '内臓', foods: [] },
+    { location: 'internal', label: '冁E��', foods: [] },
   ],
   game: [
-    { location: 'body', label: '肉', foods: [] },
+    { location: 'body', label: '肁E, foods: [] },
     { location: 'leg', label: 'もも', foods: [] },
-    { location: 'internal', label: '内臓', foods: [] },
+    { location: 'internal', label: '冁E��', foods: [] },
   ],
 };
 
@@ -70,15 +75,40 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
   const [selectedPart, setSelectedPart] = useState<PartLocation | null>(null);
   const [selectedFood, setSelectedFood] = useState<DeepFoodItem | null>(null);
   const [amount, setAmount] = useState(300);
-  const [unit, setUnit] = useState<'g' | '個'>('g');
+  const [unit, setUnit] = useState<'g' | '倁E>('g');
   const [packSize, setPackSize] = useState(300); // パックの総量
-  const [portion, setPortion] = useState<number | null>(null); // 割合（1/4, 1/2, 1, 2など）
-
+  const [portion, setPortion] = useState<number | null>(null); // 割合！E/4, 1/2, 1, 2など�E�E
   const parts = PART_AREAS[animalType] || [];
-  const availableFoods = selectedPart ? getFoodsByPart(animalType, selectedPart) : [];
+  const availableFoodsRaw = selectedPart ? getFoodsByPart(animalType, selectedPart) : [];
 
-  // 食品選択時にヒストリーレコメンドを取得
-  useEffect(() => {
+  // 不足栄養素を検出
+  const missingNutrients = useMemo(() => {
+    if (!dailyLog?.calculatedMetrics || !userProfile) return [];
+    const targets = getCarnivoreTargets(
+      userProfile.gender,
+      userProfile.age,
+      userProfile.activityLevel,
+      userProfile.isPregnant,
+      userProfile.isBreastfeeding,
+      userProfile.isPostMenopause,
+      userProfile.stressLevel,
+      userProfile.sleepHours,
+      userProfile.exerciseIntensity,
+      userProfile.exerciseFrequency,
+      userProfile.thyroidFunction,
+      userProfile.sunExposureFrequency,
+      userProfile.digestiveIssues,
+      userProfile.inflammationLevel
+    );
+    return getMissingNutrients(dailyLog.calculatedMetrics, targets);
+  }, [dailyLog?.calculatedMetrics, userProfile]);
+
+  // 推奨度でソート
+  const availableFoods = useMemo(() => {
+    return sortFoodsByRecommendation(availableFoodsRaw, missingNutrients);
+  }, [availableFoodsRaw, missingNutrients]);
+
+  // 食品選択時にヒストリーレコメンドを取征E  useEffect(() => {
     if (selectedFood) {
       getRecommendedAmount(
         selectedFood.name_ja,
@@ -94,7 +124,7 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
     }
   }, [selectedFood]);
 
-  // 部位ごとのスマートプリセット
+  // 部位ごとのスマ�Eト�EリセチE��
   const getSmartPresets = (): number[] => {
     if (animalType === 'egg') {
       return [2, 3, 5];
@@ -102,11 +132,10 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
     if (selectedPart === 'internal') {
       return [100, 150, 200];
     }
-    return [200, 300, 450]; // 肉類の標準量
+    return [200, 300, 450]; // 肉類�E標準量
   };
 
-  // Pack & Portion計算
-  useEffect(() => {
+  // Pack & Portion計箁E  useEffect(() => {
     if (portion !== null && unit === 'g') {
       const calculatedAmount = Math.round(packSize * portion);
       setAmount(calculatedAmount);
@@ -119,8 +148,7 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
 
   const handleFoodClick = (food: DeepFoodItem) => {
     setSelectedFood(food);
-    // 食品選択時は数量入力画面に移行（モーダルまたは下部パネル）
-  };
+    // 食品選択時は数量�E力画面に移行（モーダルまた�E下部パネル�E�E  };
 
   const handleConfirm = () => {
     if (selectedFood) {
@@ -131,8 +159,7 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
   return (
     <div className="butcher-chart-container">
       <button className="butcher-chart-back" onClick={onBack}>
-        ← 戻る
-      </button>
+        ↁE戻めE      </button>
       <h2 className="butcher-chart-title">
         {animalType === 'beef'
           ? '牛肉'
@@ -143,18 +170,17 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
               : animalType === 'egg'
                 ? '卵'
                 : animalType === 'fish'
-                  ? '魚'
+                  ? '魁E
                   : animalType === 'lamb'
-                    ? '羊/山羊'
+                    ? '羁E山羁E
                     : animalType === 'duck'
-                      ? '鳥類'
+                      ? '鳥顁E
                       : animalType === 'game'
                         ? 'ゲーム'
                         : '動物'}
-        の部位を選択
-      </h2>
+        の部位を選抁E      </h2>
 
-      {/* 簡易的な部位選択UI（将来的にSVGクリッカブルマップに置き換え） */}
+      {/* 簡易的な部位選択UI�E�封E��皁E��SVGクリチE��ブルマップに置き換え！E*/}
       <div className="butcher-chart-parts-grid">
         {parts.map((part) => (
           <button
@@ -164,72 +190,84 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
           >
             <div className="butcher-chart-part-label">{part.label}</div>
             {part.foods.length > 0 && (
-              <div className="butcher-chart-part-count">{part.foods.length}種類</div>
+              <div className="butcher-chart-part-count">{part.foods.length}種顁E/div>
             )}
           </button>
         ))}
       </div>
 
-      {/* 選択した部位の食品リスト */}
+      {/* 選択した部位�E食品リスチE*/}
       {selectedPart && availableFoods.length > 0 && !selectedFood && (
         <div className="butcher-chart-foods-list">
           <h3 className="butcher-chart-foods-title">選択可能な食品:</h3>
-          {availableFoods.map((food) => (
+          {availableFoods.map((food) => {
+            const recommendation = isRecommendedFood(food, missingNutrients, 300);
+            return (
             <button
               key={food.id}
-              className="butcher-chart-food-button"
+              className={`butcher-chart-food-button ${
+                recommendation.isRecommended ? 'recommended' : ''
+              } ${recommendation.priority === 'high' ? 'recommended-high' : ''} ${
+                recommendation.priority === 'medium' ? 'recommended-medium' : ''
+              }`}
               onClick={() => handleFoodClick(food)}
+              style={{ position: 'relative' }}
             >
+              {recommendation.isRecommended && (
+                <div className="butcher-chart-food-badge">
+                  ⭐ {recommendation.reason}
+                </div>
+              )}
               <div className="butcher-chart-food-name">{food.name_ja}</div>
               <div className="butcher-chart-food-verdict">{food.primal_verdict}</div>
               <div className="butcher-chart-food-stats">
                 <span>タンパク質: {food.protein}g</span>
                 <span>脂質: {food.fat}g</span>
-                <span>飽和脂肪酸（善）: {food.saturated_fat}g</span>
-                <span>オメガ6（炎症注意）: {food.omega_6}g</span>
+                <span>飽和脂肪酸�E�善�E�E {food.saturated_fat}g</span>
+                <span>オメガ6�E�炎痁E��意！E {food.omega_6}g</span>
                 <span>亜鉛: {food.zinc}mg</span>
                 <span>ビタミンB12: {food.vitamin_b12}μg</span>
               </div>
             </button>
-          ))}
+            );
+          })}
         </div>
       )}
 
-      {/* 数量入力UI（食品選択後） */}
+      {/* 数量�E力UI�E�食品選択後！E*/}
       {selectedFood && (
         <div className="butcher-chart-quantity-panel">
           <div className="butcher-chart-quantity-header">
-            <h3>{selectedFood.name_ja} の数量を選択</h3>
+            <h3>{selectedFood.name_ja} の数量を選抁E/h3>
             <button className="butcher-chart-back-button" onClick={() => setSelectedFood(null)}>
-              ← 戻る
-            </button>
+              ↁE戻めE            </button>
           </div>
 
-          {/* A. スマートプリセット */}
+          {/* A. スマ�Eト�EリセチE�� */}
           <div className="butcher-chart-presets">
             <h4>標準量:</h4>
             <div className="butcher-chart-preset-buttons">
               {getSmartPresets().map((preset) => (
                 <button
                   key={preset}
-                  className={`butcher-chart-preset-button ${amount === preset && unit === (animalType === 'egg' ? '個' : 'g') ? 'active' : ''}`}
+                  className={`butcher-chart-preset-button ${amount === preset && unit === (animalType === 'egg' ? '倁E : 'g') ? 'active' : ''}`}
                   onClick={() => {
                     setAmount(preset);
-                    setUnit(animalType === 'egg' ? '個' : 'g');
+                    setUnit(animalType === 'egg' ? '倁E : 'g');
                     setPortion(null);
                   }}
                 >
                   {preset}
-                  {animalType === 'egg' ? '個' : 'g'}
+                  {animalType === 'egg' ? '倁E : 'g'}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* B. Pack & Portion スライダー（g単位の場合のみ） */}
+          {/* B. Pack & Portion スライダー�E�E単位�E場合�Eみ�E�E*/}
           {unit === 'g' && (
             <div className="butcher-chart-pack-portion">
-              <h4>パック & 割合:</h4>
+              <h4>パック & 割吁E</h4>
               <div className="butcher-chart-pack-slider">
                 <label>パックの総量: {packSize}g</label>
                 <input
@@ -279,8 +317,8 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
             </div>
           )}
 
-          {/* 個数入力（卵の場合） */}
-          {unit === '個' && animalType === 'egg' && (
+          {/* 個数入力（卵の場合！E*/}
+          {unit === '倁E && animalType === 'egg' && (
             <div className="butcher-chart-piece-input">
               <h4>個数:</h4>
               <div className="butcher-chart-piece-buttons">
@@ -290,14 +328,13 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
                     className={`butcher-chart-piece-button ${amount === count ? 'active' : ''}`}
                     onClick={() => setAmount(count)}
                   >
-                    {count}個
-                  </button>
+                    {count}倁E                  </button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* 確認ボタン */}
+          {/* 確認�Eタン */}
           <button className="butcher-chart-confirm-button" onClick={handleConfirm}>
             {selectedFood.name_ja} {amount}
             {unit} を追加
@@ -306,8 +343,9 @@ export default function ButcherChart({ animalType, onFoodSelect, onBack }: Butch
       )}
 
       {selectedPart && availableFoods.length === 0 && (
-        <div className="butcher-chart-empty">この部位のデータはまだありません</div>
+        <div className="butcher-chart-empty">こ�E部位�EチE�Eタはまだありません</div>
       )}
     </div>
   );
 }
+

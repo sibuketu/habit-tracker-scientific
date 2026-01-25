@@ -1,17 +1,15 @@
 /**
- * Primal Logic - Makefilm API Integration
+ * CarnivoreOS - Makefilm API Integration
  *
- * Makefilm APIを使用して動画を生成
- * API仕様: https://makefilm.jp/ (要確認)
+ * Makefilm APIを使用して動画を生戁E * API仕槁E https://makefilm.jp/ (要確誁E
  */
 
 import type { VideoScript } from './videoGeneration';
 import { logError } from '../utils/errorHandler';
 
 const MAKEFILM_API_KEY = import.meta.env.VITE_MAKEFILM_API_KEY;
-// Makefilm API エンドポイント
-// 公式ドキュメントで確認してください
-// 実際のAPIエンドポイントは公式ドキュメントで確認してください
+// Makefilm API エンド�EインチE// 公式ドキュメントで確認してください
+// 実際のAPIエンド�Eイント�E公式ドキュメントで確認してください
 const MAKEFILM_API_URL = 'https://api.makefilm.jp/v1';
 
 export interface MakefilmVideoRequest {
@@ -29,15 +27,13 @@ export interface MakefilmVideoResponse {
 }
 
 /**
- * Makefilm APIを使用して動画を生成
- */
+ * Makefilm APIを使用して動画を生戁E */
 export async function generateVideoWithMakefilm(script: VideoScript): Promise<string> {
   if (!MAKEFILM_API_KEY) {
     throw new Error('VITE_MAKEFILM_API_KEY is not set');
   }
 
-  // 言語を取得（scriptから、またはデフォルトで'ja'）
-  const language = script.language || 'ja';
+  // 言語を取得！Ecriptから、また�EチE��ォルトで'ja'�E�E  const language = script.language || 'ja';
 
   // 言語コードをMakefilm APIの形式に変換
   const languageMap: Record<string, string> = {
@@ -55,7 +51,7 @@ export async function generateVideoWithMakefilm(script: VideoScript): Promise<st
   };
 
   try {
-    // Step 1: 動画生成リクエストを送信
+    // Step 1: 動画生�Eリクエストを送信
     const response = await fetch(`${MAKEFILM_API_URL}/videos/generate`, {
       method: 'POST',
       headers: {
@@ -71,8 +67,7 @@ export async function generateVideoWithMakefilm(script: VideoScript): Promise<st
 
     const data: MakefilmVideoResponse = await response.json();
 
-    // Step 2: 動画生成の完了を待つ（ポーリング）
-    if (data.status === 'processing') {
+    // Step 2: 動画生�Eの完亁E��征E���E��Eーリング�E�E    if (data.status === 'processing') {
       return await pollVideoStatus(data.video_id);
     }
 
@@ -88,7 +83,7 @@ export async function generateVideoWithMakefilm(script: VideoScript): Promise<st
 }
 
 /**
- * 動画生成のステータスをポーリング
+ * 動画生�EのスチE�Eタスを�Eーリング
  */
 async function pollVideoStatus(
   videoId: string,
@@ -119,7 +114,7 @@ async function pollVideoStatus(
         throw new Error(data.error || 'Video generation failed');
       }
 
-      // まだ処理中
+      // まだ処琁E��
     } catch (error) {
       logError(error, { component: 'videoGenerationMakefilm', action: 'pollVideoStatus', videoId });
       throw error;
@@ -128,3 +123,4 @@ async function pollVideoStatus(
 
   throw new Error('Video generation timeout');
 }
+

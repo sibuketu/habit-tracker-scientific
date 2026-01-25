@@ -1,28 +1,19 @@
 /**
- * Primal Logic - Weather Service
+ * CarnivoreOS - Weather Service
  *
- * OpenWeatherMap APIを使用して天気情報を取得
- * ビタミンD合成計算に活用
+ * OpenWeatherMap APIを使用して天気情報を取征E * ビタミンD合�E計算に活用
  */
 
 import { logError } from './errorHandler';
 
 export interface WeatherData {
-  temperature: number; // 気温（℃）
-  condition: 'sunny' | 'cloudy' | 'partly-cloudy' | 'rainy' | 'snowy'; // 天気状態
-  uvIndex: number; // UV指数（0-11+）
-  cloudCover: number; // 雲量（0-100%）
-  humidity: number; // 湿度（0-100%）
-  location?: string; // 位置情報（都市名など）
-  timestamp: string; // 取得日時
-}
+  temperature: number; // 気温�E�℃�E�E  condition: 'sunny' | 'cloudy' | 'partly-cloudy' | 'rainy' | 'snowy'; // 天気状慁E  uvIndex: number; // UV持E���E�E-11+�E�E  cloudCover: number; // 雲量！E-100%�E�E  humidity: number; // 湿度�E�E-100%�E�E  location?: string; // 位置惁E���E��E市名など�E�E  timestamp: string; // 取得日晁E}
 
 const WEATHER_CACHE_KEY = 'primal_logic_weather_cache';
 const WEATHER_CACHE_DURATION = 60 * 60 * 1000; // 1時間
 
 /**
- * 位置情報を取得（Geolocation API）
- */
+ * 位置惁E��を取得！Eeolocation API�E�E */
 export async function getCurrentLocation(): Promise<{ lat: number; lon: number } | null> {
   return new Promise((resolve) => {
     if (!navigator.geolocation) {
@@ -46,15 +37,14 @@ export async function getCurrentLocation(): Promise<{ lat: number; lon: number }
       },
       {
         timeout: 10000,
-        maximumAge: 5 * 60 * 1000, // 5分間キャッシュ
+        maximumAge: 5 * 60 * 1000, // 5刁E��キャチE��ュ
       }
     );
   });
 }
 
 /**
- * 位置情報から都市名を取得（Reverse Geocoding）
- */
+ * 位置惁E��から都市名を取得！Eeverse Geocoding�E�E */
 export async function getCityName(lat: number, lon: number): Promise<string | null> {
   try {
     // OpenWeatherMap Geocoding APIを使用
@@ -87,18 +77,15 @@ export async function getCityName(lat: number, lon: number): Promise<string | nu
 }
 
 /**
- * OpenWeatherMap APIから天気情報を取得
- */
+ * OpenWeatherMap APIから天気情報を取征E */
 export async function getWeatherData(lat?: number, lon?: number): Promise<WeatherData | null> {
   try {
-    // キャッシュを確認
-    const cached = getCachedWeatherData();
+    // キャチE��ュを確誁E    const cached = getCachedWeatherData();
     if (cached) {
       return cached;
     }
 
-    // 位置情報を取得（未指定の場合）
-    let location: { lat: number; lon: number } | null = null;
+    // 位置惁E��を取得（未持E���E場合！E    let location: { lat: number; lon: number } | null = null;
     if (lat && lon) {
       location = { lat, lon };
     } else {
@@ -112,8 +99,7 @@ export async function getWeatherData(lat?: number, lon?: number): Promise<Weathe
       return null;
     }
 
-    // OpenWeatherMap APIキーを確認
-    const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
+    // OpenWeatherMap APIキーを確誁E    const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
     if (!apiKey) {
       if (import.meta.env.DEV) {
         console.log(
@@ -123,8 +109,7 @@ export async function getWeatherData(lat?: number, lon?: number): Promise<Weathe
       return null;
     }
 
-    // OpenWeatherMap APIから天気情報を取得
-    const response = await fetch(
+    // OpenWeatherMap APIから天気情報を取征E    const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${apiKey}&units=metric&lang=ja`
     );
 
@@ -134,8 +119,7 @@ export async function getWeatherData(lat?: number, lon?: number): Promise<Weathe
 
     const data = await response.json();
 
-    // UV指数を取得（別API）
-    let uvIndex = 0;
+    // UV持E��を取得（別API�E�E    let uvIndex = 0;
     try {
       const uvResponse = await fetch(
         `https://api.openweathermap.org/data/2.5/uvi?lat=${location.lat}&lon=${location.lon}&appid=${apiKey}`
@@ -145,14 +129,12 @@ export async function getWeatherData(lat?: number, lon?: number): Promise<Weathe
         uvIndex = uvData.value || 0;
       }
     } catch (error) {
-      // UV指数の取得に失敗しても続行
-      if (import.meta.env.DEV) {
+      // UV持E��の取得に失敗しても続衁E      if (import.meta.env.DEV) {
         console.log('UV index fetch failed:', error);
       }
     }
 
-    // 天気状態を判定
-    const weatherId = data.weather[0]?.id || 800;
+    // 天気状態を判宁E    const weatherId = data.weather[0]?.id || 800;
     let condition: WeatherData['condition'] = 'cloudy';
     if (weatherId >= 800 && weatherId < 803) {
       condition = 'sunny';
@@ -166,8 +148,7 @@ export async function getWeatherData(lat?: number, lon?: number): Promise<Weathe
       condition = 'snowy';
     }
 
-    // 都市名を取得
-    const cityName = await getCityName(location.lat, location.lon);
+    // 都市名を取征E    const cityName = await getCityName(location.lat, location.lon);
 
     const weatherData: WeatherData = {
       temperature: data.main.temp || 0,
@@ -179,8 +160,7 @@ export async function getWeatherData(lat?: number, lon?: number): Promise<Weathe
       timestamp: new Date().toISOString(),
     };
 
-    // キャッシュに保存
-    cacheWeatherData(weatherData);
+    // キャチE��ュに保孁E    cacheWeatherData(weatherData);
 
     return weatherData;
   } catch (error) {
@@ -190,8 +170,7 @@ export async function getWeatherData(lat?: number, lon?: number): Promise<Weathe
 }
 
 /**
- * 天気情報をキャッシュから取得
- */
+ * 天気情報をキャチE��ュから取征E */
 function getCachedWeatherData(): WeatherData | null {
   try {
     const cached = localStorage.getItem(WEATHER_CACHE_KEY);
@@ -204,12 +183,13 @@ function getCachedWeatherData(): WeatherData | null {
     const cacheAge = now - data.cachedAt;
 
     if (cacheAge > WEATHER_CACHE_DURATION) {
-      // キャッシュが古い場合は削除
+      // キャチE��ュが古ぁE��合�E削除
       localStorage.removeItem(WEATHER_CACHE_KEY);
       return null;
     }
 
-    // キャッシュからtimestampを削除して返す
+    // キャチE��ュからtimestampを削除して返す
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { cachedAt, ...weatherData } = data;
     return weatherData;
   } catch (error) {
@@ -219,8 +199,7 @@ function getCachedWeatherData(): WeatherData | null {
 }
 
 /**
- * 天気情報をキャッシュに保存
- */
+ * 天気情報をキャチE��ュに保孁E */
 function cacheWeatherData(data: WeatherData): void {
   try {
     const cached = {
@@ -234,14 +213,12 @@ function cacheWeatherData(data: WeatherData): void {
 }
 
 /**
- * 天気状態からビタミンD合成に影響する係数を計算
- */
+ * 天気状態からビタミンD合�Eに影響する係数を計箁E */
 export function getWeatherVitaminDFactor(weather: WeatherData): number {
   // 天気状態に基づく係数
   let factor = 1.0;
 
-  // 雲量による影響（雲量が多いほど係数が低い）
-  factor *= (100 - weather.cloudCover) / 100;
+  // 雲量による影響�E�雲量が多いほど係数が低い�E�E  factor *= (100 - weather.cloudCover) / 100;
 
   // 天気状態による影響
   switch (weather.condition) {
@@ -260,10 +237,9 @@ export function getWeatherVitaminDFactor(weather: WeatherData): number {
       break;
   }
 
-  // UV指数による影響（UV指数が高いほど係数が高い）
-  // UV指数0-11+を0.5-1.5の範囲にマッピング
+  // UV持E��による影響�E�EV持E��が高いほど係数が高い�E�E  // UV持E��0-11+めE.5-1.5の篁E��にマッピング
   const uvFactor = 0.5 + (weather.uvIndex / 11) * 1.0;
   factor *= Math.min(uvFactor, 1.5);
 
-  return Math.max(0, Math.min(1, factor)); // 0-1の範囲に制限
-}
+  return Math.max(0, Math.min(1, factor)); // 0-1の篁E��に制陁E}
+

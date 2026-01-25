@@ -1,106 +1,107 @@
-# APIキー取得ガイド（このチャットで完結）
+# APIキー取得ガイド（このチャチE��で完結！E
 
-## OpenAI APIキーの取得方法
+## OpenAI APIキーの取得方況E
 
-### ステップ1: アカウント作成
+### スチE��チE: アカウント作�E
 
 1. [https://platform.openai.com/](https://platform.openai.com/) にアクセス
-2. 「Sign up」をクリック
-3. メールアドレスとパスワードを入力
-4. メール認証を完了
+2. 「Sign up」をクリチE��
+3. メールアドレスとパスワードを入劁E
+4. メール認証を完亁E
 
-### ステップ2: APIキーを生成
+### スチE��チE: APIキーを生戁E
 
-1. ログイン後、右上のプロフィールアイコン（👤）をクリック
-2. 「View API keys」を選択
-3. 「Create new secret key」をクリック
-4. キーに名前を付ける（例: "Primal Logic"）
-5. **重要**: 生成されたキーを**すぐにコピー**してください（後で表示されません）
+1. ログイン後、右上�Eプロフィールアイコン�E�👤�E�をクリチE��
+2. 「View API keys」を選抁E
+3. 「Create new secret key」をクリチE��
+4. キーに名前を付ける（侁E "CarnivOS"�E�E
+5. **重要E*: 生�EされたキーめE*すぐにコピ�E**してください�E�後で表示されません�E�E
 
-### ステップ3: クレジットを追加
+### スチE��チE: クレジチE��を追加
 
-1. 左サイドバーの「Billing」を選択
-2. 「Add payment method」をクリック
-3. クレジットカード情報を入力
-4. 初回利用時は$5程度のクレジットを追加することを推奨
+1. 左サイドバーの「Billing」を選抁E
+2. 「Add payment method」をクリチE��
+3. クレジチE��カード情報を�E劁E
+4. 初回利用時�E$5程度のクレジチE��を追加することを推奨
 
-### ステップ4: アプリに設定
+### スチE��チE: アプリに設宁E
 
-1. `primal-logic-web` ディレクトリに `.env` ファイルを作成（または編集）
+1. `primal-logic-web` チE��レクトリに `.env` ファイルを作�E�E�また�E編雁E��E
 
 ```bash
 cd primal-logic-web
-# .env ファイルを作成
+# .env ファイルを作�E
 ```
 
-2. 以下の内容を追加：
+2. 以下�E冁E��を追加�E�E
 
 ```env
-VITE_OPENAI_API_KEY=sk-ここにコピーしたAPIキーを貼り付け
+VITE_OPENAI_API_KEY=sk-ここにコピ�EしたAPIキーを貼り付け
 ```
 
-3. アプリを再起動：
+3. アプリを�E起動！E
 
 ```bash
 npm run dev
 ```
 
-## Google Gemini APIキーの取得方法
+## Google Gemini APIキーの取得方況E
 
-### ステップ1: Google AI Studio にアクセス
+### スチE��チE: Google AI Studio にアクセス
 
 1. [https://aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey) にアクセス
 2. Googleアカウントでログイン
 
-### ステップ2: APIキーを生成
+### スチE��チE: APIキーを生戁E
 
-1. 「Create API Key」をクリック
-2. Google Cloud プロジェクトを選択（新規作成も可能）
+1. 「Create API Key」をクリチE��
+2. Google Cloud プロジェクトを選択（新規作�Eも可能�E�E
 3. APIキーが生成される
-4. **重要**: 生成されたキーを**すぐにコピー**してください
+4. **重要E*: 生�EされたキーめE*すぐにコピ�E**してください
 
-### ステップ3: APIの有効化
+### スチE��チE: APIの有効匁E
 
 1. [Google Cloud Console](https://console.cloud.google.com/) にアクセス
-2. プロジェクトを選択
-3. 「APIとサービス」→「有効なAPI」を選択
-4. 「Generative Language API」が有効になっているか確認
-5. 有効でない場合は「APIを有効にする」をクリック
+2. プロジェクトを選抁E
+3. 「APIとサービス」�E「有効なAPI」を選抁E
+4. 「Generative Language API」が有効になってぁE��か確誁E
+5. 有効でなぁE��合�E「APIを有効にする」をクリチE��
 
-### ステップ4: アプリに設定
+### スチE��チE: アプリに設宁E
 
-1. `.env` ファイルに追加：
+1. `.env` ファイルに追加�E�E
 
 ```env
-VITE_GEMINI_API_KEY=ここにコピーしたAPIキーを貼り付け
+VITE_GEMINI_API_KEY=ここにコピ�EしたAPIキーを貼り付け
 ```
 
-2. アプリを再起動
+2. アプリを�E起勁E
 
-## どちらを使うべきか？
+## どちらを使ぁE��きか�E�E
 
-### 開発・テスト段階
+### 開発・チE��ト段隁E
 **Geminiを推奨**
-- 無料枠が大きい（1日60リクエスト）
-- コストがかからない
+- 無料枠が大きい�E�E日60リクエスト！E
+- コストがかからなぁE
 
-### 本番環境
-**用途に応じて選択**
-- **コスト重視**: Gemini
-- **速度・品質重視**: OpenAI
+### 本番環墁E
+**用途に応じて選抁E*
+- **コスト重要E*: Gemini
+- **速度・品質重要E*: OpenAI
 
-## トラブルシューティング
+## トラブルシューチE��ング
 
 ### エラー: "API key not valid"
-- APIキーが正しくコピーされているか確認
-- `.env`ファイルが正しい場所にあるか確認（`primal-logic-web`ディレクトリ直下）
-- アプリを再起動（環境変数の変更は再起動が必要）
+- APIキーが正しくコピ�EされてぁE��か確誁E
+- `.env`ファイルが正しい場所にあるか確認！Eprimal-logic-web`チE��レクトリ直下！E
+- アプリを�E起動（環墁E��数の変更は再起動が忁E��E��E
 
 ### エラー: "Insufficient quota"
-- OpenAI: アカウントにクレジットが残っているか確認
-- Gemini: 無料枠（1日60リクエスト）を超えている可能性
+- OpenAI: アカウントにクレジチE��が残ってぁE��か確誁E
+- Gemini: 無料枠�E�E日60リクエスト）を趁E��てぁE��可能性
 
 ### エラー: "Connection refused"
-- 開発サーバーが動いているか確認（`npm run dev`）
-- ポート5173が使用可能か確認
+- 開発サーバ�Eが動ぁE��ぁE��か確認！Enpm run dev`�E�E
+- ポ�EチE173が使用可能か確誁E
+
 

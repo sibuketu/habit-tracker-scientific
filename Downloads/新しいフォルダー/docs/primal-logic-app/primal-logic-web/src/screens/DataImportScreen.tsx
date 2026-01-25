@@ -1,7 +1,7 @@
 /**
- * Primal Logic - データインポート画面
+ * CarnivoreOS - チE�Eタインポ�Eト画面
  *
- * データのバックアップと復元機能
+ * チE�EタのバックアチE�Eと復允E���E
  */
 
 import { useState, useRef } from 'react';
@@ -34,47 +34,43 @@ export default function DataImportScreen({ onBack }: DataImportScreenProps) {
       const text = await file.text();
       const importData = JSON.parse(text);
 
-      // バージョンチェック
+      // バ�EジョンチェチE��
       if (!importData.version) {
-        throw new Error('無効なデータ形式です');
+        throw new Error('無効なチE�Eタ形式でぁE);
       }
 
-      // 既存データのバックアップ（確認）
-      if (
+      // 既存データのバックアチE�E�E�確認！E      if (
         !window.confirm(
-          '既存のデータを上書きしますか？\n（推奨: 先にエクスポートしてバックアップを取ってください）'
+          '既存�EチE�Eタを上書きしますか�E�\n�E�推奨: 先にエクスポ�EトしてバックアチE�Eを取ってください�E�E
         )
       ) {
         setImporting(false);
         return;
       }
 
-      // ユーザープロファイルをインポート
-      if (importData.userProfile) {
+      // ユーザープロファイルをインポ�EチE      if (importData.userProfile) {
         await saveUserProfile(importData.userProfile);
       }
 
-      // 設定をインポート
-      if (importData.settings) {
+      // 設定をインポ�EチE      if (importData.settings) {
         localStorage.setItem('primal_logic_settings', JSON.stringify(importData.settings));
       }
 
-      // 日次ログをインポート
-      if (importData.dailyLogs && Array.isArray(importData.dailyLogs)) {
+      // 日次ログをインポ�EチE      if (importData.dailyLogs && Array.isArray(importData.dailyLogs)) {
         for (const log of importData.dailyLogs) {
           await saveDailyLog(log);
         }
       }
 
       setImported(true);
-      alert('データのインポートが完了しました');
-      // 画面をリロードしてデータを反映
+      alert('チE�Eタのインポ�Eトが完亁E��ました');
+      // 画面をリロードしてチE�Eタを反映
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (error) {
       logError(error, { component: 'DataImportScreen', action: 'handleImport' });
-      setError('データのインポートに失敗しました。ファイル形式を確認してください。');
+      setError('チE�Eタのインポ�Eトに失敗しました。ファイル形式を確認してください、E);
     } finally {
       setImporting(false);
     }
@@ -84,12 +80,10 @@ export default function DataImportScreen({ onBack }: DataImportScreenProps) {
     <div className="data-import-screen">
       <div className="data-import-container">
         <button onClick={onBack} className="data-import-back-button">
-          ← 設定に戻る
-        </button>
-        <h1 className="data-import-title">データインポート</h1>
+          ↁE設定に戻めE        </button>
+        <h1 className="data-import-title">チE�Eタインポ�EチE/h1>
         <p className="data-import-description">
-          エクスポートしたJSONファイルを選択して、データを復元できます。
-        </p>
+          エクスポ�EトしたJSONファイルを選択して、データを復允E��きます、E        </p>
 
         <div className="data-import-form">
           <input
@@ -98,15 +92,14 @@ export default function DataImportScreen({ onBack }: DataImportScreenProps) {
             accept=".json"
             style={{ display: 'none' }}
             onChange={() => {
-              // ファイル選択時の処理はhandleImportで行う
+              // ファイル選択時の処琁E�EhandleImportで行う
             }}
           />
           <button
             onClick={() => fileInputRef.current?.click()}
             className="data-import-select-button"
           >
-            ファイルを選択
-          </button>
+            ファイルを選抁E          </button>
           {fileInputRef.current?.files?.[0] && (
             <p style={{ fontSize: '14px', color: '#78716c', marginTop: '0.5rem' }}>
               選択中: {fileInputRef.current.files[0].name}
@@ -118,23 +111,24 @@ export default function DataImportScreen({ onBack }: DataImportScreenProps) {
             disabled={importing || !fileInputRef.current?.files?.[0]}
             className="data-import-button"
           >
-            {importing ? 'インポート中...' : 'データをインポート'}
+            {importing ? 'インポ�Eト中...' : 'チE�Eタをインポ�EチE}
           </button>
         </div>
 
-        {imported && <div className="data-import-success">✅ データのインポートが完了しました</div>}
+        {imported && <div className="data-import-success">✁EチE�Eタのインポ�Eトが完亁E��ました</div>}
 
-        {error && <div className="data-import-error">⚠️ {error}</div>}
+        {error && <div className="data-import-error">⚠�E�E{error}</div>}
 
         <div className="data-import-info">
-          <h3>注意事項</h3>
+          <h3>注意事頁E/h3>
           <ul>
-            <li>インポート前に既存データのエクスポートを推奨します</li>
-            <li>既存のデータは上書きされます</li>
-            <li>エクスポートしたJSONファイルのみインポート可能です</li>
+            <li>インポ�Eト前に既存データのエクスポ�Eトを推奨しまぁE/li>
+            <li>既存�EチE�Eタは上書きされまぁE/li>
+            <li>エクスポ�EトしたJSONファイルのみインポ�Eト可能でぁE/li>
           </ul>
         </div>
       </div>
     </div>
   );
 }
+

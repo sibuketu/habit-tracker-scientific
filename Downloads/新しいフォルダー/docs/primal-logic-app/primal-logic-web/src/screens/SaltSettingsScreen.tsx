@@ -1,5 +1,5 @@
 /**
- * Primal Logic - Salt Settings Screen
+ * CarnivoreOS - Salt Settings Screen
  *
  * 塩ミル設定画面
  */
@@ -44,22 +44,22 @@ export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) 
     {
       code: 'table_salt' as const,
       name: '食卓塩',
-      description: '一般的な精製塩。ナトリウム含有量が高い。',
+      description: '一般皁E��精製塩。ナトリウム含有量が高い、E,
     },
     {
       code: 'sea_salt' as const,
       name: '海塩',
-      description: '海水から作られた塩。ミネラルが豊富。',
+      description: '海水から作られた塩。ミネラルが豊富、E,
     },
     {
       code: 'himalayan_salt' as const,
-      name: 'ヒマラヤ塩',
-      description: 'ヒマラヤ山脈の岩塩。84種類のミネラルを含む。',
+      name: 'ヒ�Eラヤ塩',
+      description: 'ヒ�Eラヤ山脈�E岩塩、E4種類�Eミネラルを含む、E,
     },
     {
       code: 'celtic_salt' as const,
       name: 'ケルト塩',
-      description: 'フランスのケルト地方の海塩。マグネシウムが豊富。',
+      description: 'フランスのケルト地方の海塩。�Eグネシウムが豊富、E,
     },
   ];
 
@@ -68,15 +68,13 @@ export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) 
       <div className="salt-settings-screen-content">
         <div className="screen-header">
           <button className="back-button" onClick={onBack} aria-label={t('common.backAriaLabel')}>
-            ←
-          </button>
-          <h1 className="screen-header-title">塩ミル設定</h1>
+            ↁE          </button>
+          <h1 className="screen-header-title">塩ミル設宁E/h1>
         </div>
 
         <div className="salt-settings-screen-section">
           <h2 className="salt-settings-screen-section-title">
-            塩の種類
-            <HelpTooltip text="塩の種類によってナトリウム含有量が異なります。正確な栄養素計算のため、使用している塩の種類を選択してください。" />
+            塩の種顁E            <HelpTooltip text="塩の種類によってナトリウム含有量が異なります。正確な栁E��素計算�Eため、使用してぁE��塩の種類を選択してください、E />
           </h2>
           <div className="salt-settings-screen-button-group">
             {saltTypes.map((type) => (
@@ -96,8 +94,8 @@ export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) 
 
         <div className="salt-settings-screen-section">
           <h2 className="salt-settings-screen-section-title">
-            1削りあたりの量 (g)
-            <HelpTooltip text="塩ミルを1回回したときの塩の重量（g）を設定します。デフォルトは0.5gです。" />
+            1削りあたり�E釁E(g)
+            <HelpTooltip text="塩ミルめE回回したとき�E塩の重量�E�E�E�を設定します。デフォルト�E0.5gです、E />
           </h2>
           <div className="salt-settings-screen-input-group">
             <input
@@ -108,19 +106,19 @@ export default function SaltSettingsScreen({ onBack }: SaltSettingsScreenProps) 
               value={saltUnitWeight}
               onChange={(e) => handleUnitWeightChange(parseFloat(e.target.value) || 0.5)}
               className="salt-settings-screen-input"
-              aria-label="1削りあたりの塩の重量"
+              aria-label="1削りあたり�E塩の重量"
             />
             <span className="salt-settings-screen-input-unit">g</span>
           </div>
-          <p className="salt-settings-screen-hint">デフォルト: 0.5g/削り</p>
+          <p className="salt-settings-screen-hint">チE��ォルチE 0.5g/削り</p>
           <button
             className="salt-settings-screen-reset-button"
             onClick={() => handleUnitWeightChange(0.5)}
           >
-            デフォルトに戻す
-          </button>
+            チE��ォルトに戻ぁE          </button>
         </div>
       </div>
     </div>
   );
 }
+

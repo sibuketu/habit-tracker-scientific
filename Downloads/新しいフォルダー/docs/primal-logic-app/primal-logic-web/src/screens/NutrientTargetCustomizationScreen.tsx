@@ -1,7 +1,7 @@
 /**
- * Primal Logic - Nutrient Target Customization Screen
+ * CarnivoreOS - Nutrient Target Customization Screen
  *
- * 栄養素目標値のカスタマイズ画面
+ * 栁E��素目標値のカスタマイズ画面
  */
 
 import { useState, useEffect, useMemo, useRef } from 'react';
@@ -9,7 +9,7 @@ import { useApp } from '../context/AppContext';
 import { saveUserProfile } from '../utils/storage';
 import { getCarnivoreTargets } from '../data/carnivoreTargets';
 import HelpTooltip from '../components/common/HelpTooltip';
-import type { UserProfile } from '../types';
+import type { UserProfile } from '../types/index';
 import { logError } from '../utils/errorHandler';
 import { useTranslation } from '../utils/i18n';
 import './NutrientTargetCustomizationScreen.css';
@@ -38,7 +38,7 @@ const NUTRIENT_LABELS: Record<string, { name: string; unit: string }> = {
   magnesium: { name: 'マグネシウム', unit: 'mg' },
   potassium: { name: 'カリウム', unit: 'mg' },
   zinc: { name: '亜鉛', unit: 'mg' },
-  iron: { name: '鉄分', unit: 'mg' },
+  iron: { name: '鉁E�E', unit: 'mg' },
   vitaminA: { name: 'ビタミンA', unit: 'IU' },
   vitaminD: { name: 'ビタミンD', unit: 'IU' },
   vitaminK2: { name: 'ビタミンK2', unit: 'μg' },
@@ -62,7 +62,7 @@ export default function NutrientTargetCustomizationScreen({
       : {}
   );
 
-  // 自動保存用のタイマー
+  // 自動保存用のタイマ�E
   const saveTimerRef = useState<NodeJS.Timeout | null>(null)[0];
 
   useEffect(() => {
@@ -78,8 +78,7 @@ export default function NutrientTargetCustomizationScreen({
     }
   }, [userProfile]);
 
-  // 推奨値を計算
-  const autoTargets = useMemo(() => {
+  // 推奨値を計箁E  const autoTargets = useMemo(() => {
     if (!userProfile) return {};
     return getCarnivoreTargets(
       userProfile.gender,
@@ -108,8 +107,7 @@ export default function NutrientTargetCustomizationScreen({
       userProfile.bodyComposition,
       userProfile.weight,
       userProfile.metabolicStressIndicators,
-      undefined // customNutrientTargetsは渡さない（推奨値を計算するため）
-    );
+      undefined // customNutrientTargetsは渡さなぁE��推奨値を計算するためE��E    );
   }, [userProfile]);
 
   // 自動保存
@@ -172,15 +170,13 @@ export default function NutrientTargetCustomizationScreen({
       <div className="nutrient-target-customization-screen-content">
         <div className="screen-header">
           <button className="back-button" onClick={onBack} aria-label={t('common.backAriaLabel')}>
-            ←
-          </button>
-          <h1 className="screen-header-title">栄養素目標値のカスタマイズ</h1>
+            ←          </button>
+          <h1 className="screen-header-title">栁E��素目標値のカスタマイズ</h1>
         </div>
 
         <div className="nutrient-target-customization-screen-section">
           <p className="nutrient-target-customization-screen-description">
-            各栄養素の目標値を「推奨値（Auto）」か「手動入力（Manual）」かを選択できます。
-          </p>
+            吁E��E��素の目標値を「推奨値�E�Euto�E�」か「手動�E力！Eanual�E�」かを選択できます、E          </p>
 
           <div className="nutrient-target-customization-screen-list">
             {NUTRIENT_KEYS.map((nutrient) => {
@@ -206,7 +202,7 @@ export default function NutrientTargetCustomizationScreen({
                           current.mode === 'auto' ? 'active' : ''
                         }`}
                         onClick={() => handleModeChange(nutrient, 'auto')}
-                        aria-label={`${label.name}を自動モードに設定`}
+                        aria-label={`${label.name}を�E動モードに設定`}
                       >
                         Auto
                       </button>
@@ -254,3 +250,4 @@ export default function NutrientTargetCustomizationScreen({
     </div>
   );
 }
+

@@ -1,68 +1,68 @@
-# 次のステップ（全部指示）
+# 次のスチE��プ（�E部持E���E�E
 
-> 作成日: 2026-01-03
-> **Cursorが指示しない限り、ユーザーは新しいターミナルから実行する前提でやる**
-
----
-
-## ✅ 完了した作業
-
-1. **Visual Regression Testの追加** - 完了
-2. **グリシン:メチオニン比の表示追加** - 完了
-3. **Rulesの前提明確化** - 完了
-4. **Visual Regression Testのセレクタ改善** - 完了
+> 作�E日: 2026-01-03
+> **Cursorが指示しなぁE��り、ユーザーは新しいターミナルから実行する前提でめE��**
 
 ---
 
-## 🎯 全タスク（Cursorが実行中）
+## ✁E完亁E��た作業
 
-### 1. ✅ コード品質チェック（Cursorが実行中）
-- Lintチェック: 実行中
-- 型チェック: 実行中
-- エラーがあれば修正
+1. **Visual Regression Testの追加** - 完亁E
+2. **グリシン:メチオニン比�E表示追加** - 完亁E
+3. **Rulesの前提明確匁E* - 完亁E
+4. **Visual Regression Testのセレクタ改喁E* - 完亁E
 
-### 2. ✅ Visual Regression Test（Cursorが実行中）
-- テスト実行中（バックグラウンド）
-- 失敗したテストの修正
+---
 
-### 3. ✅ E2Eテスト（Cursorが実行中）
-- 全テスト実行中（バックグラウンド）
-- 結果確認
+## 🎯 全タスク�E�Eursorが実行中�E�E
 
-### 4. ⏳ リリース前チェックリストの確認（Cursorが実行中）
-- 各項目の確認
-- 未完了項目の実装
+### 1. ✁Eコード品質チェチE���E�Eursorが実行中�E�E
+- LintチェチE��: 実行中
+- 型チェチE��: 実行中
+- エラーがあれ�E修正
+
+### 2. ✁EVisual Regression Test�E�Eursorが実行中�E�E
+- チE��ト実行中�E�バチE��グラウンド！E
+- 失敗したテスト�E修正
+
+### 3. ✁EE2EチE��ト！Eursorが実行中�E�E
+- 全チE��ト実行中�E�バチE��グラウンド！E
+- 結果確誁E
+
+### 4. ⏳ リリース前チェチE��リスト�E確認！Eursorが実行中�E�E
+- 吁E��E��の確誁E
+- 未完亁E��E��の実裁E
 - ドキュメント更新
 
-### 5. ⏳ ドキュメント更新（Cursorが実行中）
-- READMEの更新（グリシン:メチオニン比を追加済み）
-- 実装状況の記録
-- テスト結果の記録
+### 5. ⏳ ドキュメント更新�E�Eursorが実行中�E�E
+- READMEの更新�E�グリシン:メチオニン比を追加済み�E�E
+- 実裁E��況�E記録
+- チE��ト結果の記録
 
 ---
 
-## 📋 ユーザーが実行するタスク（エクスプローラーから）
+## 📋 ユーザーが実行するタスク�E�エクスプローラーから�E�E
 
-### iOS版テスト（Maestro）
+### iOS版テスト！Eaestro�E�E
 
-**方法1: エクスプローラーから実行（推奨・一番簡単）**
-1. エクスプローラーを開く（Windowsキー+E）
-2. アドレスバーに以下を貼り付けてEnter:
+**方況E: エクスプローラーから実行（推奨・一番簡単！E*
+1. エクスプローラーを開く！Eindowsキー+E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app
    ```
-3. `run-all-tests-ios-simple.bat` をダブルクリック
+3. `run-all-tests-ios-simple.bat` をダブルクリチE��
 
-**注意**: `.ps1`ファイルをダブルクリックするとメモ帳で開いてしまいます。必ず`.bat`ファイルをダブルクリックしてください。
+**注愁E*: `.ps1`ファイルをダブルクリチE��するとメモ帳で開いてしまぁE��す。忁E��`.bat`ファイルをダブルクリチE��してください、E
 
-**方法2: PowerShellから実行**
-1. 新しいPowerShellを開く（Windowsキー → 「PowerShell」と入力 → Enter）
-2. 以下をコピペして実行:
+**方況E: PowerShellから実衁E*
+1. 新しいPowerShellを開く！Eindowsキー ↁE「PowerShell」と入劁EↁEEnter�E�E
+2. 以下をコピ�Eして実衁E
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 .\start-ios-app.bat
 ```
-3. 別のPowerShellを開いて以下を実行:
+3. 別のPowerShellを開ぁE��以下を実衁E
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 .\run-ios-test.bat
@@ -72,27 +72,28 @@ cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 
 ## 🚀 次に何するか
 
-### 最優先（Cursorが実行中）
-1. **コード品質チェック結果の確認** - エラーがあれば修正
-2. **Visual Regression Test結果の確認** - 失敗したテストの修正
-3. **E2Eテスト結果の確認** - 失敗したテストの修正
+### 最優先！Eursorが実行中�E�E
+1. **コード品質チェチE��結果の確誁E* - エラーがあれ�E修正
+2. **Visual Regression Test結果の確誁E* - 失敗したテスト�E修正
+3. **E2EチE��ト結果の確誁E* - 失敗したテスト�E修正
 
-### 中優先（ユーザーが実行）
-4. **iOS版テスト（Maestro）** - エクスプローラーから実行（上記参照）
+### 中優先（ユーザーが実行！E
+4. **iOS版テスト！Eaestro�E�E* - エクスプローラーから実行（上記参照�E�E
 
-### 低優先（Cursorが実行中）
-5. **リリース前チェックリストの確認** - 各項目の確認
-6. **ドキュメント更新** - README、実装状況の更新
+### 低優先！Eursorが実行中�E�E
+5. **リリース前チェチE��リスト�E確誁E* - 吁E��E��の確誁E
+6. **ドキュメント更新** - README、実裁E��況�E更新
 
 ---
 
-## 📝 前提の確認
+## 📝 前提の確誁E
 
-- ✅ **Cursorはターミナル操作できる**（`run_terminal_cmd`ツール使用）
-- ✅ **Cursorが指示しない限り、ユーザーは新しいターミナルから実行する前提でやる**
-- ✅ **エクスプローラーから実行する方法が一番簡単**（バッチファイルをダブルクリック）
+- ✁E**Cursorはターミナル操作できる**�E�Erun_terminal_cmd`チE�Eル使用�E�E
+- ✁E**Cursorが指示しなぁE��り、ユーザーは新しいターミナルから実行する前提でめE��**
+- ✁E**エクスプローラーから実行する方法が一番簡十E*�E�バチE��ファイルをダブルクリチE���E�E
 
 ---
 
 最終更新: 2026-01-03
+
 

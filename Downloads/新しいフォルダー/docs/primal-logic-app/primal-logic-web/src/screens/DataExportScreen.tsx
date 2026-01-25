@@ -1,7 +1,7 @@
 /**
- * Primal Logic - データエクスポート画面
+ * CarnivoreOS - チE�Eタエクスポ�Eト画面
  *
- * GDPR対応：ユーザーデータのエクスポート機能
+ * GDPR対応：ユーザーチE�Eタのエクスポ�Eト機�E
  */
 
 import { useState } from 'react';
@@ -18,13 +18,11 @@ export default function DataExportScreen() {
     setExported(false);
 
     try {
-      // 全てのデータを取得
-      const logs = await getDailyLogs();
+      // 全てのチE�Eタを取征E      const logs = await getDailyLogs();
       const userProfile = localStorage.getItem('primal_logic_user_profile');
       const settings = localStorage.getItem('primal_logic_settings');
 
-      // エクスポートデータを構築
-      const exportData = {
+      // エクスポ�Eトデータを構篁E      const exportData = {
         exportDate: new Date().toISOString(),
         version: '1.0',
         userProfile: userProfile ? JSON.parse(userProfile) : null,
@@ -32,8 +30,7 @@ export default function DataExportScreen() {
         dailyLogs: logs,
       };
 
-      // JSONファイルとしてダウンロード
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      // JSONファイルとしてダウンローチE      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -46,7 +43,7 @@ export default function DataExportScreen() {
       setExported(true);
     } catch (error) {
       logError(error, { component: 'DataExportScreen', action: 'handleExport' });
-      alert('データのエクスポートに失敗しました');
+      alert('チE�Eタのエクスポ�Eトに失敗しました');
     } finally {
       setExporting(false);
     }
@@ -61,33 +58,31 @@ export default function DataExportScreen() {
           }}
           className="data-export-back-button"
         >
-          ← 設定に戻る
-        </button>
-        <h1 className="data-export-title">データエクスポート</h1>
+          ↁE設定に戻めE        </button>
+        <h1 className="data-export-title">チE�Eタエクスポ�EチE/h1>
         <p className="data-export-description">
-          あなたのデータをJSON形式でダウンロードできます。
-          これには、食事記録、プロファイル情報、設定などが含まれます。
-        </p>
+          あなた�EチE�EタをJSON形式でダウンロードできます、E          これには、E��事記録、�Eロファイル惁E��、設定などが含まれます、E        </p>
 
         <button onClick={handleExport} disabled={exporting} className="data-export-button">
-          {exporting ? 'エクスポート中...' : 'データをエクスポート'}
+          {exporting ? 'エクスポ�Eト中...' : 'チE�Eタをエクスポ�EチE}
         </button>
 
         {exported && (
-          <div className="data-export-success">✅ データのエクスポートが完了しました</div>
+          <div className="data-export-success">✁EチE�Eタのエクスポ�Eトが完亁E��ました</div>
         )}
 
         <div className="data-export-info">
-          <h3>エクスポートされるデータ</h3>
+          <h3>エクスポ�EトされるチE�Eタ</h3>
           <ul>
-            <li>プロファイル情報（性別、年齢、体重など）</li>
-            <li>食事記録（全履歴）</li>
-            <li>日記</li>
-            <li>体重・体脂肪率の記録</li>
-            <li>アプリ設定</li>
+            <li>プロファイル惁E���E�性別、年齢、体重など�E�E/li>
+            <li>食事記録�E��E履歴�E�E/li>
+            <li>日訁E/li>
+            <li>体重・体脂肪玁E�E記録</li>
+            <li>アプリ設宁E/li>
           </ul>
         </div>
       </div>
     </div>
   );
 }
+

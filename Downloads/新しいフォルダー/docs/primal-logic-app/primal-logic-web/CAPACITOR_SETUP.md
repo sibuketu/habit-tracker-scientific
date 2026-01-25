@@ -1,47 +1,47 @@
-# Capacitorセットアップ手順（2026-01-03）
+# CapacitorセチE��アチE�E手頁E��E026-01-03�E�E
 
-> Webアプリをネイティブアプリ化する手順
+> WebアプリをネイチE��ブアプリ化する手頁E
 
 ---
 
-## ✅ 完了した作業
+## ✁E完亁E��た作業
 
-1. **Capacitorのインストール**: 完了
+1. **Capacitorのインスト�Eル**: 完亁E
    ```bash
    npm install @capacitor/core @capacitor/cli @capacitor/ios @capacitor/android --save-dev
    ```
 
-2. **Capacitorの初期化**: 完了
+2. **Capacitorの初期匁E*: 完亁E
    ```bash
-   npx cap init "Primal Logic" "com.primallogic.app" --web-dir="dist"
+   npx cap init "CarnivOS" "com.primallogic.app" --web-dir="dist"
    ```
 
 ---
 
-## 📋 次のステップ
+## 📋 次のスチE��チE
 
-### 1. Webアプリをビルド
+### 1. WebアプリをビルチE
 
 ```bash
 cd primal-logic-web
 npm run build
 ```
 
-これで`dist`ディレクトリにビルドされたファイルが生成されます。
+これで`dist`チE��レクトリにビルドされたファイルが生成されます、E
 
-### 2. iOS/Androidプラットフォームを追加
+### 2. iOS/AndroidプラチE��フォームを追加
 
-**Android（Windowsでも可能）:**
+**Android�E�Eindowsでも可能�E�E**
 ```bash
 npx cap add android
 ```
 
-**iOS（macOSが必要）:**
+**iOS�E�EacOSが忁E��E��E**
 ```bash
 npx cap add ios
 ```
 
-**注意**: WindowsではiOSプラットフォームの追加はできません。macOSが必要です。
+**注愁E*: WindowsではiOSプラチE��フォームの追加はできません。macOSが忁E��です、E
 
 ### 3. Capacitorに同期
 
@@ -49,21 +49,21 @@ npx cap add ios
 npx cap sync
 ```
 
-これで、ビルドされたWebアプリがネイティブプロジェクトにコピーされます。
+これで、ビルドされたWebアプリがネイチE��ブ�Eロジェクトにコピ�Eされます、E
 
-### 4. 実機でテスト
+### 4. 実機でチE��チE
 
 **Android:**
 ```bash
 npx cap open android
 ```
-Android Studioが開くので、実機を接続して実行できます。
+Android Studioが開く�Eで、実機を接続して実行できます、E
 
-**iOS（macOSが必要）:**
+**iOS�E�EacOSが忁E��E��E**
 ```bash
 npx cap open ios
 ```
-Xcodeが開くので、実機を接続して実行できます。
+Xcodeが開く�Eで、実機を接続して実行できます、E
 
 ---
 
@@ -71,16 +71,16 @@ Xcodeが開くので、実機を接続して実行できます。
 
 ### capacitor.config.ts
 
-Capacitorの設定ファイルが作成されているはずです。確認してください。
+Capacitorの設定ファイルが作�EされてぁE��はずです。確認してください、E
 
 ```typescript
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.primallogic.app',
-  appName: 'Primal Logic',
+  appName: 'CarnivOS',
   webDir: 'dist',
-  // その他の設定
+  // そ�E他�E設宁E
 };
 
 export default config;
@@ -88,23 +88,24 @@ export default config;
 
 ---
 
-## 📝 注意事項
+## 📝 注意事頁E
 
-1. **WindowsでのiOS開発**: WindowsではiOSプラットフォームの追加はできません。macOSが必要です。
-2. **Android開発**: WindowsでもAndroid開発は可能です。
-3. **ビルド**: ネイティブアプリを実行する前に、必ず`npm run build`を実行してください。
+1. **WindowsでのiOS開発**: WindowsではiOSプラチE��フォームの追加はできません。macOSが忁E��です、E
+2. **Android開発**: WindowsでめEndroid開発は可能です、E
+3. **ビルチE*: ネイチE��ブアプリを実行する前に、忁E��`npm run build`を実行してください、E
 
 ---
 
 ## 🎯 次のアクション
 
-1. Webアプリをビルド: `npm run build`
-2. Androidプラットフォームを追加: `npx cap add android`
+1. WebアプリをビルチE `npm run build`
+2. AndroidプラチE��フォームを追加: `npx cap add android`
 3. Capacitorに同期: `npx cap sync`
 4. Android Studioで開く: `npx cap open android`
-5. 実機でテスト
+5. 実機でチE��チE
 
 ---
 
 最終更新: 2026-01-03
+
 

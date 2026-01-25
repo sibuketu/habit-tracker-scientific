@@ -1,43 +1,43 @@
-# コピペ用コマンド集
+# コピ�E用コマンド集
 
-> **重要**: このドキュメントは、**サルでもわかるように**実行方法を説明しています。
+> **重要E*: こ�Eドキュメント�E、E*サルでもわかるように**実行方法を説明してぁE��す、E
 > 
 > **前提**: 
-> - ターミナル（PowerShell）は**手動で開く必要があります**（AIは物理的に開けません）
-> - エクスプローラーから実行する方法（バッチファイルをダブルクリック）が**一番簡単**です
-> - エクスプローラーから実行する方法と、PowerShellから実行する方法の両方を記載しています
+> - ターミナル�E�EowerShell�E��E**手動で開く忁E��がありまぁE*�E�EIは物琁E��に開けません�E�E
+> - エクスプローラーから実行する方法（バチE��ファイルをダブルクリチE���E�が**一番簡十E*でぁE
+> - エクスプローラーから実行する方法と、PowerShellから実行する方法�E両方を記載してぁE��ぁE
 
-## Visual Regression Test（UI見た目テスト）
+## Visual Regression Test�E�EI見た目チE��ト！E
 
-### ベースライン作成（初回のみ）
+### ベ�Eスライン作�E�E��E回�Eみ�E�E
 
-**方法1: エクスプローラーから実行（一番簡単）**
+**方況E: エクスプローラーから実行（一番簡単！E*
 
-1. **エクスプローラーを開く**
-   - Windowsキーを押す
+1. **エクスプローラーを開ぁE*
+   - Windowsキーを押ぁE
    - 「エクスプローラー」と入力してEnter
-   - または、Windowsキー+Eを押す
+   - また�E、Windowsキー+Eを押ぁE
 
-2. **アドレスバーにパスを貼り付ける**
-   - エクスプローラーの上部にあるアドレスバーをクリック
-   - 以下をコピーして貼り付け（Ctrl+V）:
+2. **アドレスバ�Eにパスを貼り付けめE*
+   - エクスプローラーの上部にあるアドレスバ�EをクリチE��
+   - 以下をコピ�Eして貼り付け�E�Etrl+V�E�E
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-   - Enterキーを押す
+   - Enterキーを押ぁE
 
-3. **バッチファイルを実行**
-   - `create-visual-baseline.bat` というファイルを探す
-   - ダブルクリックする
+3. **バッチファイルを実衁E*
+   - `create-visual-baseline.bat` とぁE��ファイルを探ぁE
+   - ダブルクリチE��する
 
-**方法2: PowerShellから実行**
+**方況E: PowerShellから実衁E*
 
-1. **PowerShellを開く**
-   - Windowsキーを押す
+1. **PowerShellを開ぁE*
+   - Windowsキーを押ぁE
    - 「PowerShell」と入力してEnter
-   - または、Windowsキー+X → 「Windows PowerShell」を選択
+   - また�E、Windowsキー+X ↁE「Windows PowerShell」を選抁E
 
-2. **以下をコピペして実行（1行ずつ）**
+2. **以下をコピ�Eして実行！E行ずつ�E�E*
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 ```
@@ -45,30 +45,30 @@ cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\prim
 .\create-visual-baseline.bat
 ```
 
-### 通常のテスト実行
+### 通常のチE��ト実衁E
 
-**方法1: エクスプローラーから実行（一番簡単）**
+**方況E: エクスプローラーから実行（一番簡単！E*
 
-1. **エクスプローラーを開く**
-   - Windowsキー+Eを押す
+1. **エクスプローラーを開ぁE*
+   - Windowsキー+Eを押ぁE
 
-2. **アドレスバーにパスを貼り付ける**
-   - アドレスバーをクリック
-   - 以下をコピーして貼り付け:
+2. **アドレスバ�Eにパスを貼り付けめE*
+   - アドレスバ�EをクリチE��
+   - 以下をコピ�Eして貼り付け:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-   - Enterキーを押す
+   - Enterキーを押ぁE
 
-3. **バッチファイルを実行**
-   - `run-visual-test.bat` をダブルクリック
+3. **バッチファイルを実衁E*
+   - `run-visual-test.bat` をダブルクリチE��
 
-**方法2: PowerShellから実行**
+**方況E: PowerShellから実衁E*
 
-1. **PowerShellを開く**
-   - Windowsキー → 「PowerShell」と入力 → Enter
+1. **PowerShellを開ぁE*
+   - Windowsキー ↁE「PowerShell」と入劁EↁEEnter
 
-2. **以下をコピペして実行（1行ずつ）**
+2. **以下をコピ�Eして実行！E行ずつ�E�E*
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 ```
@@ -78,32 +78,32 @@ cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\prim
 
 ---
 
-## iOS版テスト（Maestro）
+## iOS版テスト！Eaestro�E�E
 
-### アプリ起動
+### アプリ起勁E
 
-**方法1: エクスプローラーから実行（一番簡単）**
+**方況E: エクスプローラーから実行（一番簡単！E*
 
-1. **エクスプローラーを開く**
-   - Windowsキー+Eを押す
+1. **エクスプローラーを開ぁE*
+   - Windowsキー+Eを押ぁE
 
-2. **アドレスバーにパスを貼り付ける**
-   - アドレスバーをクリック
-   - 以下をコピーして貼り付け:
+2. **アドレスバ�Eにパスを貼り付けめE*
+   - アドレスバ�EをクリチE��
+   - 以下をコピ�Eして貼り付け:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app
    ```
-   - Enterキーを押す
+   - Enterキーを押ぁE
 
-3. **バッチファイルを実行**
-   - `start-ios-app.bat` をダブルクリック
+3. **バッチファイルを実衁E*
+   - `start-ios-app.bat` をダブルクリチE��
 
-**方法2: PowerShellから実行**
+**方況E: PowerShellから実衁E*
 
-1. **PowerShellを開く**
-   - Windowsキー → 「PowerShell」と入力 → Enter
+1. **PowerShellを開ぁE*
+   - Windowsキー ↁE「PowerShell」と入劁EↁEEnter
 
-2. **以下をコピペして実行（1行ずつ）**
+2. **以下をコピ�Eして実行！E行ずつ�E�E*
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 ```
@@ -111,30 +111,30 @@ cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 .\start-ios-app.bat
 ```
 
-### テスト実行
+### チE��ト実衁E
 
-**方法1: エクスプローラーから実行（一番簡単）**
+**方況E: エクスプローラーから実行（一番簡単！E*
 
-1. **エクスプローラーを開く**
-   - Windowsキー+Eを押す
+1. **エクスプローラーを開ぁE*
+   - Windowsキー+Eを押ぁE
 
-2. **アドレスバーにパスを貼り付ける**
-   - アドレスバーをクリック
-   - 以下をコピーして貼り付け:
+2. **アドレスバ�Eにパスを貼り付けめE*
+   - アドレスバ�EをクリチE��
+   - 以下をコピ�Eして貼り付け:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app
    ```
-   - Enterキーを押す
+   - Enterキーを押ぁE
 
-3. **バッチファイルを実行**
-   - `run-ios-test.bat` をダブルクリック
+3. **バッチファイルを実衁E*
+   - `run-ios-test.bat` をダブルクリチE��
 
-**方法2: PowerShellから実行**
+**方況E: PowerShellから実衁E*
 
-1. **PowerShellを開く**
-   - Windowsキー → 「PowerShell」と入力 → Enter
+1. **PowerShellを開ぁE*
+   - Windowsキー ↁE「PowerShell」と入劁EↁEEnter
 
-2. **以下をコピペして実行（1行ずつ）**
+2. **以下をコピ�Eして実行！E行ずつ�E�E*
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 ```
@@ -144,30 +144,30 @@ cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 
 ---
 
-## 全テスト実行（E2E + Visual Regression）
+## 全チE��ト実行！E2E + Visual Regression�E�E
 
-**方法1: エクスプローラーから実行（一番簡単）**
+**方況E: エクスプローラーから実行（一番簡単！E*
 
-1. **エクスプローラーを開く**
-   - Windowsキー+Eを押す
+1. **エクスプローラーを開ぁE*
+   - Windowsキー+Eを押ぁE
 
-2. **アドレスバーにパスを貼り付ける**
-   - アドレスバーをクリック
-   - 以下をコピーして貼り付け:
+2. **アドレスバ�Eにパスを貼り付けめE*
+   - アドレスバ�EをクリチE��
+   - 以下をコピ�Eして貼り付け:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-   - Enterキーを押す
+   - Enterキーを押ぁE
 
-3. **バッチファイルを実行**
-   - `run-all-tests.bat` をダブルクリック
+3. **バッチファイルを実衁E*
+   - `run-all-tests.bat` をダブルクリチE��
 
-**方法2: PowerShellから実行**
+**方況E: PowerShellから実衁E*
 
-1. **PowerShellを開く**
-   - Windowsキー → 「PowerShell」と入力 → Enter
+1. **PowerShellを開ぁE*
+   - Windowsキー ↁE「PowerShell」と入劁EↁEEnter
 
-2. **以下をコピペして実行（1行ずつ）**
+2. **以下をコピ�Eして実行！E行ずつ�E�E*
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 ```
@@ -177,30 +177,30 @@ cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\prim
 
 ---
 
-## 開発サーバー起動
+## 開発サーバ�E起勁E
 
-**方法1: エクスプローラーから実行（一番簡単）**
+**方況E: エクスプローラーから実行（一番簡単！E*
 
-1. **エクスプローラーを開く**
-   - Windowsキー+Eを押す
+1. **エクスプローラーを開ぁE*
+   - Windowsキー+Eを押ぁE
 
-2. **アドレスバーにパスを貼り付ける**
-   - アドレスバーをクリック
-   - 以下をコピーして貼り付け:
+2. **アドレスバ�Eにパスを貼り付けめE*
+   - アドレスバ�EをクリチE��
+   - 以下をコピ�Eして貼り付け:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-   - Enterキーを押す
+   - Enterキーを押ぁE
 
-3. **バッチファイルを実行（あれば）**
-   - `start-dev-server.bat` をダブルクリック
+3. **バッチファイルを実行（あれ�E�E�E*
+   - `start-dev-server.bat` をダブルクリチE��
 
-**方法2: PowerShellから実行**
+**方況E: PowerShellから実衁E*
 
-1. **PowerShellを開く**
-   - Windowsキー → 「PowerShell」と入力 → Enter
+1. **PowerShellを開ぁE*
+   - Windowsキー ↁE「PowerShell」と入劁EↁEEnter
 
-2. **以下をコピペして実行（1行ずつ）**
+2. **以下をコピ�Eして実行！E行ずつ�E�E*
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 ```
@@ -210,13 +210,14 @@ npm run dev
 
 ---
 
-## 注意事項
+## 注意事頁E
 
-- **エクスプローラーから実行が一番簡単**: バッチファイル（.bat）は、エクスプローラーからダブルクリックで実行できます
-- **フルパスを使用**: 相対パスではなく、必ず完全なフルパスを使用してください
-- **パスが途中で切れないように**: コピペする際は、パスが途中で切れないように注意してください
+- **エクスプローラーから実行が一番簡十E*: バッチファイル�E�Ebat�E��E、エクスプローラーからダブルクリチE��で実行できまぁE
+- **フルパスを使用**: 相対パスではなく、忁E��完�Eなフルパスを使用してください
+- **パスが途中で刁E��なぁE��ぁE��**: コピ�Eする際�E、パスが途中で刁E��なぁE��ぁE��注意してください
 
 ---
 
 最終更新: 2026-01-03
+
 

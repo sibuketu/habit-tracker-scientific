@@ -1,0 +1,303 @@
+@charset "UTF-8";
+
+.paywall-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #1a1a1a;
+  color: #fff;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.paywall-header {
+  position: relative;
+  height: 40vh;
+  min-height: 300px;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url('/start-screen-bg-v2.webp');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem;
+}
+
+.paywall-header-content {
+  z-index: 2;
+  text-align: center;
+}
+
+.paywall-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.paywall-subtitle {
+  font-size: 1.1rem;
+  color: #e5e5e5;
+  margin-bottom: 1rem;
+}
+
+.paywall-body {
+  flex: 1;
+  padding: 2rem;
+  background-color: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paywall-features {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.paywall-feature-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.paywall-feature-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  min-width: 30px;
+  text-align: center;
+}
+
+.paywall-feature-text h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: #fff;
+}
+
+.paywall-feature-text p {
+  font-size: 0.9rem;
+  color: #a3a3a3;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.paywall-pricing {
+  width: 100%;
+  max-width: 500px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2rem;
+}
+
+.paywall-price-label {
+  font-size: 0.9rem;
+  color: #a3a3a3;
+  margin-bottom: 0.5rem;
+}
+
+.paywall-price-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f43f5e;
+  margin-bottom: 0.5rem;
+}
+
+.paywall-trial-text {
+  color: #10b981;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Pricing Selector */
+.paywall-pricing-selector {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+.paywall-plan-option {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  padding: 16px 12px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.paywall-plan-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.paywall-plan-option.selected {
+  background: rgba(255, 68, 68, 0.1);
+  border-color: #ff4444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 68, 68, 0.2);
+}
+
+.plan-badge {
+  position: absolute;
+  top: -10px;
+  background: #ff4444;
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.plan-name {
+  font-size: 12px;
+  color: #888;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.paywall-plan-option.selected .plan-name {
+  color: #ff4444;
+}
+
+.plan-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.plan-price .currency {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-right: 2px;
+}
+
+.plan-price .amount {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.plan-price .period {
+  font-size: 12px;
+  color: #888;
+  margin-left: 2px;
+}
+
+.plan-saving {
+  font-size: 11px;
+  color: #4caf50;
+  font-weight: 700;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.plan-subtext {
+  font-size: 11px;
+  color: #666;
+}
+
+.paywall-action-area {
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.paywall-cta-button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  /* Pill shape */
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  animation: pulse-glow 2s infinite;
+}
+
+.paywall-cta-button:active {
+  transform: scale(0.98);
+}
+
+.paywall-terms {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: #737373;
+  line-height: 1.5;
+}
+
+.paywall-terms a {
+  color: #a3a3a3;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.paywall-close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(244, 63, 94, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 63, 94, 0);
+  }
+}
+
+[data-pixel-art='true'] .paywall-cta-button {
+  font-family: 'DotGothic16', sans-serif;
+  border-radius: 4px;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+  animation: none;
+}

@@ -1,66 +1,67 @@
-# AntiGravity クイックスタート
+# AntiGravity クイチE��スターチE
 
-## 5分で始める
+## 5刁E��始めめE
 
-### 1. AntiGravityでフォルダを開く
+### 1. AntiGravityでフォルダを開ぁE
 
-1. AntiGravityを起動
-2. 「Open Folder」をクリック
-3. 以下のパスを選択：
+1. AntiGravityを起勁E
+2. 「Open Folder」をクリチE��
+3. 以下�Eパスを選択！E
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-4. セキュリティ警告 → 「Yes, I trust the authors」を選択
+4. セキュリチE��警呁EↁE「Yes, I trust the authors」を選抁E
 
-### 2. 依存関係のインストール
+### 2. 依存関係�Eインスト�Eル
 
-AntiGravityのターミナルで：
+AntiGravityのターミナルで�E�E
 
 ```bash
 npm install
 ```
 
-### 3. 開発サーバー起動
+### 3. 開発サーバ�E起勁E
 
 ```bash
 npm run dev
 ```
 
-ブラウザで `http://localhost:5173` を開く
+ブラウザで `http://localhost:5173` を開ぁE
 
 ---
 
-## 環境変数の設定
+## 環墁E��数の設宁E
 
-`.env`ファイルが存在しない場合：
+`.env`ファイルが存在しなぁE��合！E
 
 1. `.env_OPEN_GUIDE.md`を参照
-2. `.env`ファイルを作成
-3. `VITE_GEMINI_API_KEY`を設定（AI機能を使用する場合）
+2. `.env`ファイルを作�E
+3. `VITE_GEMINI_API_KEY`を設定！EI機�Eを使用する場合！E
 
 ---
 
-## よく使うコマンド
+## よく使ぁE��マンチE
 
 ```bash
-# 開発サーバー起動
+# 開発サーバ�E起勁E
 npm run dev
 
-# 本番ビルド
+# 本番ビルチE
 npm run build
 
 # ビルド結果のプレビュー
 npm run preview
 
-# リンター実行
+# リンター実衁E
 npm run lint
 ```
 
 ---
 
-## 詳細情報
+## 詳細惁E��
 
 - [AntiGravity移行ガイド](./ANTIGRAVITY_SETUP.md)
-- [IDE使い分けガイド](./IDE_USAGE_GUIDE.md)
+- [IDE使ぁE�Eけガイド](./IDE_USAGE_GUIDE.md)
 - [README](./README.md)
+
 

@@ -13,7 +13,7 @@ export default function BioHackScreen() {
       className="biohack-screen-container"
       style={{ padding: '1rem', maxWidth: '600px', margin: '0 auto' }}
     >
-      {/* 戻るボタン */}
+      {/* 戻る�Eタン */}
       <button
         onClick={() => {
           const event = new CustomEvent('navigateToScreen', { detail: 'labs' });
@@ -37,11 +37,11 @@ export default function BioHackScreen() {
           e.currentTarget.style.backgroundColor = '#f3f4f6';
         }}
       >
-        ← その他に戻る
-      </button>
+        ↁEそ�E他に戻めE      </button>
 
       {/* Bio-Hack Dashboard */}
       <BioHackDashboard />
     </div>
   );
 }
+

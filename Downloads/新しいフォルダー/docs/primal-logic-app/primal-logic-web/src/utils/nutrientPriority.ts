@@ -1,77 +1,67 @@
 /**
  * CarnivoreOS - Nutrient Priority System
  *
- * 【暫定的なTier分類 - 要Discord/Reddit分析で検証】
- * 
- * 現在の根拠：カーニボア専門家の見解 + 科学的重要度
- * 検証待ち：Discord/Reddit分析による実際の質問頻度
- * 
- * Tier 1: 科学的重要度★★★★★（低インスリン状態で必須）
- * Tier 2: 科学的重要度★★★☆☆以上（個人差あり、一部根拠薄い）
- * Tier 3: その他全て（詳細データ確認用）
- */
+ * 【暫定的なTier刁E��E- 要Discord/Reddit刁E��で検証、E *
+ * 現在の根拠�E�カーニ�Eア専門家の見解 + 科学皁E��要度
+ * 検証征E���E�Discord/Reddit刁E��による実際の質問頻度
+ *
+ * Tier 1: 科学皁E��要度☁E�E☁E�E☁E��低インスリン状態で忁E��！E * Tier 2: 科学皁E��要度☁E�E☁E�E☁E��上（個人差あり、一部根拠薁E���E�E * Tier 3: そ�E他�Eて�E�詳細チE�Eタ確認用�E�E */
 
 import { logError } from './errorHandler';
 
 /**
- * 栄養素の表示モード（debugモード削除：detailedと重複のため）
- * - simple: シンプルモード（電解質+脂質のみ）- カーニボア実践者向け
- * - standard: 標準モード（重要な栄養素10項目）- 初心者向け
- * - detailed: 詳細モード（全栄養素60項目以上）- データ重視ユーザー向け
+ * 栁E��素の表示モード！Eebugモード削除�E�detailedと重褁E�Eため�E�E * - simple: シンプルモード（電解質+脂質のみ�E�E カーニ�Eア実践老E��ぁE * - standard: 標準モード（重要な栁E��素10頁E���E�E 初忁E��E��ぁE * - detailed: 詳細モード（�E栁E��素60頁E��以上！E チE�Eタ重視ユーザー向け
  */
 export type NutrientDisplayMode = 'simple' | 'standard' | 'detailed';
 
 /**
- * 栄養素のTier分類（アプリ表示順）
- * 
- * 【暫定的】科学的重要度ベース、Discord/Reddit検証待ち
+ * Nutrient Tier Classification (app display order)
+ *
+ * [Provisional] Based on scientific importance, pending Discord/Reddit verification
  */
 export const NUTRIENT_TIERS = {
   /**
-   * Tier 1: 常に表示（科学的重要度★★★★★）
-   * 低インスリン状態で必須、カーニボア実践者の基本
+   * Tier 1: Always displayed (Scientific importance ☁E�E☁E�E☁E
+   * Essential in low insulin state, fundamental for carnivore practitioners
    */
   tier1: [
-    'fat',        // 脂質：主要エネルギー源（P:F比率 1:1.2-1.5推奨）
-    'protein',    // タンパク質：必須アミノ酸供給、筋肉・臓器・ホルモン
-    'sodium',     // ナトリウム：低インスリン→腎臓排出増加（移行期7000mg）
-    'potassium',  // カリウム：電解質バランス（Naと拮抗）
-    'magnesium',  // マグネシウム：300以上の酵素反応、筋肉・神経
+    'fat', // Fat: Primary energy source (P:F ratio 1:1.2-1.5 recommended)
+    'protein', // Protein: Essential amino acid supply, muscle, organs, hormones
+    'sodium', // Sodium: Low insulin ↁEincreased kidney excretion (7000mg during transition)
+    'potassium', // Potassium: Electrolyte balance (antagonistic with Na)
+    'magnesium', // Magnesium: 300+ enzyme reactions, muscle, nerves
   ] as const,
 
   /**
-   * Tier 2: 開閉式で表示（科学的重要度★★★☆☆以上）
-   * 
-   * 【要検証】以下の栄養素はDiscord質問頻度が低い可能性：
-   * - glycineMethionineRatio（専門的すぎ？）
-   * - calciumPhosphorusRatio（専門的すぎ？）
-   * - vitaminB12（肉で十分摂取可能？）
-   * - choline（レバー・卵で十分？）
+   * Tier 2: Displayed in collapsible format (Scientific importance ☁E�E☁E�E☁Eor higher)
+   *
+   * [Needs verification] The following nutrients may have low Discord question frequency:
+   * - glycineMethionineRatio (too specialized?)
+   * - calciumPhosphorusRatio (too specialized?)
+   * - vitaminB12 (sufficient from meat?)
+   * - choline (sufficient from liver and eggs?)
    */
   tier2: [
-    'omegaRatio',               // オメガ3/6比率：炎症管理（1:4以下推奨）- 重要度★★★★
-    'iron',                     // 鉄分（ヘム鉄）：女性は特に重要 - 重要度★★★★
-    'zinc',                     // 亜鉛：免疫・タンパク質合成 - 重要度★★★
-    'vitaminD',                 // ビタミンD：骨・免疫（太陽光連携）- 重要度★★★★
-    'vitaminA',                 // ビタミンA（レチノール）：視力・皮膚 - 重要度★★★
-    'vitaminK2',                // ビタミンK2（MK-4）：骨の健康 - 重要度★★★
-    'vitaminB12',               // ビタミンB12：神経機能（肉で十分？）- 重要度★★
-    'choline',                  // コリン：脳の健康（レバー・卵で十分？）- 重要度★★
-    'glycineMethionineRatio',   // グリシン:メチオニン比：コラーゲン・睡眠 - 重要度★★
-    'calciumPhosphorusRatio',   // カルシウム:リン比率：骨（肉のリン多い懸念）- 重要度★★
+    'omegaRatio', // Omega-3/6 ratio: Inflammation management (1:4 or less recommended) - Importance ☁E�E☁E�E
+    'iron', // Iron (heme iron): Especially important for women - Importance ☁E�E☁E�E
+    'zinc', // Zinc: Immune function, protein synthesis - Importance ☁E�E☁E    'vitaminD', // Vitamin D: Bone, immune (sunlight integration) - Importance ☁E�E☁E�E
+    'vitaminA', // Vitamin A (retinol): Vision, skin - Importance ☁E�E☁E    'vitaminK2', // Vitamin K2 (MK-4): Bone health - Importance ☁E�E☁E    'vitaminB12', // Vitamin B12: Nerve function (sufficient from meat?) - Importance ☁E�E
+    'choline', // Choline: Brain health (sufficient from liver and eggs?) - Importance ☁E�E
+    'glycineMethionineRatio', // Glycine:Methionine ratio: Collagen, sleep - Importance ☁E�E
+    'calciumPhosphorusRatio', // Calcium:Phosphorus ratio: Bone (concern about high P in meat) - Importance ☁E�E
   ] as const,
 
   /**
-   * Tier 3: デバッグモード・詳細モードで表示（その他全て）
-   * 一般的には必要ないが、詳細なデータを見たいユーザー向け
+   * Tier 3: Displayed in debug mode and detailed mode (all others)
+   * Generally not needed, but for users who want detailed data
    */
   tier3: [
-    // マクロ栄養素
+    // Macronutrients
     'carbs',
     'netCarbs',
     'fiber',
 
-    // その他のミネラル
+    // Other minerals
     'calcium',
     'phosphorus',
     'selenium',
@@ -87,11 +77,11 @@ export const NUTRIENT_TIERS = {
     'silicon',
     'vanadium',
 
-    // その他の脂溶性ビタミン
+    // Other fat-soluble vitamins
     'vitaminK',
     'vitaminE',
 
-    // 水溶性ビタミン
+    // Water-soluble vitamins
     'vitaminC',
     'vitaminB1',
     'vitaminB2',
@@ -101,13 +91,13 @@ export const NUTRIENT_TIERS = {
     'vitaminB7',
     'vitaminB9',
 
-    // その他
+    // Others
     'taurine',
     'omega3',
     'omega6',
     'pfRatio',
 
-    // 抗栄養素（Avoid Zone）
+    // Antinutrients (Avoid Zone)
     'phytates',
     'polyphenols',
     'flavonoids',
@@ -123,14 +113,14 @@ export const NUTRIENT_TIERS = {
     'solanine',
     'chaconine',
 
-    // 植物性食品（Avoid Zone）
+    // Plant-based foods (Avoid Zone)
     'plantProtein',
     'vegetableOil',
   ] as const,
 } as const;
 
 /**
- * Tier 1の栄養素を電解質とマクロ栄養素に分類
+ * Classify Tier 1 nutrients into electrolytes and macronutrients
  */
 export const TIER1_CATEGORIES = {
   electrolytes: ['sodium', 'potassium', 'magnesium'] as const,
@@ -138,7 +128,7 @@ export const TIER1_CATEGORIES = {
 } as const;
 
 /**
- * 栄養素の表示モードに応じて表示する栄養素を取得
+ * Get nutrients to display according to nutrient display mode
  */
 export function getNutrientsForMode(mode: NutrientDisplayMode): readonly string[] {
   switch (mode) {
@@ -154,8 +144,7 @@ export function getNutrientsForMode(mode: NutrientDisplayMode): readonly string[
 }
 
 /**
- * 栄養素のTierを取得
- */
+ * 栁E��素のTierを取征E */
 export function getNutrientTier(nutrientKey: string): 1 | 2 | 3 | null {
   if (NUTRIENT_TIERS.tier1.includes(nutrientKey as any)) return 1;
   if (NUTRIENT_TIERS.tier2.includes(nutrientKey as any)) return 2;
@@ -164,12 +153,9 @@ export function getNutrientTier(nutrientKey: string): 1 | 2 | 3 | null {
 }
 
 /**
- * 栄養素が特定のモードで表示されるかチェック
+ * 栁E��素が特定�Eモードで表示されるかチェチE��
  */
-export function isNutrientVisibleInMode(
-  nutrientKey: string,
-  mode: NutrientDisplayMode
-): boolean {
+export function isNutrientVisibleInMode(nutrientKey: string, mode: NutrientDisplayMode): boolean {
   const nutrients = getNutrientsForMode(mode);
   return nutrients.includes(nutrientKey);
 }
@@ -180,12 +166,12 @@ export function isNutrientVisibleInMode(
 const STORAGE_KEY = 'primal_logic_nutrient_display_mode';
 
 /**
- * 栄養素表示モードを取得
+ * Get nutrient display mode
  */
 export function getNutrientDisplayMode(): NutrientDisplayMode {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    // debugモードは削除済み（detailedに統合）
+    // Debug mode has been removed (merged into detailed)
     if (saved === 'debug') return 'detailed';
     if (saved && ['simple', 'standard', 'detailed'].includes(saved)) {
       return saved as NutrientDisplayMode;
@@ -193,39 +179,41 @@ export function getNutrientDisplayMode(): NutrientDisplayMode {
   } catch (error) {
     logError(error, { component: 'nutrientPriority', action: 'getNutrientDisplayMode' });
   }
-  // デフォルトは標準モード（初心者に優しい）
+  // Default is standard mode (beginner-friendly)
   return 'standard';
 }
 
 /**
- * 栄養素表示モードを保存
+ * Save nutrient display mode
  */
 export function saveNutrientDisplayMode(mode: NutrientDisplayMode): void {
   try {
     localStorage.setItem(STORAGE_KEY, mode);
+    // Fire custom event to notify components of the change
+    window.dispatchEvent(new CustomEvent('nutrientDisplayModeChanged'));
   } catch (error) {
     logError(error, { component: 'nutrientPriority', action: 'saveNutrientDisplayMode' });
   }
 }
 
 /**
- * 表示モードの説明を取得
+ * Get description of display mode
  */
 export function getNutrientDisplayModeDescription(mode: NutrientDisplayMode): string {
   switch (mode) {
     case 'simple':
-      return 'カーニボア実践者向け。電解質と脂質のみ表示。「数値管理」から「身体感覚」への回帰。';
+      return 'For carnivore practitioners. Display only electrolytes and fat. Return from "numerical management" to "body sensation".';
     case 'standard':
-      return '初心者向け。重要な栄養素10項目を表示。安心感のある情報量。';
+      return 'For beginners. Display 10 important nutrients. Comfortable amount of information.';
     case 'detailed':
-      return 'データ重視ユーザー向け。全ての栄養素（60項目以上）を表示。';
+      return 'For data-focused users. Display all nutrients (60+ items).';
     default:
       return '';
   }
 }
 
 /**
- * ペルソナ別のデフォルトモードを取得
+ * Get default mode for persona
  * @param persona - 'carnivore_practitioner' | 'beginner' | 'data_focused'
  */
 export function getDefaultModeForPersona(
@@ -233,12 +221,13 @@ export function getDefaultModeForPersona(
 ): NutrientDisplayMode {
   switch (persona) {
     case 'carnivore_practitioner':
-      return 'simple'; // カーニボア実践者：シンプル
+      return 'simple'; // Carnivore practitioner: Simple
     case 'beginner':
-      return 'standard'; // 初心者：標準
+      return 'standard'; // Beginner: Standard
     case 'data_focused':
-      return 'detailed'; // データ重視：詳細
+      return 'detailed'; // Data-focused: Detailed
     default:
       return 'standard';
   }
 }
+

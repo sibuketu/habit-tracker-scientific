@@ -329,6 +329,91 @@
   transition: color 0.3s ease;
 }
 
+/* Nutrient Gauge Grid */
+.minigauge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+/* Expand Nutrients Button */
+.expand-nutrients-btn {
+  width: 100%;
+  min-height: 44px; /* タッチフレンドリーなサイズ */
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+  background-color: var(--color-bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  touch-action: manipulation; /* タッチ操作の最適化 */
+}
+
+.expand-nutrients-btn:hover {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-accent);
+}
+
+.expand-nutrients-btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* Nutrient Group Styles */
+.nutrient-group {
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.nutrient-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.nutrient-group-icon {
+  font-size: 1.25rem;
+}
+
+.nutrient-group-title {
+  margin: 0;
+  font-weight: 600;
+}
+
+.nutrient-group-electrolytes {
+  background-color: var(--nutrient-group-electrolytes-bg);
+  border: 2px solid var(--nutrient-group-electrolytes-border);
+}
+
+.nutrient-group-electrolytes .nutrient-group-title {
+  color: var(--nutrient-group-electrolytes-text);
+}
+
+.nutrient-group-macros {
+  background-color: var(--nutrient-group-macros-bg);
+  border: 2px solid var(--nutrient-group-macros-border);
+}
+
+.nutrient-group-macros .nutrient-group-title {
+  color: var(--nutrient-group-macros-text);
+}
+
+.nutrient-group-others {
+  background-color: var(--nutrient-group-others-bg);
+  border: 2px solid var(--nutrient-group-others-border);
+}
+
+.nutrient-group-others .nutrient-group-title {
+  color: var(--nutrient-group-others-text);
+}
+
 /* Switch Container (デバッグモードなど) */
 .switch-container {
   padding: 1rem;

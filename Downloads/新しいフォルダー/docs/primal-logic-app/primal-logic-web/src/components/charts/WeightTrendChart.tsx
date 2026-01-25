@@ -1,8 +1,7 @@
 /**
  * Weight Trend Chart Component
  *
- * 体重の推移グラフを表示するコンポーネント
- * rechartsを使用して日次・週次・月次の推移を表示
+ * 体重の推移グラフを表示するコンポ�EネンチE * rechartsを使用して日次・週次・月次の推移を表示
  */
 
 import { useMemo } from 'react';
@@ -16,7 +15,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import type { DailyLog } from '../../types';
+import type { DailyLog } from '../../types/index';
 
 interface WeightTrendChartProps {
   logs: DailyLog[];
@@ -24,33 +23,27 @@ interface WeightTrendChartProps {
 }
 
 export default function WeightTrendChart({ logs, period = 'daily' }: WeightTrendChartProps) {
-  // データを期間ごとに集計
-  const chartData = useMemo(() => {
+  // チE�Eタを期間ごとに雁E��E  const chartData = useMemo(() => {
     if (logs.length === 0) return [];
 
-    // 体重データがあるログのみをフィルタ
+    // 体重チE�Eタがあるログのみをフィルタ
     const weightLogs = logs.filter((log) => log.weight !== undefined && log.weight !== null);
     if (weightLogs.length === 0) return [];
 
-    // 日付順にソート（古い順）
-    const sortedLogs = [...weightLogs].sort((a, b) => a.date.localeCompare(b.date));
+    // 日付頁E��ソート（古ぁE��E��E    const sortedLogs = [...weightLogs].sort((a, b) => a.date.localeCompare(b.date));
 
     if (period === 'daily') {
-      // 日次データ（最大30日分）
-      const recentLogs = sortedLogs.slice(-30);
+      // 日次チE�Eタ�E�最大30日刁E��E      const recentLogs = sortedLogs.slice(-30);
       return recentLogs.map((log) => ({
-        date: log.date.split('T')[0].split('-').slice(1).join('/'), // MM/DD形式
-        weight: Math.round((log.weight || 0) * 10) / 10, // 小数点第1位まで
+        date: log.date.split('T')[0].split('-').slice(1).join('/'), // MM/DD形弁E        weight: Math.round((log.weight || 0) * 10) / 10, // 小数点第1位まで
       }));
     } else if (period === 'weekly') {
-      // 週次データ（最大12週分）
-      const weeklyData: Record<string, { total: number; count: number }> = {};
+      // 週次チE�Eタ�E�最大12週刁E��E      const weeklyData: Record<string, { total: number; count: number }> = {};
 
       sortedLogs.forEach((log) => {
         const date = new Date(log.date);
         const weekStart = new Date(date);
-        weekStart.setDate(date.getDate() - date.getDay()); // 週の開始日（日曜日）
-        const weekKey = weekStart.toISOString().split('T')[0];
+        weekStart.setDate(date.getDate() - date.getDay()); // 週の開始日�E�日曜日�E�E        const weekKey = weekStart.toISOString().split('T')[0];
 
         if (!weeklyData[weekKey]) {
           weeklyData[weekKey] = { total: 0, count: 0 };
@@ -71,8 +64,7 @@ export default function WeightTrendChart({ logs, period = 'daily' }: WeightTrend
           };
         });
     } else {
-      // 月次データ（最大12ヶ月分）
-      const monthlyData: Record<string, { total: number; count: number }> = {};
+      // 月次チE�Eタ�E�最大12ヶ月�E�E�E      const monthlyData: Record<string, { total: number; count: number }> = {};
 
       sortedLogs.forEach((log) => {
         const date = new Date(log.date);
@@ -102,7 +94,7 @@ export default function WeightTrendChart({ logs, period = 'daily' }: WeightTrend
   if (chartData.length === 0) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center', color: '#78716c' }}>
-        体重データがありません
+        体重チE�Eタがありません
       </div>
     );
   }
@@ -133,7 +125,7 @@ export default function WeightTrendChart({ logs, period = 'daily' }: WeightTrend
             formatter={(value: number | undefined) =>
               value !== undefined ? [`${value}kg`, '体重'] : ['', '']
             }
-            labelFormatter={(label) => `日付: ${label}`}
+            labelFormatter={(label) => `日仁E ${label}`}
             contentStyle={{
               backgroundColor: '#18181b',
               border: '1px solid #27272a',
@@ -158,3 +150,4 @@ export default function WeightTrendChart({ logs, period = 'daily' }: WeightTrend
     </div>
   );
 }
+

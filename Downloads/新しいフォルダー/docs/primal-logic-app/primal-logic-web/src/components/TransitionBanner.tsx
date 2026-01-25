@@ -1,53 +1,26 @@
-/**
- * Primal Logic - Transition Banner Component
- *
- * Phase 1: 移行期間サポート - 移行期間バナー
- * 移行期間中（開始から30日間）のみ表示されるバナー
- */
-
-import React from 'react';
+﻿import React from "react";
 
 interface TransitionBannerProps {
-  daysInTransition: number; // 移行期間中の日数（0-30）
-  totalDays: number; // 移行期間の総日数（30）
-  onPress: () => void; // バナーをタップした時のコールバック
+  progress: number;
+  onClick: () => void;
 }
 
-export default function TransitionBanner({
-  daysInTransition,
-  totalDays,
-  onPress,
-}: TransitionBannerProps) {
-  const progress = Math.min((daysInTransition / totalDays) * 100, 100);
-  const remainingDays = totalDays - daysInTransition;
-
+export default function TransitionBanner({ progress, onClick }: TransitionBannerProps) {
   return (
-    <div
-      onClick={onPress}
-      style={{
-        backgroundColor: '#3b82f6',
-        color: 'white',
-        padding: '1rem',
-        borderRadius: '8px',
-        marginBottom: '1rem',
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-      }}
-    >
-      <span style={{ fontSize: '1.5rem' }}>ℹ️</span>
-      <div style={{ flex: 1 }}>
-        <div style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '0.25rem' }}>
-          移行期間: {daysInTransition}/{totalDays}日（{Math.round(progress)}%）
+    <div className="transition-banner" onClick={onClick} style={{
+      background: "linear-gradient(to right, #3b82f6, #8b5cf6)",
+      padding: "12px",
+      borderRadius: "8px",
+      margin: "16px",
+      color: "white",
+      cursor: "pointer"
+    }}>
+      <div className="banner-content">
+        <strong>🦁 Carnivore Transition</strong>
+        <div className="progress-bar-bg" style={{ background: "rgba(255,255,255,0.3)", height: "4px", marginTop: "8px", borderRadius: "2px" }}>
+          <div className="progress-bar-fill" style={{ width: `${progress}%`, background: "white", height: "100%", borderRadius: "2px" }} />
         </div>
-        <div style={{ fontSize: '12px', opacity: 0.9 }}>適応モード: 塩分目標を増量中</div>
-        {remainingDays > 0 && (
-          <div style={{ fontSize: '11px', opacity: 0.8, marginTop: '0.25rem' }}>
-            あと{remainingDays}日で移行期間終了
-          </div>
-        )}
+        <div style={{ fontSize: "12px", marginTop: "4px" }}>{progress}% Complete</div>
       </div>
     </div>
   );

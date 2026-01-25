@@ -1,7 +1,7 @@
 /**
- * Primal Logic - データ削除画面
+ * CarnivoreOS - チE�Eタ削除画面
  *
- * GDPR対応：ユーザーデータの削除機能
+ * GDPR対応：ユーザーチE�Eタの削除機�E
  */
 
 import { useState } from 'react';
@@ -20,14 +20,14 @@ export default function DataDeleteScreen() {
       return;
     }
 
-    if (!confirm('本当に全てのデータを削除しますか？この操作は取り消せません。')) {
+    if (!confirm('本当に全てのチE�Eタを削除しますか�E�この操作�E取り消せません、E)) {
       return;
     }
 
     setDeleting(true);
 
     try {
-      // ローカルストレージのデータを削除
+      // ローカルストレージのチE�Eタを削除
       const keys = Object.keys(localStorage);
       keys.forEach((key) => {
         if (key.startsWith('primal_logic_')) {
@@ -35,30 +35,26 @@ export default function DataDeleteScreen() {
         }
       });
 
-      // Supabaseのデータを削除（認証済みユーザーの場合）
-      if (isSupabaseAvailable() && supabase) {
+      // SupabaseのチE�Eタを削除�E�認証済みユーザーの場合！E      if (isSupabaseAvailable() && supabase) {
         const {
           data: { session },
         } = await supabase.auth.getSession();
         if (session) {
-          // ユーザーのデータを削除（将来的に実装）
-          // await supabase.from('daily_logs').delete().eq('user_id', session.user.id);
+          // ユーザーのチE�Eタを削除�E�封E��皁E��実裁E��E          // await supabase.from('daily_logs').delete().eq('user_id', session.user.id);
           // await supabase.from('user_profiles').delete().eq('user_id', session.user.id);
 
-          // ログアウト（アカウント削除はサーバー側で実装が必要）
-          await supabase.auth.signOut();
+          // ログアウト（アカウント削除はサーバ�E側で実裁E��忁E��E��E          await supabase.auth.signOut();
         }
       }
 
       setDeleted(true);
 
-      // 3秒後にページをリロード
-      setTimeout(() => {
+      // 3秒後にペ�EジをリローチE      setTimeout(() => {
         window.location.reload();
       }, 3000);
     } catch (error) {
       logError(error, { component: 'DataDeleteScreen', action: 'handleDelete' });
-      alert(getUserFriendlyErrorMessage(error) || 'データの削除に失敗しました');
+      alert(getUserFriendlyErrorMessage(error) || 'チE�Eタの削除に失敗しました');
     } finally {
       setDeleting(false);
     }
@@ -73,27 +69,25 @@ export default function DataDeleteScreen() {
           }}
           className="data-delete-back-button"
         >
-          ← 設定に戻る
-        </button>
-        <h1 className="data-delete-title">データ削除</h1>
+          ↁE設定に戻めE        </button>
+        <h1 className="data-delete-title">チE�Eタ削除</h1>
         <div className="data-delete-warning">
-          <h2>⚠️ 警告</h2>
-          <p>この操作を実行すると、以下のデータが完全に削除されます：</p>
+          <h2>⚠�E�E警呁E/h2>
+          <p>こ�E操作を実行すると、以下�EチE�Eタが完�Eに削除されます！E/p>
           <ul>
             <li>全ての食事記録</li>
-            <li>プロファイル情報</li>
-            <li>日記</li>
-            <li>体重・体脂肪率の記録</li>
-            <li>アプリ設定</li>
-            <li>アカウント情報（認証済みユーザーの場合）</li>
+            <li>プロファイル惁E��</li>
+            <li>日訁E/li>
+            <li>体重・体脂肪玁E�E記録</li>
+            <li>アプリ設宁E/li>
+            <li>アカウント情報�E�認証済みユーザーの場合！E/li>
           </ul>
-          <p className="data-delete-warning-strong">この操作は取り消せません。</p>
+          <p className="data-delete-warning-strong">こ�E操作�E取り消せません、E/p>
         </div>
 
         <div className="data-delete-confirm">
           <label htmlFor="confirm-input" className="data-delete-label">
-            削除を確認するには、「削除」と入力してください：
-          </label>
+            削除を確認するには、「削除」と入力してください�E�E          </label>
           <input
             id="confirm-input"
             type="text"
@@ -109,15 +103,16 @@ export default function DataDeleteScreen() {
           disabled={deleting || confirmText !== '削除'}
           className="data-delete-button"
         >
-          {deleting ? '削除中...' : '全てのデータを削除'}
+          {deleting ? '削除中...' : '全てのチE�Eタを削除'}
         </button>
 
         {deleted && (
           <div className="data-delete-success">
-            ✅ データの削除が完了しました。ページをリロードします...
+            ✁EチE�Eタの削除が完亁E��ました。�EージをリロードしまぁE..
           </div>
         )}
       </div>
     </div>
   );
 }
+

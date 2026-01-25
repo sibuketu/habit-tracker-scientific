@@ -1,73 +1,74 @@
-# Visual Regression Test ガイド
+# Visual Regression Test ガイチE
 
-## 概要
+## 概要E
 
-Visual Regression Test（VRT）は、UIの見た目が意図せず変更されていないかを検出するテストです。スクリーンショットを比較して、デザインの変更を自動的に検出します。
+Visual Regression Test�E�ERT�E��E、UIの見た目が意図せず変更されてぁE��ぁE��を検�EするチE��トです。スクリーンショチE��を比輁E��て、デザインの変更を�E動的に検�Eします、E
 
-## 実行方法
+## 実行方況E
 
-### 初回実行（ベースライン作成）
+### 初回実行（�Eースライン作�E�E�E
 
 ```bash
 npm run test:visual:update
 ```
 
-初回実行時は、現在のUIをベースラインとして保存します。
+初回実行時は、現在のUIを�Eースラインとして保存します、E
 
-### 通常のテスト実行
+### 通常のチE��ト実衁E
 
 ```bash
 npm run test:visual
 ```
 
-コードを変更した後、このコマンドでスクリーンショットを比較します。
+コードを変更した後、このコマンドでスクリーンショチE��を比輁E��ます、E
 
-### UIモードで実行
+### UIモードで実衁E
 
 ```bash
 npm run test:ui
 ```
 
-ブラウザでテスト結果を確認できます。
+ブラウザでチE��ト結果を確認できます、E
 
-## テスト対象画面
+## チE��ト対象画面
 
-- ホーム画面（デスクトップ/モバイル）
-- 入力画面（ButcherSelect）（デスクトップ/モバイル）
-- 履歴画面（デスクトップ/モバイル）
-- Labs画面（デスクトップ）
-- 設定画面（デスクトップ）
-- AIチャットモーダル（デスクトップ）
-- 栄養素ゲージ（詳細表示）
+- ホ�Eム画面�E�デスクトッチEモバイル�E�E
+- 入力画面�E�EutcherSelect�E�（デスクトッチEモバイル�E�E
+- 履歴画面�E�デスクトッチEモバイル�E�E
+- Labs画面�E�デスクトップ！E
+- 設定画面�E�デスクトップ！E
+- AIチャチE��モーダル�E�デスクトップ！E
+- 栁E��素ゲージ�E�詳細表示�E�E
 - Argument Card表示
 
-## スクリーンショットの保存場所
+## スクリーンショチE��の保存場所
 
 ```
 primal-logic-web/test-results/
 ```
 
-## 差分の確認方法
+## 差刁E�E確認方況E
 
-テストが失敗した場合、`test-results/`フォルダーに以下が保存されます：
+チE��トが失敗した場合、`test-results/`フォルダーに以下が保存されます！E
 
-- `*-actual.png`: 実際のスクリーンショット
-- `*-expected.png`: 期待されるスクリーンショット
-- `*-diff.png`: 差分画像
+- `*-actual.png`: 実際のスクリーンショチE��
+- `*-expected.png`: 期征E��れるスクリーンショチE��
+- `*-diff.png`: 差刁E��僁E
 
 ## 許容誤差の調整
 
-`playwright.config.ts`の`maxDiffPixels`で調整できます：
+`playwright.config.ts`の`maxDiffPixels`で調整できます！E
 
 ```typescript
 await expect(page).toHaveScreenshot('home-screen.png', {
-  maxDiffPixels: 100, // 100ピクセルまでの差分を許容
+  maxDiffPixels: 100, // 100ピクセルまでの差刁E��許容
 });
 ```
 
-## 注意事項
+## 注意事頁E
 
-- 動的コンテンツ（日付、ランダムな値など）は除外する必要があります
-- 初回実行時は必ず`--update-snapshots`フラグを使用してください
-- 意図的なUI変更がある場合は、ベースラインを更新してください
+- 動的コンチE��チE��日付、ランダムな値など�E��E除外する忁E��がありまぁE
+- 初回実行時は忁E��`--update-snapshots`フラグを使用してください
+- 意図皁E��UI変更がある場合�E、�Eースラインを更新してください
+
 

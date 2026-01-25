@@ -1,110 +1,111 @@
 /**
- * Primal Logic - Knowledge Base (Primal Knowledge)
+ * CarnivoreOS - Knowledge Base (Primal Knowledge)
  *
- * カーニボアに対する批判や誤解を解くためのQ&Aデータ
- * isVisibleフラグで表示/非表示を制御可能
+ * Q&A data to address criticisms and misconceptions about carnivore
+ * Display/hide can be controlled with isVisible flag
  */
 
 export type KnowledgeItem = {
   id: string;
-  title: string; // 例: "日本人は米食に適している？"
-  content: string; // 反論の本文
-  isVisible: boolean; // これをfalseにすれば本番で消せる
+  title: string; // e.g., "Are Japanese people suited for rice?"
+  content: string; // Main text of rebuttal
+  isVisible: boolean; // Set to false to hide in production
 };
 
 export const KNOWLEDGE_DATA: KnowledgeItem[] = [
   {
     id: 'rice_myth',
-    title: '日本人の腸は米に合っているという誤解',
-    content: `農耕の歴史は浅く、遺伝子レベルでの適応は起きていません。また、歴史的にも庶民が白米を常食したのはごく最近のことです。
+    title: 'Misconception: Japanese intestines are suited for rice',
+    content: `The history of agriculture is short, and genetic-level adaptation has not occurred. Also, historically, common people eating white rice as a staple is very recent.
 
-江戸時代の庶民は玄米や雑穀を食べており、白米は富裕層のものでした。明治以降に精米技術が普及し、戦後の食糧難を経て、ようやく白米が一般化しました。
+Common people in the Edo period ate brown rice and mixed grains, and white rice was for the wealthy. After the Meiji period, rice polishing technology spread, and after post-war food shortages, white rice finally became common.
 
-つまり、「日本人が米を食べてきた歴史」はせいぜい100年程度であり、遺伝子レベルでの適応には数千年が必要です。`,
+In other words, the "history of Japanese people eating rice" is at most about 100 years, and genetic-level adaptation requires thousands of years.`,
     isVisible: true,
   },
   {
     id: 'fiber_essential',
-    title: '食物繊維は必須という誤解',
-    content: `食物繊維は「必須栄養素」ではありません。むしろ、非消化性の刺激物として作用します。
+    title: 'Misconception: Fiber is essential',
+    content: `Fiber is not an "essential nutrient." Rather, it acts as a non-digestible irritant.
 
-研究によると、食物繊維を完全に除去することで便秘が100%治癒したという報告があります（Ho et al., 2012）。食物繊維は「腸の渋滞」を引き起こし、カーニボアダイエットでは不要です。
+According to research, there are reports that constipation was 100% cured by completely eliminating fiber (Ho et al., 2012). Fiber causes "intestinal congestion" and is unnecessary in a carnivore diet.
 
-動物性食品には食物繊維は含まれていませんが、消化器系は正常に機能します。`,
+Animal foods do not contain fiber, but the digestive system functions normally.`,
     isVisible: true,
   },
   {
     id: 'vitamin_c_meat',
-    title: '肉にはビタミンCがないという誤解',
-    content: `肉にはビタミンCが含まれています。さらに重要なのは、カーニボア（低炭水化物）状態では、ビタミンCの必要量が大幅に減少することです。
+    title: 'Misconception: Meat has no vitamin C',
+    content: `Meat contains vitamin C. More importantly, in a carnivore (low-carb) state, vitamin C requirements are significantly reduced.
 
-Glucose-Ascorbate Antagonism理論によると、炭水化物（グルコース）が多いとビタミンCの必要量が増えますが、ケトーシス状態では約10mg/日で十分です。
+According to the Glucose-Ascorbate Antagonism theory, high carbohydrates (glucose) increase vitamin C needs, but in a ketosis state, about 10mg/day is sufficient.
 
-通常の肉食だけで、この必要量は十分に満たされます。`,
+Normal meat consumption alone sufficiently meets this requirement.`,
     isVisible: true,
   },
   {
     id: 'saturated_fat_heart',
-    title: '飽和脂肪酸が心臓病を引き起こすという誤解',
-    content: `飽和脂肪酸は動脈を「詰まらせる」のではありません。実際に動脈を詰まらせるのは「炎症」です。
+    title: 'Misconception: Saturated fat causes heart disease',
+    content: `Saturated fat does not "clog" arteries. What actually clogs arteries is "inflammation."
 
-コレステロールは「消防士」であり、「火事（炎症）」の原因ではありません。炎症の原因は、糖質、オメガ6過多、ストレスなどです。
+Cholesterol is a "firefighter," not the cause of the "fire (inflammation)." The causes of inflammation are carbohydrates, excess omega-6, stress, etc.
 
-カーニボアダイエットでは、飽和脂肪酸は安定したエネルギー源として機能し、炎症を引き起こしません。`,
+In a carnivore diet, saturated fat functions as a stable energy source and does not cause inflammation.`,
     isVisible: true,
   },
   {
     id: 'red_meat_cancer',
-    title: '赤肉が癌を引き起こすという誤解',
-    content: `WHOの「赤肉は発癌性がある可能性」という分類は、観察研究に基づいており、因果関係は証明されていません。
+    title: 'Misconception: Red meat causes cancer',
+    content: `The WHO's classification of "red meat may be carcinogenic" is based on observational studies, and causality has not been proven.
 
-実際、これらの研究では「加工肉」と「未加工の赤肉」が混同されており、また、赤肉を食べる人々の他の生活習慣（喫煙、過度の飲酒、低運動量など）が考慮されていません。
+In fact, these studies confuse "processed meat" and "unprocessed red meat," and other lifestyle factors of people who eat red meat (smoking, excessive drinking, low exercise, etc.) are not considered.
 
-未加工の赤肉（ステーキ、レバーなど）は、栄養密度が高く、癌リスクを増加させる科学的証拠はありません。`,
+Unprocessed red meat (steak, liver, etc.) is highly nutrient-dense, and there is no scientific evidence that it increases cancer risk.`,
     isVisible: true,
   },
   {
     id: 'kidney_disease',
-    title: '高タンパク質が腎臓に悪いという誤解',
-    content: `「高タンパク質が腎臓に悪い」という説は、既に腎臓病を患っている人を対象とした研究に基づいています。
+    title: 'Misconception: High protein is bad for kidneys',
+    content: `The theory that "high protein is bad for kidneys" is based on studies of people who already have kidney disease.
 
-健康な腎臓にとって、高タンパク質は問題ではありません。むしろ、タンパク質は筋肉、ホルモン、酵素の生成に不可欠です。
+For healthy kidneys, high protein is not a problem. Rather, protein is essential for the production of muscles, hormones, and enzymes.
 
-カーニボアダイエットでは、適切な量のタンパク質（体重1kgあたり1.5-2g）を摂取し、腎機能は正常に保たれます。`,
+In a carnivore diet, appropriate amounts of protein (1.5-2g per kg of body weight) are consumed, and kidney function is maintained normally.`,
     isVisible: true,
   },
   {
     id: 'cholesterol_bad',
-    title: 'コレステロールが悪いという誤解',
-    content: `コレステロールは「悪者」ではありません。コレステロールは、細胞膜、ホルモン（テストステロン、エストロゲンなど）、ビタミンDの前駆体として不可欠です。
+    title: 'Misconception: Cholesterol is bad',
+    content: `Cholesterol is not a "villain." Cholesterol is essential as a component of cell membranes, hormones (testosterone, estrogen, etc.), and as a precursor to vitamin D.
 
-「LDL（悪玉コレステロール）」という名称も誤解を招きます。LDLはエネルギーを運ぶ「運搬車」であり、問題は「運搬車」ではなく「道路の渋滞（炎症）」です。
+The name "LDL (bad cholesterol)" is also misleading. LDL is a "delivery truck" that transports energy, and the problem is not the "truck" but "traffic congestion (inflammation)" on the road.
 
-カーニボアダイエットでは、コレステロール値が上昇することがありますが、これは正常な生理的反応であり、健康リスクではありません。`,
+In a carnivore diet, cholesterol levels may rise, but this is a normal physiological response and not a health risk.`,
     isVisible: true,
   },
   {
     id: 'balanced_diet',
-    title: 'バランスの取れた食事が必要という誤解',
-    content: `「バランスの取れた食事」という概念は、栄養密度の低い植物性食品を正当化するためのものです。
+    title: 'Misconception: A balanced diet is necessary',
+    content: `The concept of a "balanced diet" is to justify low-nutrient-density plant foods.
 
-動物性食品（肉、卵、魚、内臓）には、人間が必要とするすべての栄養素が含まれており、植物性食品は不要です。
+Animal foods (meat, eggs, fish, organ meats) contain all the nutrients humans need, and plant foods are unnecessary.
 
-カーニボアダイエットは、進化的に最も「バランスの取れた」食事です。なぜなら、人類の祖先が何百万年も食べてきたものだからです。`,
+The carnivore diet is evolutionarily the most "balanced" diet because it is what human ancestors ate for millions of years.`,
     isVisible: true,
   },
 ];
 
 /**
- * 表示可能な知識項目のみを取得
+ * Get only visible knowledge items
  */
 export function getVisibleKnowledge(): KnowledgeItem[] {
   return KNOWLEDGE_DATA.filter((item) => item.isVisible);
 }
 
 /**
- * IDで知識項目を取得
+ * Get knowledge item by ID
  */
 export function getKnowledgeById(id: string): KnowledgeItem | undefined {
   return KNOWLEDGE_DATA.find((item) => item.id === id);
 }
+

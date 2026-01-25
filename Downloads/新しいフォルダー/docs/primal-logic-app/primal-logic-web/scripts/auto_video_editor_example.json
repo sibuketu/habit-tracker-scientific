@@ -1,0 +1,40 @@
+{
+  "images": [
+    {
+      "path": "assets/images/government_guidelines_doc.jpg",
+      "start": 0,
+      "duration": 5,
+      "description": "繧｢繝｡繝ｪ繧ｫ謾ｿ蠎懊・譬・､翫ぎ繧､繝峨Λ繧､繝ｳ譁・嶌"
+    },
+    {
+      "path": "assets/images/anatomy_diagram.jpg",
+      "start": 5,
+      "duration": 8,
+      "description": "繝ｪ繧｢繝ｫ縺ｪ隗｣蜑門峙"
+    },
+    {
+      "path": "assets/images/research_graph.jpg",
+      "start": 13,
+      "duration": 5,
+      "description": "遐皮ｩｶ繝・・繧ｿ縺ｮ繧ｰ繝ｩ繝・
+    }
+  ],
+  "subtitles": [
+    {
+      "text": "The U.S. government just admitted it.",
+      "start": 0,
+      "duration": 3
+    },
+    {
+      "text": "January 7th, 2025.",
+      "start": 3,
+      "duration": 2
+    },
+    {
+      "text": "The official U.S. dietary guidelines",
+      "start": 5,
+      "duration": 3
+    }
+  ]
+}
+

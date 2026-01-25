@@ -1,0 +1,4 @@
+Test-Path "C:\Program Files (x86)\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd"
+Test-Path "C:\Program Files\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd"
+Test-Path "$env:LOCALAPPDATA\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd"
+Test-Path "C:\Program Files\Docker\Docker\resources\bin\docker.exe"

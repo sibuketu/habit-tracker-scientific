@@ -1,10 +1,10 @@
 /**
- * Primal Logic - Profile Completion Calculator
+ * CarnivoreOS - Profile Completion Calculator
  *
- * プロフィール完成度を計算するユーティリティ
+ * プロフィール完�E度を計算するユーチE��リチE��
  */
 
-import type { UserProfile } from '../types';
+import type { UserProfile } from '../types/index';
 
 export type FieldCategory =
   | 'basic'
@@ -19,40 +19,33 @@ interface ProfileFieldConfig {
   key: keyof UserProfile;
   category: FieldCategory;
   priority: 'required' | 'recommended' | 'optional';
-  weight: number; // 重要度（required: 3, recommended: 2, optional: 1）
-}
+  weight: number; // 重要度�E�Eequired: 3, recommended: 2, optional: 1�E�E}
 
 const PROFILE_FIELDS: ProfileFieldConfig[] = [
-  // 基本情報（必須）
-  { key: 'gender', category: 'basic', priority: 'required', weight: 3 },
+  // 基本惁E���E�忁E��！E  { key: 'gender', category: 'basic', priority: 'required', weight: 3 },
   { key: 'goal', category: 'basic', priority: 'required', weight: 3 },
   { key: 'metabolicStatus', category: 'basic', priority: 'required', weight: 3 },
 
-  // 基本情報（推奨）
-  { key: 'height', category: 'basic', priority: 'recommended', weight: 2 },
+  // 基本惁E���E�推奨�E�E  { key: 'height', category: 'basic', priority: 'recommended', weight: 2 },
   { key: 'weight', category: 'basic', priority: 'recommended', weight: 2 },
   { key: 'age', category: 'basic', priority: 'recommended', weight: 2 },
   { key: 'mode', category: 'basic', priority: 'recommended', weight: 2 },
 
-  // 体組成（推奨）
-  { key: 'bodyComposition', category: 'body', priority: 'recommended', weight: 2 },
+  // 体絁E�E�E�推奨�E�E  { key: 'bodyComposition', category: 'body', priority: 'recommended', weight: 2 },
   { key: 'activityLevel', category: 'body', priority: 'recommended', weight: 2 },
   { key: 'exerciseIntensity', category: 'body', priority: 'recommended', weight: 2 },
   { key: 'exerciseFrequency', category: 'body', priority: 'recommended', weight: 2 },
 
-  // 健康状態（推奨）
-  { key: 'stressLevel', category: 'health', priority: 'recommended', weight: 2 },
+  // 健康状態（推奨�E�E  { key: 'stressLevel', category: 'health', priority: 'recommended', weight: 2 },
   { key: 'sleepHours', category: 'health', priority: 'recommended', weight: 2 },
   { key: 'thyroidFunction', category: 'health', priority: 'recommended', weight: 2 },
   { key: 'sunExposureFrequency', category: 'health', priority: 'recommended', weight: 2 },
 
-  // 女性特有（推奨・任意）
-  { key: 'isPregnant', category: 'health', priority: 'recommended', weight: 2 },
+  // 女性特有（推奨・任意！E  { key: 'isPregnant', category: 'health', priority: 'recommended', weight: 2 },
   { key: 'isBreastfeeding', category: 'health', priority: 'recommended', weight: 2 },
   { key: 'isPostMenopause', category: 'health', priority: 'recommended', weight: 2 },
 
-  // ライフスタイル（任意）
-  { key: 'dairyTolerance', category: 'lifestyle', priority: 'optional', weight: 1 },
+  // ライフスタイル�E�任意！E  { key: 'dairyTolerance', category: 'lifestyle', priority: 'optional', weight: 1 },
   { key: 'digestiveIssues', category: 'lifestyle', priority: 'optional', weight: 1 },
   { key: 'caffeineIntake', category: 'lifestyle', priority: 'optional', weight: 1 },
   { key: 'alcoholFrequency', category: 'lifestyle', priority: 'optional', weight: 1 },
@@ -60,52 +53,45 @@ const PROFILE_FIELDS: ProfileFieldConfig[] = [
   { key: 'supplementVitaminD', category: 'lifestyle', priority: 'optional', weight: 1 },
   { key: 'supplementIodine', category: 'lifestyle', priority: 'optional', weight: 1 },
 
-  // 疾患・症状（任意）
-  { key: 'inflammationLevel', category: 'disease', priority: 'optional', weight: 1 },
+  // 疾患・痁E���E�任意！E  { key: 'inflammationLevel', category: 'disease', priority: 'optional', weight: 1 },
   { key: 'mentalHealthStatus', category: 'disease', priority: 'optional', weight: 1 },
   { key: 'diabetes', category: 'disease', priority: 'optional', weight: 1 },
   { key: 'autoimmuneConditions', category: 'disease', priority: 'optional', weight: 1 },
   { key: 'chronicDiseases', category: 'disease', priority: 'optional', weight: 1 },
 
-  // 血液検査値（任意）
-  { key: 'vitaminDLevel', category: 'lab', priority: 'optional', weight: 1 },
+  // 血液検査値�E�任意！E  { key: 'vitaminDLevel', category: 'lab', priority: 'optional', weight: 1 },
   { key: 'b12Level', category: 'lab', priority: 'optional', weight: 1 },
   { key: 'ferritin', category: 'lab', priority: 'optional', weight: 1 },
   { key: 'omega3Index', category: 'lab', priority: 'optional', weight: 1 },
 ];
 
 /**
- * フィールドが入力されているかチェック
+ * フィールドが入力されてぁE��かチェチE��
  */
 function isFieldFilled(profile: UserProfile | null, key: keyof UserProfile): boolean {
   if (!profile) return false;
 
   const value = profile[key];
 
-  // undefined, nullは未入力
-  if (value === undefined || value === null) return false;
+  // undefined, nullは未入劁E  if (value === undefined || value === null) return false;
 
-  // boolean型はfalseでも入力済みとみなす
-  if (typeof value === 'boolean') return true;
+  // boolean型�Efalseでも�E力済みとみなぁE  if (typeof value === 'boolean') return true;
 
-  // 数値型は0以外を入力済みとみなす
-  if (typeof value === 'number') return value > 0;
+  // 数値型�E0以外を入力済みとみなぁE  if (typeof value === 'number') return value > 0;
 
-  // 文字列型は空文字列でない場合に入力済み
+  // 斁E���E型�E空斁E���EでなぁE��合に入力済み
   if (typeof value === 'string') return value.trim() !== '';
 
-  // 配列型は空配列でない場合に入力済み
+  // 配�E型�E空配�EでなぁE��合に入力済み
   if (Array.isArray(value)) return value.length > 0;
 
-  // オブジェクト型はnull以外を入力済みとみなす
-  if (typeof value === 'object') return true;
+  // オブジェクト型はnull以外を入力済みとみなぁE  if (typeof value === 'object') return true;
 
   return false;
 }
 
 /**
- * プロフィール完成度を計算（0-100%）
- */
+ * プロフィール完�E度を計算！E-100%�E�E */
 export function calculateProfileCompletion(profile: UserProfile | null): number {
   if (!profile) return 0;
 
@@ -125,8 +111,7 @@ export function calculateProfileCompletion(profile: UserProfile | null): number 
 }
 
 /**
- * カテゴリ別の完成度を計算
- */
+ * カチE��リ別の完�E度を計箁E */
 export function calculateCategoryCompletion(
   profile: UserProfile | null,
   category: FieldCategory
@@ -152,24 +137,22 @@ export function calculateCategoryCompletion(
 }
 
 /**
- * カテゴリ名を取得
- */
+ * カチE��リ名を取征E */
 export function getCategoryName(category: FieldCategory): string {
   const names: Record<FieldCategory, string> = {
-    basic: '基本情報',
-    body: '体組成',
-    health: '健康状態',
+    basic: '基本惁E��',
+    body: '体絁E�E',
+    health: '健康状慁E,
     lifestyle: 'ライフスタイル',
-    disease: '疾患・症状',
+    disease: '疾患・痁E��',
     lab: '血液検査値',
-    advanced: '詳細設定',
+    advanced: '詳細設宁E,
   };
   return names[category];
 }
 
 /**
- * カテゴリの優先度を取得（カテゴリ内の最高優先度）
- */
+ * カチE��リの優先度を取得（カチE��リ冁E�E最高優先度�E�E */
 export function getCategoryPriority(
   category: FieldCategory
 ): 'required' | 'recommended' | 'optional' {
@@ -178,3 +161,4 @@ export function getCategoryPriority(
   if (categoryFields.some((f) => f.priority === 'recommended')) return 'recommended';
   return 'optional';
 }
+

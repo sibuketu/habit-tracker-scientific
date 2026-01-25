@@ -1,28 +1,28 @@
-# iOS対応について（macOSが必要）
+# iOS対応につぁE���E�EacOSが忁E��E��E
 
-> WindowsではiOS開発はできません。macOSが必要です。
+> WindowsではiOS開発はできません。macOSが忁E��です、E
 
 ---
 
-## ⚠️ 重要な注意事項
+## ⚠�E�E重要な注意事頁E
 
 **WindowsではiOS開発はできません**
 
-- ❌ Windowsでは`npx cap add ios`が実行できません
-- ❌ WindowsではXcodeが動作しません
-- ✅ macOSが必要です
+- ❁EWindowsでは`npx cap add ios`が実行できません
+- ❁EWindowsではXcodeが動作しません
+- ✁EmacOSが忁E��でぁE
 
 ---
 
-## 🍎 iOS対応が必要な場合
+## 🍎 iOS対応が忁E��な場吁E
 
-### 必要な環境
+### 忁E��な環墁E
 
-1. **macOS**: macOSがインストールされたMacが必要
-2. **Xcode**: Xcodeがインストールされている必要がある
-3. **Apple Developer Program**: App Storeに公開する場合は必要（有料）
+1. **macOS**: macOSがインスト�EルされたMacが忁E��E
+2. **Xcode**: Xcodeがインスト�EルされてぁE��忁E��がある
+3. **Apple Developer Program**: App Storeに公開する場合�E忁E��E��有料！E
 
-### 実行手順（macOSで実行）
+### 実行手頁E��EacOSで実行！E
 
 ```bash
 cd primal-logic-web
@@ -34,45 +34,46 @@ npx cap open ios
 
 ---
 
-## 🎯 現在の対応状況
+## 🎯 現在の対応状況E
 
-### ✅ 完了していること
+### ✁E完亁E��てぁE��こと
 
-- ✅ **Webアプリ**: 完全に動作する
-- ✅ **Android**: セットアップ完了（実機でテスト可能）
-- ⚠️ **iOS**: macOSが必要（Windowsでは不可）
+- ✁E**Webアプリ**: 完�Eに動作すめE
+- ✁E**Android**: セチE��アチE�E完亁E��実機でチE��ト可能�E�E
+- ⚠�E�E**iOS**: macOSが忁E��E��Eindowsでは不可�E�E
 
-### 📱 推奨アプローチ
+### 📱 推奨アプローチE
 
-1. **今すぐ**: Webアプリで動作確認（ブラウザで動作）
-2. **家に帰ったら**: Android実機でネイティブアプリをテスト
-3. **将来的に**: macOSがあればiOS対応も可能
-
----
-
-## 🔄 代替案
-
-### PWA（Progressive Web App）
-
-**WebアプリをPWA対応にすることで、iOSでも「ホーム画面に追加」可能:**
-
-- ✅ App Store審査不要
-- ✅ すぐに利用可能
-- ✅ iOS Safariで「ホーム画面に追加」可能
-- ⚠️ ただし、App Storeには出せない
-
-**PWA対応は既に実装済み**（`manifest.json`、Service Worker等）
+1. **今すぁE*: Webアプリで動作確認（ブラウザで動作！E
+2. **家に帰ったら**: Android実機でネイチE��ブアプリをテスチE
+3. **封E��皁E��**: macOSがあれ�EiOS対応も可能
 
 ---
 
-## 📝 まとめ
+## 🔄 代替桁E
 
-- **WindowsではiOS開発は不可**: macOSが必要
-- **Androidは可能**: 実機があればテスト可能
-- **Webアプリは動作**: ブラウザで動作確認可能
-- **PWA対応済み**: iOS Safariでも「ホーム画面に追加」可能
+### PWA�E�Erogressive Web App�E�E
+
+**WebアプリをPWA対応にすることで、iOSでも「�Eーム画面に追加」可能:**
+
+- ✁EApp Store審査不要E
+- ✁Eすぐに利用可能
+- ✁EiOS Safariで「�Eーム画面に追加」可能
+- ⚠�E�Eただし、App Storeには出せなぁE
+
+**PWA対応�E既に実裁E��み**�E�Emanifest.json`、Service Worker等！E
+
+---
+
+## 📝 まとめE
+
+- **WindowsではiOS開発は不可**: macOSが忁E��E
+- **Androidは可能**: 実機があればチE��ト可能
+- **Webアプリは動佁E*: ブラウザで動作確認可能
+- **PWA対応済み**: iOS Safariでも「�Eーム画面に追加」可能
 
 ---
 
 最終更新: 2026-01-03
+
 

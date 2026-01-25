@@ -1,0 +1,35 @@
+.mini-nutrient-gauge {
+    width: 100%;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.gauge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+}
+
+.gauge-label {
+    font-weight: 500;
+    color: var(--color-text-primary, #374151);
+}
+
+.gauge-value {
+    color: var(--color-text-secondary, #6b7280);
+    font-size: 0.8rem;
+}
+
+.gauge-unit {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.gauge-track {
+    width: 100%;
+    background-color: #e5e7eb;
+    /* Default track color */
+}

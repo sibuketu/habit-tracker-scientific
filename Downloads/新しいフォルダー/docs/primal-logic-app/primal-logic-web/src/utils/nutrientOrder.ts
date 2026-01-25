@@ -1,7 +1,7 @@
 /**
- * Primal Logic - Nutrient Order Management
+ * CarnivoreOS - Nutrient Order Management
  *
- * 栄養素の表示順序と並び替え機能
+ * Nutrient display order and sorting functionality
  */
 
 import { logError } from './errorHandler';
@@ -32,38 +32,38 @@ export type NutrientKey =
 export interface NutrientOrderConfig {
   key: NutrientKey;
   label: string;
-  priority: number; // 低いほど優先度高
+  priority: number; // Lower number = higher priority
 }
 
 export const DEFAULT_NUTRIENT_ORDER: NutrientOrderConfig[] = [
-  // 電解質（最優先：カーニボア導入期〜維持期の体調不良の9割はこれらが原因）
-  { key: 'sodium', label: 'ナトリウム', priority: 1 },
-  { key: 'potassium', label: 'カリウム', priority: 2 },
-  { key: 'magnesium', label: 'マグネシウム', priority: 3 },
-  // 必須エネルギー（脂質:タンパク質比率は後で追加）
-  { key: 'fat', label: '脂質', priority: 4 },
-  { key: 'protein', label: 'タンパク質（有効）', priority: 5 },
-  // カーニボアクオリティ（炎症管理）
-  { key: 'omegaRatio', label: 'オメガ3/6比率', priority: 6 },
-  // 重要ミネラル
-  // ヨウ素はButcherSelectのみで表示（HomeScreenから削除）
-  { key: 'calciumPhosphorusRatio', label: 'カルシウム:リン比率', priority: 7 },
-  { key: 'glycineMethionineRatio', label: 'グリシン:メチオニン比', priority: 8 },
-  // 特殊ビタミン
-  { key: 'vitaminA', label: 'ビタミンA', priority: 9 },
-  { key: 'vitaminD', label: 'ビタミンD', priority: 10 },
-  // ビタミンK2はButcherSelectのみで表示（HomeScreenから削除）
-  { key: 'vitaminB12', label: 'ビタミンB12', priority: 11 },
-  { key: 'vitaminB7', label: 'ビタミンB7（ビオチン）', priority: 12 },
-  { key: 'choline', label: 'コリン', priority: 13 },
-  { key: 'vitaminC', label: 'ビタミンC', priority: 14 },
-  { key: 'vitaminK', label: 'ビタミンK（有効）', priority: 15 },
-  // 重要ミネラル
-  { key: 'iron', label: '鉄分（有効）', priority: 16 },
-  { key: 'zinc', label: '亜鉛（有効）', priority: 17 },
-  // その他
-  { key: 'netCarbs', label: '正味炭水化物', priority: 20 },
-  { key: 'fiber', label: '食物繊維', priority: 21 },
+  // Electrolytes (highest priority: 90% of health issues during carnivore introduction to maintenance are caused by these)
+  { key: 'sodium', label: 'Sodium', priority: 1 },
+  { key: 'potassium', label: 'Potassium', priority: 2 },
+  { key: 'magnesium', label: 'Magnesium', priority: 3 },
+  // Essential energy (fat:protein ratio to be added later)
+  { key: 'fat', label: 'Fat', priority: 4 },
+  { key: 'protein', label: 'Protein (Effective)', priority: 5 },
+  // Carnivore quality (inflammation management)
+  { key: 'omegaRatio', label: 'Omega-3/6 Ratio', priority: 6 },
+  // Important minerals
+  // Iodine is displayed only in ButcherSelect (removed from HomeScreen)
+  { key: 'calciumPhosphorusRatio', label: 'Calcium:Phosphorus Ratio', priority: 7 },
+  { key: 'glycineMethionineRatio', label: 'Glycine:Methionine Ratio', priority: 8 },
+  // Special vitamins
+  { key: 'vitaminA', label: 'Vitamin A', priority: 9 },
+  { key: 'vitaminD', label: 'Vitamin D', priority: 10 },
+  // Vitamin K2 is displayed only in ButcherSelect (removed from HomeScreen)
+  { key: 'vitaminB12', label: 'Vitamin B12', priority: 11 },
+  { key: 'vitaminB7', label: 'Vitamin B7 (Biotin)', priority: 12 },
+  { key: 'choline', label: 'Choline', priority: 13 },
+  { key: 'vitaminC', label: 'Vitamin C', priority: 14 },
+  { key: 'vitaminK', label: 'Vitamin K (Effective)', priority: 15 },
+  // Important minerals
+  { key: 'iron', label: 'Iron (Effective)', priority: 16 },
+  { key: 'zinc', label: 'Zinc (Effective)', priority: 17 },
+  // Others
+  { key: 'netCarbs', label: 'Net Carbs', priority: 20 },
+  { key: 'fiber', label: 'Fiber', priority: 21 },
 ];
 
 const STORAGE_KEY = 'primal-logic-nutrient-order';
@@ -76,16 +76,16 @@ export function getNutrientOrder(): NutrientOrderConfig[] {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      // 新しい栄養素（glycineMethionineRatio等）が含まれているか確認
+      // Check if new nutrients (glycineMethionineRatio, etc.) are included
       const hasNewNutrients = parsed.some(
         (item: NutrientOrderConfig) =>
           item.key === 'glycineMethionineRatio' || item.key === 'calciumPhosphorusRatio'
       );
-      // 新しい栄養素が含まれていない場合は、デフォルト順序を使用
+      // Use default order if new nutrients are not included
       if (!hasNewNutrients) {
         if (import.meta.env.DEV) {
           console.log(
-            '[nutrientOrder] 新しい栄養素が含まれていないため、デフォルト順序を使用します'
+            '[nutrientOrder] Using default order because new nutrients are not included'
           );
         }
         return DEFAULT_NUTRIENT_ORDER;
@@ -138,3 +138,4 @@ export function moveNutrientDown(
   [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
   return newOrder;
 }
+

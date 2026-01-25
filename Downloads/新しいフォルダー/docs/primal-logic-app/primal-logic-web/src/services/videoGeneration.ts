@@ -1,31 +1,22 @@
 /**
- * Primal Logic - Video Generation Service
+ * CarnivoreOS - Video Generation Service
  *
- * 動画生成機能: Makefilm/HeyGen/Runway APIを使用してロング動画を自動生成
- */
+ * 動画生�E機�E: Makefilm/HeyGen/Runway APIを使用してロング動画を�E動生戁E */
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { logError } from '../utils/errorHandler';
-
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+import { geminiGenerate } from './geminiProxy';
 
 export interface VideoScript {
   title: string;
   description: string;
   script: string; // 動画の台本
   hashtags: string[];
-  duration: number; // 秒
-  contentType?: ContentType; // コンテンツタイプ
-  templateSelection?: TemplateSelection; // 選択されたテンプレート
-  language?: 'ja' | 'en' | 'fr' | 'de'; // 言語（デフォルト: 'ja'）
-  platform?: 'youtube' | 'tiktok' | 'instagram'; // プラットフォーム（アスペクト比の決定に使用）
-}
+  duration: number; // 私E  contentType?: ContentType; // コンチE��チE��イチE  templateSelection?: TemplateSelection; // 選択されたチE��プレーチE  language?: 'ja' | 'en' | 'fr' | 'de'; // 言語（デフォルチE 'ja'�E�E  platform?: 'youtube' | 'tiktok' | 'instagram'; // プラチE��フォーム�E�アスペクト比�E決定に使用�E�E}
 
 export type ContentType =
   | 'explainer' // 説明動画
   | 'counter' // 反論動画
-  | 'testimonial' // 体験談
-  | 'educational' // 教育動画
+  | 'testimonial' // 体験諁E  | 'educational' // 教育動画
   | 'entertainment'; // エンタメ動画
 
 export type VideoType = 'long' | 'short';
@@ -41,22 +32,21 @@ export interface TemplateSelection {
 export interface VideoGenerationOptions {
   platform: 'youtube' | 'tiktok' | 'instagram';
   language: 'ja' | 'en' | 'fr' | 'de';
-  topic?: string; // トピック（指定がない場合はランダム）
-  contentType?: ContentType; // コンテンツタイプ（自動判定も可能）
-  videoType?: VideoType; // ロング or ショート（platformから自動判定も可能）
-  useFreePlan?: boolean; // Freeプランを使用する場合true（3分・720p・月3本まで）
+  topic?: string; // トピチE���E�指定がなぁE��合�Eランダム�E�E  contentType?: ContentType; // コンチE��チE��イプ（�E動判定も可能�E�E  videoType?: VideoType; // ロング or ショート！Elatformから自動判定も可能�E�E  useFreePlan?: boolean; // Freeプランを使用する場吁Erue�E�E刁E�E720p・朁E本まで�E�E  apiKeys?: {
+    heyGen?: string;
+    makefilm?: string;
+    runway?: string;
+  };
 }
 
 /**
- * コンテンツタイプを自動判定
- */
+ * コンチE��チE��イプを自動判宁E */
 export function detectContentType(script: string): ContentType {
   const scriptLower = script.toLowerCase();
 
-  // 反論動画のキーワード
-  const counterKeywords = [
-    '反論',
-    '間違い',
+  // 反論動画のキーワーチE  const counterKeywords = [
+    '反諁E,
+    '間違ぁE,
     '批判',
     'counter',
     'myth',
@@ -68,9 +58,8 @@ export function detectContentType(script: string): ContentType {
     return 'counter';
   }
 
-  // 体験談のキーワード
-  const testimonialKeywords = [
-    '体験',
+  // 体験諁E�EキーワーチE  const testimonialKeywords = [
+    '体騁E,
     '実践',
     '結果',
     'testimonial',
@@ -82,36 +71,32 @@ export function detectContentType(script: string): ContentType {
     return 'testimonial';
   }
 
-  // 教育動画のキーワード
-  const educationalKeywords = ['学ぶ', '学習', '教育', 'learn', 'education', 'how to', 'guide'];
+  // 教育動画のキーワーチE  const educationalKeywords = ['学ぶ', '学翁E, '教育', 'learn', 'education', 'how to', 'guide'];
   if (educationalKeywords.some((keyword) => scriptLower.includes(keyword))) {
     return 'educational';
   }
 
-  // エンタメ動画のキーワード
-  const entertainmentKeywords = ['面白い', '驚き', 'fun', 'amazing', 'wow', 'shocking'];
+  // エンタメ動画のキーワーチE  const entertainmentKeywords = ['面白ぁE, '驚き', 'fun', 'amazing', 'wow', 'shocking'];
   if (entertainmentKeywords.some((keyword) => scriptLower.includes(keyword))) {
     return 'entertainment';
   }
 
-  // デフォルト: 説明動画
+  // チE��ォルチE 説明動画
   return 'explainer';
 }
 
 /**
- * テンプレートを自動選択
- */
+ * チE��プレートを自動選抁E */
 export function selectTemplate(contentType: ContentType, videoType: VideoType): TemplateSelection {
   if (videoType === 'long') {
-    // ロング動画（YouTube用）
-    if (contentType === 'explainer' || contentType === 'educational') {
+    // ロング動画�E�EouTube用�E�E    if (contentType === 'explainer' || contentType === 'educational') {
       return {
         template: 'Explainer Video',
         category: 'Explainer Video',
         orientation: 'landscape',
         style: 'professional',
         reason:
-          'カーニボアダイエットの説明・教育コンテンツに最適。プロフェッショナルな説明動画スタイル。',
+          'カーニ�EアダイエチE��の説明�E教育コンチE��チE��最適。�EロフェチE��ョナルな説明動画スタイル、E,
       };
     }
     if (contentType === 'counter') {
@@ -120,7 +105,7 @@ export function selectTemplate(contentType: ContentType, videoType: VideoType): 
         category: 'Advertisement',
         orientation: 'landscape',
         style: 'news',
-        reason: 'ニューススタイルで「事実を伝える」印象を与える。カウンター動画に最適。',
+        reason: 'ニューススタイルで「事実を伝える」印象を与える。カウンター動画に最適、E,
       };
     }
     if (contentType === 'testimonial') {
@@ -129,26 +114,24 @@ export function selectTemplate(contentType: ContentType, videoType: VideoType): 
         category: 'Explainer Video',
         orientation: 'landscape',
         style: 'professional',
-        reason: '体験談も解説動画スタイルで統一。プロフェッショナルな印象を与える。',
+        reason: '体験諁E��解説動画スタイルで統一。�EロフェチE��ョナルな印象を与える、E,
       };
     }
-    // デフォルト
-    return {
+    // チE��ォルチE    return {
       template: 'Explainer Video',
       category: 'Explainer Video',
       orientation: 'landscape',
       style: 'professional',
-      reason: 'デフォルト: 説明動画スタイル',
+      reason: 'チE��ォルチE 説明動画スタイル',
     };
   } else {
-    // ショート動画（TikTok/Instagram用）
-    if (contentType === 'entertainment' || contentType === 'testimonial') {
+    // ショート動画�E�EikTok/Instagram用�E�E    if (contentType === 'entertainment' || contentType === 'testimonial') {
       return {
         template: 'Social Template',
         category: 'Social Media',
         orientation: 'portrait',
         style: 'entertainment',
-        reason: 'SNS向けに最適化されている。エンタメ性が高い。',
+        reason: 'SNS向けに最適化されてぁE��。エンタメ性が高い、E,
       };
     }
     if (contentType === 'counter') {
@@ -157,119 +140,102 @@ export function selectTemplate(contentType: ContentType, videoType: VideoType): 
         category: 'Advertisement',
         orientation: 'portrait',
         style: 'news',
-        reason: 'ニューススタイルでインパクトのある反論動画。',
+        reason: 'ニューススタイルでインパクト�Eある反論動画、E,
       };
     }
-    // デフォルト
-    return {
+    // チE��ォルチE    return {
       template: 'Social Template',
       category: 'Social Media',
       orientation: 'portrait',
       style: 'entertainment',
-      reason: 'デフォルト: SNS向けエンタメスタイル',
+      reason: 'チE��ォルチE SNS向けエンタメスタイル',
     };
   }
 }
 
 /**
- * Gemini APIを使用して動画スクリプトを生成
- */
+ * Gemini APIを使用して動画スクリプトを生戁E */
 export async function generateVideoScript(options: VideoGenerationOptions): Promise<VideoScript> {
-  if (!GEMINI_API_KEY) {
-    throw new Error('VITE_GEMINI_API_KEY is not set');
-  }
+  // Client-side Gemini calls must go through server endpoint (/api/gemini).
+  const modelName = 'gemini-2.5-flash';
 
-  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
-  // 動画タイプを自動判定（platformから）
-  const videoType: VideoType =
+  // 動画タイプを自動判定！Elatformから�E�E  const videoType: VideoType =
     options.videoType || (options.platform === 'youtube' ? 'long' : 'short');
 
-  // コンテンツタイプを自動判定（topicから推測、または指定された値を使用）
-  // 戦略: 最初は解説動画に集中。デフォルトは説明動画（explainer）
-  const contentType: ContentType = options.contentType || 'explainer'; // デフォルトは説明動画
+  // コンチE��チE��イプを自動判定！Eopicから推測、また�E持E��された値を使用�E�E  // 戦略: 最初�E解説動画に雁E��。デフォルト�E説明動画�E�Explainer�E�E  const contentType: ContentType = options.contentType || 'explainer'; // チE��ォルト�E説明動画
 
-  // テンプレートを自動選択
-  const templateSelection = selectTemplate(contentType, videoType);
+  // チE��プレートを自動選抁E  const templateSelection = selectTemplate(contentType, videoType);
 
-  // Freeプランの場合、スクリプトは3分以内（約450-500文字）に制限
-  const maxDuration = options.useFreePlan ? 180 : videoType === 'long' ? 600 : 45; // 秒
-  const maxScriptLength = options.useFreePlan ? 500 : videoType === 'long' ? 5000 : 500; // 文字数
+  // Freeプランの場合、スクリプトは3刁E��冁E��紁E50-500斁E��）に制陁E  const maxDuration = options.useFreePlan ? 180 : videoType === 'long' ? 600 : 45; // 私E  const maxScriptLength = options.useFreePlan ? 500 : videoType === 'long' ? 5000 : 500; // 斁E��数
 
-  // コンテンツタイプに応じたプロンプト調整
+  // コンチE��チE��イプに応じた�Eロンプト調整
   const contentTypePrompt = {
-    explainer: '説明動画スタイルで、カーニボアダイエットについて分かりやすく説明してください。',
+    explainer: '説明動画スタイルで、カーニ�EアダイエチE��につぁE��刁E��りやすく説明してください、E,
     counter:
-      '反論動画スタイルで、カーニボアダイエットへの批判や誤解に対して、科学的根拠に基づいて反論してください。ニューススタイルで「事実を伝える」印象を与えてください。',
-    testimonial: '体験談スタイルで、カーニボアダイエットの実践体験や結果を語る形式にしてください。',
-    educational: '教育動画スタイルで、カーニボアダイエットについて学べる内容にしてください。',
-    entertainment: 'エンタメ動画スタイルで、視聴者が楽しめる、シェアしたくなる内容にしてください。',
+      '反論動画スタイルで、カーニ�EアダイエチE��への批判めE��解に対して、科学皁E��拠に基づぁE��反論してください。ニューススタイルで「事実を伝える」印象を与えてください、E,
+    testimonial: '体験諁E��タイルで、カーニ�EアダイエチE��の実践体験や結果を語る形式にしてください、E,
+    educational: '教育動画スタイルで、カーニ�EアダイエチE��につぁE��学べる�E容にしてください、E,
+    entertainment: 'エンタメ動画スタイルで、視�E老E��楽しめる、シェアしたくなる�E容にしてください、E,
   };
 
   const prompt = `
-あなたはカーニボアダイエットの専門家です。${options.platform === 'youtube' ? 'YouTube' : options.platform === 'tiktok' ? 'TikTok' : 'Instagram'}用の${options.language === 'ja' ? '日本語' : options.language === 'en' ? '英語' : options.language === 'fr' ? 'フランス語' : 'ドイツ語'}の動画スクリプトを生成してください。
+あなた�Eカーニ�EアダイエチE��の専門家です、E{options.platform === 'youtube' ? 'YouTube' : options.platform === 'tiktok' ? 'TikTok' : 'Instagram'}用の${options.language === 'ja' ? '日本誁E : options.language === 'en' ? '英誁E : options.language === 'fr' ? 'フランス誁E : 'ドイチE��E}の動画スクリプトを生成してください、E
+${options.topic ? `トピチE��: ${options.topic}` : 'トピチE��はランダムに選んでください�E�カーニ�EアダイエチE��に関連する冁E���E�E}
 
-${options.topic ? `トピック: ${options.topic}` : 'トピックはランダムに選んでください（カーニボアダイエットに関連する内容）'}
-
-コンテンツタイプ: ${contentType}
+コンチE��チE��イチE ${contentType}
 ${contentTypePrompt[contentType]}
 
-テンプレート: ${templateSelection.template} (${templateSelection.category})
+チE��プレーチE ${templateSelection.template} (${templateSelection.category})
 ${templateSelection.reason}
 
 要件:
-- エンタメ性を重視した内容
-- 科学的根拠に基づいた情報
-- ${options.useFreePlan ? '3分以内（約450-500文字）' : videoType === 'long' ? '5-10分' : '30-60秒'}の動画に適した長さ
-- 視聴者が興味を持ち、シェアしたくなる内容
-${options.useFreePlan ? '- **重要**: スクリプトは必ず450-500文字以内に収めてください。3分を超えるとエラーになります。' : ''}
-${options.language === 'en' ? '- **重要**: 英語で作成してください。グローバルに広がるカーニボアダイエットの動画として、英語が最適です。' : ''}
+- エンタメ性を重視した�E容
+- 科学皁E��拠に基づぁE��惁E��
+- ${options.useFreePlan ? '3刁E��冁E��紁E50-500斁E��！E : videoType === 'long' ? '5-10刁E : '30-60私E}の動画に適した長ぁE- 視�E老E��興味を持ち、シェアしたくなる�E容
+${options.useFreePlan ? '- **重要E*: スクリプトは忁E��450-500斁E��以冁E��収めてください、E刁E��趁E��るとエラーになります、E : ''}
+${options.language === 'en' ? '- **重要E*: 英語で作�Eしてください。グローバルに庁E��るカーニ�EアダイエチE��の動画として、英語が最適です、E : ''}
 
-以下のJSON形式で返してください:
+以下�EJSON形式で返してください:
 {
   "title": "動画のタイトル",
-  "description": "動画の説明文（${options.platform === 'youtube' ? '200文字以上' : '100文字程度'}）",
-  "script": "動画の台本（話す内容をそのまま書いてください。${options.useFreePlan ? '必ず450-500文字以内に収めてください。' : ''}）",
+  "description": "動画の説明文�E�E{options.platform === 'youtube' ? '200斁E��以丁E : '100斁E��程度'}�E�E,
+  "script": "動画の台本�E�話す�E容をそのまま書ぁE��ください、E{options.useFreePlan ? '忁E��450-500斁E��以冁E��収めてください、E : ''}�E�E,
   "hashtags": ["ハッシュタグ1", "ハッシュタグ2", ...],
   "duration": ${maxDuration}
 }
 `;
 
   try {
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const { text } = await geminiGenerate({ model: modelName, prompt });
 
-    // JSONを抽出（```json で囲まれている場合がある）
-    const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/) || text.match(/\{[\s\S]*\}/);
+    // JSONを抽出�E�E``json で囲まれてぁE��場合がある�E�E    const jsonMatch = text.match(/```json\s*([\s\S]*?)\s*```/) || text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       throw new Error('Failed to parse JSON from response');
     }
 
     const script = JSON.parse(jsonMatch[1] || jsonMatch[0]) as VideoScript;
 
-    // Freeプランの場合、スクリプト長さをチェック
+    // Freeプランの場合、スクリプト長さをチェチE��
     if (options.useFreePlan && script.script.length > maxScriptLength) {
-      // スクリプトが長すぎる場合は、文の区切りで切り詰める
+      // スクリプトが長すぎる場合�E、文の区刁E��で刁E��詰める
       let truncatedScript = script.script.substring(0, maxScriptLength - 3);
-      // 最後の文の区切り（。、！、？）を探して、その位置で切り詰める
+      // 最後�E斁E�E区刁E���E�。、E��、E��）を探して、その位置で刁E��詰める
       const lastSentenceEnd = Math.max(
-        truncatedScript.lastIndexOf('。'),
-        truncatedScript.lastIndexOf('！'),
-        truncatedScript.lastIndexOf('？'),
+        truncatedScript.lastIndexOf('、E),
+        truncatedScript.lastIndexOf('�E�E),
+        truncatedScript.lastIndexOf('�E�E),
         truncatedScript.lastIndexOf('.'),
         truncatedScript.lastIndexOf('!'),
         truncatedScript.lastIndexOf('?')
       );
       if (lastSentenceEnd > maxScriptLength * 0.7) {
-        // 70%以上が文の区切りで終わっている場合のみ、その位置で切り詰める
+        // 70%以上が斁E�E区刁E��で終わってぁE��場合�Eみ、その位置で刁E��詰める
         truncatedScript = truncatedScript.substring(0, lastSentenceEnd + 1);
       }
       script.script = truncatedScript + '...';
       if (import.meta.env.DEV) {
         console.warn(
-          `Freeプランの制限により、スクリプトを${truncatedScript.length}文字に切り詰めました（元の長さ: ${script.script.length}文字）`
+          `Freeプランの制限により、スクリプトめE{truncatedScript.length}斁E��に刁E��詰めました�E��Eの長ぁE ${script.script.length}斁E��）`
         );
       }
     }
@@ -289,23 +255,21 @@ import { generateVideoWithRunway } from './videoGenerationRunway';
 export { generateVideoWithMakefilm, generateVideoWithHeyGen, generateVideoWithRunway };
 
 /**
- * 動画生成のメイン関数
+ * 動画生�Eのメイン関数
  */
 export async function generateVideo(options: VideoGenerationOptions): Promise<{
   script: VideoScript;
   videoUrl?: string;
 }> {
-  // 1. スクリプト生成
+  // 1. スクリプト生�E
   const script = await generateVideoScript(options);
 
-  // 2. 動画生成（優先順位: Makefilm > HeyGen > Runway）
-  // Freeプランの場合はHeyGenのみを使用（制限があるため）
-  let videoUrl: string | undefined;
+  // 2. 動画生�E�E�優先頁E��E Makefilm > HeyGen > Runway�E�E  // Freeプランの場合�EHeyGenのみを使用�E�制限があるため�E�E  let videoUrl: string | undefined;
 
   if (options.useFreePlan) {
     // Freeプランの場合、HeyGenのみ使用
     try {
-      videoUrl = await generateVideoWithHeyGen(script, true);
+      videoUrl = await generateVideoWithHeyGen(script, true, options.apiKeys?.heyGen);
     } catch (error) {
       logError(error, {
         component: 'videoGeneration',
@@ -314,13 +278,12 @@ export async function generateVideo(options: VideoGenerationOptions): Promise<{
       });
     }
   } else {
-    // 有料プランの場合、優先順位で試行
-    try {
-      videoUrl = await generateVideoWithMakefilm(script);
+    // 有料プランの場合、優先頁E��で試衁E    try {
+      // Future feature: MakefilmにめEPIキーを渡ぁE      videoUrl = await generateVideoWithMakefilm(script);
     } catch (error) {
       console.warn('Makefilm failed, trying HeyGen:', error);
       try {
-        videoUrl = await generateVideoWithHeyGen(script, false);
+        videoUrl = await generateVideoWithHeyGen(script, false, options.apiKeys?.heyGen);
       } catch (error2) {
         if (import.meta.env.DEV) {
           console.warn('HeyGen failed, trying Runway:', error2);
@@ -343,3 +306,4 @@ export async function generateVideo(options: VideoGenerationOptions): Promise<{
     videoUrl,
   };
 }
+

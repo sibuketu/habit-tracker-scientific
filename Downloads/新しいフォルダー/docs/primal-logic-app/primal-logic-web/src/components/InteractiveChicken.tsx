@@ -1,8 +1,7 @@
 /**
- * Primal Logic - Interactive Chicken Component
+ * CarnivoreOS - Interactive Chicken Component
  *
- * クリッカブルSVG解剖図: 鶏の部位を直接タップして選択
- * デザインのトーン＆マナーは牛（InteractiveCow）と同じ
+ * クリチE��ブルSVG解剖図: 鶏�E部位を直接タチE�Eして選抁E * チE��インのト�Eン�E�E�Eナ�Eは牛！EnteractiveCow�E�と同じ
  */
 
 import './InteractiveButcher.css';
@@ -18,15 +17,15 @@ export default function InteractiveChicken({
 }: InteractiveChickenProps) {
   return (
     <div className="w-full max-w-md mx-auto">
-      <h2 className="text-xl font-bold text-center mb-4">部位をタップしてください</h2>
+      <h2 className="text-xl font-bold text-center mb-4">部位をタチE�Eしてください</h2>
 
       <svg
         viewBox="0 0 500 300"
         className="w-full h-auto drop-shadow-xl cursor-pointer interactive-butcher-svg"
       >
-        {/* 鶏のシルエット定義 */}
+        {/* Chicken silhouette definition */}
         <g stroke="white" strokeWidth="2">
-          {/* 1. 胸肉 (Breast) */}
+          {/* 1. Breast */}
           <path
             d="M150,80 Q200,60 250,80 L260,150 L150,150 Z"
             fill={selectedPart === 'breast' ? '#ff6b6b' : '#e11d48'}
@@ -42,10 +41,10 @@ export default function InteractiveChicken({
             pointerEvents="none"
             fontWeight="bold"
           >
-            胸肉
+            Breast
           </text>
 
-          {/* 2. もも (Thigh) */}
+          {/* 2. Thigh */}
           <path
             d="M260,80 Q320,85 360,120 L360,200 L260,150 Z"
             fill={selectedPart === 'thigh' ? '#ff6b6b' : '#be123c'}
@@ -61,10 +60,10 @@ export default function InteractiveChicken({
             pointerEvents="none"
             fontWeight="bold"
           >
-            もも
+            Thigh
           </text>
 
-          {/* 3. 手羽 (Wing) */}
+          {/* 3. Wing */}
           <path
             d="M100,100 Q120,70 140,90 L145,130 L100,130 Z"
             fill={selectedPart === 'wing' ? '#ff6b6b' : '#9f1239'}
@@ -80,10 +79,10 @@ export default function InteractiveChicken({
             pointerEvents="none"
             fontWeight="bold"
           >
-            手羽
+            Wing
           </text>
 
-          {/* 4. レバー (Liver) - 内臓 */}
+          {/* 4. Liver - Organ */}
           <circle
             cx="205"
             cy="165"
@@ -101,14 +100,14 @@ export default function InteractiveChicken({
             pointerEvents="none"
             fontWeight="bold"
           >
-            レバー
+            レバ�E
           </text>
         </g>
       </svg>
 
       <p className="text-center text-gray-500 mt-4 text-sm interactive-butcher-hint">
-        図の部位を直接タップして選択
-      </p>
+        図の部位を直接タチE�Eして選抁E      </p>
     </div>
   );
 }
+

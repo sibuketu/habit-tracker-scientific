@@ -1,20 +1,20 @@
 /**
- * Primal Logic - Nutrient Display Settings
+ * CarnivoreOS - Nutrient Display Settings
  *
- * 栄養素の表示/非表示を管理するユーティリティ
- * デフォルトは全部表示
+ * Utility to manage nutrient display/hide
+ * Default is to display all
  */
 
 import { logError } from './errorHandler';
 
 export type NutrientKey =
-  // マクロ栄養素
+  // Macronutrients
   | 'protein'
   | 'fat'
   | 'carbs'
   | 'netCarbs'
   | 'fiber'
-  // ミネラル
+  // Minerals
   | 'sodium'
   | 'magnesium'
   | 'potassium'
@@ -34,13 +34,13 @@ export type NutrientKey =
   | 'nickel'
   | 'silicon'
   | 'vanadium'
-  // 脂溶性ビタミン
+  // Fat-soluble Vitamins
   | 'vitaminA'
   | 'vitaminD'
   | 'vitaminK'
   | 'vitaminK2'
   | 'vitaminE'
-  // 水溶性ビタミン
+  // Water-soluble Vitamins
   | 'vitaminC'
   | 'vitaminB1'
   | 'vitaminB2'
@@ -50,7 +50,7 @@ export type NutrientKey =
   | 'vitaminB7'
   | 'vitaminB9'
   | 'vitaminB12'
-  // その他
+  // Others
   | 'choline'
   | 'taurine'
   | 'omega3'
@@ -58,11 +58,11 @@ export type NutrientKey =
   | 'omegaRatio'
   | 'vitaminB5'
   | 'vitaminB9'
-  // 比率
+  // Ratios
   | 'calciumPhosphorusRatio'
   | 'glycineMethionineRatio'
   | 'pfRatio'
-  // 抗栄養素（Avoid Zone）
+  // Antinutrients (Avoid Zone)
   | 'phytates'
   | 'polyphenols'
   | 'flavonoids'
@@ -77,7 +77,7 @@ export type NutrientKey =
   | 'cyanogenicGlycosides'
   | 'solanine'
   | 'chaconine'
-  // 植物性食品（Avoid Zone）
+  // Plant-based Foods (Avoid Zone)
   | 'plantProtein'
   | 'vegetableOil';
 
@@ -94,296 +94,296 @@ export interface NutrientDisplayConfig {
     | 'ratio'
     | 'antiNutrient'
     | 'avoid';
-  defaultVisible: boolean; // デフォルトは全部表示
+  defaultVisible: boolean; // Default is to display all
 }
 
 /**
- * 全栄養素の表示設定（デフォルト全部表示）
+ * Display settings for all nutrients (default: display all)
  */
 export const ALL_NUTRIENT_DISPLAY_CONFIGS: NutrientDisplayConfig[] = [
-  // マクロ栄養素
+  // Macronutrients
   {
     key: 'protein',
-    label: 'タンパク質（有効）',
+    label: 'Protein (Effective)',
     unit: 'g',
     category: 'macro',
     defaultVisible: true,
   },
-  { key: 'fat', label: '脂質', unit: 'g', category: 'macro', defaultVisible: true },
-  { key: 'carbs', label: '炭水化物', unit: 'g', category: 'macro', defaultVisible: true },
-  { key: 'netCarbs', label: '正味炭水化物', unit: 'g', category: 'macro', defaultVisible: true },
-  { key: 'fiber', label: '食物繊維', unit: 'g', category: 'macro', defaultVisible: true },
+  { key: 'fat', label: 'Fat', unit: 'g', category: 'macro', defaultVisible: true },
+  { key: 'carbs', label: 'Carbs', unit: 'g', category: 'macro', defaultVisible: true },
+  { key: 'netCarbs', label: 'Net Carbs', unit: 'g', category: 'macro', defaultVisible: true },
+  { key: 'fiber', label: 'Fiber', unit: 'g', category: 'macro', defaultVisible: true },
 
-  // ミネラル
-  { key: 'sodium', label: 'ナトリウム', unit: 'mg', category: 'mineral', defaultVisible: true },
+  // Minerals
+  { key: 'sodium', label: 'Sodium', unit: 'mg', category: 'mineral', defaultVisible: true },
   {
     key: 'magnesium',
-    label: 'マグネシウム',
+    label: 'Magnesium',
     unit: 'mg',
     category: 'mineral',
     defaultVisible: true,
   },
-  { key: 'potassium', label: 'カリウム', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'zinc', label: '亜鉛（有効）', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'iron', label: '鉄分（有効）', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'calcium', label: 'カルシウム', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'phosphorus', label: 'リン', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'selenium', label: 'セレン', unit: 'μg', category: 'mineral', defaultVisible: true },
-  { key: 'copper', label: '銅', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'manganese', label: 'マンガン', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'iodine', label: 'ヨウ素', unit: 'μg', category: 'mineral', defaultVisible: true },
-  { key: 'chromium', label: 'クロム', unit: 'μg', category: 'mineral', defaultVisible: true },
-  { key: 'molybdenum', label: 'モリブデン', unit: 'μg', category: 'mineral', defaultVisible: true },
-  { key: 'fluoride', label: 'フッ素', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'chloride', label: '塩素', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'boron', label: 'ホウ素', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'nickel', label: 'ニッケル', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'silicon', label: 'ケイ素', unit: 'mg', category: 'mineral', defaultVisible: true },
-  { key: 'vanadium', label: 'バナジウム', unit: 'μg', category: 'mineral', defaultVisible: true },
+  { key: 'potassium', label: 'Potassium', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'zinc', label: 'Zinc (Effective)', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'iron', label: 'Iron (Effective)', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'calcium', label: 'Calcium', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'phosphorus', label: 'Phosphorus', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'selenium', label: 'Selenium', unit: 'μg', category: 'mineral', defaultVisible: true },
+  { key: 'copper', label: 'Copper', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'manganese', label: 'Manganese', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'iodine', label: 'Iodine', unit: 'μg', category: 'mineral', defaultVisible: true },
+  { key: 'chromium', label: 'Chromium', unit: 'μg', category: 'mineral', defaultVisible: true },
+  { key: 'molybdenum', label: 'Molybdenum', unit: 'μg', category: 'mineral', defaultVisible: true },
+  { key: 'fluoride', label: 'Fluoride', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'chloride', label: 'Chloride', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'boron', label: 'Boron', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'nickel', label: 'Nickel', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'silicon', label: 'Silicon', unit: 'mg', category: 'mineral', defaultVisible: true },
+  { key: 'vanadium', label: 'Vanadium', unit: 'μg', category: 'mineral', defaultVisible: true },
 
-  // 脂溶性ビタミン
+  // Fat-soluble Vitamins
   {
     key: 'vitaminA',
-    label: 'ビタミンA',
+    label: 'Vitamin A',
     unit: 'IU',
     category: 'fatSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminD',
-    label: 'ビタミンD',
+    label: 'Vitamin D',
     unit: 'IU',
     category: 'fatSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminK',
-    label: 'ビタミンK（有効）',
+    label: 'Vitamin K (Effective)',
     unit: 'μg',
     category: 'fatSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminK2',
-    label: 'ビタミンK2',
+    label: 'Vitamin K2',
     unit: 'μg',
     category: 'fatSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminE',
-    label: 'ビタミンE',
+    label: 'Vitamin E',
     unit: 'mg',
     category: 'fatSolubleVitamin',
     defaultVisible: true,
   },
 
-  // 水溶性ビタミン
+  // Water-soluble Vitamins
   {
     key: 'vitaminC',
-    label: 'ビタミンC',
+    label: 'Vitamin C',
     unit: 'mg',
     category: 'waterSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminB1',
-    label: 'ビタミンB1',
+    label: 'Vitamin B1',
     unit: 'mg',
     category: 'waterSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminB2',
-    label: 'ビタミンB2',
+    label: 'Vitamin B2',
     unit: 'mg',
     category: 'waterSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminB3',
-    label: 'ビタミンB3',
+    label: 'Vitamin B3',
     unit: 'mg',
     category: 'waterSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminB6',
-    label: 'ビタミンB6',
+    label: 'Vitamin B6',
     unit: 'mg',
     category: 'waterSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminB7',
-    label: 'ビタミンB7（ビオチン）',
+    label: 'Vitamin B7 (Biotin)',
     unit: 'μg',
     category: 'waterSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminB9',
-    label: 'ビタミンB9（葉酸）',
+    label: 'Vitamin B9 (Folate)',
     unit: 'μg',
     category: 'waterSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminB12',
-    label: 'ビタミンB12',
+    label: 'Vitamin B12',
     unit: 'μg',
     category: 'waterSolubleVitamin',
     defaultVisible: true,
   },
   {
     key: 'vitaminB5',
-    label: 'ビタミンB5（パントテン酸）',
+    label: 'Vitamin B5 (Pantothenic Acid)',
     unit: 'mg',
     category: 'waterSolubleVitamin',
     defaultVisible: true,
   },
 
-  // その他
-  { key: 'choline', label: 'コリン', unit: 'mg', category: 'other', defaultVisible: true },
-  { key: 'taurine', label: 'タウリン', unit: 'mg', category: 'other', defaultVisible: true },
-  { key: 'omega3', label: 'オメガ3', unit: 'g', category: 'other', defaultVisible: true },
-  { key: 'omega6', label: 'オメガ6', unit: 'g', category: 'other', defaultVisible: true },
-  { key: 'omegaRatio', label: 'オメガ6:3比率', unit: '', category: 'other', defaultVisible: true },
+  // Others
+  { key: 'choline', label: 'Choline', unit: 'mg', category: 'other', defaultVisible: true },
+  { key: 'taurine', label: 'Taurine', unit: 'mg', category: 'other', defaultVisible: true },
+  { key: 'omega3', label: 'Omega-3', unit: 'g', category: 'other', defaultVisible: true },
+  { key: 'omega6', label: 'Omega-6', unit: 'g', category: 'other', defaultVisible: true },
+  { key: 'omegaRatio', label: 'Omega-6:3 Ratio', unit: '', category: 'other', defaultVisible: true },
 
-  // 比率
+  // Ratios
   {
     key: 'calciumPhosphorusRatio',
-    label: 'カルシウム:リン比率',
+    label: 'Calcium:Phosphorus Ratio',
     unit: '',
     category: 'ratio',
     defaultVisible: true,
   },
   {
     key: 'glycineMethionineRatio',
-    label: 'グリシン:メチオニン比率',
+    label: 'Glycine:Methionine Ratio',
     unit: '',
     category: 'ratio',
     defaultVisible: true,
   },
-  { key: 'pfRatio', label: 'P:F比率', unit: '', category: 'ratio', defaultVisible: true },
+  { key: 'pfRatio', label: 'P:F Ratio', unit: '', category: 'ratio', defaultVisible: true },
 
-  // 抗栄養素（Avoid Zone）
+  // Antinutrients (Avoid Zone)
   {
     key: 'phytates',
-    label: 'フィチン酸',
+    label: 'Phytic Acid',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
   {
     key: 'polyphenols',
-    label: 'ポリフェノール',
+    label: 'Polyphenols',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
   {
     key: 'flavonoids',
-    label: 'フラボノイド',
+    label: 'Flavonoids',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
   {
     key: 'anthocyanins',
-    label: 'アントシアニン',
+    label: 'Anthocyanins',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
   {
     key: 'oxalates',
-    label: 'シュウ酸',
+    label: 'Oxalic Acid',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
-  { key: 'lectins', label: 'レクチン', unit: 'mg', category: 'antiNutrient', defaultVisible: true },
+  { key: 'lectins', label: 'Lectins', unit: 'mg', category: 'antiNutrient', defaultVisible: true },
   {
     key: 'saponins',
-    label: 'サポニン',
+    label: 'Saponins',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
   {
     key: 'goitrogens',
-    label: 'ゴイトロゲン',
+    label: 'Goitrogens',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
-  { key: 'tannins', label: 'タンニン', unit: 'mg', category: 'antiNutrient', defaultVisible: true },
+  { key: 'tannins', label: 'Tannins', unit: 'mg', category: 'antiNutrient', defaultVisible: true },
   {
     key: 'trypsinInhibitors',
-    label: 'トリプシン阻害物質',
+    label: 'Trypsin Inhibitors',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
   {
     key: 'proteaseInhibitors',
-    label: 'プロテアーゼ阻害物質',
+    label: 'Protease Inhibitors',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
   {
     key: 'cyanogenicGlycosides',
-    label: 'シアノグリコシド',
+    label: 'Cyanogenic Glycosides',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
   {
     key: 'solanine',
-    label: 'ソラニン',
+    label: 'Solanine',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
   {
     key: 'chaconine',
-    label: 'チャコニン',
+    label: 'Chaconine',
     unit: 'mg',
     category: 'antiNutrient',
     defaultVisible: true,
   },
 
-  // 植物性食品（Avoid Zone）
+  // Plant-based Foods (Avoid Zone)
   {
     key: 'plantProtein',
-    label: '植物性タンパク質',
+    label: 'Plant Protein',
     unit: 'g',
     category: 'avoid',
     defaultVisible: true,
   },
-  { key: 'vegetableOil', label: '植物油', unit: 'g', category: 'avoid', defaultVisible: true },
+  { key: 'vegetableOil', label: 'Vegetable Oil', unit: 'g', category: 'avoid', defaultVisible: true },
 ];
 
 const STORAGE_KEY = 'primal_logic_nutrient_display_settings';
 
 /**
- * 栄養素の表示設定を取得（デフォルトは全部表示）
+ * Get nutrient display settings (default: display all)
  */
 export function getNutrientDisplaySettings(): Record<NutrientKey, boolean> {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      // デフォルト値とマージ（新しい栄養素が追加された場合も対応）
+      // Merge with default values (also handles newly added nutrients)
       const defaults = {} as Record<NutrientKey, boolean>;
       ALL_NUTRIENT_DISPLAY_CONFIGS.forEach((config) => {
         defaults[config.key] = config.defaultVisible;
       });
       return { ...defaults, ...parsed };
     }
-    // デフォルトは全部表示
+    // Default is to display all
     const defaults = {} as Record<NutrientKey, boolean>;
     ALL_NUTRIENT_DISPLAY_CONFIGS.forEach((config) => {
       defaults[config.key] = config.defaultVisible;
@@ -391,7 +391,7 @@ export function getNutrientDisplaySettings(): Record<NutrientKey, boolean> {
     return defaults;
   } catch (error) {
     logError(error, { component: 'nutrientDisplaySettings', action: 'getNutrientDisplaySettings' });
-    // エラー時もデフォルトは全部表示
+    // Default is to display all even on error
     const defaults = {} as Record<NutrientKey, boolean>;
     ALL_NUTRIENT_DISPLAY_CONFIGS.forEach((config) => {
       defaults[config.key] = config.defaultVisible;
@@ -401,8 +401,7 @@ export function getNutrientDisplaySettings(): Record<NutrientKey, boolean> {
 }
 
 /**
- * 栄養素の表示設定を保存
- */
+ * 栁E��素の表示設定を保孁E */
 export function saveNutrientDisplaySettings(settings: Record<NutrientKey, boolean>): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
@@ -415,8 +414,7 @@ export function saveNutrientDisplaySettings(settings: Record<NutrientKey, boolea
 }
 
 /**
- * 特定の栄養素の表示/非表示を切り替え
- */
+ * 特定�E栁E��素の表示/非表示を�Eり替ぁE */
 export function toggleNutrientVisibility(key: NutrientKey): void {
   const settings = getNutrientDisplaySettings();
   settings[key] = !settings[key];
@@ -424,8 +422,7 @@ export function toggleNutrientVisibility(key: NutrientKey): void {
 }
 
 /**
- * カテゴリごとに表示/非表示を切り替え
- */
+ * カチE��リごとに表示/非表示を�Eり替ぁE */
 export function toggleCategoryVisibility(
   category: NutrientDisplayConfig['category'],
   visible: boolean
@@ -440,7 +437,7 @@ export function toggleCategoryVisibility(
 }
 
 /**
- * 全ての栄養素を表示/非表示
+ * 全ての栁E��素を表示/非表示
  */
 export function setAllNutrientsVisible(visible: boolean): void {
   const settings = {} as Record<NutrientKey, boolean>;
@@ -449,3 +446,4 @@ export function setAllNutrientsVisible(visible: boolean): void {
   });
   saveNutrientDisplaySettings(settings);
 }
+

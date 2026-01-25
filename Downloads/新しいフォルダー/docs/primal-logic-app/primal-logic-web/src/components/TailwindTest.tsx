@@ -1,13 +1,11 @@
 /**
- * Tailwind CSS動作確認用のテストコンポーネント
- * カーニボアらしい配色（Stone, Red, Zinc系）が正しく適用されることを確認
- */
+ * Tailwind CSS動作確認用のチE��トコンポ�EネンチE * カーニ�EアらしぁE�E色�E�Etone, Red, Zinc系�E�が正しく適用されることを確誁E */
 
 export default function TailwindTest() {
   return (
     <div className="p-4 bg-carnivore-stone-50 min-h-screen">
       <h1 className="text-2xl font-bold text-carnivore-red-700 mb-4">
-        🥩 Primal Logic - Tailwind CSS Test
+        🥩 CarnivoreOS - Tailwind CSS Test
       </h1>
       <div className="space-y-4">
         <div className="p-4 bg-carnivore-stone-100 rounded-lg border border-carnivore-stone-300">
@@ -46,3 +44,4 @@ export default function TailwindTest() {
     </div>
   );
 }
+

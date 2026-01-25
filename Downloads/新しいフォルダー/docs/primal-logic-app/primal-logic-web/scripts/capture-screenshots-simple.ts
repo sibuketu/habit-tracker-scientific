@@ -1,8 +1,8 @@
 /**
- * Primal Logic - 全画面スクリーンショット取得スクリプト（シンプル版）
+ * CarnivOS - 全画面スクリーンショチE��取得スクリプト�E�シンプル版！E
  *
- * 開発サーバーが起動している状態で実行してください。
- * 使用方法: npx tsx scripts/capture-screenshots-simple.ts
+ * 開発サーバ�Eが起動してぁE��状態で実行してください、E
+ * 使用方況E npx tsx scripts/capture-screenshots-simple.ts
  */
 
 import { chromium } from 'playwright';
@@ -12,35 +12,35 @@ import * as path from 'path';
 const SCREENSHOT_DIR = path.join(__dirname, '../screenshots-for-gemini');
 const BASE_URL = 'http://localhost:5174';
 
-// 全画面のリスト
+// 全画面のリスチE
 const SCREENS = [
   { name: 'consent', description: '同意画面' },
-  { name: 'onboarding', description: 'オンボーディング画面' },
-  { name: 'home', description: 'ホーム画面（メインダッシュボード）' },
+  { name: 'onboarding', description: 'オンボ�EチE��ング画面' },
+  { name: 'home', description: 'ホ�Eム画面�E�メインダチE��ュボ�Eド！E },
   { name: 'profile', description: 'プロファイル設定画面' },
   { name: 'history', description: '履歴画面' },
-  { name: 'labs', description: 'Labs画面（実験的機能）' },
+  { name: 'labs', description: 'Labs画面�E�実験的機�E�E�E },
   { name: 'settings', description: '設定画面' },
   { name: 'customFood', description: 'カスタム食品登録画面' },
   { name: 'input', description: '日次入力画面' },
-  { name: 'gift', description: 'Gift画面（コミュニティ機能）' },
-  { name: 'bioHack', description: 'Bio-Hackダッシュボード画面' },
+  { name: 'gift', description: 'Gift画面�E�コミュニティ機�E�E�E },
+  { name: 'bioHack', description: 'Bio-HackダチE��ュボ�Eド画面' },
   { name: 'ifThenRules', description: 'If-Thenルール画面' },
 ];
 
 async function captureScreenshots() {
-  // スクリーンショットディレクトリを作成
+  // スクリーンショチE��チE��レクトリを作�E
   if (!fs.existsSync(SCREENSHOT_DIR)) {
     fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
   }
 
   const browser = await chromium.launch({ headless: false });
   const context = await browser.newContext({
-    viewport: { width: 393, height: 852 }, // iPhone 15幅
+    viewport: { width: 393, height: 852 }, // iPhone 15幁E
   });
   const page = await context.newPage();
 
-  console.log('📸 スクリーンショット取得を開始します...\n');
+  console.log('📸 スクリーンショチE��取得を開始しまぁE..\n');
 
   for (const screen of SCREENS) {
     try {
@@ -65,67 +65,68 @@ async function captureScreenshots() {
           localStorage.setItem('primal_logic_onboarding_completed', 'true');
         });
         await page.goto(BASE_URL);
-        // 画面遷移（CustomEventを使用）
+        // 画面遷移�E�EustomEventを使用�E�E
         await page.evaluate((screenName) => {
           const event = new CustomEvent('navigateToScreen', { detail: screenName });
           window.dispatchEvent(event);
         }, screen.name);
       }
 
-      // 画面の読み込みを待機
+      // 画面の読み込みを征E��E
       await page.waitForTimeout(2000);
 
-      // スクリーンショットを取得
+      // スクリーンショチE��を取征E
       const screenshotPath = path.join(SCREENSHOT_DIR, `${screen.name}.png`);
       await page.screenshot({
         path: screenshotPath,
         fullPage: true,
       });
 
-      console.log(`  ✓ 保存完了: ${screenshotPath}\n`);
+      console.log(`  ✁E保存完亁E ${screenshotPath}\n`);
     } catch (error) {
-      console.error(`  ✗ エラー: ${screen.name}`, error);
+      console.error(`  ✁Eエラー: ${screen.name}`, error);
     }
   }
 
-  // スクリーンショット一覧を生成
+  // スクリーンショチE��一覧を生戁E
   const screenshotListPath = path.join(SCREENSHOT_DIR, 'SCREENSHOT_LIST.md');
-  const markdown = `# スクリーンショット一覧
+  const markdown = `# スクリーンショチE��一覧
 
-以下のスクリーンショットをGeminiに送信してください。
+以下�EスクリーンショチE��をGeminiに送信してください、E
 
-## 📸 スクリーンショット一覧
+## 📸 スクリーンショチE��一覧
 
 ${SCREENS.map(
   (s, index) => `
 ### ${index + 1}. ${s.description} (${s.name})
 
 - **ファイルパス**: \`C:\\Users\\susam\\Downloads\\新しいフォルダー\\docs\\primal-logic-app\\primal-logic-web\\screenshots-for-gemini\\${s.name}.png\`
-- **説明**: ${s.description}
+- **説昁E*: ${s.description}
 `
 ).join('\n')}
 
 ---
 
-## 💬 Geminiへの送信メッセージ例
+## 💬 Geminiへの送信メチE��ージ侁E
 
 \`\`\`
-以下のスクリーンショットを送信します。Primal Logicアプリの全画面のスクリーンショットです。
+以下�EスクリーンショチE��を送信します。Primal Logicアプリの全画面のスクリーンショチE��です、E
 
-送信ファイル：
+送信ファイル�E�E
 ${SCREENS.map((s) => `- ${s.name}.png (${s.description})`).join('\n')}
 
-これらのスクリーンショットを参考に、カメラ機能統合の要件定義をお願いします。
+これら�EスクリーンショチE��を参老E��、カメラ機�E統合�E要件定義をお願いします、E
 \`\`\`
 `;
 
   fs.writeFileSync(screenshotListPath, markdown);
-  console.log(`✓ スクリーンショット一覧を保存: ${screenshotListPath}`);
+  console.log(`✁EスクリーンショチE��一覧を保孁E ${screenshotListPath}`);
 
   await browser.close();
-  console.log('\n✅ 全てのスクリーンショット取得が完了しました！');
+  console.log('\n✁E全てのスクリーンショチE��取得が完亁E��ました�E�E);
 }
 
-// 実行
+// 実衁E
 captureScreenshots().catch(console.error);
+
 

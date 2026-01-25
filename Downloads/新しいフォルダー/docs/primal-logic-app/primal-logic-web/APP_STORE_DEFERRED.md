@@ -1,30 +1,31 @@
-# App Store公開について
+# App Store公開につぁE��
 
 ## 判断
 
-**App Store公開は後回しで良い**
+**App Store公開�E後回しで良ぁE*
 
-### 理由
+### 琁E��
 
-1. **PWAで配布可能**: PWA対応済みのため、App Store審査なしで配布可能
-2. **コスト削減**: App Store公開にはmacOS環境が必要（MacinCloud月額約3,750円〜、またはMac購入初期費用10万円〜）
-3. **開発優先**: まずはWebアプリとして完成度を高める
-4. **ユーザー登録後に判断**: ユーザーが登録できてから、App Store公開の必要性を判断する
+1. **PWAで配币E��能**: PWA対応済みのため、App Store審査なしで配币E��能
+2. **コスト削渁E*: App Store公開にはmacOS環墁E��忁E��E��EacinCloud月額紁E,750冁E��、また�EMac購入初期費用10丁E�E〜！E
+3. **開発優允E*: まず�EWebアプリとして完�E度を高めめE
+4. **ユーザー登録後に判断**: ユーザーが登録できてから、App Store公開�E忁E��性を判断する
 
-### 現在の対応状況
+### 現在の対応状況E
 
-- ✅ **Webアプリ**: 完全に動作する
-- ✅ **PWA対応済み**: iOS Safariでも「ホーム画面に追加」可能
-- ✅ **Android**: セットアップ完了（実機でテスト可能）
-- ⚠️ **iOS App Store**: 後回し（macOS環境が必要）
+- ✁E**Webアプリ**: 完�Eに動作すめE
+- ✁E**PWA対応済み**: iOS Safariでも「�Eーム画面に追加」可能
+- ✁E**Android**: セチE��アチE�E完亁E��実機でチE��ト可能�E�E
+- ⚠�E�E**iOS App Store**: 後回し！EacOS環墁E��忁E��E��E
 
-### 将来的な判断
+### 封E��皁E��判断
 
-- **ユーザー登録が増えてから**: App Store公開の必要性を判断
-- **macOS環境の準備**: 必要になった時点でMacinCloudまたはMac購入を検討
-- **現時点では**: PWA配布で十分
+- **ユーザー登録が増えてから**: App Store公開�E忁E��性を判断
+- **macOS環墁E�E準備**: 忁E��になった時点でMacinCloudまた�EMac購入を検訁E
+- **現時点では**: PWA配币E��十�E
 
 ---
 
 最終更新: 2026-01-03
+
 

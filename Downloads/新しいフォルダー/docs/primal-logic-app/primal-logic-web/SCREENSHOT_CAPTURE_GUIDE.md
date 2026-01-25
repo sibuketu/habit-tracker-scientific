@@ -1,24 +1,24 @@
-# スクリーンショット取得ガイド
+# スクリーンショチE��取得ガイチE
 
-Primal Logicアプリの全画面のスクリーンショットを自動取得し、Geminiに共有するためのガイドです。
+CarnivOSアプリの全画面のスクリーンショチE��を�E動取得し、Geminiに共有するため�Eガイドです、E
 
 ---
 
-## 🚀 クイックスタート
+## 🚀 クイチE��スターチE
 
-### 方法1: バッチファイルから実行（推奨・一番簡単）
+### 方況E: バッチファイルから実行（推奨・一番簡単！E
 
-1. **エクスプローラーを開く**（Windowsキー+E）
-2. **アドレスバーに以下を貼り付けてEnter**:
+1. **エクスプローラーを開ぁE*�E�Eindowsキー+E�E�E
+2. **アドレスバ�Eに以下を貼り付けてEnter**:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-3. **`capture-screenshots.bat`をダブルクリック**
+3. **`capture-screenshots.bat`をダブルクリチE��**
 
-### 方法2: PowerShellから実行
+### 方況E: PowerShellから実衁E
 
-1. **新しいPowerShellを開く**（Windowsキー → 「PowerShell」と入力 → Enter）
-2. **以下をコピペして実行**:
+1. **新しいPowerShellを開ぁE*�E�Eindowsキー ↁE「PowerShell」と入劁EↁEEnter�E�E
+2. **以下をコピ�Eして実衁E*:
    ```powershell
    cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
    npm run screenshot:all
@@ -26,120 +26,120 @@ Primal Logicアプリの全画面のスクリーンショットを自動取得�
 
 ---
 
-## ⚠️ 前提条件
+## ⚠�E�E前提条件
 
-### 開発サーバーが起動している必要があります
+### 開発サーバ�Eが起動してぁE��忁E��がありまぁE
 
-スクリーンショット取得前に、**開発サーバーを起動**してください：
+スクリーンショチE��取得前に、E*開発サーバ�Eを起勁E*してください�E�E
 
-#### 開発サーバーの起動方法
+#### 開発サーバ�Eの起動方況E
 
-**方法1: バッチファイルから実行（推奨）**
-1. エクスプローラーを開く（Windowsキー+E）
-2. アドレスバーに以下を貼り付けてEnter:
+**方況E: バッチファイルから実行（推奨�E�E*
+1. エクスプローラーを開く！Eindowsキー+E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-3. `start-dev-server.bat`をダブルクリック
+3. `start-dev-server.bat`をダブルクリチE��
 
-**方法2: PowerShellから実行**
+**方況E: PowerShellから実衁E*
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 npm run dev
 ```
 
-開発サーバーが起動したら（`http://localhost:5173`でアクセス可能）、別のターミナルでスクリーンショット取得を実行してください。
+開発サーバ�Eが起動したら�E�Ehttp://localhost:5173`でアクセス可能�E�、別のターミナルでスクリーンショチE��取得を実行してください、E
 
 ---
 
-## 📸 取得されるスクリーンショット
+## 📸 取得されるスクリーンショチE��
 
-以下の画面のスクリーンショットが自動取得されます：
+以下�E画面のスクリーンショチE��が�E動取得されます！E
 
 1. **consent.png** - 同意画面
-2. **onboarding.png** - オンボーディング画面
-3. **home.png** - ホーム画面（メインダッシュボード）
+2. **onboarding.png** - オンボ�EチE��ング画面
+3. **home.png** - ホ�Eム画面�E�メインダチE��ュボ�Eド！E
 4. **profile.png** - プロファイル設定画面
 5. **history.png** - 履歴画面
-6. **labs.png** - Labs画面（実験的機能）
+6. **labs.png** - Labs画面�E�実験的機�E�E�E
 7. **settings.png** - 設定画面
 8. **customFood.png** - カスタム食品登録画面
 9. **input.png** - 日次入力画面
-10. **gift.png** - Gift画面（コミュニティ機能）
-11. **bioHack.png** - Bio-Hackダッシュボード画面
+10. **gift.png** - Gift画面�E�コミュニティ機�E�E�E
+11. **bioHack.png** - Bio-HackダチE��ュボ�Eド画面
 12. **ifThenRules.png** - If-Thenルール画面
 
 ---
 
-## 📁 保存先
+## 📁 保存�E
 
-スクリーンショットは以下のフォルダに保存されます：
+スクリーンショチE��は以下�Eフォルダに保存されます！E
 
 **フォルダパス**: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\screenshots-for-gemini\`
 
-各スクリーンショットは以下の形式で保存されます：
-- `{画面名}.png` - スクリーンショット画像
-- `SCREENSHOT_LIST.md` - スクリーンショット一覧（Geminiへの送信メッセージ例付き）
+吁E��クリーンショチE��は以下�E形式で保存されます！E
+- `{画面名}.png` - スクリーンショチE��画僁E
+- `SCREENSHOT_LIST.md` - スクリーンショチE��一覧�E�Eeminiへの送信メチE��ージ例付き�E�E
 
 ---
 
-## 📤 Geminiへの送信方法
+## 📤 Geminiへの送信方況E
 
-### 1. スクリーンショット一覧を確認
+### 1. スクリーンショチE��一覧を確誁E
 
-スクリーンショット取得後、以下のファイルを開いて確認してください：
+スクリーンショチE��取得後、以下�Eファイルを開ぁE��確認してください�E�E
 
 **ファイルパス**: `C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web\screenshots-for-gemini\SCREENSHOT_LIST.md`
 
-このファイルには、各スクリーンショットの説明とGeminiへの送信メッセージ例が含まれています。
+こ�Eファイルには、各スクリーンショチE��の説明とGeminiへの送信メチE��ージ例が含まれてぁE��す、E
 
 ### 2. Geminiにファイルを送信
 
-以下のファイルをGeminiに送信してください：
+以下�EファイルをGeminiに送信してください�E�E
 
-1. **スクリーンショット画像**（`screenshots-for-gemini\`フォルダ内の全`.png`ファイル）
-2. **要件定義プロンプト**（`GEMINI_CAMERA_PROMPT_COMPLETE.md`）
+1. **スクリーンショチE��画僁E*�E�Escreenshots-for-gemini\`フォルダ冁E�E全`.png`ファイル�E�E
+2. **要件定義プロンプト**�E�EGEMINI_CAMERA_PROMPT_COMPLETE.md`�E�E
 
-### 3. 送信メッセージ例
+### 3. 送信メチE��ージ侁E
 
 ```
-以下のファイルを送信します。Primal Logicアプリの全画面のスクリーンショットと、カメラ機能統合の要件定義です。
+以下�Eファイルを送信します。Primal Logicアプリの全画面のスクリーンショチE��と、カメラ機�E統合�E要件定義です、E
 
-送信ファイル：
-1. GEMINI_CAMERA_PROMPT_COMPLETE.md（要件定義プロンプト）
-2. screenshots-for-gemini\ フォルダ内の全スクリーンショット画像
+送信ファイル�E�E
+1. GEMINI_CAMERA_PROMPT_COMPLETE.md�E�要件定義プロンプト�E�E
+2. screenshots-for-gemini\ フォルダ冁E�E全スクリーンショチE��画僁E
 
-これらのスクリーンショットを参考に、カメラ機能統合の要件定義をお願いします。
+これら�EスクリーンショチE��を参老E��、カメラ機�E統合�E要件定義をお願いします、E
 ```
 
 ---
 
-## 🔧 トラブルシューティング
+## 🔧 トラブルシューチE��ング
 
 ### エラー: "Cannot connect to http://localhost:5173"
 
-**原因**: 開発サーバーが起動していない
+**原因**: 開発サーバ�Eが起動してぁE��ぁE
 
-**解決方法**: 
-1. 別のターミナルで開発サーバーを起動（`npm run dev`）
-2. `http://localhost:5173`でアクセスできることを確認
-3. 再度スクリーンショット取得を実行
+**解決方況E*: 
+1. 別のターミナルで開発サーバ�Eを起動！Enpm run dev`�E�E
+2. `http://localhost:5173`でアクセスできることを確誁E
+3. 再度スクリーンショチE��取得を実衁E
 
 ### エラー: "tsx: command not found"
 
-**原因**: `tsx`がインストールされていない
+**原因**: `tsx`がインスト�EルされてぁE��ぁE
 
-**解決方法**:
+**解決方況E*:
 ```powershell
 npm install
 ```
 
-### スクリーンショットが空白
+### スクリーンショチE��が空白
 
-**原因**: 画面の読み込みが完了していない
+**原因**: 画面の読み込みが完亁E��てぁE��ぁE
 
-**解決方法**: 
-- `scripts/capture-screenshots-simple.ts`の`waitForTimeout`の値を増やす（例: 2000 → 3000）
+**解決方況E*: 
+- `scripts/capture-screenshots-simple.ts`の`waitForTimeout`の値を増やす（侁E 2000 ↁE3000�E�E
 
 ---
 
@@ -147,26 +147,27 @@ npm install
 
 ### 取得する画面を変更する
 
-`scripts/capture-screenshots-simple.ts`の`SCREENS`配列を編集してください。
+`scripts/capture-screenshots-simple.ts`の`SCREENS`配�Eを編雁E��てください、E
 
-### ビューポートサイズを変更する
+### ビューポ�Eトサイズを変更する
 
-`scripts/capture-screenshots-simple.ts`の以下の行を編集してください：
+`scripts/capture-screenshots-simple.ts`の以下�E行を編雁E��てください�E�E
 
 ```typescript
-viewport: { width: 393, height: 852 }, // iPhone 15幅
+viewport: { width: 393, height: 852 }, // iPhone 15幁E
 ```
 
-例：
+例！E
 - iPad: `{ width: 768, height: 1024 }`
-- デスクトップ: `{ width: 1920, height: 1080 }`
+- チE��クトッチE `{ width: 1920, height: 1080 }`
 
 ---
 
-## 🎯 次のステップ
+## 🎯 次のスチE��チE
 
-1. スクリーンショットを取得
-2. `SCREENSHOT_LIST.md`を確認
-3. Geminiにスクリーンショットと要件定義プロンプトを送信
-4. Geminiの回答を確認して実装を進める
+1. スクリーンショチE��を取征E
+2. `SCREENSHOT_LIST.md`を確誁E
+3. GeminiにスクリーンショチE��と要件定義プロンプトを送信
+4. Geminiの回答を確認して実裁E��進める
+
 

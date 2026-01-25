@@ -1,8 +1,7 @@
 /**
- * Primal Logic - Vitamin D Calculator
+ * CarnivoreOS - Vitamin D Calculator
  *
- * Solar Charge (太陽光暴露) から Vitamin D 合成量を計算
- * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
+ * Solar Charge (太陽光暴露) から Vitamin D 合�E量を計箁E * 技術仕様書: @Primal_Logic_Technical_Spec.md 参�E
  */
 
 /**
@@ -24,10 +23,7 @@ export interface SunExposure {
   minutes: number;
   isSunny: boolean; // true = sunny, false = cloudy
   exposureArea?: 'full' | 'partial'; // full body vs arms/face only
-  weatherFactor?: number; // 天気情報による係数（0-1、weatherServiceから取得）
-  uvIndex?: number; // UV指数（0-11+）
-  cloudCover?: number; // 雲量（0-100%）
-}
+  weatherFactor?: number; // 天気情報による係数�E�E-1、weatherServiceから取得！E  uvIndex?: number; // UV持E���E�E-11+�E�E  cloudCover?: number; // 雲量！E-100%�E�E}
 
 /**
  * Calculate Vitamin D synthesis (IU)
@@ -52,22 +48,16 @@ export function calculateVitaminDSynthesis(exposure: SunExposure): number {
   // Partial exposure (arms/face): ~100-150 IU/min (sunny)
   const baseRate = exposureArea === 'full' ? 600 : 120;
 
-  // 天気情報による係数を適用（weatherServiceから取得した場合）
-  let rate = baseRate;
+  // 天気情報による係数を適用�E�EeatherServiceから取得した場合！E  let rate = baseRate;
   if (weatherFactor !== undefined) {
-    // weatherFactorが提供されている場合はそれを使用（より正確）
-    rate = baseRate * weatherFactor;
+    // weatherFactorが提供されてぁE��場合�Eそれを使用�E�より正確�E�E    rate = baseRate * weatherFactor;
   } else {
-    // 従来の方法（isSunnyのみ）
-    // Cloudy conditions reduce synthesis by ~60%
+    // 従来の方法！EsSunnyのみ�E�E    // Cloudy conditions reduce synthesis by ~60%
     rate = isSunny ? baseRate : baseRate * 0.4;
 
-    // UV指数と雲量が提供されている場合はより正確に計算
-    if (uvIndex !== undefined && cloudCover !== undefined) {
-      // UV指数による影響（0-11+を0.3-1.5の範囲にマッピング）
-      const uvFactor = 0.3 + (uvIndex / 11) * 1.2;
-      // 雲量による影響（雲量が多いほど係数が低い）
-      const cloudFactor = (100 - cloudCover) / 100;
+    // UV持E��と雲量が提供されてぁE��場合�Eより正確に計箁E    if (uvIndex !== undefined && cloudCover !== undefined) {
+      // UV持E��による影響�E�E-11+めE.3-1.5の篁E��にマッピング�E�E      const uvFactor = 0.3 + (uvIndex / 11) * 1.2;
+      // 雲量による影響�E�雲量が多いほど係数が低い�E�E      const cloudFactor = (100 - cloudCover) / 100;
       rate = baseRate * Math.min(uvFactor, 1.5) * cloudFactor;
     }
   }
@@ -125,3 +115,4 @@ export function getRecommendedSunExposure(
     frequency: '2-3 times per week',
   };
 }
+

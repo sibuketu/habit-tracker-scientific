@@ -1,9 +1,7 @@
 /**
- * Primal Logic - Knowledge Base (理論武装データ)
+ * CarnivoreOS - Knowledge Base (琁E��武裁E��ータ)
  *
- * カーニボアダイエットに関する一般的な誤解（Myth）と科学的真実（Truth）を定義します。
- * これにより、ユーザーは「なぜカーニボアが正しいのか」を論理的に説明できるようになります。
- *
+ * カーニ�EアダイエチE��に関する一般皁E��誤解�E�Eyth�E�と科学皁E��実！Eruth�E�を定義します、E * これにより、ユーザーは「なぜカーニ�Eアが正しいのか」を論理皁E��説明できるようになります、E *
  * A robust collection of scientific arguments to debunk common Carnivore Diet criticisms.
  * Focuses on "Logic Armor": High specificity, mechanism of action, and statistical significance.
  */
@@ -23,9 +21,9 @@ export interface KnowledgeItem {
   mechanism: string;
   source: string;
   effectSize: string; // Effect size context for statistical significance
-  // 後方互換性のためのオプショナルフィールド
-  title?: string; // 旧データ構造との互換性
-  details?: string; // 旧データ構造との互換性
+  // Optional fields for backward compatibility
+  title?: string; // Compatibility with old data structure
+  details?: string; // Compatibility with old data structure
 }
 
 export const KNOWLEDGE_BASE: KnowledgeItem[] = [
@@ -81,15 +79,13 @@ export const KNOWLEDGE_BASE: KnowledgeItem[] = [
 ];
 
 /**
- * カテゴリ別に知識を取得
- */
+ * カチE��リ別に知識を取征E */
 export function getKnowledgeByCategory(category: KnowledgeItem['category']): KnowledgeItem[] {
   return KNOWLEDGE_BASE.filter((item) => item.category === category);
 }
 
 /**
- * IDで知識を取得
- */
+ * IDで知識を取征E */
 export function getKnowledgeById(id: string): KnowledgeItem | undefined {
   return KNOWLEDGE_BASE.find((item) => item.id === id);
 }
@@ -112,8 +108,8 @@ export function searchKnowledge(keyword: string): KnowledgeItem[] {
 }
 
 /**
- * すべてのカテゴリを取得
- */
+ * すべてのカチE��リを取征E */
 export function getAllCategories(): KnowledgeItem['category'][] {
   return Array.from(new Set(KNOWLEDGE_BASE.map((item) => item.category)));
 }
+

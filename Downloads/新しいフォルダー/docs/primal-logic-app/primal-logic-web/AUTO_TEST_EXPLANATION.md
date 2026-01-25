@@ -1,66 +1,66 @@
-# 自動テストと手動テストの違い
+# 自動テストと手動チE��ト�E違い
 
 ## 現在利用可能な自動テストツール
 
-### 1. Playwright（E2Eテスト - Web版）
-- **用途**: Webブラウザでの自動テスト
-- **実行コマンド**: `npm test` または `npm run test:ui`
+### 1. Playwright�E�E2EチE��チE- Web版！E
+- **用送E*: Webブラウザでの自動テスチE
+- **実行コマンチE*: `npm test` また�E `npm run test:ui`
 - **できること**: 
-  - PCブラウザ（Chrome、Firefox、Safari）での自動操作
-  - 画面遷移、ボタンクリック、フォーム入力などの自動化
-- **できないこと**: 
-  - iPhone実機でのテスト（PCのブラウザエミュレーションのみ）
+  - PCブラウザ�E�Ehrome、Firefox、Safari�E�での自動操佁E
+  - 画面遷移、�EタンクリチE��、フォーム入力などの自動化
+- **できなぁE��と**: 
+  - iPhone実機でのチE��ト！ECのブラウザエミュレーションのみ�E�E
 
-### 2. Jest（ユニットテスト）
-- **用途**: 関数・ロジックの自動テスト
-- **実行コマンド**: `npm run test:unit`
+### 2. Jest�E�ユニットテスト！E
+- **用送E*: 関数・ロジチE��の自動テスチE
+- **実行コマンチE*: `npm run test:unit`
 - **できること**: 
-  - 計算ロジック（栄養素計算など）の自動テスト
-- **できないこと**: 
-  - UIの操作テスト
-  - 実機でのテスト
+  - 計算ロジチE���E�栁E��素計算など�E��E自動テスチE
+- **できなぁE��と**: 
+  - UIの操作テスチE
+  - 実機でのチE��チE
 
-### 3. Maestro（モバイルE2Eテスト）
-- **現状**: 導入されていない
-- **用途**: iOS/Android実機での自動テスト
+### 3. Maestro�E�モバイルE2EチE��ト！E
+- **現状**: 導�EされてぁE��ぁE
+- **用送E*: iOS/Android実機での自動テスチE
 - **できること**: 
-  - iPhone実機での自動操作
-- **必要なもの**: 
-  - Maestroのインストール
-  - 実機との接続
+  - iPhone実機での自動操佁E
+- **忁E��なも�E**: 
+  - Maestroのインスト�Eル
+  - 実機との接綁E
 
 ---
 
-## 今回のチェックリストについて
+## 今回のチェチE��リストにつぁE��
 
-`TEST_ITEMS_29_ONWARD.md` は**手動テスト用**のチェックリストです。
+`TEST_ITEMS_29_ONWARD.md` は**手動チE��ト用**のチェチE��リストです、E
 
-### なぜ手動テストが必要？
-- iPhone実機でのテストが必要
-- PlaywrightはPCブラウザでのテストのみ（実機不可）
-- Maestroは未導入
+### なぜ手動テストが忁E��E��E
+- iPhone実機でのチE��トが忁E��E
+- PlaywrightはPCブラウザでのチE��ト�Eみ�E�実機不可�E�E
+- Maestroは未導�E
 
 ### 自動テストでできること
-- PCブラウザでの基本動作確認（Playwright）
-- 計算ロジックの検証（Jest）
+- PCブラウザでの基本動作確認！Elaywright�E�E
+- 計算ロジチE��の検証�E�Eest�E�E
 
-### 自動テストでできないこと（手動テストが必要）
-- iPhone実機での操作確認
-- タッチ操作の確認
-- Safari特有の動作確認
-- 実機でのパフォーマンス確認
+### 自動テストでできなぁE��と�E�手動テストが忁E��E��E
+- iPhone実機での操作確誁E
+- タチE��操作�E確誁E
+- Safari特有�E動作確誁E
+- 実機でのパフォーマンス確誁E
 
 ---
 
-## 自動テストを実行する場合
+## 自動テストを実行する場吁E
 
-### Playwrightでテスト実行
+### PlaywrightでチE��ト実衁E
 ```bash
 cd primal-logic-app/primal-logic-web
 npm test
 ```
 
-### Jestでテスト実行
+### JestでチE��ト実衁E
 ```bash
 cd primal-logic-app/primal-logic-web
 npm run test:unit
@@ -69,4 +69,5 @@ npm run test:unit
 ---
 
 最終更新: 2025-01-27
+
 

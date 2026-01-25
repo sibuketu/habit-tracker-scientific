@@ -1,7 +1,7 @@
 /**
- * Primal Logic - Remedy Logic (トラブルシューティング)
+ * CarnivoreOS - Remedy Logic (Troubleshooting)
  *
- * カーニボア実践中に起こりうる問題とその対処法を定義します。
+ * Defines problems that may occur during carnivore practice and their solutions.
  *
  * Research Basis: Dr. Steven Gundry (The Plant Paradox) & Carnivore Diet Logic
  */
@@ -25,183 +25,183 @@ export interface RemedyItem {
 }
 
 /**
- * 植物性抗栄養素（植物毒）データベース
+ * Plant Antinutrient (Plant Toxin) Database
  *
- * このデータベースは、「健康に良い」と一般的に信じられているが、
- * 実際には抗栄養素や毒素を含み、炎症、腸内環境の悪化、栄養吸収阻害を
- * 引き起こす可能性のある植物性食品をリスト化したものです。
+ * This database lists plant foods that are generally believed to be "healthy"
+ * but actually contain antinutrients or toxins that can cause inflammation,
+ * gut environment deterioration, and nutrient absorption inhibition.
  */
 export const PLANT_TOXIN_DATABASE: PlantToxin[] = [
   {
-    name: 'ほうれん草',
+    name: 'Spinach',
     nameEn: 'Spinach',
-    category: '葉物野菜',
-    foods: ['ほうれん草', 'スイスチャード', 'ビートの葉'],
-    toxins: ['Oxalates(シュウ酸)'],
+    category: 'Leafy Vegetables',
+    foods: ['Spinach', 'Swiss chard', 'Beet greens'],
+    toxins: ['Oxalates'],
     effects: [
-      'カルシウムと結合し、体内で鋭利な結晶を形成',
-      '腎結石、関節痛、外陰部痛、全身の炎症を引き起こす',
-      '鉄分の吸収も阻害する',
+      'Binds with calcium and forms sharp crystals in the body',
+      'Causes kidney stones, joint pain, vulvodynia, and systemic inflammation',
+      'Also inhibits iron absorption',
     ],
     riskLevel: 'high',
-    carnivoreAlternative: 'レバー(生物学的利用能の高い本物の栄養素)',
+    carnivoreAlternative: 'Liver (high bioavailability real nutrients)',
   },
   {
-    name: 'アーモンド',
+    name: 'Almonds',
     nameEn: 'Almonds',
-    category: 'ナッツ類',
-    foods: ['アーモンド', 'カシューナッツ', 'ピーナッツ'],
-    toxins: ['Lectins(レクチン)', 'Phytates(フィチン酸)'],
+    category: 'Nuts',
+    foods: ['Almonds', 'Cashews', 'Peanuts'],
+    toxins: ['Lectins', 'Phytates'],
     effects: [
-      'レクチン: 腸壁を攻撃し、リーキーガット（腸管壁浸漏）を引き起こす',
-      'フィチン酸: 亜鉛、マグネシウム、カルシウム等の重要ミネラルの吸収をブロックする',
-      '※皮に最も多くの毒素が含まれる',
+      'Lectins: Attack intestinal walls and cause leaky gut (intestinal permeability)',
+      'Phytates: Block absorption of important minerals such as zinc, magnesium, and calcium',
+      'Note: Most toxins are in the skin',
     ],
     riskLevel: 'high',
-    carnivoreAlternative: '動物性脂肪(バター、牛脂、ラード)',
+    carnivoreAlternative: 'Animal fats (butter, tallow, lard)',
   },
   {
-    name: '大豆',
+    name: 'Soybeans',
     nameEn: 'Soybeans',
-    category: '豆類',
-    foods: ['大豆', 'インゲン豆', 'レンズ豆'],
-    toxins: ['Lectins(特にWGA/PHA)', 'Phytates'],
+    category: 'Legumes',
+    foods: ['Soybeans', 'Kidney beans', 'Lentils'],
+    toxins: ['Lectins (especially WGA/PHA)', 'Phytates'],
     effects: [
-      '強力なレクチンが腸の微絨毛を破壊し、自己免疫疾患の引き金となる',
-      'タンパク質の消化を阻害する酵素阻害物質も含む',
-      'エストロゲン様作用（大豆）によるホルモン撹乱',
+      'Strong lectins destroy intestinal villi and trigger autoimmune diseases',
+      'Also contains enzyme inhibitors that inhibit protein digestion',
+      'Hormone disruption from estrogen-like effects (soy)',
     ],
     riskLevel: 'high',
-    carnivoreAlternative: '赤身肉 (反芻動物)(完全なアミノ酸スコアとヘム鉄)',
+    carnivoreAlternative: 'Red meat (ruminants) (complete amino acid score and heme iron)',
   },
   {
-    name: 'トマト',
+    name: 'Tomato',
     nameEn: 'Tomato',
-    category: 'ナス科',
-    foods: ['トマト (皮/種)', '唐辛子', 'ジャガイモ', 'ナス'],
-    toxins: ['Lectins', 'Solanine(ソラニン)'],
+    category: 'Nightshades',
+    foods: ['Tomato (skin/seeds)', 'Peppers', 'Potatoes', 'Eggplant'],
+    toxins: ['Lectins', 'Solanine'],
     effects: [
-      'レクチン: 関節軟骨に結合しやすく、関節炎や痛みの原因となる',
-      'ソラニン: 神経毒の一種であり、炎症反応を増悪させる',
-      '※「イタリア人はトマトの皮と種を取り除いて食べる」のが伝統',
+      'Lectins: Easily bind to joint cartilage and cause arthritis and pain',
+      'Solanine: A type of neurotoxin that worsens inflammatory reactions',
+      'Note: "Italians traditionally remove tomato skin and seeds before eating"',
     ],
     riskLevel: 'medium',
-    carnivoreAlternative: '卵黄(コリンと脂溶性ビタミン)',
+    carnivoreAlternative: 'Egg yolk (choline and fat-soluble vitamins)',
   },
   {
-    name: '全粒小麦',
+    name: 'Whole Wheat',
     nameEn: 'Whole Wheat',
-    category: '穀物',
-    foods: ['全粒小麦', '玄米', 'オートミール'],
-    toxins: ['WGA (小麦胚芽レクチン)', 'Phytates', 'Gluten'],
+    category: 'Grains',
+    foods: ['Whole wheat', 'Brown rice', 'Oatmeal'],
+    toxins: ['WGA (Wheat Germ Agglutinin)', 'Phytates', 'Gluten'],
     effects: [
-      'WGA: インスリンの挙動を模倣し、代謝を混乱させる。血管内皮を傷つける',
-      'フィチン酸: ミネラル欠乏症の原因',
-      '繊維質が腸を物理的に傷つける',
+      'WGA: Mimics insulin behavior and disrupts metabolism. Damages vascular endothelium',
+      'Phytates: Cause mineral deficiency',
+      'Fiber physically damages the intestines',
     ],
     riskLevel: 'high',
-    carnivoreAlternative: '骨付き肉・ボーンブロス(グリシンとコラーゲンによる腸の修復)',
+    carnivoreAlternative: 'Bone-in meat and bone broth (intestinal repair through glycine and collagen)',
   },
   {
-    name: 'ケール',
+    name: 'Kale',
     nameEn: 'Kale',
-    category: 'アブラナ科',
-    foods: ['ケール', 'ブロッコリー', 'キャベツ'],
-    toxins: ['Goitrogens(ゴイトロゲン)'],
+    category: 'Brassicas',
+    foods: ['Kale', 'Broccoli', 'Cabbage'],
+    toxins: ['Goitrogens'],
     effects: [
-      '甲状腺によるヨウ素の取り込みを阻害し、甲状腺機能を低下させる（代謝低下、疲労）',
-      'ラフィノース（難消化性糖類）によるガス・膨満感',
+      'Inhibits thyroid iodine uptake and reduces thyroid function (reduced metabolism, fatigue)',
+      'Gas and bloating from raffinose (indigestible sugars)',
     ],
     riskLevel: 'medium',
-    carnivoreAlternative: 'シーフード(天然のヨウ素源)',
+    carnivoreAlternative: 'Seafood (natural iodine source)',
   },
   {
-    name: 'チアシード',
+    name: 'Chia Seeds',
     nameEn: 'Chia Seeds',
-    category: '種子類',
-    foods: ['チアシード', 'パンプキンシード', 'ヒマワリの種'],
+    category: 'Seeds',
+    foods: ['Chia seeds', 'Pumpkin seeds', 'Sunflower seeds'],
     toxins: ['Lectins', 'Phytates', 'Omega-6'],
     effects: [
-      '植物にとって「次世代の命」である種子は最も防御（毒性）が強い',
-      '過剰なオメガ6脂肪酸（リノール酸）による炎症促進',
-      'エストロゲン様作用',
+      'Seeds, which are "the next generation of life" for plants, have the strongest defense (toxicity)',
+      'Inflammation promotion from excessive omega-6 fatty acids (linoleic acid)',
+      'Estrogen-like effects',
     ],
     riskLevel: 'medium',
-    carnivoreAlternative: '魚卵 (イクラ等)(DHA/EPAが豊富な「動物の種」)',
+    carnivoreAlternative: 'Fish roe (ikura, etc.) (DHA/EPA-rich "animal seeds")',
   },
 ];
 
 /**
- * 用語解説 (Mechanism Summary)
+ * Terminology Explanation (Mechanism Summary)
  */
 export const TOXIN_MECHANISMS = {
   oxalates: {
-    name: 'Oxalates (シュウ酸)',
+    name: 'Oxalates',
     description:
-      '植物が捕食者から身を守るための「ガラスの破片」のような微細な結晶。加熱しても完全には分解されない。',
+      'Fine crystals like "glass shards" that plants use to protect themselves from predators. Not completely broken down even when heated.',
   },
   lectins: {
-    name: 'Lectins (レクチン)',
+    name: 'Lectins',
     description:
-      '糖結合タンパク質。腸のバリア機能を破壊し（リーキーガット）、血中に侵入して全身の炎症や自己免疫反応を引き起こす。',
+      'Sugar-binding proteins. Destroy intestinal barrier function (leaky gut) and enter the bloodstream, causing systemic inflammation and autoimmune reactions.',
   },
   phytates: {
-    name: 'Phytates (フィチン酸)',
+    name: 'Phytates',
     description:
-      '「抗栄養素」の代表格。ミネラル（特に亜鉛、鉄、マグネシウム）と結合し、人体への吸収を不可逆的に阻害する。',
+      'Representative "antinutrient." Binds with minerals (especially zinc, iron, magnesium) and irreversibly inhibits absorption into the human body.',
   },
   goitrogens: {
-    name: 'Goitrogens (ゴイトロゲン)',
-    description: '甲状腺腫誘発物質。代謝の要である甲状腺ホルモンの生成を妨げる。',
+    name: 'Goitrogens',
+    description: 'Goiter-inducing substances. Interfere with the production of thyroid hormones, which are essential for metabolism.',
   },
 };
 
 /**
- * トラブルシューティング: よくある症状と対処法
+ * Troubleshooting: Common Symptoms and Solutions
  */
 export const REMEDY_LOGIC: RemedyItem[] = [
   {
-    symptom: '便秘',
-    possibleCauses: ['マグネシウム不足', '水分不足', '食物繊維の過剰摂取（移行期）'],
+    symptom: 'Constipation',
+    possibleCauses: ['Magnesium deficiency', 'Water deficiency', 'Excessive fiber intake (transition period)'],
     remedies: [
-      'マグネシウムサプリメント（600mg/日）',
-      '水分と塩分の十分な摂取',
-      '食物繊維を完全に除去',
+      'Magnesium supplement (600mg/day)',
+      'Sufficient water and salt intake',
+      'Complete elimination of fiber',
     ],
     logic:
-      '食物繊維は腸の刺激物であり、除去することで便秘が解消される（Ho et al., 2012）。マグネシウムは腸の水分保持を助ける。',
+      'Fiber is an intestinal irritant, and constipation is resolved by eliminating it (Ho et al., 2012). Magnesium helps maintain intestinal water.',
   },
   {
-    symptom: 'こむら返り',
-    possibleCauses: ['マグネシウム不足', 'カリウム不足', 'ナトリウム不足'],
+    symptom: 'Muscle Cramps',
+    possibleCauses: ['Magnesium deficiency', 'Potassium deficiency', 'Sodium deficiency'],
     remedies: [
-      'マグネシウムサプリメント',
-      '肉汁を捨てずに摂取（カリウム）',
-      '塩分の積極的摂取（5000-8000mg/日）',
+      'Magnesium supplement',
+      'Consume meat juice without discarding (potassium)',
+      'Active salt intake (5000-8000mg/day)',
     ],
-    logic: '電解質バランスが重要。カーニボアではナトリウム排出が加速するため、積極的な補充が必要。',
+    logic: 'Electrolyte balance is important. In carnivore, sodium excretion accelerates, so active replenishment is necessary.',
   },
   {
-    symptom: 'ケトフル（頭痛、疲労）',
-    possibleCauses: ['ナトリウム不足', 'マグネシウム不足', '水分不足'],
+    symptom: 'Keto Flu (Headache, Fatigue)',
+    possibleCauses: ['Sodium deficiency', 'Magnesium deficiency', 'Water deficiency'],
     remedies: [
-      '塩水を飲む（1リットルの水に5-8gの塩）',
-      'マグネシウムサプリメント',
-      '十分な水分摂取',
+      'Drink salt water (5-8g salt per 1 liter of water)',
+      'Magnesium supplement',
+      'Sufficient water intake',
     ],
     logic:
-      '低インスリン状態では腎臓からのナトリウム排出が加速するため、高用量のナトリウムが必要（Dr. Ken Berry）。',
+      'In a low insulin state, sodium excretion from the kidneys accelerates, so high doses of sodium are needed (Dr. Ken Berry).',
   },
   {
-    symptom: '関節痛',
-    possibleCauses: ['レクチンを含む植物の摂取（移行期）', 'オキサレートの蓄積'],
-    remedies: ['すべての植物を除去', '十分な水分摂取でオキサレートを排出'],
-    logic: 'レクチンは関節軟骨に結合しやすく、炎症を引き起こす。完全な除去が必要。',
+    symptom: 'Joint Pain',
+    possibleCauses: ['Intake of plants containing lectins (transition period)', 'Oxalate accumulation'],
+    remedies: ['Eliminate all plants', 'Excrete oxalates with sufficient water intake'],
+    logic: 'Lectins easily bind to joint cartilage and cause inflammation. Complete elimination is necessary.',
   },
 ];
 
 /**
- * 特定の食品に含まれる毒素を検索
+ * Search for toxins contained in specific foods
  */
 export function getToxinsByFood(foodName: string): PlantToxin[] {
   return PLANT_TOXIN_DATABASE.filter((toxin) =>
@@ -214,7 +214,7 @@ export function getToxinsByFood(foodName: string): PlantToxin[] {
 }
 
 /**
- * 特定の毒素の詳細を取得
+ * Get details of specific toxin
  */
 export function getToxinByName(name: string): PlantToxin | undefined {
   return PLANT_TOXIN_DATABASE.find(
@@ -223,7 +223,7 @@ export function getToxinByName(name: string): PlantToxin | undefined {
 }
 
 /**
- * 症状から対処法を検索
+ * Search for remedies by symptom
  */
 export function getRemedyBySymptom(symptom: string): RemedyItem | undefined {
   return REMEDY_LOGIC.find(
@@ -234,30 +234,31 @@ export function getRemedyBySymptom(symptom: string): RemedyItem | undefined {
 }
 
 /**
- * Primal Logic - Adaptation Phases (代謝フェーズ)
+ * CarnivoreOS - Adaptation Phases (Metabolic Phases)
  *
- * カーニボア移行における代謝適応の段階を定義します。
- * ユーザーが現在どの段階にいるかを判定するために使用します。
+ * Defines the stages of metabolic adaptation in carnivore transition.
+ * Used to determine which stage the user is currently in.
  */
 export interface AdaptationPhase {
   id: string;
   name: string;
   nameEn: string;
-  duration: string; // 例: "1-2週間", "2-4週間"
+  duration: string; // e.g., "1-2 weeks", "2-4 weeks"
   description: string;
-  symptoms: string[]; // このフェーズでよく見られる症状
-  metabolicState: string; // 代謝状態の説明
-  recommendations: string[]; // このフェーズでの推奨事項
-  nextPhase?: string; // 次のフェーズのID
+  symptoms: string[]; // Symptoms commonly seen in this phase
+  metabolicState: string; // Explanation of metabolic state
+  recommendations: string[]; // Recommendations for this phase
+  nextPhase?: string; // ID of next phase
 }
 
 /**
- * 代謝適応フェーズのデータベース
+ * Metabolic Adaptation Phase Database
  *
- * カーニボア移行における典型的な代謝適応の段階を定義します。
- * 各フェーズは、ユーザーの移行開始からの経過時間と症状に基づいて判定されます。
+ * Defines typical stages of metabolic adaptation in carnivore transition.
+ * Each phase is determined based on elapsed time since the user started transition and symptoms.
  */
 export const ADAPTATION_PHASES: AdaptationPhase[] = [
-  // データは後で追加される予定
-  // 現時点では空配列として定義
+  // Data will be added later
+  // Currently defined as empty array
 ];
+

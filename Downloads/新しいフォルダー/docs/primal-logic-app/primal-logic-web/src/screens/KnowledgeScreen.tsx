@@ -1,9 +1,8 @@
 /**
- * Primal Logic - Knowledge Screen (理論武装モード)
+ * CarnivoreOS - Knowledge Screen (琁E��武裁E��ーチE
  *
- * カーニボアダイエットに関する一般的な誤解（Myth）と科学的真実（Truth）を表示
- * カード型のリスト表示で、MythをタップするとTruthとSourceが表示される
- */
+ * カーニ�EアダイエチE��に関する一般皁E��誤解�E�Eyth�E�と科学皁E��実！Eruth�E�を表示
+ * カード型のリスト表示で、MythをタチE�EするとTruthとSourceが表示されめE */
 
 import { useState, useMemo } from 'react';
 import {
@@ -43,13 +42,12 @@ export default function KnowledgeScreen() {
   return (
     <div className="knowledge-screen-container">
       <div className="knowledge-screen-header">
-        <h1 className="knowledge-screen-title">🛡️ Logic Armor (理論武装)</h1>
+        <h1 className="knowledge-screen-title">🛡�E�ELogic Armor (琁E��武裁E</h1>
         <p className="knowledge-screen-subtitle">
-          カーニボアに対する誤解を解き、科学的根拠で武装する
-        </p>
+          カーニ�Eアに対する誤解を解き、科学皁E��拠で武裁E��めE        </p>
       </div>
 
-      {/* カテゴリフィルター */}
+      {/* カチE��リフィルター */}
       <div className="knowledge-category-filter">
         {categories.map((category) => (
           <button
@@ -62,17 +60,17 @@ export default function KnowledgeScreen() {
               : category === 'Digestion'
                 ? '消化'
                 : category === 'Heart Health'
-                  ? '心臓'
+                  ? '忁E��'
                   : category === 'Long-term Health'
                     ? '長期健康'
                     : category === 'Nutrition'
-                      ? '栄養'
-                      : 'その他'}
+                      ? '栁E��E
+                      : 'そ�E仁E}
           </button>
         ))}
       </div>
 
-      {/* 知識カードリスト */}
+      {/* 知識カードリスチE*/}
       <div className="knowledge-cards-container">
         {filteredKnowledge.map((item) => {
           const isFlipped = flippedCards.has(item.id);
@@ -83,23 +81,23 @@ export default function KnowledgeScreen() {
               onClick={() => toggleCard(item.id)}
             >
               <div className="knowledge-card-inner">
-                {/* 表面（Myth） */}
+                {/* 表面�E�Eyth�E�E*/}
                 <div className="knowledge-card-front">
                   <div className="knowledge-card-category">{item.category}</div>
                   <h3 className="knowledge-card-title">{item.title}</h3>
                   <div className="knowledge-card-myth">
-                    <div className="knowledge-card-label">❌ Myth (誤解)</div>
+                    <div className="knowledge-card-label">❁EMyth (誤解)</div>
                     <p className="knowledge-card-text">{item.myth}</p>
                   </div>
-                  <div className="knowledge-card-hint">タップして真実を見る →</div>
+                  <div className="knowledge-card-hint">タチE�Eして真実を見る ↁE/div>
                 </div>
 
-                {/* 裏面（Truth + Source） */}
+                {/* 裏面�E�Eruth + Source�E�E*/}
                 <div className="knowledge-card-back">
                   <div className="knowledge-card-category">{item.category}</div>
                   <h3 className="knowledge-card-title">{item.title}</h3>
                   <div className="knowledge-card-truth">
-                    <div className="knowledge-card-label">✅ Truth (真実)</div>
+                    <div className="knowledge-card-label">✁ETruth (真宁E</div>
                     <p className="knowledge-card-text">{item.truth}</p>
                   </div>
                   <div className="knowledge-card-details">
@@ -110,7 +108,7 @@ export default function KnowledgeScreen() {
                     <div className="knowledge-card-label">🔬 Source</div>
                     <p className="knowledge-card-text">{item.source}</p>
                   </div>
-                  <div className="knowledge-card-hint">タップして戻る ←</div>
+                  <div className="knowledge-card-hint">タチE�Eして戻めEↁE/div>
                 </div>
               </div>
             </div>
@@ -120,9 +118,10 @@ export default function KnowledgeScreen() {
 
       {filteredKnowledge.length === 0 && (
         <div className="knowledge-empty-state">
-          <p>このカテゴリには知識がありません</p>
+          <p>こ�EカチE��リには知識がありません</p>
         </div>
       )}
     </div>
   );
 }
+

@@ -1,9 +1,8 @@
 /**
- * Primal Logic - Google Calendar Service
+ * CarnivoreOS - Google Calendar Service
  *
  * Google Calendar APIを使用して食事時間や運動時間を記録
- * 将来的に実装予定
- */
+ * 封E��皁E��実裁E��宁E */
 
 import { logError } from './errorHandler';
 
@@ -16,16 +15,11 @@ export interface CalendarEvent {
 }
 
 /**
- * Google Calendar API認証（OAuth 2.0）
- *
- * 注意: Webアプリでは直接的な連携は難しいため、以下の方法を提供:
- * 1. Google Calendar APIキーを設定（VITE_GOOGLE_CALENDAR_API_KEY）
- * 2. OAuth 2.0認証フロー（将来的に実装）
- */
+ * Google Calendar API認証�E�EAuth 2.0�E�E *
+ * 注愁E Webアプリでは直接皁E��連携は難しいため、以下�E方法を提侁E
+ * 1. Google Calendar APIキーを設定！EITE_GOOGLE_CALENDAR_API_KEY�E�E * 2. OAuth 2.0認証フロー�E�封E��皁E��実裁E��E */
 export async function authenticateGoogleCalendar(): Promise<boolean> {
-  // 将来的にOAuth 2.0認証フローを実装
-  // 現在はAPIキーのみ確認
-  const apiKey = import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY;
+  // 封E��皁E��OAuth 2.0認証フローを実裁E  // 現在はAPIキーのみ確誁E  const apiKey = import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY;
   if (!apiKey) {
     if (import.meta.env.DEV) {
       console.log(
@@ -48,8 +42,7 @@ export async function addMealToCalendar(event: CalendarEvent): Promise<boolean> 
     }
 
     // Google Calendar APIを使用
-    // 注意: 実際の実装ではOAuth 2.0認証が必要
-
+    // 注愁E 実際の実裁E��はOAuth 2.0認証が忁E��E
     if (import.meta.env.DEV) {
       console.log(
         'Google Calendar API integration is not yet fully implemented. OAuth 2.0 authentication is required.'
@@ -64,8 +57,7 @@ export async function addMealToCalendar(event: CalendarEvent): Promise<boolean> 
 }
 
 /**
- * Google Calendarから食事記録を取得
- */
+ * Google Calendarから食事記録を取征E */
 export async function getMealsFromCalendar(date: string): Promise<CalendarEvent[]> {
   try {
     const apiKey = import.meta.env.VITE_GOOGLE_CALENDAR_API_KEY;
@@ -74,8 +66,7 @@ export async function getMealsFromCalendar(date: string): Promise<CalendarEvent[
     }
 
     // Google Calendar APIを使用
-    // 注意: 実際の実装ではOAuth 2.0認証が必要
-
+    // 注愁E 実際の実裁E��はOAuth 2.0認証が忁E��E
     if (import.meta.env.DEV) {
       console.log(
         'Google Calendar API integration is not yet fully implemented. OAuth 2.0 authentication is required.'
@@ -88,3 +79,4 @@ export async function getMealsFromCalendar(date: string): Promise<CalendarEvent[
     return [];
   }
 }
+

@@ -1,17 +1,18 @@
 /**
  * Omega 3/6 Ratio Gauge
  *
- * オメガ3/6比率をシーソー表示で表示
- * カーニボア重要：炎症管理のための最重要指標
+ * Display Omega-3/6 ratio in seesaw format
+ * Carnivore important: Most critical indicator for inflammation management
  */
 
 import './NutrientGauge.css';
+import { getStatusColor } from '../utils/gaugeUtils';
 
 interface OmegaRatioGaugeProps {
   omega3: number; // g
   omega6: number; // g
-  previewOmega3?: number; // g（プレビュー）
-  previewOmega6?: number; // g（プレビュー）
+  previewOmega3?: number; // g (preview)
+  previewOmega6?: number; // g (preview)
   onPress?: () => void;
 }
 
@@ -25,31 +26,25 @@ export default function OmegaRatioGauge({
   const totalOmega3 = omega3 + previewOmega3;
   const totalOmega6 = omega6 + previewOmega6;
 
-  // 比率計算（6:3 = ?:1）
+  // Ratio calculation (6:3 = ?:1)
   const ratio = totalOmega3 > 0 ? totalOmega6 / totalOmega3 : totalOmega6 > 0 ? Infinity : 0;
 
-  // 推奨比率: 1:1 〜 1:4（カーニボア推奨）
+  // Recommended ratio: 1:1 to 1:4 (Carnivore recommended)
   const optimalRatioMin = 1;
   const optimalRatioMax = 4;
 
-  // ステータス判定
+  // Status determination
   const getStatus = (): 'optimal' | 'warning' | 'low' => {
     if (totalOmega3 === 0 && totalOmega6 === 0) return 'low';
-    if (ratio === 0) return 'optimal'; // オメガ3のみ（理想的）
+    if (ratio === 0) return 'optimal'; // Omega-3 only (ideal)
     if (ratio >= optimalRatioMin && ratio <= optimalRatioMax) return 'optimal';
-    if (ratio > optimalRatioMax) return 'warning'; // オメガ6過多（炎症リスク）
-    return 'low'; // オメガ3過多（問題なしだが表示用）
+    if (ratio > optimalRatioMax) return 'warning'; // Omega-6 excess (inflammation risk)
+    return 'low'; // Omega-3 excess (no problem, but for display)
   };
 
   const status = getStatus();
 
-  const getStatusColor = () => {
-    if (status === 'optimal') return '#34C759';
-    if (status === 'warning') return '#FF3B30';
-    return '#FF9500';
-  };
-
-  // シーソー表示用のパーセンテージ
+  // Percentage for seesaw display
   const total = totalOmega3 + totalOmega6;
   const omega3Percent = total > 0 ? (totalOmega3 / total) * 100 : 0;
   const omega6Percent = total > 0 ? (totalOmega6 / total) * 100 : 0;
@@ -61,7 +56,7 @@ export default function OmegaRatioGauge({
       style={{ cursor: onPress ? 'pointer' : 'default' }}
     >
       <div className="nutrient-gauge-header">
-        <span className="nutrient-gauge-label">オメガ3/6比率</span>
+        <span className="nutrient-gauge-label">Omega-3/6 Ratio</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <span className="nutrient-gauge-value">
             {totalOmega3 > 0 && totalOmega6 > 0 ? (
@@ -91,14 +86,13 @@ export default function OmegaRatioGauge({
                 cursor: 'pointer',
                 color: '#FF3B30',
               }}
-              title="オメガ6過多は炎症の原因になります。牧草牛や魚介類を増やすことを推奨します。"
+              title="Excess Omega-6 causes inflammation. It is recommended to increase grass-fed beef and seafood."
             >
-              ⚠️
-            </span>
+              ⚠�E�E            </span>
           )}
         </div>
       </div>
-      {/* シーソー表示 */}
+      {/* Seesaw display */}
       <div
         style={{
           display: 'flex',
@@ -109,7 +103,7 @@ export default function OmegaRatioGauge({
           marginTop: '8px',
         }}
       >
-        {/* オメガ3（左側、緑） */}
+        {/* Omega-3 (left, green) */}
         <div
           style={{
             width: `${omega3Percent}%`,
@@ -124,7 +118,7 @@ export default function OmegaRatioGauge({
         >
           {omega3Percent > 10 && 'Ω3'}
         </div>
-        {/* オメガ6（右側、赤） */}
+        {/* Omega-6 (right side, red) */}
         <div
           style={{
             width: `${omega6Percent}%`,
@@ -142,14 +136,15 @@ export default function OmegaRatioGauge({
       </div>
       {status === 'optimal' && ratio > 0 && (
         <div className="nutrient-gauge-status" style={{ color: '#34C759' }}>
-          ✅ 推奨比率範囲内（1:1 〜 1:4）
+          ✁EWithin recommended ratio range (1:1 to 1:4)
         </div>
       )}
       {status === 'warning' && (
         <div className="nutrient-gauge-status" style={{ color: '#FF3B30' }}>
-          ⚠️ オメガ6過多（炎症リスク）
+          ⚠�E�EOmega-6 excess (inflammation risk)
         </div>
       )}
     </div>
   );
 }
+

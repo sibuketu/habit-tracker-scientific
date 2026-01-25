@@ -1,0 +1,63 @@
+{
+  "topic": "野菜は毒！レクチンが�Eを破壊する真宁E,
+  "title": "まだ野菜を食べてる？それ、�Eを破壊してますよ",
+  "heygen_settings": {
+    "avatar_id": "なし（アバターなし！E,
+    "voice_id": "�E�EeyGen UIで選択した音声ID、英語！E,
+    "dimension": {
+      "width": 1080,
+      "height": 1920
+    },
+    "background": "リアルな腸の解剖図�E��E粘�Eの拡大図を含む、参老E��像的なも�Eではなく医学皁E��ラスト�Eリアル系�E�E,
+    "background_priority": "最優允E リアルな人体解剖図・臓器の実�E、次点: 3DモチE��・VRモチE��、E��ける: 参老E��像的なも�E・簡略なイラスチE,
+    "caption": true,
+    "caption_style": {
+      "font": "Arial Bold",
+      "color": "#FFFFFF",
+      "backgroundColor": "#000000",
+      "position": "bottom"
+    },
+    "tone": "専門家っぽく、�E意あめE,
+    "pace": "だんだん話すスピ�EドアチE�E�E��E頭: 普送EↁE中盤: めE��速め ↁE終盤: 速め�E�E,
+    "structure": "Hook ↁEProblem ↁESolution ↁESummary ↁECTA",
+    "language": "英誁E(US)�E�絶対�E�E,
+    "numeric_style": "書き�Eし（侁E '2 million'�E�E,
+    "performance_notes": "重要なポイントで声のト�Eンを上げる、研究引用時�E落ち着ぁE��ト�Eン、話すスピ�Eドを段階的に上げめE,
+    "caption_overlap_prevention": "吁E��クション間に0.5秒�Eポ�Eズを�Eれる、研究引用の前後にも�Eーズを�Eれる、字幕�E表示時間は最大8秒以冁E
+  },
+  "hook_jp": "まだ野菜を食べてるんですか�E�野菜に含まれるレクチンが、あなた�E腸を破壊してぁE��可能性があるんです。これ�E植物の自己防衛メカニズムなんです、E,
+  "script_jp": "まだ野菜を食べてるんですか�E�野菜に含まれるレクチンが、あなた�E腸を破壊してぁE��可能性があるんです。これ�E植物の自己防衛メカニズムなんです、En\n植物は動けなぁE��め、捕食老E��ら身を守るためにレクチンとぁE��タンパク質を生成します。このレクチンは腸の粘�Eを攻撁E��、リーキーガチE��痁E��群の原因となる可能性があります。（引用: PubMed論文、レクチン研究�E�\n\nさらに、�EウレンソウめE��ケノコに多く含まれるシュウ酸は、カルシウムと結合して腎臓結石を形成し、ミネラルの吸収を阻害します。（引用: 栁E��学の定説�E�豁E��に含まれるフィチン酸は、亜鉛めE�Eグネシウムなどの重要なミネラルの吸収をブロチE��します。（引用: 研究証明済み�E�\n\n人間�E200丁E��以上、大型哺乳類�E脂肪と肉を中忁E��進化してきたのです。植物は刁E��するように設計されてぁE��せん。今日から『肉だけ』にして、体�E炎症を止めてください、E,
+  "hook_en": "Still eating vegetables? Lectins in vegetables may be destroying your gut. This is a plant's self-defense mechanism.",
+  "script_en": "Still eating vegetables? Lectins in vegetables may be destroying your gut. This is a plant's self-defense mechanism.\n\nPlants can't move, so they produce lectin proteins to protect themselves from predators. These lectins attack your intestinal lining, potentially causing leaky gut syndrome. (Citation: PubMed research on lectins)\n\nFurthermore, oxalates found abundantly in spinach and bamboo shoots bind with calcium to form kidney stones and block mineral absorption. (Citation: Established nutrition science) Phytates in legumes block the absorption of important minerals like zinc and magnesium. (Citation: Research proven)\n\nHumans have evolved eating large mammal fat and meat for over 2 million years. We weren't designed to break down plants. Start eating 'meat only' today and stop the inflammation in your body.",
+  "script_en_heygen": "Still eating vegetables? Lectins in vegetables may be destroying your gut. This is a plant's self-defense mechanism. Plants can't move, so they produce lectin proteins to protect themselves from predators. These lectins attack your intestinal lining, potentially causing leaky gut syndrome. Furthermore, oxalates found abundantly in spinach and bamboo shoots bind with calcium to form kidney stones and block mineral absorption. Phytates in legumes block the absorption of important minerals like zinc and magnesium. Humans have evolved eating large mammal fat and meat for over 2 million years. We weren't designed to break down plants. Start eating 'meat only' today and stop the inflammation in your body.",
+  "scientificEvidence": "レクチン�E�EubMed論文多数�E�、シュウ酸�E�栁E��学の定説�E�、フィチン酸�E�研究証明済み�E�、人類�E進化史�E�E00丁E��の肉食！E,
+  "hashtags": [
+    "#carnivore",
+    "#carnivorediet",
+    "#lectins",
+    "#guthealth",
+    "#leakygut",
+    "#planttoxins",
+    "#oxalates",
+    "#phytates",
+    "#meatonly",
+    "#zerocarb"
+  ],
+  "keywords": [
+    "レクチン",
+    "野菜",
+    "腸",
+    "リーキーガチE��",
+    "シュウ酸",
+    "フィチン酸",
+    "カーニ�Eア",
+    "肉飁E,
+    "植物毁E
+  ],
+  "fixedComment": "既に実践中の人も、移行しようとぁE��人にもおすすめ、Earnivore始めるならこのアプリ、E,
+  "fixedComment_en": "Recommended for both those already practicing and those looking to transition. If you're starting Carnivore, this app is for you.",
+  "discussionComment": "野菜をやめて変わった人、コメントで教えてください、E,
+  "discussionComment_en": "If you've stopped eating vegetables and noticed changes, please share in the comments.",
+  "duration": 60
+}
+

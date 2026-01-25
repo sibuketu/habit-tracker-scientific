@@ -1,25 +1,25 @@
-# Primal Logic Web App - 開発サーバー起動ガイド
+# CarnivOS Web App - 開発サーバ�E起動ガイチE
 
 > 最終更新: 2025-12-18
 
 ---
 
-## 🚀 開発サーバー起動方法
+## 🚀 開発サーバ�E起動方況E
 
-### 方法1: 絶対パスで起動（推奨）
+### 方況E: 絶対パスで起動（推奨�E�E
 
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 npm run dev
 ```
 
-### 方法2: 現在のディレクトリから
+### 方況E: 現在のチE��レクトリから
 
 ```powershell
 npm --prefix ".\primal-logic-app\primal-logic-web" run dev
 ```
 
-### 方法3: PowerShellでパスを検索して起動
+### 方況E: PowerShellでパスを検索して起勁E
 
 ```powershell
 $webPath = (Get-ChildItem -Path . -Filter "package.json" -Recurse | Where-Object { $_.DirectoryName -like "*primal-logic-web*" } | Select-Object -First 1).DirectoryName
@@ -33,33 +33,33 @@ if ($webPath) {
 
 ## 📱 アクセス
 
-ブラウザで `http://localhost:5173` を開く
+ブラウザで `http://localhost:5173` を開ぁE
 
 ---
 
-## ✅ 動作確認項目
+## ✁E動作確認頁E��
 
-### 基本動作
-- [ ] アプリが起動する
-- [ ] ナビゲーション（Home, Input, History, Profile）が動作する
-- [ ] エラーが表示されない
+### 基本動佁E
+- [ ] アプリが起動すめE
+- [ ] ナビゲーション�E�Eome, Input, History, Profile�E�が動作すめE
+- [ ] エラーが表示されなぁE
 
 ### Home画面
-- [ ] ログがない場合のEmpty Stateが表示される
-- [ ] ログがある場合、栄養素ゲージが表示される
-- [ ] ゲージをタップするとArgument Cardが表示される
+- [ ] ログがなぁE��合�EEmpty Stateが表示されめE
+- [ ] ログがある場合、栁E��素ゲージが表示されめE
+- [ ] ゲージをタチE�EするとArgument Cardが表示されめE
 
 ### Input画面
-- [ ] Status入力（Sleep, Sun, Activity）が動作する
-- [ ] 食品検索が動作する
-- [ ] 食品追加が動作する
-- [ ] Recovery Protocolが自動生成される（違反食品の場合）
+- [ ] Status入力！Eleep, Sun, Activity�E�が動作すめE
+- [ ] 食品検索が動作すめE
+- [ ] 食品追加が動作すめE
+- [ ] Recovery Protocolが�E動生成される�E�違反食品の場合！E
 
 ### History画面
-- [ ] ログ一覧が表示される（新しい順）
-- [ ] ログアイテムをタップすると詳細が展開される（アコーディオン形式）
-- [ ] 削除ボタンが動作する
-- [ ] 栄養素メトリクスをタップするとArgument Cardが表示される
+- [ ] ログ一覧が表示される（新しい頁E��E
+- [ ] ログアイチE��をタチE�Eすると詳細が展開される（アコーチE��オン形式！E
+- [ ] 削除ボタンが動作すめE
+- [ ] 栁E��素メトリクスをタチE�EするとArgument Cardが表示されめE
 
 ### Profile画面
 - [ ] プロファイル設定が保存できる
@@ -67,19 +67,19 @@ if ($webPath) {
 
 ---
 
-## 🐛 トラブルシューティング
+## 🐛 トラブルシューチE��ング
 
-### ポート5173が既に使用されている場合
+### ポ�EチE173が既に使用されてぁE��場吁E
 
 ```powershell
-# ポートを使用しているプロセスを確認
+# ポ�Eトを使用してぁE��プロセスを確誁E
 netstat -ano | findstr :5173
 
-# プロセスを終了（必要に応じて）
+# プロセスを終亁E��忁E��に応じて�E�E
 taskkill /PID <プロセスID> /F
 ```
 
-### 依存関係の再インストール
+### 依存関係�E再インスト�Eル
 
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
@@ -90,4 +90,5 @@ npm install
 ---
 
 最終更新: 2025-12-18
+
 

@@ -1,38 +1,38 @@
-# iPhone実機テスト - クイック修正ガイド
+# iPhone実機テスチE- クイチE��修正ガイチE
 
-## 🚨 アクセスできない場合の最初の確認事項
+## 🚨 アクセスできなぁE��合�E最初�E確認事頁E
 
-### 1. PCのブラウザで動作確認（最重要）
+### 1. PCのブラウザで動作確認（最重要E��E
 
-まず、PCのブラウザ（Chrome/Edge）で以下にアクセスしてください：
+まず、PCのブラウザ�E�Ehrome/Edge�E�で以下にアクセスしてください�E�E
 
 ```
 http://localhost:5174
 ```
 
-- ✅ **表示される**: 開発サーバーは正常です。次のステップに進んでください。
-- ❌ **表示されない**: 開発サーバーが起動していません。`npm run dev`を実行してください。
+- ✁E**表示されめE*: 開発サーバ�Eは正常です。次のスチE��プに進んでください、E
+- ❁E**表示されなぁE*: 開発サーバ�Eが起動してぁE��せん。`npm run dev`を実行してください、E
 
 ---
 
-### 2. ファイアウォールの設定（よくある原因）
+### 2. ファイアウォールの設定（よくある原因�E�E
 
-Windowsファイアウォールでポート5174がブロックされている可能性が高いです。
+Windowsファイアウォールでポ�EチE174がブロチE��されてぁE��可能性が高いです、E
 
-#### 簡単な設定方法（GUI）
+#### 簡単な設定方法！EUI�E�E
 
-1. Windowsの検索で「ファイアウォール」→「Windows Defender ファイアウォール」
-2. 「詳細設定」をクリック
-3. 「受信の規則」→「新しい規則」
-4. 「ポート」→「次へ」
-5. 「TCP」→「特定のローカル ポート」に `5174` →「次へ」
-6. 「接続を許可する」→「次へ」
-7. すべてにチェック→「次へ」
-8. 名前「Vite Dev Server (5174)」→「完了」
+1. Windowsの検索で「ファイアウォール」�E「Windows Defender ファイアウォール、E
+2. 「詳細設定」をクリチE��
+3. 「受信の規則」�E「新しい規則、E
+4. 「�Eート」�E「次へ、E
+5. 「TCP」�E「特定�Eローカル ポ�Eト」に `5174` →「次へ、E
+6. 「接続を許可する」�E「次へ、E
+7. すべてにチェチE��→「次へ、E
+8. 名前「Vite Dev Server (5174)」�E「完亁E��E
 
-詳細は `FIREWALL_SETUP.md` を参照してください。
+詳細は `FIREWALL_SETUP.md` を参照してください、E
 
-#### PowerShellで設定（管理者権限）
+#### PowerShellで設定（管琁E��E��限！E
 
 ```powershell
 New-NetFirewallRule -DisplayName "Vite Dev Server (5174)" -Direction Inbound -Protocol TCP -LocalPort 5174 -Action Allow
@@ -40,36 +40,37 @@ New-NetFirewallRule -DisplayName "Vite Dev Server (5174)" -Direction Inbound -Pr
 
 ---
 
-### 3. IPアドレスの確認
+### 3. IPアドレスの確誁E
 
-PowerShellまたはコマンドプロンプトで：
+PowerShellまた�Eコマンド�Eロンプトで�E�E
 
 ```powershell
 ipconfig
 ```
 
-「IPv4 アドレス」を確認してください（例: `172.20.10.2`）
+「IPv4 アドレス」を確認してください�E�侁E `172.20.10.2`�E�E
 
 ---
 
 ### 4. iPhoneからアクセス
 
-iPhoneのSafariで以下を開いてください：
+iPhoneのSafariで以下を開いてください�E�E
 
 ```
 http://[PCのIPアドレス]:5174
 ```
 
-例: `http://172.20.10.2:5174`
+侁E `http://172.20.10.2:5174`
 
 ---
 
-## 📚 詳細なトラブルシューティング
+## 📚 詳細なトラブルシューチE��ング
 
-- `TROUBLESHOOTING_IPHONE.md`: 詳細なトラブルシューティングガイド
-- `FIREWALL_SETUP.md`: ファイアウォール設定の詳細手順
+- `TROUBLESHOOTING_IPHONE.md`: 詳細なトラブルシューチE��ングガイチE
+- `FIREWALL_SETUP.md`: ファイアウォール設定�E詳細手頁E
 
 ---
 
 最終更新: 2025-01-27
+
 

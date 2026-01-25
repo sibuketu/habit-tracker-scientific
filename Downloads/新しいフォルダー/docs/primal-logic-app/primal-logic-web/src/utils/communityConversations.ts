@@ -1,8 +1,7 @@
 /**
- * Community Conversations - コミュニティ会話のモックデータ
+ * Community Conversations - コミュニティ会話のモチE��チE�Eタ
  *
- * ユーザー同士の会話がデータとして解析され、集合知になる設計
- */
+ * ユーザー同士の会話がデータとして解析され、E��合知になる設訁E */
 
 export interface CommunityConversation {
   id: string;
@@ -20,76 +19,77 @@ export interface CommunityConversation {
 export const mockConversations: CommunityConversation[] = [
   {
     id: '1',
-    title: '下痢が続いています。どう対処すべきですか？',
+    title: '下痢が続いてぁE��す。どぁE��処すべきですか�E�E,
     category: 'question',
     author: '匿名ユーザーA',
-    content: 'カーニボアを始めて3日目ですが、下痢が続いています。塩分を増やすべきでしょうか？',
+    content: 'カーニ�Eアを始めて3日目ですが、下痢が続いてぁE��す。塩刁E��増やすべきでしょぁE���E�E,
     replies: 12,
     views: 245,
     upvotes: 8,
-    timestamp: '2時間前',
-    tags: ['下痢', '初心者', '症状'],
+    timestamp: '2時間剁E,
+    tags: ['下痢', '初忁E��E, '痁E��'],
   },
   {
     id: '2',
-    title: '便秘が改善しました！マグネシウム600mgで',
+    title: '便秘が改喁E��ました�E��Eグネシウム600mgで',
     category: 'experience',
     author: '匿名ユーザーB',
     content:
-      'マグネシウムを600mg摂取するようにしたら、便秘が完全に改善しました。2週間続けています。',
+      'マグネシウムめE00mg摂取するようにしたら、便秘が完�Eに改喁E��ました、E週間続けてぁE��す、E,
     replies: 5,
     views: 189,
     upvotes: 15,
-    timestamp: '5時間前',
-    tags: ['便秘', '改善', 'マグネシウム'],
+    timestamp: '5時間剁E,
+    tags: ['便私E, '改喁E, 'マグネシウム'],
   },
   {
     id: '3',
-    title: '違反後の回復方法について',
+    title: '違反後�E回復方法につぁE��',
     category: 'question',
     author: '匿名ユーザーC',
-    content: 'うっかり炭水化物を摂取してしまいました。16時間ファスティングで回復できますか？',
+    content: 'ぁE��かり炭水化物を摂取してしまぁE��した、E6時間ファスチE��ングで回復できますか�E�E,
     replies: 18,
     views: 312,
     upvotes: 11,
-    timestamp: '1日前',
-    tags: ['違反', '回復', 'ファスティング'],
+    timestamp: '1日剁E,
+    tags: ['違反', '回復', 'ファスチE��ング'],
   },
   {
     id: '4',
-    title: '塩分の摂取量について',
+    title: '塩刁E�E摂取量につぁE��',
     category: 'question',
     author: '匿名ユーザーD',
-    content: '1日どのくらいの塩分を摂取すべきですか？5000mg以上と聞きましたが...',
+    content: '1日どのくらぁE�E塩刁E��摂取すべきですか�E�E000mg以上と聞きましたぁE..',
     replies: 23,
     views: 456,
     upvotes: 19,
-    timestamp: '1日前',
-    tags: ['塩分', 'ナトリウム', '初心者'],
+    timestamp: '1日剁E,
+    tags: ['塩刁E, 'ナトリウム', '初忁E��E],
   },
   {
     id: '5',
-    title: '頭痛が続いています。ナトリウム不足でしょうか？',
+    title: '頭痛が続いてぁE��す。ナトリウム不足でしょぁE���E�E,
     category: 'question',
     author: '匿名ユーザーE',
-    content: 'カーニボアを始めてから頭痛が続いています。ナトリウムを増やすべきでしょうか？',
+    content: 'カーニ�Eアを始めてから頭痛が続いてぁE��す。ナトリウムを増やすべきでしょぁE���E�E,
     replies: 9,
     views: 167,
     upvotes: 6,
-    timestamp: '2日前',
-    tags: ['頭痛', 'ナトリウム', '症状'],
+    timestamp: '2日剁E,
+    tags: ['頭痁E, 'ナトリウム', '痁E��'],
   },
   {
     id: '6',
-    title: 'こむら返りがなくなりました',
+    title: 'こ�Eら返りがなくなりました',
     category: 'experience',
     author: '匿名ユーザーF',
     content:
-      'マグネシウムを増やしたら、こむら返りが完全になくなりました。毎日400mg摂取しています。',
+      'マグネシウムを増やしたら、こむら返りが完�Eになくなりました。毎日400mg摂取してぁE��す、E,
     replies: 4,
     views: 134,
     upvotes: 12,
-    timestamp: '2日前',
-    tags: ['こむら返り', '改善', 'マグネシウム'],
+    timestamp: '2日剁E,
+    tags: ['こ�Eら返り', '改喁E, 'マグネシウム'],
   },
 ];
+

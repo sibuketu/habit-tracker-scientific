@@ -23,11 +23,24 @@
     "test:unit": "jest",
     "test:unit:watch": "jest --watch",
     "test:unit:coverage": "jest --coverage",
-    "screenshot:all": "tsx scripts/capture-screenshots-simple.ts"
+    "screenshot:all": "tsx scripts/capture-screenshots-simple.ts",
+    "resize-screenshot": "tsx scripts/resize-screenshot.ts",
+    "cap:sync": "npx cap sync",
+    "cap:ios": "npx cap open ios",
+    "cap:android": "npx cap open android",
+    "cap:build": "npm run build && npx cap sync",
+    "cap:run:ios": "npx cap run ios",
+    "cap:run:android": "npx cap run android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.0.1",
+    "@capacitor/cli": "^8.0.1",
+    "@capacitor/core": "^8.0.1",
+    "@capacitor/ios": "^8.0.1",
     "@google/generative-ai": "^0.21.0",
+    "@stripe/stripe-js": "^4.0.0",
     "@supabase/supabase-js": "^2.89.0",
+    "firebase": "^12.8.0",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
@@ -52,3 +65,4 @@
     "vite-plugin-pwa": "^1.2.0"
   }
 }
+

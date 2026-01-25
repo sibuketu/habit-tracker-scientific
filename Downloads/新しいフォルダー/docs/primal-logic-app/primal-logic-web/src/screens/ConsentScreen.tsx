@@ -1,7 +1,7 @@
 /**
- * Primal Logic - Consent Screen
+ * CarnivoreOS - Consent Screen
  *
- * 初回起動時のプライバシーポリシー・利用規約への同意画面
+ * 初回起動時のプライバシーポリシー・利用規紁E��の同意画面
  */
 
 import { useState } from 'react';
@@ -35,10 +35,9 @@ export default function ConsentScreen({ onAccept, onDecline }: ConsentScreenProp
   return (
     <div className="consent-screen-container">
       <div className="consent-screen-content">
-        <h1 className="consent-screen-title">Primal Logicへようこそ</h1>
+        <h1 className="consent-screen-title">CarnivoreOSへようこそ</h1>
         <p className="consent-screen-description">
-          サービスをご利用いただくには、プライバシーポリシーと利用規約への同意が必要です。
-        </p>
+          サービスをご利用ぁE��だくには、�Eライバシーポリシーと利用規紁E��の同意が忁E��です、E        </p>
 
         <div className="consent-screen-checkboxes">
           <label className="consent-screen-checkbox">
@@ -57,8 +56,7 @@ export default function ConsentScreen({ onAccept, onDecline }: ConsentScreenProp
               >
                 プライバシーポリシー
               </a>
-              に同意します
-            </span>
+              に同意しまぁE            </span>
           </label>
 
           <label className="consent-screen-checkbox">
@@ -75,10 +73,8 @@ export default function ConsentScreen({ onAccept, onDecline }: ConsentScreenProp
                   handleViewTerms();
                 }}
               >
-                利用規約
-              </a>
-              に同意します
-            </span>
+                利用規紁E              </a>
+              に同意しまぁE            </span>
           </label>
         </div>
 
@@ -94,10 +90,10 @@ export default function ConsentScreen({ onAccept, onDecline }: ConsentScreenProp
             onClick={handleAccept}
             disabled={!privacyAccepted || !termsAccepted}
           >
-            同意して続ける
-          </button>
+            同意して続けめE          </button>
         </div>
       </div>
     </div>
   );
 }
+

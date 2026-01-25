@@ -1,11 +1,9 @@
 /**
- * Community Screen - コミュニティ機能
+ * Community Screen - コミュニティ機�E
  *
- * 設計思想: 既存コミュニティ系の上位互換 + データ駆動型集合知
- * - 既存コミュニティ（Discord、Reddit、X等）の上位互換
- * - 会話はデータベースに保存され、ログとして活用される
- * - 過去の会話に基づいてAIが回答したり、集合知の生成に利用される
- */
+ * 設計思想: 既存コミュニティ系の上位互換 + チE�Eタ駁E��型集合知
+ * - 既存コミュニティ�E�Eiscord、Reddit、X等）�E上位互換
+ * - 会話はチE�Eタベ�Eスに保存され、ログとして活用されめE * - 過去の会話に基づぁE��AIが回答したり、E��合知の生�Eに利用されめE */
 
 import { useState, useEffect } from 'react';
 import {
@@ -72,10 +70,9 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
                 color: '#6b7280',
               }}
             >
-              ←
-            </button>
+              ↁE            </button>
             <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>
-              🤝 {t('community.title')}
+              🤁E{t('community.title')}
             </h1>
           </div>
           <button
@@ -90,11 +87,10 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
             }}
             title={t('community.showConcept')}
           >
-            ❓
-          </button>
+            ❁E          </button>
         </div>
 
-        {/* 設計思想の説明（展開可能） */}
+        {/* 設計思想の説明（展開可能�E�E*/}
         {showConcept && (
           <div
             style={{
@@ -138,7 +134,7 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
           </div>
         )}
 
-        {/* カテゴリタブ */}
+        {/* カチE��リタチE*/}
         <div
           style={{
             display: 'flex',
@@ -214,11 +210,11 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
               whiteSpace: 'nowrap',
             }}
           >
-            👨‍⚕️ {t('community.consultation')}
+            👨‍⚕�E�E{t('community.consultation')}
           </button>
         </div>
 
-        {/* コンテンツ */}
+        {/* コンチE��チE*/}
         {activeCategory === 'conversations' && (
           <div>
             <div
@@ -257,7 +253,7 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
                     marginBottom: '0.5rem',
                   }}
                 >
-                  ⚠️ {t('community.comingSoonWarning')}
+                  ⚠�E�E{t('community.comingSoonWarning')}
                 </div>
                 <p
                   style={{
@@ -300,7 +296,7 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
                       cursor: 'pointer',
                     }}
                     onClick={() => {
-                      // 将来的にはスレッド詳細画面に遷移
+                      // 封E��皁E��はスレチE��詳細画面に遷移
                       alert(t('community.threadDetail'));
                     }}
                   >
@@ -623,7 +619,7 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
                   color: '#1f2937',
                 }}
               >
-                👨‍⚕️ {t('community.consultationTitle')}
+                👨‍⚕�E�E{t('community.consultationTitle')}
               </h2>
               <div
                 style={{
@@ -743,8 +739,7 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
                     color: '#1e40af',
                   }}
                 >
-                  💡 将来的には、専門医・コーチとのデータ共有プラットフォームが利用可能になります
-                </div>
+                  💡 封E��皁E��は、専門医・コーチとのチE�Eタ共有�EラチE��フォームが利用可能になりまぁE                </div>
               </div>
             </div>
           </div>
@@ -753,3 +748,4 @@ export default function CommunityScreen({ onBack }: CommunityScreenProps) {
     </div>
   );
 }
+

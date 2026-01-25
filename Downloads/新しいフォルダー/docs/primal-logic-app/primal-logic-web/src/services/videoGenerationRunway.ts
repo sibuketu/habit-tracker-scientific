@@ -1,21 +1,19 @@
 /**
- * Primal Logic - Runway API Integration
+ * CarnivoreOS - Runway API Integration
  *
- * Runway APIを使用して動画を生成
- * API仕様: https://docs.runwayml.com/ (要確認)
+ * Runway APIを使用して動画を生戁E * API仕槁E https://docs.runwayml.com/ (要確誁E
  */
 
 import type { VideoScript } from './videoGeneration';
 import { logError } from '../utils/errorHandler';
 
 const RUNWAY_API_KEY = import.meta.env.VITE_RUNWAY_API_KEY;
-// Runway ML API エンドポイント
-// 公式ドキュメント: https://docs.runwayml.com/
-// 実際のAPIエンドポイントは公式ドキュメントで確認してください
+// Runway ML API エンド�EインチE// 公式ドキュメンチE https://docs.runwayml.com/
+// 実際のAPIエンド�Eイント�E公式ドキュメントで確認してください
 const RUNWAY_API_URL = 'https://api.runwayml.com/v1';
 
 export interface RunwayVideoRequest {
-  prompt: string; // スクリプトから生成したプロンプト
+  prompt: string; // スクリプトから生�Eしたプロンプト
   duration?: number;
   aspect_ratio?: '16:9' | '9:16' | '1:1';
 }
@@ -23,32 +21,28 @@ export interface RunwayVideoRequest {
 export interface RunwayVideoResponse {
   id: string;
   status: 'pending' | 'processing' | 'completed' | 'failed';
-  output?: string[]; // 動画URLの配列
+  output?: string[]; // 動画URLの配�E
   error?: string;
 }
 
 /**
- * Runway APIを使用して動画を生成
- */
+ * Runway APIを使用して動画を生戁E */
 export async function generateVideoWithRunway(script: VideoScript): Promise<string> {
   if (!RUNWAY_API_KEY) {
     throw new Error('VITE_RUNWAY_API_KEY is not set');
   }
 
-  // スクリプトからプロンプトを生成（完全実装版）
-  // タイトル、説明、スクリプトの最初の部分を組み合わせてプロンプトを作成
+  // スクリプトからプロンプトを生成（完�E実裁E���E�E  // タイトル、説明、スクリプトの最初�E部刁E��絁E��合わせてプロンプトを作�E
   const scriptPreview = script.script.substring(0, 500);
   const prompt = `${script.title}. ${script.description || ''}. ${scriptPreview}`.trim();
 
-  // プラットフォームに応じてアスペクト比を決定
-  const aspectRatioMap: Record<string, '16:9' | '9:16' | '1:1'> = {
+  // プラチE��フォームに応じてアスペクト比を決宁E  const aspectRatioMap: Record<string, '16:9' | '9:16' | '1:1'> = {
     youtube: '16:9',
     tiktok: '9:16',
     instagram: script.duration <= 60 ? '9:16' : '1:1', // ショート動画は9:16、ロング動画は1:1
   };
 
-  const aspectRatio = script.platform ? aspectRatioMap[script.platform] || '16:9' : '16:9'; // デフォルトは16:9（YouTube用）
-
+  const aspectRatio = script.platform ? aspectRatioMap[script.platform] || '16:9' : '16:9'; // チE��ォルト�E16:9�E�EouTube用�E�E
   const request: RunwayVideoRequest = {
     prompt,
     duration: script.duration,
@@ -56,7 +50,7 @@ export async function generateVideoWithRunway(script: VideoScript): Promise<stri
   };
 
   try {
-    // Step 1: 動画生成リクエストを送信
+    // Step 1: 動画生�Eリクエストを送信
     const response = await fetch(`${RUNWAY_API_URL}/video/generate`, {
       method: 'POST',
       headers: {
@@ -72,8 +66,7 @@ export async function generateVideoWithRunway(script: VideoScript): Promise<stri
 
     const data: RunwayVideoResponse = await response.json();
 
-    // Step 2: 動画生成の完了を待つ（ポーリング）
-    if (data.status === 'pending' || data.status === 'processing') {
+    // Step 2: 動画生�Eの完亁E��征E���E��Eーリング�E�E    if (data.status === 'pending' || data.status === 'processing') {
       return await pollVideoStatus(data.id);
     }
 
@@ -89,7 +82,7 @@ export async function generateVideoWithRunway(script: VideoScript): Promise<stri
 }
 
 /**
- * 動画生成のステータスをポーリング
+ * 動画生�EのスチE�Eタスを�Eーリング
  */
 async function pollVideoStatus(
   videoId: string,
@@ -120,7 +113,7 @@ async function pollVideoStatus(
         throw new Error(data.error || 'Video generation failed');
       }
 
-      // まだ処理中
+      // まだ処琁E��
     } catch (error) {
       logError(error, { component: 'videoGenerationRunway', action: 'pollVideoStatus', videoId });
       throw error;
@@ -129,3 +122,4 @@ async function pollVideoStatus(
 
   throw new Error('Video generation timeout');
 }
+

@@ -1,34 +1,25 @@
 /**
- * Fuzzy Data Master - 栄養素の「幅」を持つマスターデータ
+ * Fuzzy Data Master - 栁E��素の「幁E��を持つマスターチE�Eタ
  *
- * 栄養素は「100~130g」のような幅（Range）として保持するが、
- * メイン画面では中央値のみシンプルに表示する。
- */
+ * 栁E��素は、E00~130g」�Eような幁E��Eange�E�として保持するが、E * メイン画面では中央値のみシンプルに表示する、E */
 
 /**
- * 栄養素の幅（Fuzzy Data）
- */
+ * 栁E��素の幁E��Euzzy Data�E�E */
 export type FuzzyNutrient = {
-  value: number; // UI表示用（中央値）
-  min: number; // 最小値
+  value: number; // UI表示用�E�中央値�E�E  min: number; // 最小値
   max: number; // 最大値
 };
 
 /**
- * 食品マスターデータの型
- */
+ * 食品マスターチE�Eタの垁E */
 export interface FoodMasterItem {
   id: string;
   name: string; // 英語名
   name_ja: string; // 日本語名
-  name_fr?: string; // フランス語名（オプション）
-  name_de?: string; // ドイツ語名（オプション）
-  protein: FuzzyNutrient; // per 100g
+  name_fr?: string; // フランス語名�E�オプション�E�E  name_de?: string; // ドイチE��名�E�オプション�E�E  protein: FuzzyNutrient; // per 100g
   fat: FuzzyNutrient; // per 100g
   carbs: FuzzyNutrient; // per 100g
-  default_unit: number; // デフォルトの量（g）
-  // 追加栄養素（オプション）
-  saturated_fat?: FuzzyNutrient;
+  default_unit: number; // チE��ォルト�E量！E�E�E  // 追加栁E��素�E�オプション�E�E  saturated_fat?: FuzzyNutrient;
   omega_6?: FuzzyNutrient;
   zinc?: FuzzyNutrient;
   vitamin_b12?: FuzzyNutrient;
@@ -36,8 +27,7 @@ export interface FoodMasterItem {
   sodium?: FuzzyNutrient;
   magnesium?: FuzzyNutrient;
   potassium?: FuzzyNutrient; // mg
-  // 脂溶性ビタミン（カーニボア重要）
-  vitamin_a?: FuzzyNutrient; // IU
+  // 脂溶性ビタミン�E�カーニ�Eア重要E��E  vitamin_a?: FuzzyNutrient; // IU
   vitamin_d?: FuzzyNutrient; // IU
   vitamin_k2?: FuzzyNutrient; // μg (MK-4)
   omega_3?: FuzzyNutrient; // g
@@ -46,14 +36,12 @@ export interface FoodMasterItem {
   iodine?: FuzzyNutrient; // μg (ヨウ素)
   calcium?: FuzzyNutrient; // mg (カルシウム)
   phosphorus?: FuzzyNutrient; // mg (リン)
-  glycine?: FuzzyNutrient; // g (グリシン、コラーゲン、皮、骨、軟骨由来)
+  glycine?: FuzzyNutrient; // g (グリシン、コラーゲン、皮、E��、軟骨由来)
   methionine?: FuzzyNutrient; // g (メチオニン、筋肉由来)
-  // 食物繊維（Avoid Zone用）
-  fiber?: FuzzyNutrient; // g (食物繊維)
-  // 抗栄養素（植物性食品のみ、カーニボア重要）
-  phytates?: FuzzyNutrient; // mg (フィチン酸)
-  polyphenols?: FuzzyNutrient; // mg (ポリフェノール)
-  flavonoids?: FuzzyNutrient; // mg (フラボノイド)
+  // 食物繊維�E�Evoid Zone用�E�E  fiber?: FuzzyNutrient; // g (食物繊維)
+  // 抗栁E��素�E�植物性食品のみ、カーニ�Eア重要E��E  phytates?: FuzzyNutrient; // mg (フィチン酸)
+  polyphenols?: FuzzyNutrient; // mg (ポリフェノ�Eル)
+  flavonoids?: FuzzyNutrient; // mg (フラボノイチE
   oxalates?: FuzzyNutrient; // mg (シュウ酸)
   lectins?: FuzzyNutrient; // mg (レクチン)
   saponins?: FuzzyNutrient; // mg (サポニン)
@@ -72,11 +60,10 @@ export type FoodMaster = {
   fish: Record<string, FoodMasterItem>;
   dairy: Record<string, FoodMasterItem>;
   fat: Record<string, FoodMasterItem>;
-  plant?: Record<string, FoodMasterItem>; // 植物性食品（Avoid Zone用）
-};
+  plant?: Record<string, FoodMasterItem>; // 植物性食品�E�Evoid Zone用�E�E};
 
 /**
- * 食品マスターデータ
+ * 食品マスターチE�Eタ
  */
 export const FOOD_MASTER: FoodMaster = {
   beef: {
@@ -98,15 +85,8 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 50, min: 30, max: 70 },
       magnesium: { value: 20, min: 15, max: 25 },
       potassium: { value: 350, min: 300, max: 400 }, // mg/100g
-      vitamin_a: { value: 0, min: 0, max: 0 }, // IU/100g（赤身肉には少ない）
-      vitamin_d: { value: 0.1, min: 0.05, max: 0.2 }, // IU/100g（微量、USDAデータ）
-      vitamin_k2: { value: 1.5, min: 1.0, max: 2.0 }, // μg/100g（脂肪分由来の微量値）
-      omega_3: { value: 0.05, min: 0.03, max: 0.08 }, // g/100g（牧草牛はより高い）
-      choline: { value: 80, min: 70, max: 90 }, // mg/100g
-      // グリシン:メチオニン比（筋肉肉はメチオニンが多い）
-      glycine: { value: 0.8, min: 0.7, max: 0.9 }, // g/100g（筋肉肉には少ない）
-      methionine: { value: 0.5, min: 0.45, max: 0.55 }, // g/100g（筋肉肉には多い）
-    },
+      vitamin_a: { value: 0, min: 0, max: 0 }, // IU/100g�E�赤身肉には少なぁE��E      vitamin_d: { value: 0.1, min: 0.05, max: 0.2 }, // IU/100g�E�微量、USDAチE�Eタ�E�E      vitamin_k2: { value: 1.5, min: 1.0, max: 2.0 }, // μg/100g�E�脂肪刁E��来の微量値�E�E      omega_3: { value: 0.05, min: 0.03, max: 0.08 }, // g/100g�E�牧草牛はより高い�E�E      choline: { value: 80, min: 70, max: 90 }, // mg/100g
+      // グリシン:メチオニン比（筋肉肉�Eメチオニンが多い�E�E      glycine: { value: 0.8, min: 0.7, max: 0.9 }, // g/100g�E�筋肉肉には少なぁE��E      methionine: { value: 0.5, min: 0.45, max: 0.55 }, // g/100g�E�筋肉肉には多い�E�E    },
     sirloin: {
       id: 'beef_sirloin',
       name: 'Sirloin Steak',
@@ -134,7 +114,7 @@ export const FOOD_MASTER: FoodMaster = {
     ground: {
       id: 'beef_ground',
       name: 'Ground Beef',
-      name_ja: '牛ひき肉',
+      name_ja: '牛�Eき肉',
       name_fr: 'Bœuf haché',
       name_de: 'Rinderhackfleisch',
       protein: { value: 18, min: 16, max: 20 },
@@ -150,15 +130,13 @@ export const FOOD_MASTER: FoodMaster = {
       magnesium: { value: 18, min: 15, max: 21 },
       potassium: { value: 340, min: 300, max: 380 }, // mg/100g
       vitamin_a: { value: 0, min: 0, max: 0 },
-      vitamin_d: { value: 0.1, min: 0.05, max: 0.2 }, // IU/100g（微量、USDAデータ）
-      vitamin_k2: { value: 1.5, min: 1.0, max: 2.0 }, // μg/100g（脂肪分由来の微量値）
-      omega_3: { value: 0.05, min: 0.03, max: 0.08 },
+      vitamin_d: { value: 0.1, min: 0.05, max: 0.2 }, // IU/100g�E�微量、USDAチE�Eタ�E�E      vitamin_k2: { value: 1.5, min: 1.0, max: 2.0 }, // μg/100g�E�脂肪刁E��来の微量値�E�E      omega_3: { value: 0.05, min: 0.03, max: 0.08 },
       choline: { value: 75, min: 65, max: 85 }, // mg/100g
     },
     brisket: {
       id: 'beef_brisket',
       name: 'Brisket',
-      name_ja: '牛バラ / ブリスケット',
+      name_ja: '牛バラ / ブリスケチE��',
       name_fr: 'Poitrine de bœuf',
       name_de: 'Rinderbrust',
       protein: { value: 14, min: 12, max: 16 },
@@ -174,9 +152,7 @@ export const FOOD_MASTER: FoodMaster = {
       magnesium: { value: 15, min: 12, max: 18 },
       potassium: { value: 320, min: 280, max: 360 }, // mg/100g
       vitamin_a: { value: 0, min: 0, max: 0 },
-      vitamin_d: { value: 0.1, min: 0.05, max: 0.2 }, // IU/100g（微量、USDAデータ）
-      vitamin_k2: { value: 2.0, min: 1.5, max: 2.5 }, // μg/100g（脂肪分由来の微量値、バラはより高い）
-      omega_3: { value: 0.05, min: 0.03, max: 0.08 },
+      vitamin_d: { value: 0.1, min: 0.05, max: 0.2 }, // IU/100g�E�微量、USDAチE�Eタ�E�E      vitamin_k2: { value: 2.0, min: 1.5, max: 2.5 }, // μg/100g�E�脂肪刁E��来の微量値、バラはより高い�E�E      omega_3: { value: 0.05, min: 0.03, max: 0.08 },
       choline: { value: 70, min: 60, max: 80 }, // mg/100g
     },
     chuck: {
@@ -198,21 +174,19 @@ export const FOOD_MASTER: FoodMaster = {
       magnesium: { value: 19, min: 16, max: 22 },
       potassium: { value: 355, min: 320, max: 390 }, // mg/100g
       vitamin_a: { value: 0, min: 0, max: 0 },
-      vitamin_d: { value: 0.1, min: 0.05, max: 0.2 }, // IU/100g（微量、USDAデータ）
-      vitamin_k2: { value: 1.2, min: 0.8, max: 1.6 }, // μg/100g（脂肪分由来の微量値）
-      omega_3: { value: 0.05, min: 0.03, max: 0.08 },
+      vitamin_d: { value: 0.1, min: 0.05, max: 0.2 }, // IU/100g�E�微量、USDAチE�Eタ�E�E      vitamin_k2: { value: 1.2, min: 0.8, max: 1.6 }, // μg/100g�E�脂肪刁E��来の微量値�E�E      omega_3: { value: 0.05, min: 0.03, max: 0.08 },
       choline: { value: 82, min: 72, max: 92 }, // mg/100g
     },
     liver: {
       id: 'beef_liver',
       name: 'Beef Liver',
-      name_ja: '牛レバー',
+      name_ja: '牛レバ�E',
       name_fr: 'Foie de bœuf',
       name_de: 'Rinderleber',
       protein: { value: 20, min: 18, max: 22 },
       fat: { value: 3.6, min: 2.5, max: 5.0 },
       carbs: { value: 3.9, min: 3.0, max: 5.0 },
-      default_unit: 100, // レバーは少量
+      default_unit: 100, // レバ�Eは少量
       saturated_fat: { value: 1.5, min: 1.0, max: 2.0 },
       omega_6: { value: 0.2, min: 0.1, max: 0.3 },
       zinc: { value: 4.0, min: 3.5, max: 4.5 },
@@ -220,13 +194,10 @@ export const FOOD_MASTER: FoodMaster = {
       iron: { value: 6.2, min: 5.0, max: 7.5 },
       sodium: { value: 70, min: 50, max: 90 },
       magnesium: { value: 18, min: 15, max: 21 },
-      // レバーは脂溶性ビタミンの宝庫
-      vitamin_a: { value: 49678, min: 45000, max: 55000 }, // IU/100g（非常に高い）
-      vitamin_d: { value: 49, min: 40, max: 60 }, // IU/100g
-      vitamin_k2: { value: 0, min: 0, max: 0 }, // レバーにはK1はあるがK2は少ない
-      omega_3: { value: 0.1, min: 0.05, max: 0.15 },
-      // レバーはCholineが非常に豊富
-      choline: { value: 350, min: 320, max: 380 }, // mg/100g
+      // レバ�Eは脂溶性ビタミンの宝庫
+      vitamin_a: { value: 49678, min: 45000, max: 55000 }, // IU/100g�E�非常に高い�E�E      vitamin_d: { value: 49, min: 40, max: 60 }, // IU/100g
+      vitamin_k2: { value: 0, min: 0, max: 0 }, // レバ�EにはK1はあるがK2は少なぁE      omega_3: { value: 0.1, min: 0.05, max: 0.15 },
+      // レバ�EはCholineが非常に豊寁E      choline: { value: 350, min: 320, max: 380 }, // mg/100g
     },
   },
   pork: {
@@ -248,10 +219,7 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 50, min: 30, max: 70 },
       magnesium: { value: 15, min: 12, max: 18 },
       potassium: { value: 200, min: 180, max: 220 }, // mg/100g
-      // 豚バラは脂溶性ビタミンを含む（ラード由来）
-      vitamin_a: { value: 0, min: 0, max: 0 }, // 豚バラにはビタミンAはほとんど含まれない
-      vitamin_d: { value: 2.5, min: 2.0, max: 3.0 }, // IU/100g（ラード由来の微量値）
-      vitamin_k2: { value: 0, min: 0, max: 0 },
+      // 豚バラは脂溶性ビタミンを含む�E�ラード由来�E�E      vitamin_a: { value: 0, min: 0, max: 0 }, // 豚バラにはビタミンAはほとんど含まれなぁE      vitamin_d: { value: 2.5, min: 2.0, max: 3.0 }, // IU/100g�E�ラード由来の微量値�E�E      vitamin_k2: { value: 0, min: 0, max: 0 },
       omega_3: { value: 0.2, min: 0.15, max: 0.25 },
       choline: { value: 60, min: 50, max: 70 }, // mg/100g
     },
@@ -274,8 +242,7 @@ export const FOOD_MASTER: FoodMaster = {
       magnesium: { value: 20, min: 17, max: 23 },
       potassium: { value: 300, min: 270, max: 330 }, // mg/100g
       vitamin_a: { value: 0, min: 0, max: 0 },
-      vitamin_d: { value: 0.5, min: 0.3, max: 0.7 }, // IU/100g（ラード由来の微量値）
-      vitamin_k2: { value: 0, min: 0, max: 0 },
+      vitamin_d: { value: 0.5, min: 0.3, max: 0.7 }, // IU/100g�E�ラード由来の微量値�E�E      vitamin_k2: { value: 0, min: 0, max: 0 },
       omega_3: { value: 0.1, min: 0.05, max: 0.15 },
       choline: { value: 75, min: 65, max: 85 }, // mg/100g
     },
@@ -298,15 +265,14 @@ export const FOOD_MASTER: FoodMaster = {
       magnesium: { value: 18, min: 15, max: 21 },
       potassium: { value: 290, min: 260, max: 320 }, // mg/100g
       vitamin_a: { value: 0, min: 0, max: 0 },
-      vitamin_d: { value: 0.6, min: 0.4, max: 0.8 }, // IU/100g（ラード由来の微量値）
-      vitamin_k2: { value: 0, min: 0, max: 0 },
+      vitamin_d: { value: 0.6, min: 0.4, max: 0.8 }, // IU/100g�E�ラード由来の微量値�E�E      vitamin_k2: { value: 0, min: 0, max: 0 },
       omega_3: { value: 0.1, min: 0.05, max: 0.15 },
       choline: { value: 70, min: 60, max: 80 }, // mg/100g
     },
     ribs: {
       id: 'pork_ribs',
       name: 'Pork Ribs',
-      name_ja: '豚スペアリブ',
+      name_ja: '豚スペアリチE,
       name_fr: 'Côtes de porc',
       name_de: 'Schweinerippchen',
       protein: { value: 16, min: 14, max: 18 },
@@ -322,15 +288,14 @@ export const FOOD_MASTER: FoodMaster = {
       magnesium: { value: 16, min: 13, max: 19 },
       potassium: { value: 275, min: 245, max: 305 }, // mg/100g
       vitamin_a: { value: 0, min: 0, max: 0 },
-      vitamin_d: { value: 0.7, min: 0.5, max: 0.9 }, // IU/100g（ラード由来の微量値）
-      vitamin_k2: { value: 0, min: 0, max: 0 },
+      vitamin_d: { value: 0.7, min: 0.5, max: 0.9 }, // IU/100g�E�ラード由来の微量値�E�E      vitamin_k2: { value: 0, min: 0, max: 0 },
       omega_3: { value: 0.1, min: 0.05, max: 0.15 },
       choline: { value: 65, min: 55, max: 75 }, // mg/100g
     },
     liver: {
       id: 'pork_liver',
       name: 'Pork Liver',
-      name_ja: '豚レバー',
+      name_ja: '豚レバ�E',
       name_fr: 'Foie de porc',
       name_de: 'Schweineleber',
       protein: { value: 20, min: 18, max: 22 },
@@ -345,19 +310,15 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 75, min: 55, max: 95 },
       magnesium: { value: 17, min: 14, max: 20 },
       potassium: { value: 230, min: 200, max: 260 }, // mg/100g
-      // 豚レバーも脂溶性ビタミンが豊富（牛レバーよりやや低い）
-      vitamin_a: { value: 32976, min: 30000, max: 36000 }, // IU/100g（非常に高い）
-      vitamin_d: { value: 23, min: 20, max: 26 }, // IU/100g
-      vitamin_k2: { value: 0, min: 0, max: 0 }, // レバーにはK1はあるがK2は少ない
-      omega_3: { value: 0.15, min: 0.1, max: 0.2 },
-      choline: { value: 320, min: 290, max: 350 }, // mg/100g（非常に高い）
-    },
+      // 豚レバ�Eも脂溶性ビタミンが豊富（牛レバ�EよりめE��低い�E�E      vitamin_a: { value: 32976, min: 30000, max: 36000 }, // IU/100g�E�非常に高い�E�E      vitamin_d: { value: 23, min: 20, max: 26 }, // IU/100g
+      vitamin_k2: { value: 0, min: 0, max: 0 }, // レバ�EにはK1はあるがK2は少なぁE      omega_3: { value: 0.15, min: 0.1, max: 0.2 },
+      choline: { value: 320, min: 290, max: 350 }, // mg/100g�E�非常に高い�E�E    },
   },
   chicken: {
     breast: {
       id: 'chicken_breast',
       name: 'Chicken Breast',
-      name_ja: '鶏胸肉',
+      name_ja: '鶏�E肁E,
       name_fr: 'Blanc de poulet',
       name_de: 'Hähnchenbrust',
       protein: { value: 31, min: 29, max: 33 },
@@ -429,7 +390,7 @@ export const FOOD_MASTER: FoodMaster = {
     liver: {
       id: 'chicken_liver',
       name: 'Chicken Liver',
-      name_ja: '鶏レバー',
+      name_ja: '鶏レバ�E',
       name_fr: 'Foie de poulet',
       name_de: 'Hähnchenleber',
       protein: { value: 18.9, min: 17, max: 21 },
@@ -443,13 +404,10 @@ export const FOOD_MASTER: FoodMaster = {
       iron: { value: 9.0, min: 7.5, max: 11.0 },
       sodium: { value: 80, min: 60, max: 100 },
       magnesium: { value: 16, min: 13, max: 19 },
-      // 鶏レバーも脂溶性ビタミンが豊富
-      vitamin_a: { value: 32976, min: 30000, max: 36000 }, // IU/100g（非常に高い）
-      vitamin_d: { value: 49, min: 40, max: 60 }, // IU/100g
+      // 鶏レバ�Eも脂溶性ビタミンが豊寁E      vitamin_a: { value: 32976, min: 30000, max: 36000 }, // IU/100g�E�非常に高い�E�E      vitamin_d: { value: 49, min: 40, max: 60 }, // IU/100g
       vitamin_k2: { value: 0, min: 0, max: 0 },
       omega_3: { value: 0.1, min: 0.05, max: 0.15 },
-      // 鶏レバーもCholineが豊富
-      choline: { value: 290, min: 270, max: 310 }, // mg/100g
+      // 鶏レバ�EめEholineが豊寁E      choline: { value: 290, min: 270, max: 310 }, // mg/100g
     },
     whole: {
       id: 'chicken_whole',
@@ -480,13 +438,13 @@ export const FOOD_MASTER: FoodMaster = {
     whole: {
       id: 'egg_whole',
       name: 'Whole Egg',
-      name_ja: '卵（全卵）',
+      name_ja: '卵�E��E卵�E�E,
       name_fr: 'Œuf entier',
       name_de: 'Volles Ei',
       protein: { value: 12.5, min: 11, max: 14 },
       fat: { value: 10.0, min: 8, max: 12 },
       carbs: { value: 0.7, min: 0.5, max: 1.0 },
-      default_unit: 50, // 1個 = 50g
+      default_unit: 50, // 1倁E= 50g
       saturated_fat: { value: 3.1, min: 2.5, max: 3.7 },
       omega_6: { value: 1.2, min: 1.0, max: 1.5 },
       zinc: { value: 1.0, min: 0.8, max: 1.2 },
@@ -495,24 +453,17 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 140, min: 120, max: 160 },
       magnesium: { value: 10, min: 8, max: 12 },
       potassium: { value: 138, min: 120, max: 155 }, // mg/100g
-      // 卵は脂溶性ビタミンの宝庫（特に卵黄）
-      vitamin_a: { value: 540, min: 480, max: 600 }, // IU/100g（卵黄由来）
-      vitamin_d: { value: 87, min: 80, max: 95 }, // IU/100g（卵黄由来）
-      vitamin_k2: { value: 5.4, min: 4.8, max: 6.0 }, // μg/100g（MK-4、卵黄由来）
-      omega_3: { value: 0.2, min: 0.15, max: 0.25 }, // g（放牧卵はより高い）
-      choline: { value: 251, min: 230, max: 270 }, // mg/100g（非常に高い）
-      vitamin_b7: { value: 20, min: 18, max: 22 }, // μg/100g（ビオチン、卵黄に豊富）
-    },
+      // 卵は脂溶性ビタミンの宝庫�E�特に卵黁E��E      vitamin_a: { value: 540, min: 480, max: 600 }, // IU/100g�E�卵黁E��来�E�E      vitamin_d: { value: 87, min: 80, max: 95 }, // IU/100g�E�卵黁E��来�E�E      vitamin_k2: { value: 5.4, min: 4.8, max: 6.0 }, // μg/100g�E�EK-4、卵黁E��来�E�E      omega_3: { value: 0.2, min: 0.15, max: 0.25 }, // g�E�放牧卵はより高い�E�E      choline: { value: 251, min: 230, max: 270 }, // mg/100g�E�非常に高い�E�E      vitamin_b7: { value: 20, min: 18, max: 22 }, // μg/100g�E�ビオチン、卵黁E��豊富！E    },
     yolk: {
       id: 'egg_yolk',
       name: 'Egg Yolk',
-      name_ja: '卵黄',
+      name_ja: '卵黁E,
       name_fr: "Jaune d'œuf",
       name_de: 'Eigelb',
       protein: { value: 16.0, min: 14, max: 18 },
       fat: { value: 26.5, min: 24, max: 29 },
       carbs: { value: 0.3, min: 0.2, max: 0.5 },
-      default_unit: 17, // 1個の卵黄 = 17g
+      default_unit: 17, // 1個�E卵黁E= 17g
       saturated_fat: { value: 9.5, min: 8, max: 11 },
       omega_6: { value: 1.8, min: 1.5, max: 2.1 },
       zinc: { value: 2.3, min: 2.0, max: 2.6 },
@@ -520,25 +471,18 @@ export const FOOD_MASTER: FoodMaster = {
       iron: { value: 2.7, min: 2.3, max: 3.1 },
       sodium: { value: 8, min: 6, max: 10 },
       magnesium: { value: 5, min: 4, max: 6 },
-      // 卵黄は脂溶性ビタミンの宝庫
-      vitamin_a: { value: 1442, min: 1300, max: 1600 }, // IU/100g（非常に高い）
-      vitamin_d: { value: 218, min: 200, max: 240 }, // IU/100g（非常に高い）
-      vitamin_k2: { value: 15.5, min: 14, max: 17 }, // μg/100g（MK-4）
-      omega_3: { value: 0.5, min: 0.4, max: 0.6 }, // g（放牧卵はより高い）
-      // 卵黄はCholineが非常に豊富
-      choline: { value: 680, min: 650, max: 710 }, // mg/100g（非常に高い）
-      vitamin_b7: { value: 50, min: 45, max: 55 }, // μg/100g（ビオチン、卵黄に非常に豊富）
-    },
+      // 卵黁E�E脂溶性ビタミンの宝庫
+      vitamin_a: { value: 1442, min: 1300, max: 1600 }, // IU/100g�E�非常に高い�E�E      vitamin_d: { value: 218, min: 200, max: 240 }, // IU/100g�E�非常に高い�E�E      vitamin_k2: { value: 15.5, min: 14, max: 17 }, // μg/100g�E�EK-4�E�E      omega_3: { value: 0.5, min: 0.4, max: 0.6 }, // g�E�放牧卵はより高い�E�E      // 卵黁E�ECholineが非常に豊寁E      choline: { value: 680, min: 650, max: 710 }, // mg/100g�E�非常に高い�E�E      vitamin_b7: { value: 50, min: 45, max: 55 }, // μg/100g�E�ビオチン、卵黁E��非常に豊富！E    },
     white: {
       id: 'egg_white',
       name: 'Egg White',
       name_ja: '卵白',
       name_fr: "Blanc d'œuf",
-      name_de: 'Eiweiß',
+      name_de: 'EiweiÁE,
       protein: { value: 10.9, min: 9.5, max: 12 },
       fat: { value: 0.2, min: 0.1, max: 0.3 },
       carbs: { value: 0.7, min: 0.5, max: 1.0 },
-      default_unit: 33, // 1個の卵白 = 33g
+      default_unit: 33, // 1個�E卵白 = 33g
       saturated_fat: { value: 0, min: 0, max: 0.1 },
       omega_6: { value: 0, min: 0, max: 0.1 },
       zinc: { value: 0.1, min: 0.05, max: 0.15 },
@@ -547,13 +491,8 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 166, min: 150, max: 180 },
       magnesium: { value: 11, min: 9, max: 13 },
       potassium: { value: 163, min: 150, max: 175 }, // mg/100g
-      vitamin_a: { value: 0, min: 0, max: 0 }, // 卵白にはビタミンAは含まれない
-      vitamin_d: { value: 0, min: 0, max: 0 }, // 卵白にはビタミンDは含まれない
-      vitamin_k2: { value: 0, min: 0, max: 0 }, // 卵白にはビタミンK2は含まれない
-      omega_3: { value: 0, min: 0, max: 0 },
-      choline: { value: 0.4, min: 0.3, max: 0.5 }, // mg/100g（非常に少ない）
-      vitamin_b7: { value: 0, min: 0, max: 0 }, // μg/100g（卵白にはビオチンは含まれない、アビジンが含まれる）
-    },
+      vitamin_a: { value: 0, min: 0, max: 0 }, // 卵白にはビタミンAは含まれなぁE      vitamin_d: { value: 0, min: 0, max: 0 }, // 卵白にはビタミンDは含まれなぁE      vitamin_k2: { value: 0, min: 0, max: 0 }, // 卵白にはビタミンK2は含まれなぁE      omega_3: { value: 0, min: 0, max: 0 },
+      choline: { value: 0.4, min: 0.3, max: 0.5 }, // mg/100g�E�非常に少なぁE��E      vitamin_b7: { value: 0, min: 0, max: 0 }, // μg/100g�E�卵白にはビオチンは含まれなぁE��アビジンが含まれる�E�E    },
   },
   fish: {
     salmon: {
@@ -574,14 +513,8 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 44, min: 35, max: 55 },
       magnesium: { value: 27, min: 23, max: 31 },
       potassium: { value: 363, min: 330, max: 395 }, // mg/100g
-      // サーモンはビタミンDが非常に豊富
-      vitamin_a: { value: 58, min: 50, max: 65 }, // IU/100g（微量）
-      vitamin_d: { value: 988, min: 900, max: 1100 }, // IU/100g（非常に高い）
-      vitamin_k2: { value: 0.5, min: 0.3, max: 0.7 }, // μg/100g（微量）
-      omega_3: { value: 2.3, min: 2.0, max: 2.6 }, // g（非常に高い）
-      choline: { value: 75, min: 65, max: 85 }, // mg/100g
-      iodine: { value: 35, min: 30, max: 40 }, // μg/100g（サーモンはヨウ素が豊富）
-    },
+      // サーモンはビタミンDが非常に豊寁E      vitamin_a: { value: 58, min: 50, max: 65 }, // IU/100g�E�微量！E      vitamin_d: { value: 988, min: 900, max: 1100 }, // IU/100g�E�非常に高い�E�E      vitamin_k2: { value: 0.5, min: 0.3, max: 0.7 }, // μg/100g�E�微量！E      omega_3: { value: 2.3, min: 2.0, max: 2.6 }, // g�E�非常に高い�E�E      choline: { value: 75, min: 65, max: 85 }, // mg/100g
+      iodine: { value: 35, min: 30, max: 40 }, // μg/100g�E�サーモンはヨウ素が豊富！E    },
     tuna: {
       id: 'fish_tuna',
       name: 'Tuna',
@@ -600,17 +533,14 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 37, min: 30, max: 45 },
       magnesium: { value: 30, min: 25, max: 35 },
       potassium: { value: 323, min: 290, max: 355 }, // mg/100g
-      vitamin_a: { value: 60, min: 50, max: 70 }, // IU/100g（微量）
-      vitamin_d: { value: 227, min: 200, max: 250 }, // IU/100g（高い）
-      vitamin_k2: { value: 0, min: 0, max: 0 },
+      vitamin_a: { value: 60, min: 50, max: 70 }, // IU/100g�E�微量！E      vitamin_d: { value: 227, min: 200, max: 250 }, // IU/100g�E�高い�E�E      vitamin_k2: { value: 0, min: 0, max: 0 },
       omega_3: { value: 0.2, min: 0.15, max: 0.25 }, // g
       choline: { value: 65, min: 55, max: 75 }, // mg/100g
-      iodine: { value: 50, min: 45, max: 55 }, // μg/100g（マグロはヨウ素が非常に豊富）
-    },
+      iodine: { value: 50, min: 45, max: 55 }, // μg/100g�E��Eグロはヨウ素が非常に豊富！E    },
     mackerel: {
       id: 'fish_mackerel',
       name: 'Mackerel',
-      name_ja: 'サバ',
+      name_ja: 'サチE,
       name_fr: 'Maquereau',
       name_de: 'Makrele',
       protein: { value: 19, min: 17, max: 21 },
@@ -625,23 +555,18 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 63, min: 50, max: 75 },
       magnesium: { value: 25, min: 21, max: 29 },
       potassium: { value: 314, min: 280, max: 350 }, // mg/100g
-      vitamin_a: { value: 50, min: 40, max: 60 }, // IU/100g（微量）
-      vitamin_d: { value: 360, min: 320, max: 400 }, // IU/100g（高い）
-      vitamin_k2: { value: 0.1, min: 0, max: 0.2 }, // μg/100g（微量）
-      omega_3: { value: 2.6, min: 2.3, max: 2.9 }, // g（非常に高い）
-      choline: { value: 65, min: 55, max: 75 }, // mg/100g
-      iodine: { value: 25, min: 20, max: 30 }, // μg/100g（サバはヨウ素が豊富）
-    },
+      vitamin_a: { value: 50, min: 40, max: 60 }, // IU/100g�E�微量！E      vitamin_d: { value: 360, min: 320, max: 400 }, // IU/100g�E�高い�E�E      vitamin_k2: { value: 0.1, min: 0, max: 0.2 }, // μg/100g�E�微量！E      omega_3: { value: 2.6, min: 2.3, max: 2.9 }, // g�E�非常に高い�E�E      choline: { value: 65, min: 55, max: 75 }, // mg/100g
+      iodine: { value: 25, min: 20, max: 30 }, // μg/100g�E�サバ�Eヨウ素が豊富！E    },
   },
   dairy: {
     egg: {
       id: 'dairy_egg',
       name: 'Egg (Whole)',
-      name_ja: '卵（全卵）',
+      name_ja: '卵�E��E卵�E�E,
       protein: { value: 12.3, min: 11.5, max: 13.0 },
       fat: { value: 10.6, min: 9.5, max: 11.5 },
       carbs: { value: 0.7, min: 0.5, max: 1.0 },
-      default_unit: 50, // 1個 = 50g
+      default_unit: 50, // 1倁E= 50g
       saturated_fat: { value: 3.3, min: 3.0, max: 3.6 },
       omega_6: { value: 1.4, min: 1.2, max: 1.6 },
       zinc: { value: 1.1, min: 0.9, max: 1.3 },
@@ -649,30 +574,19 @@ export const FOOD_MASTER: FoodMaster = {
       iron: { value: 1.8, min: 1.5, max: 2.1 },
       sodium: { value: 140, min: 130, max: 150 },
       magnesium: { value: 12, min: 10, max: 14 },
-      // 卵（全卵）は脂溶性ビタミンが豊富
-      vitamin_a: { value: 540, min: 480, max: 600 }, // IU/100g
+      // 卵�E��E卵�E��E脂溶性ビタミンが豊寁E      vitamin_a: { value: 540, min: 480, max: 600 }, // IU/100g
       vitamin_d: { value: 87, min: 80, max: 95 }, // IU/100g
-      vitamin_k2: { value: 31.4, min: 28, max: 35 }, // μg/100g（MK-4）
-      omega_3: { value: 0.3, min: 0.2, max: 0.4 }, // g（放牧卵はより高い）
-      // 卵はCholineが豊富
-      choline: { value: 150, min: 140, max: 160 }, // mg/100g
+      vitamin_k2: { value: 31.4, min: 28, max: 35 }, // μg/100g�E�EK-4�E�E      omega_3: { value: 0.3, min: 0.2, max: 0.4 }, // g�E�放牧卵はより高い�E�E      // 卵はCholineが豊寁E      choline: { value: 150, min: 140, max: 160 }, // mg/100g
       // カリウム
       potassium: { value: 138, min: 120, max: 155 }, // mg/100g
-      // ビタミンB7（ビオチン）
-      vitamin_b7: { value: 20, min: 18, max: 22 }, // μg/100g（ビオチン、卵黄に豊富）
-      // ヨウ素
-      iodine: { value: 25, min: 20, max: 30 }, // μg/100g（卵はヨウ素が豊富）
-      // カルシウム、リン
-      calcium: { value: 56, min: 50, max: 60 }, // mg/100g（卵はカルシウムが豊富）
-      phosphorus: { value: 198, min: 180, max: 210 }, // mg/100g（卵はリンが豊富）
-      // グリシン:メチオニン比（卵はバランスが良い）
-      glycine: { value: 0.4, min: 0.35, max: 0.45 }, // g/100g
-      methionine: { value: 0.4, min: 0.35, max: 0.45 }, // g/100g（卵は1:1に近い）
-    },
+      // ビタミンB7�E�ビオチン�E�E      vitamin_b7: { value: 20, min: 18, max: 22 }, // μg/100g�E�ビオチン、卵黁E��豊富！E      // ヨウ素
+      iodine: { value: 25, min: 20, max: 30 }, // μg/100g�E�卵はヨウ素が豊富！E      // カルシウム、リン
+      calcium: { value: 56, min: 50, max: 60 }, // mg/100g�E�卵はカルシウムが豊富！E      phosphorus: { value: 198, min: 180, max: 210 }, // mg/100g�E�卵はリンが豊富！E      // グリシン:メチオニン比（卵はバランスが良ぁE��E      glycine: { value: 0.4, min: 0.35, max: 0.45 }, // g/100g
+      methionine: { value: 0.4, min: 0.35, max: 0.45 }, // g/100g�E�卵は1:1に近い�E�E    },
     cheese: {
       id: 'dairy_cheese',
       name: 'Cheese',
-      name_ja: 'チーズ',
+      name_ja: 'チ�Eズ',
       name_fr: 'Fromage',
       name_de: 'Käse',
       protein: { value: 25, min: 23, max: 27 },
@@ -687,11 +601,8 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 650, min: 600, max: 700 },
       magnesium: { value: 25, min: 22, max: 28 },
       potassium: { value: 98, min: 85, max: 110 }, // mg/100g
-      // チーズは脂溶性ビタミンを含む（特にビタミンK2）
-      vitamin_a: { value: 1002, min: 900, max: 1100 }, // IU/100g（高い）
-      vitamin_d: { value: 24, min: 20, max: 28 }, // IU/100g
-      vitamin_k2: { value: 76, min: 70, max: 82 }, // μg/100g（MK-4、非常に高い）
-      omega_3: { value: 0.1, min: 0.05, max: 0.15 },
+      // チ�Eズは脂溶性ビタミンを含む�E�特にビタミンK2�E�E      vitamin_a: { value: 1002, min: 900, max: 1100 }, // IU/100g�E�高い�E�E      vitamin_d: { value: 24, min: 20, max: 28 }, // IU/100g
+      vitamin_k2: { value: 76, min: 70, max: 82 }, // μg/100g�E�EK-4、E��常に高い�E�E      omega_3: { value: 0.1, min: 0.05, max: 0.15 },
       choline: { value: 15, min: 12, max: 18 }, // mg/100g
     },
     heavy_cream: {
@@ -712,9 +623,7 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 27, min: 25, max: 30 },
       magnesium: { value: 7, min: 6, max: 8 },
       potassium: { value: 132, min: 120, max: 145 }, // mg/100g
-      vitamin_a: { value: 1387, min: 1300, max: 1500 }, // IU/100g（高い）
-      vitamin_d: { value: 7, min: 5, max: 9 }, // IU/100g（微量）
-      vitamin_k2: { value: 0, min: 0, max: 0 },
+      vitamin_a: { value: 1387, min: 1300, max: 1500 }, // IU/100g�E�高い�E�E      vitamin_d: { value: 7, min: 5, max: 9 }, // IU/100g�E�微量！E      vitamin_k2: { value: 0, min: 0, max: 0 },
       omega_3: { value: 0.1, min: 0.05, max: 0.15 },
       choline: { value: 19, min: 17, max: 21 }, // mg/100g
     },
@@ -737,10 +646,8 @@ export const FOOD_MASTER: FoodMaster = {
       magnesium: { value: 2, min: 1.5, max: 2.5 },
       potassium: { value: 24, min: 20, max: 28 }, // mg/100g
       // バターは脂溶性ビタミンを含む
-      vitamin_a: { value: 2499, min: 2300, max: 2700 }, // IU/100g（非常に高い）
-      vitamin_d: { value: 60, min: 50, max: 70 }, // IU/100g
-      vitamin_k2: { value: 15, min: 12, max: 18 }, // μg/100g（MK-4）
-      omega_3: { value: 0.3, min: 0.2, max: 0.4 },
+      vitamin_a: { value: 2499, min: 2300, max: 2700 }, // IU/100g�E�非常に高い�E�E      vitamin_d: { value: 60, min: 50, max: 70 }, // IU/100g
+      vitamin_k2: { value: 15, min: 12, max: 18 }, // μg/100g�E�EK-4�E�E      omega_3: { value: 0.3, min: 0.2, max: 0.4 },
       choline: { value: 19, min: 17, max: 21 }, // mg/100g
     },
   },
@@ -762,12 +669,9 @@ export const FOOD_MASTER: FoodMaster = {
       iron: { value: 0, min: 0, max: 0 },
       sodium: { value: 0, min: 0, max: 0 },
       magnesium: { value: 0, min: 0, max: 0 },
-      // 牛脂は脂溶性ビタミンの宝庫（特にビタミンDが豊富）
-      vitamin_a: { value: 0, min: 0, max: 0 }, // 牛脂自体には含まれないが、加熱時に溶出
-      vitamin_d: { value: 101, min: 90, max: 112 }, // IU/100g（牧草牛の脂は特に高い）
-      vitamin_k2: { value: 0, min: 0, max: 0 },
-      omega_3: { value: 0.3, min: 0.2, max: 0.4 }, // g（牧草牛の脂にはオメガ3が含まれる）
-    },
+      // 牛脂は脂溶性ビタミンの宝庫�E�特にビタミンDが豊富！E      vitamin_a: { value: 0, min: 0, max: 0 }, // 牛脂自体には含まれなぁE��、加熱時に溶出
+      vitamin_d: { value: 101, min: 90, max: 112 }, // IU/100g�E�牧草牛の脂�E特に高い�E�E      vitamin_k2: { value: 0, min: 0, max: 0 },
+      omega_3: { value: 0.3, min: 0.2, max: 0.4 }, // g�E�牧草牛の脂にはオメガ3が含まれる�E�E    },
     ghee: {
       id: 'fat_ghee',
       name: 'Ghee',
@@ -786,11 +690,8 @@ export const FOOD_MASTER: FoodMaster = {
       sodium: { value: 0, min: 0, max: 0 },
       magnesium: { value: 0, min: 0, max: 0 },
       potassium: { value: 0, min: 0, max: 0 },
-      // ギーはバターを精製したものなので、バターよりビタミン含有量は低い
-      vitamin_a: { value: 3069, min: 2800, max: 3300 }, // IU/100g（高い、バターよりやや高い）
-      vitamin_d: { value: 0, min: 0, max: 0 }, // ギーにはビタミンDは含まれない（精製過程で失われる）
-      vitamin_k2: { value: 0, min: 0, max: 0 }, // ギーにはビタミンK2は含まれない
-      omega_3: { value: 0.3, min: 0.2, max: 0.4 },
+      // ギーはバターを精製したも�Eなので、バターよりビタミン含有量は低い
+      vitamin_a: { value: 3069, min: 2800, max: 3300 }, // IU/100g�E�高い、バターよりめE��高い�E�E      vitamin_d: { value: 0, min: 0, max: 0 }, // ギーにはビタミンDは含まれなぁE��精製過程で失われる！E      vitamin_k2: { value: 0, min: 0, max: 0 }, // ギーにはビタミンK2は含まれなぁE      omega_3: { value: 0.3, min: 0.2, max: 0.4 },
       choline: { value: 0, min: 0, max: 0 },
     },
     salt: {
@@ -802,78 +703,61 @@ export const FOOD_MASTER: FoodMaster = {
       protein: { value: 0, min: 0, max: 0 },
       fat: { value: 0, min: 0, max: 0 },
       carbs: { value: 0, min: 0, max: 0 },
-      default_unit: 5, // デフォルト5g
+      default_unit: 5, // チE��ォルチEg
       saturated_fat: { value: 0, min: 0, max: 0 },
       omega_6: { value: 0, min: 0, max: 0 },
       zinc: { value: 0, min: 0, max: 0 },
       vitamin_b12: { value: 0, min: 0, max: 0 },
       iron: { value: 0, min: 0, max: 0 },
-      sodium: { value: 38758, min: 38500, max: 39000 }, // 塩5g = 約1940mg Na
+      sodium: { value: 38758, min: 38500, max: 39000 }, // 塩5g = 紁E940mg Na
       magnesium: { value: 2, min: 1.5, max: 2.5 },
-      // ぬちまーす（沖縄の塩）はヨウ素が豊富（通常の食塩より高い）
-      iodine: { value: 200, min: 180, max: 220 }, // μg/100g（ぬちまーすは特に高い、通常の食塩は0-10μg/100g）
-      potassium: { value: 0, min: 0, max: 0 },
+      // ぬちまーす（沖縁E�E塩�E��Eヨウ素が豊富（通常の食塩より高い�E�E      iodine: { value: 200, min: 180, max: 220 }, // μg/100g�E�ぬちまーす�E特に高い、E��常の食塩は0-10μg/100g�E�E      potassium: { value: 0, min: 0, max: 0 },
     },
   },
   plant: {
-    // 植物性食品（Avoid Zone用、抗栄養素データ含む）
-    soybean: {
+    // 植物性食品�E�Evoid Zone用、抗栁E��素チE�Eタ含む�E�E    soybean: {
       id: 'plant_soybean',
       name: 'Soybean',
-      name_ja: '大豆',
+      name_ja: '大豁E,
       protein: { value: 35.0, min: 33.0, max: 37.0 },
       fat: { value: 19.9, min: 18.0, max: 21.8 },
       carbs: { value: 30.2, min: 28.0, max: 32.4 },
       default_unit: 100,
       fiber: { value: 15.7, min: 14.0, max: 17.4 },
-      // 抗栄養素
-      phytates: { value: 1500, min: 1200, max: 1800 }, // mg/100g（フィチン酸）
-      lectins: { value: 200, min: 150, max: 250 }, // mg/100g（レクチン）
-      saponins: { value: 500, min: 400, max: 600 }, // mg/100g（サポニン）
-      oxalates: { value: 200, min: 150, max: 250 }, // mg/100g（シュウ酸）
-    },
+      // 抗栁E��素
+      phytates: { value: 1500, min: 1200, max: 1800 }, // mg/100g�E�フィチン酸�E�E      lectins: { value: 200, min: 150, max: 250 }, // mg/100g�E�レクチン�E�E      saponins: { value: 500, min: 400, max: 600 }, // mg/100g�E�サポニン�E�E      oxalates: { value: 200, min: 150, max: 250 }, // mg/100g�E�シュウ酸�E�E    },
     tofu: {
       id: 'plant_tofu',
       name: 'Tofu',
-      name_ja: '豆腐',
+      name_ja: '豁E�E',
       protein: { value: 8.1, min: 7.5, max: 8.7 },
       fat: { value: 4.8, min: 4.2, max: 5.4 },
       carbs: { value: 1.9, min: 1.5, max: 2.3 },
       default_unit: 100,
       fiber: { value: 0.4, min: 0.2, max: 0.6 },
-      // 抗栄養素（加工により減少）
-      phytates: { value: 500, min: 300, max: 700 }, // mg/100g（フィチン酸、加工により減少）
-      lectins: { value: 50, min: 30, max: 70 }, // mg/100g（レクチン、加工により減少）
-      saponins: { value: 100, min: 50, max: 150 }, // mg/100g（サポニン、加工により減少）
-    },
+      // 抗栁E��素�E�加工により減少！E      phytates: { value: 500, min: 300, max: 700 }, // mg/100g�E�フィチン酸、加工により減少！E      lectins: { value: 50, min: 30, max: 70 }, // mg/100g�E�レクチン、加工により減少！E      saponins: { value: 100, min: 50, max: 150 }, // mg/100g�E�サポニン、加工により減少！E    },
     spinach: {
       id: 'plant_spinach',
       name: 'Spinach',
-      name_ja: 'ほうれん草',
+      name_ja: 'ほぁE��ん草',
       protein: { value: 2.9, min: 2.5, max: 3.3 },
       fat: { value: 0.4, min: 0.3, max: 0.5 },
       carbs: { value: 3.6, min: 3.0, max: 4.2 },
       default_unit: 100,
       fiber: { value: 2.2, min: 2.0, max: 2.4 },
-      // 抗栄養素
-      oxalates: { value: 970, min: 800, max: 1140 }, // mg/100g（シュウ酸、非常に高い）
-      goitrogens: { value: 200, min: 150, max: 250 }, // mg/100g（ゴイトロゲン）
-      tannins: { value: 50, min: 30, max: 70 }, // mg/100g（タンニン）
-    },
+      // 抗栁E��素
+      oxalates: { value: 970, min: 800, max: 1140 }, // mg/100g�E�シュウ酸、E��常に高い�E�E      goitrogens: { value: 200, min: 150, max: 250 }, // mg/100g�E�ゴイトロゲン�E�E      tannins: { value: 50, min: 30, max: 70 }, // mg/100g�E�タンニン�E�E    },
     nuts: {
       id: 'plant_nuts',
       name: 'Nuts',
-      name_ja: 'ナッツ類',
+      name_ja: 'ナッチE��E,
       protein: { value: 20.0, min: 18.0, max: 22.0 },
       fat: { value: 50.0, min: 45.0, max: 55.0 },
       carbs: { value: 20.0, min: 18.0, max: 22.0 },
       default_unit: 30,
       fiber: { value: 10.0, min: 8.0, max: 12.0 },
-      // 抗栄養素
-      phytates: { value: 2000, min: 1500, max: 2500 }, // mg/100g（フィチン酸、非常に高い）
-      lectins: { value: 300, min: 200, max: 400 }, // mg/100g（レクチン）
-      tannins: { value: 100, min: 50, max: 150 }, // mg/100g（タンニン）
-    },
+      // 抗栁E��素
+      phytates: { value: 2000, min: 1500, max: 2500 }, // mg/100g�E�フィチン酸、E��常に高い�E�E      lectins: { value: 300, min: 200, max: 400 }, // mg/100g�E�レクチン�E�E      tannins: { value: 100, min: 50, max: 150 }, // mg/100g�E�タンニン�E�E    },
     grain: {
       id: 'plant_grain',
       name: 'Grain',
@@ -883,17 +767,13 @@ export const FOOD_MASTER: FoodMaster = {
       carbs: { value: 72.0, min: 70.0, max: 74.0 },
       default_unit: 100,
       fiber: { value: 12.0, min: 10.0, max: 14.0 },
-      // 抗栄養素
-      phytates: { value: 3000, min: 2500, max: 3500 }, // mg/100g（フィチン酸、非常に高い）
-      lectins: { value: 500, min: 400, max: 600 }, // mg/100g（レクチン、特に全粒穀物）
-      saponins: { value: 200, min: 150, max: 250 }, // mg/100g（サポニン）
-    },
+      // 抗栁E��素
+      phytates: { value: 3000, min: 2500, max: 3500 }, // mg/100g�E�フィチン酸、E��常に高い�E�E      lectins: { value: 500, min: 400, max: 600 }, // mg/100g�E�レクチン、特に全粒穀物�E�E      saponins: { value: 200, min: 150, max: 250 }, // mg/100g�E�サポニン�E�E    },
   },
 };
 
 /**
- * 動物タイプと部位名から食品マスターデータを取得
- */
+ * 動物タイプと部位名から食品マスターチE�Eタを取征E */
 export function getFoodMasterItem(
   animal: 'beef' | 'pork' | 'chicken' | 'egg' | 'fish' | 'dairy' | 'fat' | 'plant',
   part: string
@@ -902,8 +782,7 @@ export function getFoodMasterItem(
 }
 
 /**
- * 食品IDから食品マスターデータを取得
- */
+ * 食品IDから食品マスターチE�Eタを取征E */
 export function getFoodMasterItemById(id: string): FoodMasterItem | undefined {
   for (const animal of Object.keys(FOOD_MASTER) as Array<keyof FoodMaster>) {
     const animalData = FOOD_MASTER[animal];
@@ -918,8 +797,7 @@ export function getFoodMasterItemById(id: string): FoodMasterItem | undefined {
 }
 
 /**
- * 動物タイプごとの部位リストを取得
- */
+ * 動物タイプごとの部位リストを取征E */
 export function getPartsByAnimal(
   animal: 'beef' | 'pork' | 'chicken' | 'egg' | 'fish' | 'dairy' | 'fat' | 'plant'
 ): string[] {
@@ -927,35 +805,28 @@ export function getPartsByAnimal(
 }
 
 /**
- * 食品名（日本語・英語対応）から食品マスターデータを検索
- * 部分一致で検索し、最も一致度の高いものを返す
+ * 食品名（日本語�E英語対応）から食品マスターチE�Eタを検索
+ * 部刁E��致で検索し、最も一致度の高いも�Eを返す
  *
- * 検索優先順位:
- * 1. 完全一致（英語名・日本語名）
- * 2. キーワードマッピング（日本語・英語）
- * 3. 部分一致（英語名・日本語名）
- * 4. 単語単位の部分一致（英語名・日本語名）
- */
+ * 検索優先頁E��E
+ * 1. 完�E一致�E�英語名・日本語名�E�E * 2. キーワード�EチE��ング�E�日本語�E英語！E * 3. 部刁E��致�E�英語名・日本語名�E�E * 4. 単語単位�E部刁E��致�E�英語名・日本語名�E�E */
 export function searchFoodMasterByName(foodName: string): FoodMasterItem | undefined {
   const lowerName = foodName.toLowerCase().trim();
   if (lowerName.length === 0) return undefined;
 
-  // キーワードマッピング（日本語・英語対応）
-  const keywordMap: Record<string, { animal: keyof FoodMaster; part: string }> = {
-    // 牛肉（日本語）
-    リブアイ: { animal: 'beef', part: 'ribeye' },
-    リブ: { animal: 'beef', part: 'ribeye' },
+  // キーワード�EチE��ング�E�日本語�E英語対応！E  const keywordMap: Record<string, { animal: keyof FoodMaster; part: string }> = {
+    // 牛肉�E�日本語！E    リブアイ: { animal: 'beef', part: 'ribeye' },
+    リチE { animal: 'beef', part: 'ribeye' },
     サーロイン: { animal: 'beef', part: 'sirloin' },
-    ステーキ: { animal: 'beef', part: 'ribeye' },
-    牛: { animal: 'beef', part: 'ribeye' },
+    スチE�Eキ: { animal: 'beef', part: 'ribeye' },
+    牁E { animal: 'beef', part: 'ribeye' },
     牛肉: { animal: 'beef', part: 'ribeye' },
     ひき肉: { animal: 'beef', part: 'ground' },
     牛肉バラ: { animal: 'beef', part: 'brisket' },
-    ブリスケット: { animal: 'beef', part: 'brisket' },
+    ブリスケチE��: { animal: 'beef', part: 'brisket' },
     牛肉肩ロース: { animal: 'beef', part: 'chuck' },
-    レバー: { animal: 'beef', part: 'liver' },
-    // 牛肉（英語）
-    ribeye: { animal: 'beef', part: 'ribeye' },
+    レバ�E: { animal: 'beef', part: 'liver' },
+    // 牛肉�E�英語！E    ribeye: { animal: 'beef', part: 'ribeye' },
     rib: { animal: 'beef', part: 'ribeye' },
     sirloin: { animal: 'beef', part: 'sirloin' },
     steak: { animal: 'beef', part: 'ribeye' },
@@ -964,132 +835,107 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
     brisket: { animal: 'beef', part: 'brisket' },
     chuck: { animal: 'beef', part: 'chuck' },
     liver: { animal: 'beef', part: 'liver' },
-    // 牛肉（フランス語）
-    entrecôte: { animal: 'beef', part: 'ribeye' },
+    // 牛肉�E�フランス語！E    entrecôte: { animal: 'beef', part: 'ribeye' },
     bœuf: { animal: 'beef', part: 'ribeye' },
     foie: { animal: 'beef', part: 'liver' },
-    // 牛肉（ドイツ語）
-    rippensteak: { animal: 'beef', part: 'ribeye' },
+    // 牛肉�E�ドイチE��！E    rippensteak: { animal: 'beef', part: 'ribeye' },
     rindfleisch: { animal: 'beef', part: 'ribeye' },
     leber: { animal: 'beef', part: 'liver' },
-    // 豚肉（日本語）
-    豚バラ: { animal: 'pork', part: 'belly' },
+    // 豚肉�E�日本語！E    豚バラ: { animal: 'pork', part: 'belly' },
     バラ: { animal: 'pork', part: 'belly' },
-    豚: { animal: 'pork', part: 'belly' },
+    豁E { animal: 'pork', part: 'belly' },
     豚肉: { animal: 'pork', part: 'belly' },
     ロース: { animal: 'pork', part: 'loin' },
     肩ロース: { animal: 'pork', part: 'shoulder' },
-    スペアリブ: { animal: 'pork', part: 'ribs' },
-    豚レバー: { animal: 'pork', part: 'liver' },
-    // 豚肉（英語）
-    pork: { animal: 'pork', part: 'belly' },
+    スペアリチE { animal: 'pork', part: 'ribs' },
+    豚レバ�E: { animal: 'pork', part: 'liver' },
+    // 豚肉�E�英語！E    pork: { animal: 'pork', part: 'belly' },
     belly: { animal: 'pork', part: 'belly' },
     loin: { animal: 'pork', part: 'loin' },
     shoulder: { animal: 'pork', part: 'shoulder' },
     ribs: { animal: 'pork', part: 'ribs' },
-    // 豚肉（フランス語）
-    porc: { animal: 'pork', part: 'belly' },
+    // 豚肉�E�フランス語！E    porc: { animal: 'pork', part: 'belly' },
     ventre: { animal: 'pork', part: 'belly' },
-    // 豚肉（ドイツ語）
-    schweinefleisch: { animal: 'pork', part: 'belly' },
+    // 豚肉�E�ドイチE��！E    schweinefleisch: { animal: 'pork', part: 'belly' },
     bauch: { animal: 'pork', part: 'belly' },
-    // 鶏肉（日本語）
-    鶏もも: { animal: 'chicken', part: 'thigh' },
+    // 鶏肉�E�日本語！E    鶏もめE { animal: 'chicken', part: 'thigh' },
     もも: { animal: 'chicken', part: 'thigh' },
-    鶏: { animal: 'chicken', part: 'thigh' },
+    鶁E { animal: 'chicken', part: 'thigh' },
     鶏肉: { animal: 'chicken', part: 'thigh' },
-    胸肉: { animal: 'chicken', part: 'breast' },
+    胸肁E { animal: 'chicken', part: 'breast' },
     手羽: { animal: 'chicken', part: 'wing' },
-    鶏レバー: { animal: 'chicken', part: 'liver' },
+    鶏レバ�E: { animal: 'chicken', part: 'liver' },
     丸ごと: { animal: 'chicken', part: 'whole' },
-    // 鶏肉（英語）
-    chicken: { animal: 'chicken', part: 'thigh' },
+    // 鶏肉�E�英語！E    chicken: { animal: 'chicken', part: 'thigh' },
     thigh: { animal: 'chicken', part: 'thigh' },
     breast: { animal: 'chicken', part: 'breast' },
     wing: { animal: 'chicken', part: 'wing' },
     whole: { animal: 'chicken', part: 'whole' },
-    // 鶏肉（フランス語）
-    poulet: { animal: 'chicken', part: 'thigh' },
+    // 鶏肉�E�フランス語！E    poulet: { animal: 'chicken', part: 'thigh' },
     cuisse: { animal: 'chicken', part: 'thigh' },
     blanc_poulet: { animal: 'chicken', part: 'breast' },
-    // 鶏肉（ドイツ語）
-    huhn: { animal: 'chicken', part: 'thigh' },
+    // 鶏肉�E�ドイチE��！E    huhn: { animal: 'chicken', part: 'thigh' },
     hähnchen: { animal: 'chicken', part: 'thigh' },
     schenkel: { animal: 'chicken', part: 'thigh' },
     brust: { animal: 'chicken', part: 'breast' },
-    // 魚（日本語）
-    サーモン: { animal: 'fish', part: 'salmon' },
+    // 魚（日本語！E    サーモン: { animal: 'fish', part: 'salmon' },
     サケ: { animal: 'fish', part: 'salmon' },
     マグロ: { animal: 'fish', part: 'tuna' },
-    サバ: { animal: 'fish', part: 'mackerel' },
-    // 魚（英語）
-    salmon: { animal: 'fish', part: 'salmon' },
+    サチE { animal: 'fish', part: 'mackerel' },
+    // 魚（英語！E    salmon: { animal: 'fish', part: 'salmon' },
     tuna: { animal: 'fish', part: 'tuna' },
     mackerel: { animal: 'fish', part: 'mackerel' },
     fish: { animal: 'fish', part: 'salmon' },
-    // 魚（フランス語）
-    saumon: { animal: 'fish', part: 'salmon' },
+    // 魚（フランス語！E    saumon: { animal: 'fish', part: 'salmon' },
     thon: { animal: 'fish', part: 'tuna' },
     maquereau: { animal: 'fish', part: 'mackerel' },
     poisson: { animal: 'fish', part: 'salmon' },
-    // 魚（ドイツ語）
-    lachs: { animal: 'fish', part: 'salmon' },
+    // 魚（ドイチE��！E    lachs: { animal: 'fish', part: 'salmon' },
     thunfisch: { animal: 'fish', part: 'tuna' },
     makrele: { animal: 'fish', part: 'mackerel' },
     fisch: { animal: 'fish', part: 'salmon' },
-    // 卵（日本語）
-    卵: { animal: 'egg', part: 'whole' },
-    たまご: { animal: 'egg', part: 'whole' },
+    // 卵�E�日本語！E    卵: { animal: 'egg', part: 'whole' },
+    たまぁE { animal: 'egg', part: 'whole' },
     全卵: { animal: 'egg', part: 'whole' },
-    卵黄: { animal: 'egg', part: 'yolk' },
+    卵黁E { animal: 'egg', part: 'yolk' },
     卵白: { animal: 'egg', part: 'white' },
-    // 卵（英語）
-    egg: { animal: 'egg', part: 'whole' },
+    // 卵�E�英語！E    egg: { animal: 'egg', part: 'whole' },
     yolk: { animal: 'egg', part: 'yolk' },
     white: { animal: 'egg', part: 'white' },
-    // 卵（フランス語）
-    œuf: { animal: 'egg', part: 'whole' },
+    // 卵�E�フランス語！E    œuf: { animal: 'egg', part: 'whole' },
     oeuf: { animal: 'egg', part: 'whole' },
     jaune: { animal: 'egg', part: 'yolk' },
     blanc: { animal: 'egg', part: 'white' },
-    // 卵（ドイツ語）
-    ei: { animal: 'egg', part: 'whole' },
+    // 卵�E�ドイチE��！E    ei: { animal: 'egg', part: 'whole' },
     eigelb: { animal: 'egg', part: 'yolk' },
-    eiweiß: { animal: 'egg', part: 'white' },
-    // 乳製品（日本語）
-    チーズ: { animal: 'dairy', part: 'cheese' },
+    eiweiÁE { animal: 'egg', part: 'white' },
+    // 乳製品E��日本語！E    チ�Eズ: { animal: 'dairy', part: 'cheese' },
     生クリーム: { animal: 'dairy', part: 'heavy_cream' },
     バター: { animal: 'dairy', part: 'butter' },
-    // 乳製品（英語）
-    cheese: { animal: 'dairy', part: 'cheese' },
+    // 乳製品E��英語！E    cheese: { animal: 'dairy', part: 'cheese' },
     cream: { animal: 'dairy', part: 'heavy_cream' },
     butter: { animal: 'dairy', part: 'butter' },
-    // 乳製品（フランス語）
-    fromage: { animal: 'dairy', part: 'cheese' },
+    // 乳製品E��フランス語！E    fromage: { animal: 'dairy', part: 'cheese' },
     crème: { animal: 'dairy', part: 'heavy_cream' },
     beurre: { animal: 'dairy', part: 'butter' },
-    // 乳製品（ドイツ語）
-    käse: { animal: 'dairy', part: 'cheese' },
+    // 乳製品E��ドイチE��！E    käse: { animal: 'dairy', part: 'cheese' },
     sahne: { animal: 'dairy', part: 'heavy_cream' },
-    // 脂質（日本語）
-    牛脂: { animal: 'fat', part: 'tallow' },
+    // 脂質�E�日本語！E    牛脂: { animal: 'fat', part: 'tallow' },
     ギー: { animal: 'fat', part: 'ghee' },
     塩: { animal: 'fat', part: 'salt' },
-    // 脂質（英語）
-    tallow: { animal: 'fat', part: 'tallow' },
+    // 脂質�E�英語！E    tallow: { animal: 'fat', part: 'tallow' },
     ghee: { animal: 'fat', part: 'ghee' },
     salt: { animal: 'fat', part: 'salt' },
   };
 
-  // 1. 完全一致検索（優先度最高）
-  for (const animal of Object.keys(FOOD_MASTER) as Array<keyof FoodMaster>) {
+  // 1. 完�E一致検索�E�優先度最高！E  for (const animal of Object.keys(FOOD_MASTER) as Array<keyof FoodMaster>) {
     const animalData = FOOD_MASTER[animal];
     if (!animalData) continue;
     for (const part of Object.keys(animalData)) {
       const item = animalData[part];
       if (!item) continue;
 
-      // 英語名・日本語名・フランス語名・ドイツ語名の完全一致
+      // 英語名・日本語名・フランス語名・ドイチE��名の完�E一致
       if (
         item.name.toLowerCase() === lowerName ||
         item.name_ja.toLowerCase() === lowerName ||
@@ -1102,7 +948,7 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
     }
   }
 
-  // 2. キーワードマッピングで検索
+  // 2. キーワード�EチE��ングで検索
   for (const [keyword, mapping] of Object.entries(keywordMap)) {
     if (lowerName.includes(keyword) || keyword.includes(lowerName)) {
       const item = getFoodMasterItem(mapping.animal, mapping.part);
@@ -1110,8 +956,7 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
     }
   }
 
-  // 3. 部分一致検索（英語名・日本語名）
-  let bestMatch: FoodMasterItem | undefined;
+  // 3. 部刁E��致検索�E�英語名・日本語名�E�E  let bestMatch: FoodMasterItem | undefined;
   let bestScore = 0;
 
   for (const animal of Object.keys(FOOD_MASTER) as Array<keyof FoodMaster>) {
@@ -1127,12 +972,11 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
       const nameDeLower = item.name_de?.toLowerCase() || '';
       const idLower = item.id.toLowerCase();
 
-      // スコアリングシステム: 検索語と食品名の一致度を数値化し、最も一致度の高い食品を返す
-      // スコアが高いほど、検索語と食品名の一致度が高いことを意味する
+      // スコアリングシスチE��: 検索語と食品名�E一致度を数値化し、最も一致度の高い食品を返す
+      // スコアが高いほど、検索語と食品名�E一致度が高いことを意味する
       let score = 0;
 
-      // 完全一致（最高スコア: 100点）
-      if (
+      // 完�E一致�E�最高スコア: 100点�E�E      if (
         nameLower === lowerName ||
         nameJaLower === lowerName ||
         idLower === lowerName ||
@@ -1141,8 +985,7 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
       ) {
         score = 100;
       }
-      // 前方一致（80点）
-      else if (
+      // 前方一致�E�E0点�E�E      else if (
         nameLower.startsWith(lowerName) ||
         nameJaLower.startsWith(lowerName) ||
         nameFrLower.startsWith(lowerName) ||
@@ -1150,8 +993,7 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
       ) {
         score = 80;
       }
-      // 後方一致（70点）
-      else if (
+      // 後方一致�E�E0点�E�E      else if (
         nameLower.endsWith(lowerName) ||
         nameJaLower.endsWith(lowerName) ||
         nameFrLower.endsWith(lowerName) ||
@@ -1159,8 +1001,7 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
       ) {
         score = 70;
       }
-      // 部分一致（60点）
-      else if (
+      // 部刁E��致�E�E0点�E�E      else if (
         nameLower.includes(lowerName) ||
         nameJaLower.includes(lowerName) ||
         nameFrLower.includes(lowerName) ||
@@ -1168,8 +1009,7 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
       ) {
         score = 60;
       }
-      // 逆方向の部分一致（検索語が食品名を含む、50点）
-      else if (
+      // 送E��向�E部刁E��致�E�検索語が食品名を含む、E0点�E�E      else if (
         lowerName.includes(nameLower) ||
         lowerName.includes(nameJaLower) ||
         lowerName.includes(nameFrLower) ||
@@ -1177,8 +1017,7 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
       ) {
         score = 50;
       }
-      // 単語単位の部分一致（30点/単語）
-      else {
+      // 単語単位�E部刁E��致�E�E0点/単語！E      else {
         const nameWords = nameLower.split(/[\s\-_]+/);
         const nameJaWords = nameJaLower.split(/[\s\-_]+/);
         const nameFrWords = nameFrLower.split(/[\s\-_]+/);
@@ -1210,3 +1049,4 @@ export function searchFoodMasterByName(foodName: string): FoodMasterItem | undef
 
   return bestMatch;
 }
+

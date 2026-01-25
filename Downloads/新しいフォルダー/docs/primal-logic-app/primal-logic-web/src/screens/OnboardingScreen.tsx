@@ -1,33 +1,51 @@
 /**
- * Primal Logic - Onboarding Screen
+ * CarnivoreOS - Onboarding Screen
  *
- * 初回起動時のチュートリアル・機能説明
+ * 初回ユーザー向けのオンボーディングフロー
  */
 
 import { useState, useEffect } from 'react';
-import { setLanguage, getLanguage, type Language } from '../utils/i18n';
+import { setLanguage, getLanguage, useTranslation, type Language } from '../utils/i18n';
+import type { NutrientDisplayMode } from '../utils/nutrientPriority';
+import { saveNutrientDisplayMode, getDefaultModeForPersona } from '../utils/nutrientPriority';
+import AuthScreen from './AuthScreen';
+import { isSupabaseAvailable } from '../lib/supabaseClient';
 import './OnboardingScreen.css';
 
 interface OnboardingStep {
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   icon: string;
-  isLanguageStep?: boolean; // 言語設定ステップかどうか
-  isNotificationStep?: boolean; // 通知設定ステップかどうか
-  isChoiceStep?: boolean; // 選択肢を表示するステップかどうか
-  isAISpotlightStep?: boolean; // AIボタンをスポットライトするステップかどうか
+  isLanguageStep?: boolean;
+  isNotificationStep?: boolean;
+  isChoiceStep?: boolean;
+  isAISpotlightStep?: boolean;
+  isPersonaStep?: boolean;
+  isAuthStep?: boolean;
 }
 
-const onboardingSteps: OnboardingStep[] = [
+const onboardingStepConfigs: OnboardingStep[] = [
   {
-    title: '言語を選択',
-    description: 'まず、アプリの表示言語を選択してください。後から変更することもできます。',
-    icon: '🌐',
+    titleKey: 'onboarding.step1.title',
+    descriptionKey: 'onboarding.step1.description',
+    icon: '👋',
     isLanguageStep: true,
   },
   {
-    title: '通知設定',
-    description: '電解質アラート、脂質不足リマインダーなどの通知を受け取れます。',
+    titleKey: 'onboarding.step2.title',
+    descriptionKey: 'onboarding.step2.description',
+    icon: '👤',
+    isPersonaStep: true,
+  },
+  {
+    titleKey: 'onboarding.step4.title',
+    descriptionKey: 'onboarding.step4.description',
+    icon: '🔐',
+    isAuthStep: true,
+  },
+  {
+    titleKey: 'onboarding.step3.title',
+    descriptionKey: 'onboarding.step3.description',
     icon: '🔔',
     isNotificationStep: true,
   },
@@ -38,11 +56,18 @@ interface OnboardingScreenProps {
 }
 
 export default function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedLanguage, setSelectedLanguage] = useState<Language>(getLanguage());
   const [aiButtonClicked, setAiButtonClicked] = useState(false);
+  const [selectedPersona, setSelectedPersona] = useState<
+    'carnivore_practitioner' | 'beginner' | 'data_focused' | null
+  >(null);
+  const [authCompleted, setAuthCompleted] = useState(false);
+  // Force re-render on language change
+  const [, forceUpdate] = useState(0);
 
-  // 初期ステップを設定（AISpeedDialでスポットライト制御用）
+  // Set initial step (for spotlight control in AISpeedDial)
   useEffect(() => {
     (window as any).__onboardingCurrentStep = currentStep;
     window.dispatchEvent(new CustomEvent('onboardingStepChanged'));
@@ -56,168 +81,140 @@ export default function OnboardingScreen({ onComplete }: OnboardingScreenProps) 
     { code: 'zh', name: 'Chinese', nativeName: '中文' },
   ];
 
-  const handleLanguageSelect = (lang: Language) => {
-    setSelectedLanguage(lang);
-    setLanguage(lang);
-    // 言語変更イベントを発火
-    const event = new CustomEvent('languageChanged', { detail: lang });
-    window.dispatchEvent(event);
-  };
-
-  const handleNext = async () => {
-    // 通知設定ステップの場合、通知許可をリクエスト
-    if (step.isNotificationStep) {
-      const { requestNotificationPermission } = await import('../utils/defrostReminder');
-      await requestNotificationPermission();
-    }
-    
-    if (currentStep < onboardingSteps.length - 1) {
-      const nextStep = currentStep + 1;
-      setCurrentStep(nextStep);
-      // ステップ変更を通知（AISpeedDialでスポットライト制御用）
-      (window as any).__onboardingCurrentStep = nextStep;
-      window.dispatchEvent(new CustomEvent('onboardingStepChanged'));
-    } else {
-      handleComplete();
-    }
-  };
-
-  const handleBack = () => {
-    if (currentStep > 0) {
-      const prevStep = currentStep - 1;
-      setCurrentStep(prevStep);
-      // ステップ変更を通知（AISpeedDialでスポットライト制御用）
-      (window as any).__onboardingCurrentStep = prevStep;
-      window.dispatchEvent(new CustomEvent('onboardingStepChanged'));
-    }
-  };
-
-  const handleSkip = () => {
-    handleComplete();
-  };
-
-  const handleComplete = () => {
-    localStorage.setItem('primal_logic_onboarding_completed', 'true');
-    onComplete();
-  };
-
-  const step = onboardingSteps[currentStep];
-
-  // AIボタンクリックを検知（強制イベント）
-  useEffect(() => {
-    if (step.isAISpotlightStep && !aiButtonClicked) {
-      const handleAIClick = () => {
-        setAiButtonClicked(true);
-      };
-      window.addEventListener('onboardingAIClicked', handleAIClick);
-      return () => {
-        window.removeEventListener('onboardingAIClicked', handleAIClick);
-      };
-    }
-  }, [step.isAISpotlightStep, aiButtonClicked]);
-
   return (
-    <div className="onboarding-screen-container">
-      <div className="onboarding-screen-content">
-        <div className="onboarding-screen-icon">{step.icon}</div>
-        <h1 className="onboarding-screen-title">{step.title}</h1>
-        <p className="onboarding-screen-description">{step.description}</p>
+    <div className="onboarding-overlay">
+      <div className="onboarding-card">
+        <div className="onboarding-icon">
+          {onboardingStepConfigs[currentStep].icon}
+        </div>
+        <h2 className="onboarding-title">
+          {t(onboardingStepConfigs[currentStep].titleKey)}
+        </h2>
+        <p className="onboarding-description">
+          {t(onboardingStepConfigs[currentStep].descriptionKey)}
+        </p>
 
-        {/* 言語選択ステップの場合、言語選択UIを表示 */}
-        {step.isLanguageStep && (
-          <div className="onboarding-language-selector">
+        {/* Step 1: Language Selection */}
+        {onboardingStepConfigs[currentStep].isLanguageStep && (
+          <div className="language-selector">
             {languages.map((lang) => (
               <button
                 key={lang.code}
-                className={`onboarding-language-button ${
-                  selectedLanguage === lang.code ? 'active' : ''
-                }`}
-                onClick={() => handleLanguageSelect(lang.code)}
+                className={`language-button ${selectedLanguage === lang.code ? 'selected' : ''
+                  }`}
+                onClick={() => {
+                  setLanguage(lang.code);
+                  setSelectedLanguage(lang.code);
+                  forceUpdate((n) => n + 1);
+                }}
               >
-                <div className="onboarding-language-name">{lang.nativeName}</div>
-                <div className="onboarding-language-subtitle">{lang.name}</div>
-                {selectedLanguage === lang.code && (
-                  <span className="onboarding-language-check">✓</span>
-                )}
+                {lang.nativeName}
               </button>
             ))}
           </div>
         )}
 
-        {/* AIスポットライトステップの場合、説明とガイドを表示 */}
-        {step.isAISpotlightStep && (
-          <div className="onboarding-ai-spotlight-guide">
-            <div className="onboarding-ai-instruction">
-              <p style={{ fontSize: '18px', fontWeight: '600', marginBottom: '1rem' }}>
-                👆 右下のAIボタンをタップしてください
-              </p>
-              <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: '1.6' }}>
-                実際に操作することで、AI機能の使い方を学べます。
-                <br />
-                ボタンをタップするまで次に進めません。
-              </p>
-            </div>
+        {/* Step 2: Persona Selection */}
+        {onboardingStepConfigs[currentStep].isPersonaStep && (
+          <div className="persona-selector" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', margin: '1rem 0' }}>
+            <button
+              className={`persona-button ${selectedPersona === 'carnivore_practitioner' ? 'selected' : ''}`}
+              onClick={() => setSelectedPersona('carnivore_practitioner')}
+              style={{
+                padding: '1rem',
+                border: selectedPersona === 'carnivore_practitioner' ? '2px solid #ef4444' : '1px solid #3f3f46',
+                borderRadius: '12px',
+                backgroundColor: selectedPersona === 'carnivore_practitioner' ? '#1f1f22' : 'transparent',
+                textAlign: 'left',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ fontWeight: 'bold', color: '#ef4444', marginBottom: '0.25rem' }}>🥩 {t('onboarding.persona.practitioner')}</div>
+              <div style={{ fontSize: '12px', color: '#a1a1aa' }}>{t('onboarding.persona.practitionerDesc')}</div>
+            </button>
+            <button
+              className={`persona-button ${selectedPersona === 'beginner' ? 'selected' : ''}`}
+              onClick={() => setSelectedPersona('beginner')}
+              style={{
+                padding: '1rem',
+                border: selectedPersona === 'beginner' ? '2px solid #f59e0b' : '1px solid #3f3f46',
+                borderRadius: '12px',
+                backgroundColor: selectedPersona === 'beginner' ? '#1f1f22' : 'transparent',
+                textAlign: 'left',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ fontWeight: 'bold', color: '#f59e0b', marginBottom: '0.25rem' }}>🔰 {t('onboarding.persona.beginner')}</div>
+              <div style={{ fontSize: '12px', color: '#a1a1aa' }}>{t('onboarding.persona.beginnerDesc')}</div>
+            </button>
+            <button
+              className={`persona-button ${selectedPersona === 'data_focused' ? 'selected' : ''}`}
+              onClick={() => setSelectedPersona('data_focused')}
+              style={{
+                padding: '1rem',
+                border: selectedPersona === 'data_focused' ? '2px solid #3b82f6' : '1px solid #3f3f46',
+                borderRadius: '12px',
+                backgroundColor: selectedPersona === 'data_focused' ? '#1f1f22' : 'transparent',
+                textAlign: 'left',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ fontWeight: 'bold', color: '#3b82f6', marginBottom: '0.25rem' }}>📊 {t('onboarding.persona.data')}</div>
+              <div style={{ fontSize: '12px', color: '#a1a1aa' }}>{t('onboarding.persona.dataDesc')}</div>
+            </button>
           </div>
         )}
 
-        {/* 選択肢ステップの場合、選択肢UIを表示（AIボタンクリック後） */}
-        {step.isChoiceStep && aiButtonClicked && (
-          <div className="onboarding-choice-selector">
-            <button
-              className="onboarding-choice-button onboarding-choice-button-spotlight"
-              onClick={handleNext}
-            >
-              <div className="onboarding-choice-icon">📚</div>
-              <div className="onboarding-choice-title">他の機能も見る</div>
-              <div className="onboarding-choice-description">残りの機能説明を確認する</div>
-            </button>
-            <button
-              className="onboarding-choice-button onboarding-choice-button-primary onboarding-choice-button-spotlight"
-              onClick={handleComplete}
-            >
-              <div className="onboarding-choice-icon">🚀</div>
-              <div className="onboarding-choice-title">アプリを体験する</div>
-              <div className="onboarding-choice-description">今すぐアプリを使い始める</div>
-            </button>
-          </div>
-        )}
-
-        <div className="onboarding-screen-progress">
-          {onboardingSteps.map((_, index) => (
-            <div
-              key={index}
-              className={`onboarding-screen-progress-dot ${
-                index === currentStep ? 'active' : index < currentStep ? 'completed' : ''
-              }`}
+        {/* Step 3: Auth Selection */}
+        {onboardingStepConfigs[currentStep].isAuthStep && (
+          <div style={{ margin: '1rem 0' }}>
+            <AuthScreen
+              onAuthSuccess={() => {
+                setAuthCompleted(true);
+                // Auth success automatically handled, button allows proceed
+              }}
+              isEmbedded={true}
             />
-          ))}
-        </div>
-
-        {/* 選択肢ステップでは通常のボタンを非表示 */}
-        {!step.isChoiceStep && (
-          <div className="onboarding-screen-buttons">
-            {currentStep > 0 && (
-              <button
-                className="onboarding-screen-button onboarding-screen-button-back"
-                onClick={handleBack}
-              >
-                戻る
-              </button>
-            )}
-            <button
-              className="onboarding-screen-button onboarding-screen-button-secondary"
-              onClick={handleSkip}
-            >
-              スキップ
-            </button>
-            <button
-              className="onboarding-screen-button onboarding-screen-button-primary"
-              onClick={handleNext}
-            >
-              {currentStep < onboardingSteps.length - 1 ? '次へ' : (step.isNotificationStep ? '通知を有効にする' : '始める')}
-            </button>
           </div>
         )}
+
+        {/* Step 4: Notification (Prompt only) */}
+        {onboardingStepConfigs[currentStep].isNotificationStep && (
+          <div style={{ margin: '1rem 0', textAlign: 'center', color: '#a1a1aa', fontSize: '14px' }}>
+            {t('onboarding.notification.hint')}
+          </div>
+        )}
+
+        <button
+          className="onboarding-next-button"
+          onClick={() => {
+            if (onboardingStepConfigs[currentStep].isPersonaStep && selectedPersona) {
+              // Set default mode based on persona
+              const defaultMode = getDefaultModeForPersona(selectedPersona);
+              saveNutrientDisplayMode(defaultMode);
+            }
+
+            if (currentStep < onboardingStepConfigs.length - 1) {
+              setCurrentStep(currentStep + 1);
+            } else {
+              onComplete();
+            }
+          }}
+          disabled={
+            (onboardingStepConfigs[currentStep].isPersonaStep && !selectedPersona) ||
+            (onboardingStepConfigs[currentStep].isAuthStep && !authCompleted && isSupabaseAvailable()) // Only require auth if Supabase is configured
+          }
+          style={{
+            opacity: (
+              (onboardingStepConfigs[currentStep].isPersonaStep && !selectedPersona) ||
+              (onboardingStepConfigs[currentStep].isAuthStep && !authCompleted && isSupabaseAvailable())
+            ) ? 0.5 : 1
+          }}
+        >
+          {currentStep === onboardingStepConfigs.length - 1
+            ? t('onboarding.start')
+            : t('onboarding.next')}
+        </button>
       </div>
     </div>
   );

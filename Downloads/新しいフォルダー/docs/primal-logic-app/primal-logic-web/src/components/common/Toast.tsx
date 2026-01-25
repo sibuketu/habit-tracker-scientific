@@ -1,26 +1,44 @@
 import { useEffect } from 'react';
 import './Toast.css';
 
+export type ToastType = 'success' | 'error' | 'info';
+
 interface ToastProps {
   message: string;
-  duration?: number;
+  type: ToastType;
+  isVisible: boolean;
   onClose: () => void;
 }
 
-export default function Toast({ message, duration = 3000, onClose }: ToastProps) {
+export default function Toast({ message, type, isVisible, onClose }: ToastProps) {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onClose();
-    }, duration);
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 3000); // Auto close after 3 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, onClose]);
 
-    return () => clearTimeout(timer);
-  }, [duration, onClose]);
+  if (!isVisible) return null;
+
+  const getIcon = () => {
+    switch (type) {
+      case 'success':
+        return '✅';
+      case 'error':
+        return '❌';
+      case 'info':
+        return 'ℹ️';
+      default:
+        return '';
+    }
+  };
 
   return (
-    <div className="toast-container">
-      <div className="toast-message">
-        {message}
-      </div>
+    <div className={`toast-container toast-${type}`}>
+      <span className="toast-icon">{getIcon()}</span>
+      <span className="toast-message">{message}</span>
     </div>
   );
 }

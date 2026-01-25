@@ -1,9 +1,9 @@
 /**
  * CursorのTODOリストをObsidianに記録するスクリプト
  * 
- * 使用方法:
- * - Cursorのターミナルで実行: `npx tsx scripts/saveTodoToObsidian.ts`
- * - または、package.jsonにスクリプトを追加して実行
+ * 使用方況E
+ * - Cursorのターミナルで実衁E `npx tsx scripts/saveTodoToObsidian.ts`
+ * - また�E、package.jsonにスクリプトを追加して実衁E
  */
 
 import * as fs from 'fs';
@@ -16,13 +16,13 @@ interface TodoItem {
 }
 
 /**
- * ObsidianのVaultパスを取得
- * シンボリックリンクまたは直接パスを指定
+ * ObsidianのVaultパスを取征E
+ * シンボリチE��リンクまた�E直接パスを指宁E
  */
 function getObsidianVaultPath(): string {
   // プロジェクトルートから相対パスでObsidianのVaultを参照
-  // シンボリックリンクが作成されている場合: ./obsidian-vault
-  // または、絶対パスを指定: C:\Users\susam\Documents\ObsidianVault
+  // シンボリチE��リンクが作�EされてぁE��場吁E ./obsidian-vault
+  // また�E、絶対パスを指宁E C:\Users\susam\Documents\ObsidianVault
   
   const possiblePaths = [
     path.join(process.cwd(), 'obsidian-vault'),
@@ -36,11 +36,11 @@ function getObsidianVaultPath(): string {
     }
   }
 
-  throw new Error('Obsidian Vaultが見つかりません。シンボリックリンクを作成するか、パスを確認してください。');
+  throw new Error('Obsidian Vaultが見つかりません。シンボリチE��リンクを作�Eするか、パスを確認してください、E);
 }
 
 /**
- * 今日の日付をYYYY-MM-DD形式で取得
+ * 今日の日付をYYYY-MM-DD形式で取征E
  */
 function getTodayDateString(): string {
   const today = new Date();
@@ -51,14 +51,14 @@ function getTodayDateString(): string {
 }
 
 /**
- * TODOリストをObsidianファイルに保存
+ * TODOリストをObsidianファイルに保孁E
  */
 function saveTodoToObsidian(todos: TodoItem[]): void {
   try {
     const vaultPath = getObsidianVaultPath();
     const dailyFolder = path.join(vaultPath, 'Daily');
     
-    // Dailyフォルダが存在しない場合は作成
+    // Dailyフォルダが存在しなぁE��合�E作�E
     if (!fs.existsSync(dailyFolder)) {
       fs.mkdirSync(dailyFolder, { recursive: true });
     }
@@ -66,14 +66,14 @@ function saveTodoToObsidian(todos: TodoItem[]): void {
     const today = getTodayDateString();
     const filePath = path.join(dailyFolder, `${today}.md`);
 
-    // 既存のファイルを読み込む（存在する場合）
+    // 既存�Eファイルを読み込む�E�存在する場合！E
     let existingContent = '';
     if (fs.existsSync(filePath)) {
       existingContent = fs.readFileSync(filePath, 'utf-8');
     }
 
-    // TODOリストをMarkdown形式で生成
-    const todoSection = `## Cursor TODOリスト (${today})
+    // TODOリストをMarkdown形式で生�E
+    const todoSection = `## Cursor TODOリスチE(${today})
 
 ${todos.map(todo => {
   const statusIcon = {
@@ -84,9 +84,9 @@ ${todos.map(todo => {
   }[todo.status];
 
   const statusText = {
-    pending: '未着手',
+    pending: '未着扁E,
     in_progress: '進行中',
-    completed: '完了',
+    completed: '完亁E,
     cancelled: 'キャンセル',
   }[todo.status];
 
@@ -101,12 +101,12 @@ ${todos.map(todo => {
 
 `;
 
-    // 既存の内容と結合（TODOセクションを更新または追加）
-    const todoSectionRegex = /## Cursor TODOリスト.*?(?=\n## |$)/s;
+    // 既存�E冁E��と結合�E�EODOセクションを更新また�E追加�E�E
+    const todoSectionRegex = /## Cursor TODOリスチE*?(?=\n## |$)/s;
     let updatedContent = existingContent;
 
     if (todoSectionRegex.test(existingContent)) {
-      // 既存のTODOセクションを置き換え
+      // 既存�ETODOセクションを置き換ぁE
       updatedContent = existingContent.replace(todoSectionRegex, todoSection.trim());
     } else {
       // 新しいTODOセクションを追加
@@ -115,23 +115,23 @@ ${todos.map(todo => {
 
     // ファイルに書き込む
     fs.writeFileSync(filePath, updatedContent, 'utf-8');
-    console.log(`✅ TODOリストをObsidianに保存しました: ${filePath}`);
+    console.log(`✁ETODOリストをObsidianに保存しました: ${filePath}`);
   } catch (error) {
-    console.error('❌ エラーが発生しました:', error);
+    console.error('❁Eエラーが発生しました:', error);
     throw error;
   }
 }
 
 /**
- * CursorのTODOリストを取得
+ * CursorのTODOリストを取征E
  * 
- * 取得方法（優先順位順）:
- * 1. コマンドライン引数からTODOリストを取得（JSON形式）
+ * 取得方法（優先頁E��頁E��E
+ * 1. コマンドライン引数からTODOリストを取得！ESON形式！E
  * 2. second-brain/logs/daily/ から最新のTODOリストを読み込む
- * 3. デフォルトのTODOリスト（サンプル）
+ * 3. チE��ォルト�ETODOリスト（サンプル�E�E
  */
 function getCursorTodos(): TodoItem[] {
-  // 方法1: コマンドライン引数から取得
+  // 方況E: コマンドライン引数から取征E
   const args = process.argv.slice(2);
   if (args.length > 0) {
     try {
@@ -141,25 +141,25 @@ function getCursorTodos(): TodoItem[] {
         return todos;
       }
     } catch (error) {
-      console.warn('コマンドライン引数のパースに失敗しました。デフォルトのTODOリストを使用します。');
+      console.warn('コマンドライン引数のパ�Eスに失敗しました。デフォルト�ETODOリストを使用します、E);
     }
   }
 
-  // 方法2: second-brain/logs/daily/ から最新のTODOリストを読み込む
+  // 方況E: second-brain/logs/daily/ から最新のTODOリストを読み込む
   try {
     const secondBrainPath = path.join(process.cwd(), '..', '..', 'second-brain', 'logs', 'daily');
     if (fs.existsSync(secondBrainPath)) {
       const files = fs.readdirSync(secondBrainPath)
         .filter(file => file.endsWith('.md') && file.match(/^\d{4}-\d{2}-\d{2}\.md$/))
         .sort()
-        .reverse(); // 最新のファイルを先に
+        .reverse(); // 最新のファイルを�Eに
       
       if (files.length > 0) {
         const latestFile = path.join(secondBrainPath, files[0]);
         const content = fs.readFileSync(latestFile, 'utf-8');
         
-        // MarkdownのTODOリストをパース（🔵付きのタスクを抽出）
-        // 形式: "- 1. 🔵 タスク内容" または "- [ ] タスク内容"
+        // MarkdownのTODOリストをパ�Eス�E�🔵付きのタスクを抽出�E�E
+        // 形弁E "- 1. 🔵 タスク冁E��" また�E "- [ ] タスク冁E��"
         const todoRegex = /[-*]\s*(?:\[([ x~])\])?\s*(?:\d+\.\s*)?(?:🔵\s*)?(.+)/g;
         const todos: TodoItem[] = [];
         let match;
@@ -169,8 +169,8 @@ function getCursorTodos(): TodoItem[] {
           const checkbox = match[1];
           const taskContent = match[2].trim();
           
-          // 空のタスクや「（ToDo）」のようなプレースホルダーはスキップ
-          if (!taskContent || taskContent === '（ToDo）' || taskContent === '(ToDo)') {
+          // 空のタスクめE��！EoDo�E�」�EようなプレースホルダーはスキチE�E
+          if (!taskContent || taskContent === '�E�EoDo�E�E || taskContent === '(ToDo)') {
             continue;
           }
           
@@ -182,7 +182,7 @@ function getCursorTodos(): TodoItem[] {
           } else if (checkbox === ' ') {
             status = 'pending';
           } else {
-            // 🔵付きのタスクは未完了として扱う
+            // 🔵付きのタスクは未完亁E��して扱ぁE
             status = 'pending';
           }
           
@@ -200,31 +200,31 @@ function getCursorTodos(): TodoItem[] {
       }
     }
   } catch (error) {
-    console.warn('second-brainからのTODOリスト読み込みに失敗しました。', error);
+    console.warn('second-brainからのTODOリスト読み込みに失敗しました、E, error);
   }
 
-  // 方法3: デフォルトのTODOリスト（サンプル）
-  console.log('⚠️ デフォルトのTODOリストを使用します。');
+  // 方況E: チE��ォルト�ETODOリスト（サンプル�E�E
+  console.log('⚠�E�EチE��ォルト�ETODOリストを使用します、E);
   return [
     {
       id: '1',
-      content: 'AIチャット機能の改善',
+      content: 'AIチャチE��機�Eの改喁E,
       status: 'completed',
     },
     {
       id: '2',
-      content: 'Obsidian連携の実装',
+      content: 'Obsidian連携の実裁E,
       status: 'in_progress',
     },
     {
       id: '3',
-      content: '投資家からの返事確認',
+      content: '投賁E��からの返事確誁E,
       status: 'pending',
     },
   ];
 }
 
-// メイン処理
+// メイン処琁E
 if (require.main === module) {
   try {
     const todos = getCursorTodos();
@@ -236,4 +236,5 @@ if (require.main === module) {
 }
 
 export { saveTodoToObsidian, getCursorTodos, getTodayDateString };
+
 

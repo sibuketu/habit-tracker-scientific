@@ -1,7 +1,7 @@
 /**
- * Primal Logic - Carbohydrate Target Settings Screen
+ * CarnivoreOS - Carbohydrate Target Settings Screen
  *
- * 炭水化物ターゲット設定画面
+ * 炭水化物ターゲチE��設定画面
  */
 
 import { useState, useEffect } from 'react';
@@ -36,19 +36,17 @@ export default function CarbTargetSettingsScreen({ onBack }: CarbTargetSettingsS
       <div className="carb-target-settings-screen-content">
         <div className="screen-header">
           <button className="back-button" onClick={onBack} aria-label={t('common.backAriaLabel')}>
-            ←
-          </button>
-          <h1 className="screen-header-title">炭水化物ターゲット設定</h1>
+            ↁE          </button>
+          <h1 className="screen-header-title">炭水化物ターゲチE��設宁E/h1>
         </div>
 
         <div className="carb-target-settings-screen-section">
           <h2 className="carb-target-settings-screen-section-title">
             1日の炭水化物目標値 (g)
-            <HelpTooltip text="カーニボアダイエットでは通常0gを目標としますが、ケトボアや移行期間中は20-50g程度を許可することもあります。厳格なカーニボアの場合は0gに設定してください。" />
+            <HelpTooltip text="カーニ�EアダイエチE��では通常0gを目標としますが、ケト�EアめE��行期間中は20-50g程度を許可することもあります。厳格なカーニ�Eアの場合�E0gに設定してください、E />
           </h2>
           <p className="carb-target-settings-screen-description">
-            カーニボアダイエットでは通常0gを目標とします。ケトボアや移行期間中は20-50g程度を許可することもあります。
-          </p>
+            カーニ�EアダイエチE��では通常0gを目標とします。ケト�EアめE��行期間中は20-50g程度を許可することもあります、E          </p>
 
           <div className="carb-target-settings-screen-input-group">
             <input
@@ -65,7 +63,7 @@ export default function CarbTargetSettingsScreen({ onBack }: CarbTargetSettingsS
           </div>
 
           <div className="carb-target-settings-screen-presets">
-            <p className="carb-target-settings-screen-presets-label">プリセット:</p>
+            <p className="carb-target-settings-screen-presets-label">プリセチE��:</p>
             <div className="carb-target-settings-screen-preset-buttons">
               {presetValues.map((value) => (
                 <button
@@ -86,17 +84,17 @@ export default function CarbTargetSettingsScreen({ onBack }: CarbTargetSettingsS
             {targetCarbs === 0 ? (
               <div className="carb-target-settings-screen-info-item">
                 <span className="carb-target-settings-screen-info-icon">🥩</span>
-                <span>厳格なカーニボアモード: 炭水化物は0gを目標とします。</span>
+                <span>厳格なカーニ�EアモーチE 炭水化物は0gを目標とします、E/span>
               </div>
             ) : targetCarbs <= 20 ? (
               <div className="carb-target-settings-screen-info-item">
                 <span className="carb-target-settings-screen-info-icon">🌿</span>
-                <span>ケトボアモード: 少量の低炭水化物植物を許可します。</span>
+                <span>ケト�EアモーチE 少量の低炭水化物植物を許可します、E/span>
               </div>
             ) : (
               <div className="carb-target-settings-screen-info-item">
                 <span className="carb-target-settings-screen-info-icon">🔄</span>
-                <span>移行期間モード: 炭水化物を段階的に減らしていきます。</span>
+                <span>移行期間モーチE 炭水化物を段階的に減らしてぁE��ます、E/span>
               </div>
             )}
           </div>
@@ -105,3 +103,4 @@ export default function CarbTargetSettingsScreen({ onBack }: CarbTargetSettingsS
     </div>
   );
 }
+

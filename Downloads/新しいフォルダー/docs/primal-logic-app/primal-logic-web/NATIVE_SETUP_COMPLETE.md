@@ -1,36 +1,36 @@
-# ネイティブアプリ化セットアップ完了（2026-01-03）
+# ネイチE��ブアプリ化セチE��アチE�E完亁E��E026-01-03�E�E
 
-> Capacitorを使ったネイティブアプリ化の準備が完了しました
-
----
-
-## ✅ 完了した作業
-
-1. **Capacitorのインストール**: 完了 ✅
-2. **Capacitorの初期化**: 完了 ✅
-3. **capacitor.config.tsの作成**: 完了 ✅
-4. **セットアップバッチファイルの作成**: 完了 ✅
+> Capacitorを使ったネイチE��ブアプリ化�E準備が完亁E��ました
 
 ---
 
-## 📋 次のステップ（ユーザーが実行）
+## ✁E完亁E��た作業
 
-### 方法1: バッチファイルを使用（推奨・一番簡単）
+1. **Capacitorのインスト�Eル**: 完亁E✁E
+2. **Capacitorの初期匁E*: 完亁E✁E
+3. **capacitor.config.tsの作�E**: 完亁E✁E
+4. **セチE��アチE�Eバッチファイルの作�E**: 完亁E✁E
+
+---
+
+## 📋 次のスチE��プ（ユーザーが実行！E
+
+### 方況E: バッチファイルを使用�E�推奨・一番簡単！E
 
 **エクスプローラーから:**
-1. エクスプローラーを開く（Windowsキー+E）
-2. アドレスバーに以下を貼り付けてEnter:
+1. エクスプローラーを開く！Eindowsキー+E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-3. `setup-capacitor.bat` をダブルクリック
-4. 自動的にビルド、Androidプラットフォーム追加、同期が実行されます
+3. `setup-capacitor.bat` をダブルクリチE��
+4. 自動的にビルド、AndroidプラチE��フォーム追加、同期が実行されまぁE
 
-### 方法2: 手動で実行
+### 方況E: 手動で実衁E
 
 **PowerShellから:**
-1. 新しいPowerShellを開く（Windowsキー → 「PowerShell」と入力 → Enter）
-2. 以下のコマンドを順番に実行:
+1. 新しいPowerShellを開く！Eindowsキー ↁE「PowerShell」と入劁EↁEEnter�E�E
+2. 以下�Eコマンドを頁E��に実衁E
 
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
@@ -42,59 +42,60 @@ npx cap open android
 
 ---
 
-## 📱 実機でテスト
+## 📱 実機でチE��チE
 
 ### Android
 
 1. **Android Studioで開く**: `npx cap open android`
-2. **実機をUSBで接続**: Android実機をUSBケーブルで接続
-3. **実機を選択**: Android Studioのデバイス選択で実機を選択
-4. **実行**: 「Run」ボタンをクリック
-5. **アプリが起動**: 実機でアプリが起動します
+2. **実機をUSBで接綁E*: Android実機をUSBケーブルで接綁E
+3. **実機を選抁E*: Android StudioのチE��イス選択で実機を選抁E
+4. **実衁E*: 「Run」�EタンをクリチE��
+5. **アプリが起勁E*: 実機でアプリが起動しまぁE
 
-### iOS（macOSが必要）
+### iOS�E�EacOSが忁E��E��E
 
-**注意**: WindowsではiOS開発はできません。macOSが必要です。
+**注愁E*: WindowsではiOS開発はできません。macOSが忁E��です、E
 
 1. **Xcodeで開く**: `npx cap open ios`
-2. **実機をUSBで接続**: iOS実機をUSBケーブルで接続
-3. **実機を選択**: Xcodeのデバイス選択で実機を選択
-4. **実行**: 「Run」ボタンをクリック
-5. **アプリが起動**: 実機でアプリが起動します
+2. **実機をUSBで接綁E*: iOS実機をUSBケーブルで接綁E
+3. **実機を選抁E*: XcodeのチE��イス選択で実機を選抁E
+4. **実衁E*: 「Run」�EタンをクリチE��
+5. **アプリが起勁E*: 実機でアプリが起動しまぁE
 
 ---
 
-## 🔍 Recovery Protocolの確認
+## 🔍 Recovery Protocolの確誁E
 
-**Webアプリ版に実装されている機能:**
-- ✅ Recovery Protocol表示
-- ✅ Recovery Protocol生成
-- ✅ Recovery Protocol設定
-- ✅ 「明日のログに追加」機能
+**Webアプリ版に実裁E��れてぁE��機�E:**
+- ✁ERecovery Protocol表示
+- ✁ERecovery Protocol生�E
+- ✁ERecovery Protocol設宁E
+- ✁E「�E日のログに追加」機�E
 
-**Capacitorでネイティブ化した場合:**
-- ✅ 全ての機能がそのまま動作します
-- ✅ Recovery Protocolも動作します（心配なし）
+**CapacitorでネイチE��ブ化した場吁E**
+- ✁E全ての機�Eがそのまま動作しまぁE
+- ✁ERecovery Protocolも動作します（忁E�Eなし！E
 
 ---
 
-## 📝 注意事項
+## 📝 注意事頁E
 
-1. **ビルド**: ネイティブアプリを実行する前に、必ず`npm run build`を実行してください
+1. **ビルチE*: ネイチE��ブアプリを実行する前に、忁E��`npm run build`を実行してください
 2. **同期**: コードを変更したら、`npx cap sync`を実行してください
-3. **iOS**: WindowsではiOS開発はできません（macOSが必要）
-4. **Android Studio**: Android開発にはAndroid Studioが必要です
+3. **iOS**: WindowsではiOS開発はできません�E�EacOSが忁E��E��E
+4. **Android Studio**: Android開発にはAndroid Studioが忁E��でぁE
 
 ---
 
 ## 🎯 次のアクション
 
-1. **バッチファイルを実行**: `setup-capacitor.bat` をダブルクリック
+1. **バッチファイルを実衁E*: `setup-capacitor.bat` をダブルクリチE��
 2. **Android Studioで開く**: `npx cap open android`
-3. **実機でテスト**: 実機を接続して実行
-4. **Recovery Protocolの動作確認**: 実機でRecovery Protocolを試す
+3. **実機でチE��チE*: 実機を接続して実衁E
+4. **Recovery Protocolの動作確誁E*: 実機でRecovery Protocolを試ぁE
 
 ---
 
 最終更新: 2026-01-03
+
 

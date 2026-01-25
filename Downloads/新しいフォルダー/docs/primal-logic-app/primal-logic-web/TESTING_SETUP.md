@@ -1,77 +1,78 @@
-# テストセットアップ
+# チE��トセチE��アチE�E
 
-## ユニットテスト (Jest)
+## ユニットテスチE(Jest)
 
-計算ロジック（`getCarnivoreTargets`など）のユニットテストを実行します。
+計算ロジチE���E�EgetCarnivoreTargets`など�E��Eユニットテストを実行します、E
 
-### 実行方法
+### 実行方況E
 
 ```bash
 cd primal-logic-web
 
-# 全テスト実行
+# 全チE��ト実衁E
 npm run test:unit
 
-# ウォッチモード（開発中に便利）
+# ウォチE��モード（開発中に便利�E�E
 npm run test:unit:watch
 
-# カバレッジレポート付き
+# カバレチE��レポ�Eト付き
 npm run test:unit:coverage
 ```
 
-### テストファイルの場所
+### チE��トファイルの場所
 
 - `src/__tests__/`: ユニットテストファイル
-- テストファイル名: `*.test.ts` または `*.spec.ts`
+- チE��トファイル吁E `*.test.ts` また�E `*.spec.ts`
 
-## E2Eテスト (Playwright)
+## E2EチE��チE(Playwright)
 
-WebアプリのE2Eテストを実行します。
+WebアプリのE2EチE��トを実行します、E
 
-### 実行方法
+### 実行方況E
 
 ```bash
 cd primal-logic-web
 
-# 全テスト実行
+# 全チE��ト実衁E
 npm test
 
-# UIモード（視覚的にテストを実行）
+# UIモード（視覚的にチE��トを実行！E
 npm run test:ui
 
-# ヘッド付きモード（ブラウザを表示）
+# ヘッド付きモード（ブラウザを表示�E�E
 npm run test:headed
 ```
 
-## コードフォーマット (Prettier)
+## コードフォーマッチE(Prettier)
 
-コードの自動フォーマットを実行します。
+コード�E自動フォーマットを実行します、E
 
-### 実行方法
+### 実行方況E
 
 ```bash
 cd primal-logic-web
 
-# フォーマット実行
+# フォーマット実衁E
 npm run format
 
-# フォーマットチェック（CI用）
+# フォーマットチェチE���E�EI用�E�E
 npm run format:check
 ```
 
 ## リンター (ESLint)
 
-コードの品質チェックと自動修正を実行します。
+コード�E品質チェチE��と自動修正を実行します、E
 
-### 実行方法
+### 実行方況E
 
 ```bash
 cd primal-logic-web
 
-# リンターチェック
+# リンターチェチE��
 npm run lint
 
 # 自動修正
 npm run lint:fix
 ```
+
 

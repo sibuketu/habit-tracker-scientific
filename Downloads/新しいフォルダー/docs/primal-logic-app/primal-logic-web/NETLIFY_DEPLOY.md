@@ -1,6 +1,6 @@
-# Netlifyデプロイ手順
+# NetlifyチE�Eロイ手頁E
 
-## ビルドコマンド
+## ビルドコマンチE
 
 ```bash
 npm run build
@@ -14,7 +14,7 @@ dist
 
 ## Netlify設定ファイル
 
-`netlify.toml`が既に存在します：
+`netlify.toml`が既に存在します！E
 
 ```toml
 [build]
@@ -30,28 +30,29 @@ dist
   NODE_VERSION = "20"
 ```
 
-## 環境変数
+## 環墁E��数
 
-Netlifyのダッシュボードで以下の環境変数を設定してください：
+NetlifyのダチE��ュボ�Eドで以下�E環墁E��数を設定してください�E�E
 
-- `VITE_GEMINI_API_KEY`: Gemini APIキー（AIチャット機能用）
+- `VITE_GEMINI_API_KEY`: Gemini APIキー�E�EIチャチE��機�E用�E�E
 - `VITE_SUPABASE_URL`: Supabase Project URL
 - `VITE_SUPABASE_ANON_KEY`: Supabase ANON KEY
-- `VITE_REPLICATE_API_TOKEN`: Replicate APIトークン（画像生成用、オプション）
+- `VITE_REPLICATE_API_TOKEN`: Replicate APIト�Eクン�E�画像生成用、オプション�E�E
 
-## デプロイ方法
+## チE�Eロイ方況E
 
 1. Netlifyにログイン
-2. 新しいサイトを作成
-3. Gitリポジトリを接続
-4. ビルド設定：
-   - **ビルドコマンド**: `npm run build`
+2. 新しいサイトを作�E
+3. Gitリポジトリを接綁E
+4. ビルド設定！E
+   - **ビルドコマンチE*: `npm run build`
    - **公開ディレクトリ**: `dist`
-5. 環境変数を設定
-6. デプロイ
+5. 環墁E��数を設宁E
+6. チE�Eロイ
 
-## 注意事項
+## 注意事頁E
 
-- `dist`フォルダは`.gitignore`に含まれているため、Gitにはコミットされません
-- Netlifyが自動的にビルドしてデプロイします
-- SPA（Single Page Application）のため、`netlify.toml`でリダイレクト設定が必要です
+- `dist`フォルダは`.gitignore`に含まれてぁE��ため、Gitにはコミットされません
+- Netlifyが�E動的にビルドしてチE�EロイしまぁE
+- SPA�E�Eingle Page Application�E��Eため、`netlify.toml`でリダイレクト設定が忁E��でぁE
+

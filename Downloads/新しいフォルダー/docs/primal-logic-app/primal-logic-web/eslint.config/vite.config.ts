@@ -10,7 +10,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Primal Logic',
+        name: 'CarnivOS',
         short_name: 'PrimalLogic',
         description: 'Optimized Carnivore Diet Tracker',
         theme_color: '#0A0A0A',
@@ -60,3 +60,4 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
   },
 })
+

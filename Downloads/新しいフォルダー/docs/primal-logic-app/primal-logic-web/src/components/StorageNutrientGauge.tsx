@@ -1,16 +1,18 @@
 /**
- * Storage Nutrient Gauge - 貯蔵可能な栄養素のゲージ
+ * Storage Nutrient Gauge - Storage Nutrient Gauge
  *
- * 脂溶性ビタミン（A、D、K2、E）や一部のミネラル（カルシウム、リン）など、
- * 体内に貯蔵可能な栄養素を表示します。
- * 1日たつと他の栄養素はリセットされるが、貯蔵可能な栄養素は「ためてたやつが減る」感じ。
+ * Displays nutrients that can be stored in the body, such as fat-soluble vitamins (A, D, K2, E)
+ * and some minerals (calcium, phosphorus).
+ * Unlike other nutrients that reset daily, stored nutrients decrease from accumulated levels.
  */
+
+import { getStatusColor } from '../utils/gaugeUtils';
 
 interface StorageNutrientGaugeProps {
   label: string;
-  currentStorage: number; // 現在の貯蔵量（%）
-  dailyIntake: number; // 今日の摂取量
-  dailyRequirement: number; // 1日の必要量
+  currentStorage: number; // Current storage amount (%)
+  dailyIntake: number; // Today's intake
+  dailyRequirement: number; // Daily requirement
   unit: string;
   color?: string;
   onPress?: () => void;
@@ -25,12 +27,12 @@ export default function StorageNutrientGauge({
   color = '#a855f7',
   onPress,
 }: StorageNutrientGaugeProps) {
-  // 貯蔵量の計算：前日の貯蔵量 - 1日の消費量 + 今日の摂取量
-  // 簡易版：現在の貯蔵量 + 今日の摂取量（1日の必要量に対する割合）
+  // Calculate storage: previous day's storage - daily consumption + today's intake
+  // Simplified version: current storage + today's intake (as percentage of daily requirement)
   const dailyIntakePercent = dailyRequirement > 0 ? (dailyIntake / dailyRequirement) * 100 : 0;
-  const newStorage = Math.min(100, Math.max(0, currentStorage - 100 + dailyIntakePercent)); // 1日で100%消費、摂取分を追加
+  const newStorage = Math.min(100, Math.max(0, currentStorage - 100 + dailyIntakePercent)); // 100% consumed per day, add intake portion
 
-  // 貯蔵量の状態判定
+  // Determine storage status
   const getStorageStatus = (): 'optimal' | 'warning' | 'low' => {
     if (currentStorage >= 80) return 'optimal';
     if (currentStorage >= 50) return 'warning';
@@ -38,14 +40,7 @@ export default function StorageNutrientGauge({
   };
 
   const status = getStorageStatus();
-
-  const getStatusColor = () => {
-    if (status === 'optimal') return '#22c55e'; // 緑
-    if (status === 'warning') return '#f59e0b'; // オレンジ
-    return '#ef4444'; // 赤
-  };
-
-  const statusColor = getStatusColor();
+  const statusColor = getStatusColor(status);
 
   return (
     <div
@@ -81,7 +76,7 @@ export default function StorageNutrientGauge({
         </div>
       </div>
 
-      {/* バッテリー表示（単色、ライン表示） */}
+      {/* Battery display (solid color, line display) */}
       <div
         style={{
           position: 'relative',
@@ -92,7 +87,7 @@ export default function StorageNutrientGauge({
           overflow: 'hidden',
         }}
       >
-        {/* 現在の貯蔵量（単色） */}
+        {/* Current storage amount (solid color) */}
         <div
           style={{
             position: 'absolute',
@@ -104,7 +99,7 @@ export default function StorageNutrientGauge({
             transition: 'width 0.3s ease',
           }}
         />
-        {/* 今日の摂取分（追加分） */}
+        {/* Today's intake (additional portion) */}
         {dailyIntake > 0 && (
           <div
             style={{
@@ -120,12 +115,13 @@ export default function StorageNutrientGauge({
         )}
       </div>
 
-      {/* 説明テキスト */}
+      {/* Description text */}
       <div style={{ fontSize: '10px', color: '#9ca3af', marginTop: 0 }}>
-        {status === 'optimal' && '✅ 貯蔵量十分'}
-        {status === 'warning' && '⚠️ 貯蔵量中程度'}
-        {status === 'low' && '🔴 貯蔵量不足'}
+        {status === 'optimal' && '✁ESufficient storage'}
+        {status === 'warning' && '⚠�E�EModerate storage'}
+        {status === 'low' && '🔴 Insufficient storage'}
       </div>
     </div>
   );
 }
+

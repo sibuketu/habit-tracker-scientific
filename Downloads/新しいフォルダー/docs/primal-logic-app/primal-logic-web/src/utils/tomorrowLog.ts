@@ -1,11 +1,10 @@
 /**
- * Primal Logic - Tomorrow Log Utility
+ * CarnivoreOS - Tomorrow Log Utility
  *
- * 「明日のログに追加」機能: Phase 4の仕様
- * SET PROTOCOLボタンで明日のログにRecovery Protocolと推奨食品を追加
+ * 「�E日のログに追加」機�E: Phase 4の仕槁E * SET PROTOCOLボタンで明日のログにRecovery Protocolと推奨食品を追加
  */
 
-import type { DailyLog, RecoveryProtocol, FoodItem } from '../types';
+import type { DailyLog, RecoveryProtocol, FoodItem } from '../types/index';
 import { calculateAllMetrics } from './nutrientCalculator';
 import { saveDailyLog, getDailyLogByDate } from './storage';
 
@@ -21,7 +20,7 @@ export function getTomorrowDate(): string {
 /**
  * Create or update tomorrow's log with recovery protocol
  *
- * Phase 4仕様:
+ * Phase 4仕槁E
  * - Adds menu to tomorrow's log
  * - Sets a "Defrost Reminder" for tonight
  */
@@ -97,8 +96,7 @@ export async function addProtocolToTomorrowLog(protocol: RecoveryProtocol): Prom
         recommendedFoods.push({
           item: 'Bone Broth',
           amount: 500,
-          unit: 'g', // 'ml'は型に含まれていないため'g'に変更（500ml ≈ 500g）
-          type: 'animal',
+          unit: 'g', // 'ml'は型に含まれてぁE��ぁE��めEg'に変更�E�E00ml ≁E500g�E�E          type: 'animal',
           nutrients: {
             protein: 10,
             fat: 2,
@@ -142,3 +140,4 @@ export async function addProtocolToTomorrowLog(protocol: RecoveryProtocol): Prom
 
   return tomorrowLog;
 }
+

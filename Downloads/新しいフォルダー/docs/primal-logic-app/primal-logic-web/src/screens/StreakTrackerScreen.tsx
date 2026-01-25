@@ -1,5 +1,5 @@
 /**
- * Streak Tracker Screen - 習慣トラッカー画面
+ * Streak Tracker Screen - 習�EトラチE��ー画面
  *
  * 連続記録日数の詳細を表示
  */
@@ -9,7 +9,7 @@ import { calculateStreak, type StreakData } from '../utils/streakCalculator';
 import { getDailyLogs } from '../utils/storage';
 import StreakCalendar from '../components/StreakCalendar';
 import { useTranslation } from '../utils/i18n';
-import type { DailyLog } from '../types';
+import type { DailyLog } from '../types/index';
 import './StreakTrackerScreen.css';
 
 type StreakTrackerScreenProps = {
@@ -29,8 +29,7 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
     };
     loadData();
 
-    // データ更新・画面遷移を監視
-    const handleDataUpdate = () => {
+    // チE�Eタ更新・画面遷移を監要E    const handleDataUpdate = () => {
       loadData();
     };
     window.addEventListener('dailyLogUpdated', handleDataUpdate);
@@ -89,14 +88,13 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
               color: '#6b7280',
             }}
           >
-            ←
-          </button>
+            ←          </button>
           <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: 0 }}>
             🔥 {t('streak.title')}
           </h1>
         </div>
 
-        {/* 現在の連続日数（コンパクト版） */}
+        {/* 現在の連続日数�E�コンパクト版�E�E*/}
         <div
           style={{
             textAlign: 'center',
@@ -117,9 +115,9 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
           >
             {streakData.currentStreak}
           </div>
-          <div style={{ fontSize: '16px', color: '#6b7280', marginBottom: '1rem' }}>日連続</div>
+          <div style={{ fontSize: '16px', color: '#6b7280', marginBottom: '1rem' }}>日連綁E/div>
 
-          {/* フェーズと次のフェーズまでを1行で表示 */}
+          {/* フェーズと次のフェーズまでめE行で表示 */}
           <div
             style={{
               display: 'flex',
@@ -190,12 +188,11 @@ export default function StreakTrackerScreen({ onBack }: StreakTrackerScreenProps
               // 履歴画面に遷移
               const event = new CustomEvent('navigateToScreen', { detail: 'history' });
               window.dispatchEvent(event);
-              // 履歴画面で該当日付を展開するためのイベント（HistoryScreenで実装が必要な場合）
-              // 現在は履歴画面に遷移するだけ
-            }}
+              // 履歴画面で該当日付を展開するためのイベント！EistoryScreenで実裁E��忁E��な場合！E              // 現在は履歴画面に遷移するだぁE            }}
           />
         </div>
       </div>
     </div>
   );
 }
+

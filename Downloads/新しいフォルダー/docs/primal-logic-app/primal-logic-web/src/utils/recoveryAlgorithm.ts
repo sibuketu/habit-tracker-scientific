@@ -1,12 +1,12 @@
 /**
- * Primal Logic - Recovery Algorithm
+ * CarnivoreOS - Recovery Algorithm
  *
- * 違反タイプ別の処方箋生成ロジック
- * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
+ * 違反タイプ別の処方箋生成ロジチE��
+ * 技術仕様書: @Primal_Logic_Technical_Spec.md 参�E
  */
 
 import { VIOLATION_TYPES } from '../constants/carnivore_constants';
-import type { ViolationType, RecoveryProtocol } from '../types';
+import type { ViolationType, RecoveryProtocol } from '../types/index';
 
 /**
  * Generate recovery protocol based on violation type
@@ -161,3 +161,4 @@ export function calculateTargetFastEnd(fastingHours: number, startTime?: Date): 
   const end = new Date(start.getTime() + fastingHours * 60 * 60 * 1000);
   return end.toISOString();
 }
+

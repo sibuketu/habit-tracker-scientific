@@ -1,81 +1,81 @@
-# AntiGravity移行ガイド
+# AntiGravity移行ガイチE
 
-## 概要
+## 概要E
 
-このガイドは、Primal LogicアプリをAntiGravityで開いて開発するための手順を説明します。
+こ�Eガイド�E、Primal LogicアプリをAntiGravityで開いて開発するための手頁E��説明します、E
 
 ---
 
 ## 前提条件
 
-- AntiGravityがインストールされていること
-- Gitリポジトリが設定されていること
-- 環境変数（`.env`）が設定されていること
+- AntiGravityがインスト�EルされてぁE��こと
+- Gitリポジトリが設定されてぁE��こと
+- 環墁E��数�E�E.env`�E�が設定されてぁE��こと
 
 ---
 
-## 移行手順
+## 移行手頁E
 
 ### 1. AntiGravityでプロジェクトを開く
 
-1. AntiGravityを起動
-2. 「Open Folder」をクリック
-3. 以下のパスを選択：
+1. AntiGravityを起勁E
+2. 「Open Folder」をクリチE��
+3. 以下�Eパスを選択！E
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-4. セキュリティ警告が表示されたら、「Yes, I trust the authors」を選択
+4. セキュリチE��警告が表示されたら、「Yes, I trust the authors」を選抁E
 
-### 2. 環境変数の確認
+### 2. 環墁E��数の確誁E
 
-`.env`ファイルが存在することを確認してください。存在しない場合は、`.env_OPEN_GUIDE.md`を参照して作成してください。
+`.env`ファイルが存在することを確認してください。存在しなぁE��合�E、`.env_OPEN_GUIDE.md`を参照して作�Eしてください、E
 
-**必要な環境変数:**
-- `VITE_GEMINI_API_KEY`: Gemini APIキー（AI機能用）
-- `VITE_SUPABASE_URL`: Supabase Project URL（オプション）
-- `VITE_SUPABASE_ANON_KEY`: Supabase ANON KEY（オプション）
+**忁E��な環墁E��数:**
+- `VITE_GEMINI_API_KEY`: Gemini APIキー�E�EI機�E用�E�E
+- `VITE_SUPABASE_URL`: Supabase Project URL�E�オプション�E�E
+- `VITE_SUPABASE_ANON_KEY`: Supabase ANON KEY�E�オプション�E�E
 
-### 3. 依存関係のインストール
+### 3. 依存関係�Eインスト�Eル
 
-AntiGravityのターミナルで以下を実行：
+AntiGravityのターミナルで以下を実行！E
 
 ```bash
 npm install
 ```
 
-### 4. 開発サーバーの起動
+### 4. 開発サーバ�Eの起勁E
 
 ```bash
 npm run dev
 ```
 
-ブラウザで `http://localhost:5173` を開いて動作確認してください。
+ブラウザで `http://localhost:5173` を開ぁE��動作確認してください、E
 
 ---
 
 ## AntiGravityでの開発フロー
 
-### 日常的な開発
+### 日常皁E��開発
 
-1. **AntiGravityでコード編集**
-   - ファイルを開いて編集
-   - AIエージェントに質問・指示
+1. **AntiGravityでコード編雁E*
+   - ファイルを開ぁE��編雁E
+   - AIエージェントに質問�E持E��
 
-2. **Git操作**
+2. **Git操佁E*
    ```bash
    git add .
-   git commit -m "変更内容"
+   git commit -m "変更冁E��"
    git push
    ```
 
 3. **自動デプロイ**
-   - AntiGravityの自動デプロイ機能を使用
+   - AntiGravityの自動デプロイ機�Eを使用
    - Netlifyへの自動デプロイが可能
 
-### ビルドとデプロイ
+### ビルドとチE�Eロイ
 
 ```bash
-# 本番ビルド
+# 本番ビルチE
 npm run build
 
 # ビルド結果のプレビュー
@@ -84,78 +84,79 @@ npm run preview
 
 ---
 
-## Cursorとの使い分け
+## Cursorとの使ぁE�EぁE
 
-### AntiGravityを使う場合
-- ✅ 自動デプロイが必要な場合
-- ✅ UI調整や軽微な修正
-- ✅ Obsidian（第二の脳）の参照・編集
-- ✅ コストを抑えたい場合
+### AntiGravityを使ぁE��吁E
+- ✁E自動デプロイが忁E��な場吁E
+- ✁EUI調整めE��微な修正
+- ✁EObsidian�E�第二�E脳�E��E参�E・編雁E
+- ✁Eコストを抑えたい場吁E
 
-### Cursorを使う場合
-- ✅ 複雑な機能実装
-- ✅ コード補完やリファクタリング
-- ✅ エラー修正やデバッグ
-- ✅ `.cursorrules`を活用した開発
+### Cursorを使ぁE��吁E
+- ✁E褁E��な機�E実裁E
+- ✁Eコード補完やリファクタリング
+- ✁Eエラー修正めE��バッグ
+- ✁E`.cursorrules`を活用した開発
 
 ---
 
-## Obsidian（第二の脳）との連携
+## Obsidian�E�第二�E脳�E�との連携
 
-AntiGravityで`docs`フォルダ全体を開くと、`second-brain`フォルダも参照・編集可能になります。
+AntiGravityで`docs`フォルダ全体を開くと、`second-brain`フォルダも参照・編雁E��能になります、E
 
-1. AntiGravityで「Open Folder」をクリック
-2. 以下のパスを選択：
+1. AntiGravityで「Open Folder」をクリチE��
+2. 以下�Eパスを選択！E
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs
    ```
 3. 左側のExplorerで`second-brain`フォルダを展開
-4. `.md`ファイルを開いて編集可能
+4. `.md`ファイルを開ぁE��編雁E��能
 
 ---
 
-## トラブルシューティング
+## トラブルシューチE��ング
 
-### 開発サーバーが起動しない
+### 開発サーバ�Eが起動しなぁE
 
 ```bash
-# node_modulesを削除して再インストール
+# node_modulesを削除して再インスト�Eル
 rm -rf node_modules
 npm install
 ```
 
-### 環境変数が読み込まれない
+### 環墁E��数が読み込まれなぁE
 
-- `.env`ファイルが正しい場所（`primal-logic-web`フォルダ）にあるか確認
-- 環境変数の名前が`VITE_`で始まっているか確認
-- 開発サーバーを再起動
+- `.env`ファイルが正しい場所�E�Eprimal-logic-web`フォルダ�E�にあるか確誁E
+- 環墁E��数の名前が`VITE_`で始まってぁE��か確誁E
+- 開発サーバ�Eを�E起勁E
 
-### Git操作でエラーが出る
+### Git操作でエラーが�EめE
 
-- Gitリポジトリが正しく設定されているか確認
-- リモートリポジトリが設定されているか確認：
+- Gitリポジトリが正しく設定されてぁE��か確誁E
+- リモートリポジトリが設定されてぁE��か確認！E
   ```bash
   git remote -v
   ```
 
 ---
 
-## 注意事項
+## 注意事頁E
 
-1. **同時に開発サーバーを起動しない**: CursorとAntiGravityで同時に起動するとポート競合が発生します
-2. **Git操作は一つのIDEから**: 両方で同時に操作しないでください
-3. **環境変数は両方で同じ値**: `.env`ファイルを共有してください
-4. **`.cursorrules`は両方で有効**: AntiGravityも`.cursorrules`を読み込みます
+1. **同時に開発サーバ�Eを起動しなぁE*: CursorとAntiGravityで同時に起動するとポ�Eト競合が発生しまぁE
+2. **Git操作�E一つのIDEから**: 両方で同時に操作しなぁE��ください
+3. **環墁E��数は両方で同じ値**: `.env`ファイルを�E有してください
+4. **`.cursorrules`は両方で有効**: AntiGravityも`.cursorrules`を読み込みまぁE
 
 ---
 
-## 関連ドキュメント
+## 関連ドキュメンチE
 
-- [IDE使い分けガイド](./IDE_USAGE_GUIDE.md)
-- [環境変数設定ガイド](./.env_OPEN_GUIDE.md)
+- [IDE使ぁE�Eけガイド](./IDE_USAGE_GUIDE.md)
+- [環墁E��数設定ガイド](./.env_OPEN_GUIDE.md)
 - [README](./README.md)
 
 ---
 
 最終更新: 2025-12-31
+
 

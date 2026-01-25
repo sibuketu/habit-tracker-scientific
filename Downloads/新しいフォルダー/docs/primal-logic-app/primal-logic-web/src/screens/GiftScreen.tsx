@@ -1,13 +1,15 @@
 /**
- * Primal Logic - Gift Screen
+ * CarnivoreOS - Gift Screen
  *
- * ギフト購入画面: お金投げる + メッセージ入力
- */
+ * ギフト購入画面: お��投げめE+ メチE��ージ入劁E */
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from '../utils/i18n';
 import { logError, getUserFriendlyErrorMessage } from '../utils/errorHandler';
 import { isSupabaseAvailable, supabase } from '../lib/supabaseClient';
+import { httpsCallable } from 'firebase/functions';
+import { functions, auth } from '../lib/firebaseClient';
+import { signInAnonymously } from 'firebase/auth';
 import './GiftScreen.css';
 
 interface GiftScreenProps {
@@ -39,7 +41,7 @@ interface GiftReply {
   createdAt: string;
 }
 
-// Supabase giftsテーブルの型定義
+// Supabase giftsチE�Eブルの型定義
 interface SupabaseGift {
   id: string;
   user_id: string;
@@ -61,15 +63,9 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
   const [showMessages, setShowMessages] = useState(false);
   const [myMessages, setMyMessages] = useState<GiftMessage[]>([]);
   const [publicMessages, setPublicMessages] = useState<GiftMessage[]>([]);
-  const [giftAmount, setGiftAmount] = useState<number>(1350); // 9ドル = 約1350円（1ドル=150円換算）
-  const [giftMode, setGiftMode] = useState<'amount' | 'people'>('people'); // 'amount': 金額指定, 'people': 人数指定（デフォルト: 人数指定で利他性を刺激）
-  const [giftPeopleCount, setGiftPeopleCount] = useState<number>(1.0); // 何人分送るか（小数対応）
-  const [replyingTo, setReplyingTo] = useState<string | null>(null); // 返信対象のメッセージID
-  const [replyText, setReplyText] = useState<string>(''); // 返信テキスト
-  const MONTHLY_PRICE = 1350; // 1ヶ月分の価格（9ドル = 約1350円）
-
-  // ギフトデータを取得
-  useEffect(() => {
+  const [giftAmount, setGiftAmount] = useState<number>(1350); // 9ドル = 紁E350冁E��Eドル=150冁E��算！E  const [giftMode, setGiftMode] = useState<'amount' | 'people'>('people'); // 'amount': 金額指宁E 'people': 人数持E��（デフォルチE 人数持E��で利他性を刺激�E�E  const [giftPeopleCount, setGiftPeopleCount] = useState<number>(1.0); // 何人刁E��るか（小数対応！E  const [replyingTo, setReplyingTo] = useState<string | null>(null); // 返信対象のメチE��ージID
+  const [replyText, setReplyText] = useState<string>(''); // 返信チE��スチE  const MONTHLY_PRICE = 1350; // 1ヶ月�Eの価格�E�Eドル = 紁E350冁E��E
+  // ギフトチE�Eタを取征E  useEffect(() => {
     loadGiftData();
     loadMessages();
   }, []);
@@ -77,8 +73,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
   const loadGiftData = async () => {
     try {
       if (!isSupabaseAvailable()) {
-        // モックデータ（開発用）
-        setGiftData({
+        // モチE��チE�Eタ�E�開発用�E�E        setGiftData({
           totalAmount: 50000,
           newUserCount: 20,
           discountPerUser: 2500,
@@ -87,13 +82,12 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
       }
 
       const today = new Date();
-      // 月の形式: '2025-01' (YYYY-MM)
+      // 月�E形弁E '2025-01' (YYYY-MM)
       const monthStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
       const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
       const monthStartStr = monthStart.toISOString().split('T')[0];
 
-      // 今月のGift総額を取得
-      const { data: gifts, error: giftsError } = await supabase
+      // 今月のGift総額を取征E      const { data: gifts, error: giftsError } = await supabase
         .from('gifts')
         .select('amount')
         .eq('month', monthStr);
@@ -102,8 +96,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
 
       const totalAmount = gifts?.reduce((sum, g) => sum + g.amount, 0) || 0;
 
-      // 今月の新規ユーザー数を取得
-      const { data: newUsers, error: newUsersError } = await supabase
+      // 今月の新規ユーザー数を取征E      const { data: newUsers, error: newUsersError } = await supabase
         .from('user_profiles')
         .select('id')
         .gte('created_at', monthStartStr + 'T00:00:00.000Z')
@@ -125,7 +118,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
       });
     } catch (error) {
       logError(error, { action: 'loadGiftData' });
-      // エラー時はモックデータを表示
+      // エラー時�EモチE��チE�Eタを表示
       setGiftData({
         totalAmount: 50000,
         newUserCount: 20,
@@ -137,12 +130,11 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
   const loadMessages = async () => {
     try {
       if (!isSupabaseAvailable()) {
-        // モックデータ（開発用）
-        const mockMyMessages: GiftMessage[] = [
+        // モチE��チE�Eタ�E�開発用�E�E        const mockMyMessages: GiftMessage[] = [
           {
             id: 'm1',
             message:
-              'カーニボアダイエットを始めるあなたを応援しています！一緒に健康な体を目指しましょう！',
+              'カーニ�EアダイエチE��を始めるあなたを応援してぁE��す！一緒に健康な体を目持E��ましょぁE��E,
             isPublic: true,
             createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
             userId: 'local',
@@ -152,7 +144,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                 id: 'r1',
                 messageId: 'm1',
                 userId: 'user2',
-                replyText: 'ありがとうございます！頑張ります！',
+                replyText: 'ありがとぁE��ざいます！E��張ります！E,
                 createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
               },
             ],
@@ -160,7 +152,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
           },
           {
             id: 'm2',
-            message: '初月は大変ですが、乗り越えれば素晴らしい世界が待っています。',
+            message: '初月は大変ですが、乗り越えれ�E素晴らしぁE��界が征E��てぁE��す、E,
             isPublic: false,
             createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
             userId: 'local',
@@ -172,7 +164,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
         const mockPublicMessages: GiftMessage[] = [
           {
             id: 'p1',
-            message: 'ようこそ！一緒に健康になりましょう！',
+            message: 'ようこそ�E�一緒に健康になりましょぁE��E,
             isPublic: true,
             createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
             userId: 'user1',
@@ -182,7 +174,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                 id: 'r2',
                 messageId: 'p1',
                 userId: 'user3',
-                replyText: 'ありがとうございます！',
+                replyText: 'ありがとぁE��ざいます！E,
                 createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
               },
             ],
@@ -190,7 +182,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
           },
           {
             id: 'p2',
-            message: '肉は最高の薬です。',
+            message: '肉�E最高�E薬です、E,
             isPublic: true,
             createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
             userId: 'user2',
@@ -200,7 +192,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
           },
           {
             id: 'p3',
-            message: '迷ったら肉を食べよう！',
+            message: '迷ったら肉を食べよう�E�E,
             isPublic: true,
             createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
             userId: 'user3',
@@ -210,7 +202,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                 id: 'r3',
                 messageId: 'p3',
                 userId: 'user4',
-                replyText: 'その通りです！',
+                replyText: 'そ�E通りです！E,
                 createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
               },
             ],
@@ -219,7 +211,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
           {
             id: 'm1',
             message:
-              'カーニボアダイエットを始めるあなたを応援しています！一緒に健康な体を目指しましょう！',
+              'カーニ�EアダイエチE��を始めるあなたを応援してぁE��す！一緒に健康な体を目持E��ましょぁE��E,
             isPublic: true,
             createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
             userId: 'local',
@@ -229,7 +221,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                 id: 'r1',
                 messageId: 'm1',
                 userId: 'user2',
-                replyText: 'ありがとうございます！頑張ります！',
+                replyText: 'ありがとぁE��ざいます！E��張ります！E,
                 createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
               },
             ],
@@ -246,9 +238,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
       } = await supabase.auth.getUser();
       if (!user) return;
 
-      // 自分のメッセージを取得（giftsテーブルから、messageフィールドが存在するもののみ）
-      // 注意: is_publicフィールドが存在しない場合は、messageフィールドのみで判定
-      const { data: myGifts, error: myGiftsError } = await supabase
+      // 自刁E�EメチE��ージを取得！EiftsチE�Eブルから、messageフィールドが存在するも�Eのみ�E�E      // 注愁E is_publicフィールドが存在しなぁE��合�E、messageフィールド�Eみで判宁E      const { data: myGifts, error: myGiftsError } = await supabase
         .from('gifts')
         .select('id, message, is_public, created_at')
         .eq('user_id', user.id)
@@ -263,15 +253,12 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
       const myMsgs: GiftMessage[] = (myGifts || []).map((g: SupabaseGift) => ({
         id: g.id,
         message: g.message || '',
-        isPublic: g.is_public !== undefined ? g.is_public : true, // デフォルトは公開
-        createdAt: g.created_at || new Date().toISOString(),
+        isPublic: g.is_public !== undefined ? g.is_public : true, // チE��ォルト�E公閁E        createdAt: g.created_at || new Date().toISOString(),
         userId: user.id,
       }));
       setMyMessages(myMsgs);
 
-      // 公開メッセージを取得（giftsテーブルから、is_public=trueかつmessageが存在するもののみ）
-      // 注意: is_publicフィールドが存在しない場合は、全てのメッセージを公開として扱う
-      const { data: publicGifts, error: publicGiftsError } = await supabase
+      // 公開メチE��ージを取得！EiftsチE�Eブルから、is_public=trueかつmessageが存在するも�Eのみ�E�E      // 注愁E is_publicフィールドが存在しなぁE��合�E、�EてのメチE��ージを�E開として扱ぁE      const { data: publicGifts, error: publicGiftsError } = await supabase
         .from('gifts')
         .select('id, message, is_public, created_at, user_id')
         .not('message', 'is', null)
@@ -282,30 +269,25 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
         logError(publicGiftsError, { action: 'loadMessages', type: 'publicMessages' });
       }
 
-      // GiftMessage形式に変換（is_publicがtrueのもののみ、またはis_publicフィールドが存在しない場合は全て）
-      // いいね数と返信を取得（Supabaseから取得）
-      const currentUserId = user?.id || '';
+      // GiftMessage形式に変換�E�Es_publicがtrueのも�Eのみ、また�Eis_publicフィールドが存在しなぁE��合�E全て�E�E      // ぁE��ね数と返信を取得！Eupabaseから取得！E      const currentUserId = user?.id || '';
 
       const publicMsgs: GiftMessage[] = await Promise.all(
         (publicGifts || [])
           .filter((g: SupabaseGift) => g.is_public === undefined || g.is_public === true)
           .map(async (g: SupabaseGift) => {
-            // いいね数を取得（gift_likesテーブルから）
-            const { count: likesCount } = await supabase
+            // ぁE��ね数を取得！Eift_likesチE�Eブルから�E�E            const { count: likesCount } = await supabase
               .from('gift_likes')
               .select('*', { count: 'exact', head: true })
               .eq('gift_id', g.id);
 
-            // 現在のユーザーがいいねしているか確認
-            const { data: userLike } = await supabase
+            // 現在のユーザーがいぁE�EしてぁE��か確誁E            const { data: userLike } = await supabase
               .from('gift_likes')
               .select('id')
               .eq('gift_id', g.id)
               .eq('user_id', currentUserId)
               .single();
 
-            // 返信を取得（gift_repliesテーブルから）
-            const { data: repliesData } = await supabase
+            // 返信を取得！Eift_repliesチE�Eブルから�E�E            const { data: repliesData } = await supabase
               .from('gift_replies')
               .select('*')
               .eq('message_id', g.id)
@@ -337,8 +319,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
     }
   };
 
-  // 実際の購入金額を計算
-  const calculatePurchaseAmount = (): number => {
+  // 実際の購入金額を計箁E  const calculatePurchaseAmount = (): number => {
     if (giftMode === 'amount') {
       return giftAmount;
     } else {
@@ -357,15 +338,21 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
 
     setIsLoading(true);
     try {
-      // Stripe決済処理（環境変数が設定されている場合のみ実行）
-      const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+      // Stripe決済�E琁E��環墁E��数が設定されてぁE��場合�Eみ実行！E      const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
       if (stripeKey && typeof window !== 'undefined' && (window as any).Stripe) {
         try {
-          // Stripe Checkout Sessionを作成
-          const response = await fetch('/api/create-checkout-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+          // Firebase Auth�E�匿名認証�E�E          if (auth && !auth.currentUser) {
+            await signInAnonymously(auth);
+          }
+
+          // Firebase Functions経由でStripe Checkout Sessionを作�E
+          if (functions) {
+            const currentUrl = window.location.origin;
+            const successUrl = `${currentUrl}/?payment_success=true&giftMode=${giftMode}`;
+            const cancelUrl = `${currentUrl}/?payment_cancel=true`;
+
+            const createCheckoutSession = httpsCallable(functions, 'createCheckoutSession');
+            const result = await createCheckoutSession({
               amount: purchaseAmount,
               currency: 'jpy',
               metadata: {
@@ -373,31 +360,35 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                 message: message.trim() || null,
                 isPublic: isPublicMessage,
               },
-            }),
-          });
+              successUrl,
+              cancelUrl,
+            });
 
-          if (response.ok) {
-            const { sessionId } = await response.json();
-            const stripe = (window as any).Stripe(stripeKey);
-            await stripe.redirectToCheckout({ sessionId });
-            return; // リダイレクトされるため、ここで終了
+            const data = result.data as { sessionId?: string; url?: string };
+
+            if (data.url) {
+              // Stripe CheckoutにリダイレクチE              window.location.href = data.url;
+              return;
+            } else if (data.sessionId) {
+              // sessionIdが返された場合�EStripe.jsでリダイレクチE              const stripe = (window as any).Stripe(stripeKey);
+              await stripe.redirectToCheckout({ sessionId: data.sessionId });
+              return;
+            }
           }
         } catch (error) {
           logError(error, { action: 'handlePurchase', step: 'stripeCheckout' });
-          // Stripe決済に失敗した場合は、モック処理にフォールバック
+          // Stripe決済に失敗した場合�E、モチE��処琁E��フォールバック
         }
       }
 
-      // Stripe決済が利用できない場合、または失敗した場合はモック処理
-      if (import.meta.env.DEV) {
+      // Stripe決済が利用できなぁE��合、また�E失敗した場合�EモチE��処琁E      if (import.meta.env.DEV) {
         alert(t('gift.purchaseSuccess'));
       } else {
-        alert('決済機能は現在準備中です。しばらくお待ちください。');
+        alert('決済機�Eは現在準備中です。しばらくお征E��ください、E);
         return;
       }
 
-      // ギフト購入とメッセージを保存
-      if (isSupabaseAvailable()) {
+      // ギフト購入とメチE��ージを保孁E      if (isSupabaseAvailable()) {
         const {
           data: { user },
         } = await supabase.auth.getUser();
@@ -405,9 +396,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
           const today = new Date();
           const monthStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 
-          // giftsテーブルに購入情報とメッセージを保存
-          // 注意: giftsテーブルにis_publicフィールドが存在しない場合は、messageフィールドのみ保存
-          const giftData: Partial<SupabaseGift> & {
+          // giftsチE�Eブルに購入惁E��とメチE��ージを保孁E          // 注愁E giftsチE�Eブルにis_publicフィールドが存在しなぁE��合�E、messageフィールド�Eみ保孁E          const giftData: Partial<SupabaseGift> & {
             user_id: string;
             amount: number;
             month: string;
@@ -425,18 +414,15 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
 
           if (message.trim()) {
             giftData.message = message.trim();
-            // is_publicフィールドが存在する場合のみ追加
-            // データベーススキーマに応じて調整が必要
-            giftData.is_public = isPublic;
+            // is_publicフィールドが存在する場合�Eみ追加
+            // チE�Eタベ�Eススキーマに応じて調整が忁E��E            giftData.is_public = isPublic;
           }
 
           await supabase.from('gifts').insert(giftData);
         }
       } else {
-        // ローカルストレージに保存（開発用）
-        if (message.trim()) {
-          // ローカルストレージに保存（開発用）
-          const messages = JSON.parse(localStorage.getItem('primal_logic_gift_messages') || '[]');
+        // ローカルストレージに保存（開発用�E�E        if (message.trim()) {
+          // ローカルストレージに保存（開発用�E�E          const messages = JSON.parse(localStorage.getItem('primal_logic_gift_messages') || '[]');
           messages.push({
             id: Date.now().toString(),
             message: message.trim(),
@@ -451,7 +437,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
         loadMessages();
       }
 
-      // ギフトデータを再読み込み
+      // ギフトチE�Eタを�E読み込み
       loadGiftData();
     } catch (error) {
       logError(error, { action: 'handlePurchase', amount: purchaseAmount });
@@ -467,8 +453,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
       <div className="gift-screen-content">
         <div className="screen-header">
           <button className="back-button" onClick={onBack} aria-label={t('common.back')}>
-            ←
-          </button>
+            ↁE          </button>
           <h1 className="screen-header-title">{t('gift.title')}</h1>
         </div>
 
@@ -501,7 +486,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
             </div>
           )}
 
-          {/* Gift購入方式選択 */}
+          {/* Gift購入方式選抁E*/}
           <div className="gift-purchase-mode-section">
             <div className="gift-mode-toggle">
               <button
@@ -550,8 +535,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                     setGiftAmount(value);
                   }}
                   onBlur={(e) => {
-                    // フォーカスが外れた時に0の場合は最小値に設定
-                    if (giftAmount === 0 || giftAmount < 1) {
+                    // フォーカスが外れた時に0の場合�E最小値に設宁E                    if (giftAmount === 0 || giftAmount < 1) {
                       setGiftAmount(1350);
                     }
                   }}
@@ -563,9 +547,8 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                   {t('gift.amountHint')}
                   {giftAmount > 0 && (
                     <span className="gift-amount-people-equivalent">
-                      （約 {(giftAmount / MONTHLY_PRICE).toFixed(1)}
-                      {t('gift.amountPeopleEquivalent')}）
-                    </span>
+                      �E�紁E{(giftAmount / MONTHLY_PRICE).toFixed(1)}
+                      {t('gift.amountPeopleEquivalent')}�E�E                    </span>
                   )}
                 </p>
               </div>
@@ -632,8 +615,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                   onClick={() => setShowMessages(false)}
                   aria-label={t('common.close')}
                 >
-                  ×
-                </button>
+                  ÁE                </button>
               </div>
               <div className="gift-messages-content">
                 <h3>{t('gift.myMessages')}</h3>
@@ -663,7 +645,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                               setMyMessages(updatedMessages);
                             }}
                           >
-                            {msg.userLiked ? '❤️' : '🤍'} {msg.likes || 0}
+                            {msg.userLiked ? '❤�E�E : '🤁E} {msg.likes || 0}
                           </button>
                           <button
                             className="gift-message-reply-button"
@@ -756,9 +738,8 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                           <button
                             className={`gift-message-like-button ${msg.userLiked ? 'liked' : ''}`}
                             onClick={async () => {
-                              // いいね機能を実装
-                              if (!isSupabaseAvailable()) {
-                                alert('いいね機能はログインが必要です');
+                              // ぁE��ね機�Eを実裁E                              if (!isSupabaseAvailable()) {
+                                alert('ぁE��ね機�Eはログインが忁E��でぁE);
                                 return;
                               }
 
@@ -766,35 +747,35 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                                 data: { user },
                               } = await supabase.auth.getUser();
                               if (!user) {
-                                alert('ログインが必要です');
+                                alert('ログインが忁E��でぁE);
                                 return;
                               }
 
                               try {
                                 if (msg.userLiked) {
-                                  // いいねを削除
+                                  // ぁE��ねを削除
                                   await supabase
                                     .from('gift_likes')
                                     .delete()
                                     .eq('gift_id', msg.id)
                                     .eq('user_id', user.id);
                                 } else {
-                                  // いいねを追加
+                                  // ぁE��ねを追加
                                   await supabase.from('gift_likes').insert({
                                     gift_id: msg.id,
                                     user_id: user.id,
                                   });
                                 }
 
-                                // メッセージ一覧を再読み込み
+                                // メチE��ージ一覧を�E読み込み
                                 loadMessages();
                               } catch (error) {
                                 logError(error, { action: 'handleLike', messageId: msg.id });
-                                alert('いいねの処理に失敗しました');
+                                alert('ぁE��ねの処琁E��失敗しました');
                               }
                             }}
                           >
-                            {msg.userLiked ? '❤️' : '🤍'} {msg.likes || 0}
+                            {msg.userLiked ? '❤�E�E : '🤁E} {msg.likes || 0}
                           </button>
                           <button
                             className="gift-message-reply-button"
@@ -830,12 +811,11 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                             <div className="gift-reply-actions">
                               <button
                                 onClick={async () => {
-                                  // 返信を保存
-                                  const {
+                                  // 返信を保孁E                                  const {
                                     data: { user },
                                   } = await supabase.auth.getUser();
                                   if (!user) {
-                                    alert('ログインが必要です');
+                                    alert('ログインが忁E��でぁE);
                                     return;
                                   }
 
@@ -846,7 +826,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                                       reply_text: replyText.trim(),
                                     });
 
-                                    // メッセージ一覧を再読み込み
+                                    // メチE��ージ一覧を�E読み込み
                                     loadMessages();
                                     setReplyingTo(null);
                                     setReplyText('');
@@ -855,8 +835,7 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
                                     alert('返信の保存に失敗しました');
                                   }
 
-                                  return; // 処理完了
-                                  const updatedMessages = publicMessages.map((m) =>
+                                  return; // 処琁E��亁E                                  const updatedMessages = publicMessages.map((m) =>
                                     m.id === msg.id
                                       ? { ...m, replies: [...(m.replies || []), newReply] }
                                       : m
@@ -895,3 +874,4 @@ export default function GiftScreen({ onBack }: GiftScreenProps) {
     </div>
   );
 }
+

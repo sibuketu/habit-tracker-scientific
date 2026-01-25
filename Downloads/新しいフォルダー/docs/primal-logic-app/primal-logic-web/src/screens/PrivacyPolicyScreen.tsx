@@ -1,5 +1,5 @@
 /**
- * Primal Logic - プライバシーポリシー画面
+ * CarnivoreOS - プライバシーポリシー画面
  */
 
 import './PrivacyPolicyScreen.css';
@@ -14,126 +14,119 @@ export default function PrivacyPolicyScreen() {
           }}
           className="privacy-policy-back-button"
         >
-          ← 設定に戻る
-        </button>
+          ↁE設定に戻めE        </button>
         <h1 className="privacy-policy-title">プライバシーポリシー</h1>
         <div className="privacy-policy-content">
-          <p className="privacy-policy-updated">最終更新日: 2025年1月1日</p>
+          <p className="privacy-policy-updated">最終更新日: 2025年1朁E日</p>
 
           <section className="privacy-policy-section">
             <h2>1. はじめに</h2>
             <p>
               Primal
-              Logic（以下「当アプリ」）は、ユーザーのプライバシーを尊重し、個人情報の保護に努めています。
-              本プライバシーポリシーは、当アプリが収集、使用、保護する情報について説明します。
-            </p>
+              Logic�E�以下「当アプリ」）�E、ユーザーのプライバシーを尊重し、個人惁E��の保護に努めてぁE��す、E              本プライバシーポリシーは、当アプリが収雁E��使用、保護する惁E��につぁE��説明します、E            </p>
           </section>
 
           <section className="privacy-policy-section">
-            <h2>2. 収集する情報</h2>
+            <h2>2. 収集する惁E��</h2>
             <h3>2.1 アカウント情報</h3>
-            <p>当アプリを使用するために、以下の情報を収集する場合があります：</p>
+            <p>当アプリを使用するために、以下�E惁E��を収雁E��る場合があります！E/p>
             <ul>
               <li>メールアドレス</li>
-              <li>パスワード（暗号化して保存）</li>
+              <li>パスワード（暗号化して保存！E/li>
             </ul>
 
-            <h3>2.2 健康・栄養情報</h3>
-            <p>当アプリの機能を提供するために、以下の情報を収集します：</p>
+            <h3>2.2 健康・栁E��情報</h3>
+            <p>当アプリの機�Eを提供するために、以下�E惁E��を収雁E��ます！E/p>
             <ul>
-              <li>食事記録（食品名、量、栄養素情報）</li>
-              <li>体重、体脂肪率</li>
-              <li>日記（体調、症状など）</li>
-              <li>プロファイル情報（性別、年齢、体重、活動レベルなど）</li>
-              <li>血液検査値（任意入力）</li>
+              <li>食事記録�E�食品名、E��、栁E��素惁E���E�E/li>
+              <li>体重、体脂肪玁E/li>
+              <li>日記（体調、症状など�E�E/li>
+              <li>プロファイル惁E���E�性別、年齢、体重、活動レベルなど�E�E/li>
+              <li>血液検査値�E�任意�E力！E/li>
             </ul>
 
             <h3>2.3 技術情報</h3>
-            <p>当アプリの改善のために、以下の技術情報を収集する場合があります：</p>
+            <p>当アプリの改喁E�Eために、以下�E技術情報を収雁E��る場合があります！E/p>
             <ul>
-              <li>デバイス情報（OS、ブラウザ種類など）</li>
-              <li>使用状況（機能の使用頻度など）</li>
+              <li>チE��イス惁E���E�ES、ブラウザ種類など�E�E/li>
+              <li>使用状況E��機�Eの使用頻度など�E�E/li>
               <li>エラーログ</li>
             </ul>
           </section>
 
           <section className="privacy-policy-section">
-            <h2>3. 情報の使用目的</h2>
-            <p>収集した情報は、以下の目的で使用します：</p>
+            <h2>3. 惁E��の使用目皁E/h2>
+            <p>収集した惁E��は、以下�E目皁E��使用します！E/p>
             <ul>
-              <li>アプリの機能提供（栄養素追跡、目標値計算など）</li>
-              <li>アカウント管理と認証</li>
-              <li>アプリの改善と新機能の開発</li>
-              <li>エラーの修正とパフォーマンスの向上</li>
-              <li>ユーザーサポート</li>
+              <li>アプリの機�E提供（栁E��素追跡、目標値計算など�E�E/li>
+              <li>アカウント管琁E��認証</li>
+              <li>アプリの改喁E��新機�Eの開発</li>
+              <li>エラーの修正とパフォーマンスの向丁E/li>
+              <li>ユーザーサポ�EチE/li>
             </ul>
           </section>
 
           <section className="privacy-policy-section">
-            <h2>4. 情報の保存と保護</h2>
-            <h3>4.1 データの保存</h3>
-            <p>データは以下の方法で保存されます：</p>
+            <h2>4. 惁E��の保存と保護</h2>
+            <h3>4.1 チE�Eタの保孁E/h3>
+            <p>チE�Eタは以下�E方法で保存されます！E/p>
             <ul>
-              <li>ローカルストレージ（ブラウザのローカルストレージ）</li>
-              <li>Supabase（クラウドデータベース、認証済みユーザーのみ）</li>
+              <li>ローカルストレージ�E�ブラウザのローカルストレージ�E�E/li>
+              <li>Supabase�E�クラウドデータベ�Eス、認証済みユーザーのみ�E�E/li>
             </ul>
 
-            <h3>4.2 データの保護</h3>
-            <p>当アプリは、以下の方法でデータを保護します：</p>
+            <h3>4.2 チE�Eタの保護</h3>
+            <p>当アプリは、以下�E方法でチE�Eタを保護します！E/p>
             <ul>
-              <li>データの暗号化（転送時および保存時）</li>
+              <li>チE�Eタの暗号化（転送時および保存時�E�E/li>
               <li>認証とアクセス制御</li>
-              <li>定期的なセキュリティ監査</li>
+              <li>定期皁E��セキュリチE��監査</li>
             </ul>
           </section>
 
           <section className="privacy-policy-section">
-            <h2>5. 情報の共有</h2>
-            <p>当アプリは、以下の場合を除き、ユーザーの個人情報を第三者と共有しません：</p>
+            <h2>5. 惁E��の共朁E/h2>
+            <p>当アプリは、以下�E場合を除き、ユーザーの個人惁E��を第三老E��共有しません�E�E/p>
             <ul>
-              <li>ユーザーの明示的な同意がある場合</li>
-              <li>法的義務に基づく場合</li>
-              <li>アプリのサービス提供に必要な場合（例：Supabase、AIサービス）</li>
+              <li>ユーザーの明示皁E��同意がある場吁E/li>
+              <li>法的義務に基づく場吁E/li>
+              <li>アプリのサービス提供に忁E��な場合（例：Supabase、AIサービス�E�E/li>
             </ul>
           </section>
 
           <section className="privacy-policy-section">
             <h2>6. ユーザーの権利</h2>
-            <p>ユーザーは、以下の権利を有します：</p>
+            <p>ユーザーは、以下�E権利を有します！E/p>
             <ul>
-              <li>個人情報へのアクセス</li>
-              <li>個人情報の修正</li>
-              <li>個人情報の削除</li>
-              <li>データのエクスポート</li>
-              <li>アカウントの削除</li>
+              <li>個人惁E��へのアクセス</li>
+              <li>個人惁E��の修正</li>
+              <li>個人惁E��の削除</li>
+              <li>チE�Eタのエクスポ�EチE/li>
+              <li>アカウント�E削除</li>
             </ul>
             <p>
-              これらの権利を行使するには、設定画面からアカウントを削除するか、お問い合わせください。
-            </p>
+              これら�E権利を行使するには、設定画面からアカウントを削除するか、お問い合わせください、E            </p>
           </section>
 
           <section className="privacy-policy-section">
-            <h2>7. クッキーとトラッキング</h2>
+            <h2>7. クチE��ーとトラチE��ング</h2>
             <p>
-              当アプリは、セッション管理とアプリの機能提供のために、必要最小限のクッキーを使用します。
-              第三者によるトラッキングや広告配信は行いません。
-            </p>
+              当アプリは、セチE��ョン管琁E��アプリの機�E提供�Eために、忁E��最小限のクチE��ーを使用します、E              第三老E��よるトラチE��ングめE��E��配信は行いません、E            </p>
           </section>
 
           <section className="privacy-policy-section">
-            <h2>8. お問い合わせ</h2>
-            <p>プライバシーポリシーに関するご質問やご意見は、設定画面からお問い合わせください。</p>
+            <h2>8. お問ぁE��わせ</h2>
+            <p>プライバシーポリシーに関するご質問やご意見�E、設定画面からお問ぁE��わせください、E/p>
           </section>
 
           <section className="privacy-policy-section">
             <h2>9. 変更通知</h2>
             <p>
-              本プライバシーポリシーは、予告なく変更される場合があります。
-              重要な変更がある場合は、アプリ内で通知します。
-            </p>
+              本プライバシーポリシーは、予告なく変更される場合があります、E              重要な変更がある場合�E、アプリ冁E��通知します、E            </p>
           </section>
         </div>
       </div>
     </div>
   );
 }
+

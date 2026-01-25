@@ -1,9 +1,9 @@
 /* AI Chat UI - ChatGPT/Claude/Perplexity Style */
 
-/* Floating Action Button (FAB) - ドラッグ可能 */
+/* Floating Action Button (FAB) - Draggable */
 .ai-chat-fab-button {
   position: fixed;
-  /* bottom と right はインラインスタイルで上書きされる */
+  /* bottom and right are overridden by inline styles */
   width: 56px;
   height: 56px;
   border-radius: 28px;
@@ -18,7 +18,7 @@
   justify-content: center;
   transition: box-shadow 0.2s ease;
   z-index: 1001;
-  /* ナビゲーション等より上に */
+  /* Above navigation, etc. */
   user-select: none;
   touch-action: none;
 }
@@ -28,20 +28,20 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* オンボーディング中のスポットライト効果 */
+/* Spotlight effect during onboarding */
 .ai-chat-fab-button.onboarding-spotlight {
   animation: onboardingSpotlightPulse 2s ease-in-out infinite;
   box-shadow:
-    0 4px 20px rgba(230, 57, 80, 0.6),
-    0 0 40px rgba(230, 57, 80, 0.4),
-    0 0 60px rgba(230, 57, 80, 0.2);
+    0 4px 20px rgba(33, 150, 243, 0.6),
+    0 0 40px rgba(33, 150, 243, 0.4),
+    0 0 60px rgba(33, 150, 243, 0.2);
   transform: scale(1.1);
   z-index: 1000 !important;
 }
 
-/* スポットライト用のツールチップ */
+/* Tooltip for spotlight */
 .ai-chat-fab-button.onboarding-spotlight::before {
-  content: '👆 ここをタップ';
+  content: '👆 Tap here';
   position: fixed;
   bottom: 170px;
   right: 24px;
@@ -58,7 +58,7 @@
   pointer-events: none;
 }
 
-/* 矢印（AIボタンを指す） */
+/* Arrow (pointing to AI button) */
 .ai-chat-fab-button.onboarding-spotlight::after {
   content: '↓';
   position: fixed;
@@ -69,11 +69,11 @@
   animation: onboardingArrowBounce 1.5s ease-in-out infinite;
   z-index: 999;
   pointer-events: none;
-  text-shadow: 0 2px 8px rgba(230, 57, 80, 0.6);
+  text-shadow: 0 2px 8px rgba(33, 150, 243, 0.6);
   font-weight: bold;
 }
 
-/* モバイル対応：スポットライト時の位置調整 */
+/* Mobile support: Position adjustment during spotlight */
 @media (max-width: 480px) {
   .ai-chat-fab-button.onboarding-spotlight::before {
     bottom: 170px;
@@ -87,27 +87,25 @@
 }
 
 @keyframes onboardingSpotlightPulse {
-
   0%,
   100% {
     box-shadow:
-      0 4px 20px rgba(230, 57, 80, 0.6),
-      0 0 40px rgba(230, 57, 80, 0.4),
-      0 0 60px rgba(230, 57, 80, 0.2);
+      0 4px 20px rgba(33, 150, 243, 0.6),
+      0 0 40px rgba(33, 150, 243, 0.4),
+      0 0 60px rgba(33, 150, 243, 0.2);
     transform: scale(1.1);
   }
 
   50% {
     box-shadow:
-      0 4px 30px rgba(230, 57, 80, 0.8),
-      0 0 60px rgba(230, 57, 80, 0.6),
-      0 0 80px rgba(230, 57, 80, 0.4);
+      0 4px 30px rgba(33, 150, 243, 0.8),
+      0 0 60px rgba(33, 150, 243, 0.6),
+      0 0 80px rgba(33, 150, 243, 0.4);
     transform: scale(1.15);
   }
 }
 
 @keyframes onboardingArrowBounce {
-
   0%,
   100% {
     transform: translateY(0);
@@ -131,7 +129,6 @@
 }
 
 @keyframes onboardingTooltipPulse {
-
   0%,
   100% {
     opacity: 1;
@@ -153,42 +150,43 @@
   transform: scale(0.95);
 }
 
-/* Drawer (ウィジェット) Style - 後ろの画面を触れるように */
+/* Drawer (Widget) Style - Allow interaction with background screen */
 .ai-chat-modal-overlay {
   display: none !important;
-  /* 背景のオーバーレイを非表示にし、後ろの画面を操作可能にする */
+  /* Hide background overlay to allow interaction with background screen */
 }
 
-/* フェードインアニメーションは不要になったため削除 */
+/* Fade-in animation removed as it's no longer needed */
 
 .ai-chat-modal {
   position: fixed;
   bottom: 0;
-  /* 下部に固定（デフォルト） */
+  /* Fixed to bottom (default) */
   right: 0;
-  /* 右側に固定（デフォルト） */
+  /* Fixed to right (default) */
   width: 100%;
-  /* モバイルは全幅 */
+  /* Full width on mobile */
   height: 90vh;
-  /* 高さ */
-  /* backdrop-filter: blur(10px); は削除し、不透明にする */
+  /* Height */
+  /* Remove backdrop-filter: blur(10px); and make opaque */
   background-color: #1a1a1a;
-  /* 不透明なダークグレー */
+  /* Opaque dark gray */
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
-  /* 影を濃く */
+  /* Darker shadow */
   display: flex;
   flex-direction: column;
   z-index: 2000;
-  /* ナビゲーションよりさらに上 */
-  transition: transform 0.3s ease-out,
+  /* Above navigation */
+  transition:
+    transform 0.3s ease-out,
     max-width 0.3s ease,
     height 0.3s ease,
     max-height 0.3s ease,
     border-radius 0.3s ease;
   border: 1px solid var(--color-border);
-  /* 境界線を明確に */
+  /* Clear border */
   overflow: hidden;
   animation: slideUp 0.3s ease;
   z-index: 1001;
@@ -207,22 +205,27 @@
   z-index: 10000;
 }
 
-/* 全画面表示時、他のUI要素を非表示 */
+/* Hide other UI elements when in fullscreen mode */
 body.ai-chat-fullscreen-mode .app-container,
 body.ai-chat-fullscreen-mode .app-content,
 body.ai-chat-fullscreen-mode .app-navigation,
 body.ai-chat-fullscreen-mode nav,
 body.ai-chat-fullscreen-mode footer,
-body.ai-chat-fullscreen-mode .ai-chat-fab-button {
+body.ai-chat-fullscreen-mode .ai-chat-fab-button,
+body.ai-chat-fullscreen-mode .ai-reading-float,
+body.ai-chat-fullscreen-mode [class*="sidebar"],
+body.ai-chat-fullscreen-mode [class*="reading"],
+body.ai-chat-fullscreen-mode [style*="position: fixed"][style*="right"]:not(.ai-chat-modal-fullscreen),
+body.ai-chat-fullscreen-mode [style*="position: fixed"]:not(.ai-chat-modal-fullscreen):not(.ai-chat-fab-button) {
   display: none !important;
 }
 
-/* 全画面表示時のオーバーレイも非表示 */
+/* Hide overlay when in fullscreen mode */
 body.ai-chat-fullscreen-mode .ai-chat-modal-overlay {
   display: none;
 }
 
-/* 全画面表示時、bodyのスクロールを無効化 */
+/* Disable body scroll when in fullscreen mode */
 body.ai-chat-fullscreen-mode {
   overflow: hidden;
   position: fixed;
@@ -230,7 +233,7 @@ body.ai-chat-fullscreen-mode {
   height: 100%;
 }
 
-/* 全画面表示時、モーダルを確実に全画面に */
+/* Ensure modal is fullscreen when in fullscreen mode */
 body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   position: fixed !important;
   top: 0 !important;
@@ -257,7 +260,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   }
 }
 
-/* モバイル対応: 画面幅が小さい場合は全幅 */
+/* Mobile support: Full width when screen is narrow */
 @media (max-width: 480px) {
   .ai-chat-modal {
     max-width: 100%;
@@ -266,7 +269,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   }
 }
 
-/* 吹き出しUI（バブル）スタイル - アプリ操作中も見られる、ドラッグ・リサイズ可能 */
+/* Bubble UI style - Visible during app operation, draggable and resizable */
 .ai-chat-bubble {
   position: fixed;
   background-color: #1a1a1a;
@@ -288,49 +291,53 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
     top 0.3s ease;
   user-select: none;
   resize: none;
-  /* ブラウザのデフォルトリサイズを無効化 */
+  /* Disable browser default resize */
 }
 
 .ai-chat-bubble:hover {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* リサイズハンドル（4つの角） */
+/* Resize handles (4 corners) */
 .ai-chat-bubble-resize-handle {
   position: absolute;
   width: 32px;
   height: 32px;
   z-index: 1001;
   touch-action: none;
-  background: linear-gradient(135deg,
-      transparent 0%,
-      transparent 40%,
-      var(--color-border) 40%,
-      var(--color-border) 45%,
-      transparent 45%,
-      transparent 55%,
-      var(--color-border) 55%,
-      var(--color-border) 60%,
-      transparent 60%);
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 40%,
+    var(--color-border) 40%,
+    var(--color-border) 45%,
+    transparent 45%,
+    transparent 55%,
+    var(--color-border) 55%,
+    var(--color-border) 60%,
+    transparent 60%
+  );
   transition: background 0.2s ease;
   pointer-events: auto;
   cursor: nwse-resize;
 }
 
 .ai-chat-bubble-resize-handle:hover {
-  background: linear-gradient(135deg,
-      transparent 0%,
-      transparent 40%,
-      var(--color-accent) 40%,
-      var(--color-accent) 45%,
-      transparent 45%,
-      transparent 55%,
-      var(--color-accent) 55%,
-      var(--color-accent) 60%,
-      transparent 60%);
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    transparent 40%,
+    var(--color-accent) 40%,
+    var(--color-accent) 45%,
+    transparent 45%,
+    transparent 55%,
+    var(--color-accent) 55%,
+    var(--color-accent) 60%,
+    transparent 60%
+  );
 }
 
-/* 左上 */
+/* Top-left */
 .ai-chat-bubble-resize-handle-top-left {
   top: 0;
   left: 0;
@@ -339,7 +346,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   transform: rotate(0deg);
 }
 
-/* 右上 */
+/* Top-right */
 .ai-chat-bubble-resize-handle-top-right {
   top: 4px;
   right: 4px;
@@ -348,7 +355,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   transform: rotate(90deg);
 }
 
-/* 左下 */
+/* Bottom-left */
 .ai-chat-bubble-resize-handle-bottom-left {
   bottom: 0;
   left: 0;
@@ -357,7 +364,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   transform: rotate(-90deg);
 }
 
-/* 右下 */
+/* Bottom-right */
 .ai-chat-bubble-resize-handle-bottom-right {
   bottom: 0;
   right: 0;
@@ -390,7 +397,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
     border-color 0.3s ease;
   flex-shrink: 0;
   touch-action: none;
-  /* ドラッグ時のスクロールを防ぐ */
+  /* Prevent scrolling during drag */
 }
 
 .ai-chat-bubble-title {
@@ -435,6 +442,20 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   color: var(--color-text-primary);
 }
 
+/* Fullscreen toggle button - Active state (when fullscreen) */
+.ai-chat-bubble-toggle-button.active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(33, 150, 243, 0.4);
+}
+
+.ai-chat-bubble-toggle-button.active:hover {
+  background-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(33, 150, 243, 0.5);
+}
+
 .ai-chat-bubble .ai-chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -442,7 +463,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   background-color: var(--color-bg-root);
   min-height: 150px;
   transition: background-color 0.3s ease;
-  /* max-heightは動的に計算されるため削除 */
+  /* max-height removed as it's calculated dynamically */
 }
 
 .ai-chat-bubble .ai-chat-input-container {
@@ -455,9 +476,9 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   flex-shrink: 0;
   position: relative;
   z-index: 10;
-  /* モバイル対応: 安全エリアを考慮 */
+  /* Mobile support: Consider safe area */
   padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
-  /* 可視性の向上 */
+  /* Improved visibility */
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -470,12 +491,12 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
 
 .ai-chat-bubble .ai-chat-textarea {
   flex: 1;
-  font-size: 12px;
-  padding: 0.5rem 0.75rem;
+  font-size: 14px;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--color-border);
   border-radius: 20px;
-  min-height: 32px;
-  max-height: 80px;
+  min-height: 48px;
+  max-height: 120px;
   background-color: var(--color-bg-secondary);
   color: var(--color-text-primary);
   touch-action: manipulation;
@@ -555,7 +576,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   font-size: 12px;
 }
 
-/* UI切り替えボタン */
+/* UI toggle button */
 .ai-chat-ui-toggle-button {
   background: none;
   border: 1px solid var(--color-border);
@@ -563,12 +584,12 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   font-size: 16px;
   cursor: pointer;
   color: var(--color-text-secondary);
-  padding: 0.375rem 0.5rem;
+  padding: 0.5rem 0.75rem;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 32px;
+  min-height: 48px;
   touch-action: manipulation;
 }
 
@@ -578,7 +599,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   color: var(--color-accent);
 }
 
-/* モバイル対応: 吹き出しUI */
+/* Mobile support: Bubble UI */
 @media (max-width: 480px) {
   .ai-chat-bubble {
     width: calc(100% - 40px);
@@ -764,11 +785,11 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
     border-color 0.3s ease;
   position: relative;
   z-index: 10;
-  /* モバイル対応: 安全エリアを考慮 */
+  /* Mobile support: Consider safe area */
   padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
-  /* 可視性の向上: Mobbinスタイル */
+  /* Improved visibility: Mobbin style */
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
-  /* モバイル対応: タッチフレンドリー */
+  /* Mobile support: Touch-friendly */
   flex-shrink: 0;
 }
 
@@ -784,10 +805,10 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   padding: 0.75rem 1rem;
   border: 1px solid var(--color-border);
   border-radius: 20px;
-  font-size: 15px;
+  font-size: 16px;
   font-family: inherit;
   resize: none;
-  min-height: 44px;
+  min-height: 48px;
   max-height: 120px;
   background-color: var(--color-bg-secondary);
   color: var(--color-text-primary);
@@ -798,7 +819,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   overflow-wrap: break-word;
   white-space: pre-wrap;
   overflow-y: auto;
-  /* モバイル対応: タッチフレンドリー */
+  /* Mobile support: Touch-friendly */
   -webkit-appearance: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
@@ -857,7 +878,7 @@ body.ai-chat-fullscreen-mode .ai-chat-modal-fullscreen {
   min-width: 70px;
   height: 44px;
   flex-shrink: 0;
-  /* モバイル対応: タッチフレンドリー */
+  /* Mobile support: Touch-friendly */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }

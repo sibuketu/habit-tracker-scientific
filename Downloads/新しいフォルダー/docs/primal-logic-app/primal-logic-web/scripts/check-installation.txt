@@ -1,0 +1,3 @@
+gcloud --version
+docker --version
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser

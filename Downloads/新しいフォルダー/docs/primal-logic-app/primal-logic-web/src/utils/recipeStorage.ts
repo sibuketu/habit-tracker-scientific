@@ -1,11 +1,11 @@
 /**
- * Primal Logic - Recipe Storage Utility
+ * CarnivoreOS - Recipe Storage Utility
  *
- * レシピ登録・保存機能
+ * レシピ登録・保存機�E
  */
 
 import { logError } from './errorHandler';
-import type { FoodItem } from '../types';
+import type { FoodItem } from '../types/index';
 
 export interface Recipe {
   id: string;
@@ -19,8 +19,7 @@ export interface Recipe {
 const RECIPE_STORAGE_KEY = 'primal_logic_recipes';
 
 /**
- * 全てのレシピを取得
- */
+ * 全てのレシピを取征E */
 export function getRecipes(): Recipe[] {
   try {
     const stored = localStorage.getItem(RECIPE_STORAGE_KEY);
@@ -33,8 +32,7 @@ export function getRecipes(): Recipe[] {
 }
 
 /**
- * レシピを保存
- */
+ * レシピを保存 */
 export function saveRecipe(recipe: Omit<Recipe, 'id' | 'createdAt' | 'updatedAt'>): Recipe {
   try {
     const recipes = getRecipes();
@@ -96,8 +94,7 @@ export function deleteRecipe(id: string): boolean {
 }
 
 /**
- * レシピをIDで取得
- */
+ * レシピをIDで取征E */
 export function getRecipeById(id: string): Recipe | null {
   try {
     const recipes = getRecipes();
@@ -107,3 +104,4 @@ export function getRecipeById(id: string): Recipe | null {
     return null;
   }
 }
+

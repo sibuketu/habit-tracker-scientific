@@ -1,8 +1,7 @@
 /**
- * Primal Logic - HeyGen API Integration
+ * CarnivoreOS - HeyGen API Integration
  *
- * HeyGen APIを使用して動画を生成
- * API仕様: https://www.heygen.com/api (要確認)
+ * HeyGen APIを使用して動画を生戁E * API仕槁E https://www.heygen.com/api (要確誁E
  */
 
 import type { VideoScript } from './videoGeneration';
@@ -12,17 +11,11 @@ const HEYGEN_API_KEY = import.meta.env.VITE_HEYGEN_API_KEY;
 const HEYGEN_API_URL = 'https://api.heygen.com/v2'; // HeyGen API V2
 
 export interface HeyGenVideoRequest {
-  text: string; // スクリプトテキスト（5000文字以下）
-  avatar_id?: string; // アバターID（必須）
-  voice_id?: string; // 音声ID（必須）
-  dimension?: {
+  text: string; // スクリプトチE��スト！E000斁E��以下！E  avatar_id?: string; // アバターID�E�忁E��！E  voice_id?: string; // 音声ID�E�忁E��！E  dimension?: {
     width: number;
     height: number;
-  }; // 解像度（デフォルト: 720p）
-  background?: string; // 背景設定
-  caption?: boolean; // キャプション表示
-  test?: boolean; // テストモード
-}
+  }; // 解像度�E�デフォルチE 720p�E�E  background?: string; // 背景設宁E  caption?: boolean; // キャプション表示
+  test?: boolean; // チE��トモーチE}
 
 export interface HeyGenVideoResponse {
   data: {
@@ -34,28 +27,28 @@ export interface HeyGenVideoResponse {
 }
 
 /**
- * HeyGen APIを使用して動画を生成
- * @param script 動画スクリプト
- * @param useFreePlan Freeプランを使用する場合true（3分・720p・月3本まで）
- */
+ * HeyGen APIを使用して動画を生戁E * @param script 動画スクリプト
+ * @param useFreePlan Freeプランを使用する場吁Erue�E�E刁E�E720p・朁E本まで�E�E */
 export async function generateVideoWithHeyGen(
   script: VideoScript,
-  useFreePlan: boolean = false
+  useFreePlan: boolean = false,
+  apiKey?: string
 ): Promise<string> {
-  if (!HEYGEN_API_KEY) {
-    throw new Error('VITE_HEYGEN_API_KEY is not set');
+  const keyToUse = apiKey || HEYGEN_API_KEY;
+
+  if (!keyToUse) {
+    throw new Error('HeyGen APIキーが設定されてぁE��せん、EPIキーを�E力してください、E);
   }
 
-  // Freeプランの場合、スクリプト長さを500文字に制限
-  if (useFreePlan) {
+  // Freeプランの場合、スクリプト長さを500斁E��に制陁E  if (useFreePlan) {
     if (script.script.length > 500) {
-      throw new Error('Freeプランではスクリプトは500文字以内に制限されています（3分以内の動画用）');
+      throw new Error('Freeプランではスクリプトは500斁E��以冁E��制限されてぁE��す！E刁E��冁E�E動画用�E�E);
     }
     if (script.duration > 180) {
-      throw new Error('Freeプランでは動画の長さは3分（180秒）以内に制限されています');
+      throw new Error('Freeプランでは動画の長さ�E3刁E��E80秒）以冁E��制限されてぁE��ぁE);
     }
   } else {
-    // 有料プランの場合、5000文字まで
+    // 有料プランの場合、E000斁E��まで
     if (script.script.length > 5000) {
       throw new Error('Script text must be less than 5000 characters');
     }
@@ -63,21 +56,20 @@ export async function generateVideoWithHeyGen(
 
   const request: HeyGenVideoRequest = {
     text: script.script,
-    // avatar_idとvoice_idは必須だが、デフォルト値を使用する場合は省略可能
+    // avatar_idとvoice_idは忁E��だが、デフォルト値を使用する場合�E省略可能
     // 実際の使用時には、事前にList Avatars APIとList Voices APIで取得したIDを使用
     dimension: useFreePlan
       ? { width: 1280, height: 720 } // Freeプラン: 720p
-      : { width: 1920, height: 1080 }, // 有料プラン: 1080p（Teamプランなら4Kも可能）
-  };
+      : { width: 1920, height: 1080 }, // 有料プラン: 1080p�E�EeamプランなめEKも可能�E�E  };
 
   try {
-    // Step 1: 動画生成リクエストを送信
-    // エンドポイント: POST https://api.heygen.com/v2/video/generate
+    // Step 1: 動画生�Eリクエストを送信
+    // エンド�EインチE POST https://api.heygen.com/v2/video/generate
     const response = await fetch(`${HEYGEN_API_URL}/video/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Api-Key': HEYGEN_API_KEY, // HeyGen APIはX-Api-Keyヘッダーを使用
+        'X-Api-Key': keyToUse, // HeyGen APIはX-Api-Keyヘッダーを使用
       },
       body: JSON.stringify(request),
     });
@@ -90,9 +82,8 @@ export async function generateVideoWithHeyGen(
     const result: HeyGenVideoResponse = await response.json();
     const data = result.data;
 
-    // Step 2: 動画生成の完了を待つ（ポーリング）
-    if (data.status === 'pending' || data.status === 'waiting' || data.status === 'processing') {
-      return await pollVideoStatus(data.video_id);
+    // Step 2: 動画生�Eの完亁E��征E���E��Eーリング�E�E    if (data.status === 'pending' || data.status === 'waiting' || data.status === 'processing') {
+      return await pollVideoStatus(data.video_id, keyToUse);
     }
 
     if (data.status === 'completed' && data.video_url) {
@@ -107,10 +98,11 @@ export async function generateVideoWithHeyGen(
 }
 
 /**
- * 動画生成のステータスをポーリング
+ * 動画生�EのスチE�Eタスを�Eーリング
  */
 async function pollVideoStatus(
   videoId: string,
+  apiKey: string,
   maxAttempts = 60,
   intervalMs = 5000
 ): Promise<string> {
@@ -118,10 +110,10 @@ async function pollVideoStatus(
     await new Promise((resolve) => setTimeout(resolve, intervalMs));
 
     try {
-      // エンドポイント: GET https://api.heygen.com/v2/video_status?video_id={video_id}
+      // エンド�EインチE GET https://api.heygen.com/v2/video_status?video_id={video_id}
       const response = await fetch(`${HEYGEN_API_URL}/video_status?video_id=${videoId}`, {
         headers: {
-          'X-Api-Key': HEYGEN_API_KEY,
+          'X-Api-Key': apiKey,
         },
       });
 
@@ -140,7 +132,7 @@ async function pollVideoStatus(
         throw new Error(data.error || 'Video generation failed');
       }
 
-      // まだ処理中
+      // まだ処琁E��
     } catch (error) {
       logError(error, { component: 'videoGenerationHeyGen', action: 'pollVideoStatus', videoId });
       throw error;
@@ -149,3 +141,4 @@ async function pollVideoStatus(
 
   throw new Error('Video generation timeout');
 }
+

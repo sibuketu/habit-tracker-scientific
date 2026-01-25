@@ -1,46 +1,46 @@
-# 全タスク一覧（一気に色々やる）
+# 全タスク一覧�E�一気に色、E��る！E
 
-> 作成日: 2026-01-03
-> 目的: リリース前の最終確認と改善を一気に進める
+> 作�E日: 2026-01-03
+> 目皁E リリース前�E最終確認と改喁E��一気に進める
 
 ---
 
-## 🎯 全タスク（並行実行）
+## 🎯 全タスク�E�並行実行！E
 
-### ✅ 完了済み
-1. **Visual Regression Testの追加** - 完了
-2. **グリシン:メチオニン比の表示追加** - 完了
-3. **Rulesの前提明確化** - 完了
+### ✁E完亁E��み
+1. **Visual Regression Testの追加** - 完亁E
+2. **グリシン:メチオニン比�E表示追加** - 完亁E
+3. **Rulesの前提明確匁E* - 完亁E
 
 ### ⏳ 実行中・次のアクション
 
-#### 1. コード品質チェック
-**Cursorが実行:**
-- Lintチェック実行中
-- 型チェック実行中
-- エラーがあれば修正
+#### 1. コード品質チェチE��
+**Cursorが実衁E**
+- LintチェチE��実行中
+- 型チェチE��実行中
+- エラーがあれ�E修正
 
-**ユーザーが実行（エクスプローラーから）:**
-- `run-code-check.bat` をダブルクリック（確認用）
+**ユーザーが実行（エクスプローラーから�E�E**
+- `run-code-check.bat` をダブルクリチE���E�確認用�E�E
 
-#### 2. Visual Regression Testの再実行
-**Cursorが実行:**
-- テスト実行中
-- 失敗したテストの修正
+#### 2. Visual Regression Testの再実衁E
+**Cursorが実衁E**
+- チE��ト実行中
+- 失敗したテスト�E修正
 
-**ユーザーが実行（エクスプローラーから）:**
-- `run-visual-test.bat` をダブルクリック（確認用）
+**ユーザーが実行（エクスプローラーから�E�E**
+- `run-visual-test.bat` をダブルクリチE���E�確認用�E�E
 
-#### 3. iOS版テスト（Maestro）
-**ユーザーが実行:**
-1. エクスプローラーを開く（Windowsキー+E）
-2. アドレスバーに以下を貼り付けてEnter:
+#### 3. iOS版テスト！Eaestro�E�E
+**ユーザーが実衁E**
+1. エクスプローラーを開く！Eindowsキー+E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app
    ```
-3. `.maestro\scripts\run-all-tests-ios.ps1` をダブルクリック
+3. `.maestro\scripts\run-all-tests-ios.ps1` をダブルクリチE��
 
-**または、PowerShellから:**
+**また�E、PowerShellから:**
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 .\start-ios-app.bat
@@ -48,47 +48,47 @@ cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 .\run-ios-test.bat
 ```
 
-#### 4. リリース前チェックリストの確認
-**Cursorが実行:**
-- `RELEASE_CHECKLIST.md`の各項目を確認
-- 未完了項目の実装
+#### 4. リリース前チェチE��リスト�E確誁E
+**Cursorが実衁E**
+- `RELEASE_CHECKLIST.md`の吁E��E��を確誁E
+- 未完亁E��E��の実裁E
 - ドキュメント更新
 
-**ユーザーが確認:**
-- デバッグモードの動作確認
-- UI/UXの確認
-- ブラウザ互換性の確認
+**ユーザーが確誁E**
+- チE��チE��モード�E動作確誁E
+- UI/UXの確誁E
+- ブラウザ互換性の確誁E
 
 #### 5. ドキュメント更新
-**Cursorが実行:**
+**Cursorが実衁E**
 - `README.md`の更新
-- 実装状況の記録
-- テスト結果の記録
+- 実裁E��況�E記録
+- チE��ト結果の記録
 
 ---
 
-## 📋 実行コマンド（コピペ用）
+## 📋 実行コマンド（コピ�E用�E�E
 
-### コードチェック（Cursorが実行中）
+### コードチェチE���E�Eursorが実行中�E�E
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 npm run lint
 npx tsc --noEmit
 ```
 
-### Visual Regression Test（Cursorが実行中）
+### Visual Regression Test�E�Eursorが実行中�E�E
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 npm run test:visual
 ```
 
-### E2Eテスト（全テスト）
+### E2EチE��ト（�EチE��ト！E
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 npm test
 ```
 
-### iOS版テスト（Maestro）
+### iOS版テスト！Eaestro�E�E
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 .\start-ios-app.bat
@@ -98,39 +98,40 @@ cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 
 ---
 
-## 🔍 確認項目
+## 🔍 確認頁E��
 
 ### Visual Regression Testの失敗原因
-1. **Firefoxのタイムアウト**: `page.reload()`が30秒でタイムアウト
-   - **修正**: `waitUntil: 'domcontentloaded'`に変更済み ✅
-2. **セレクタの問題**: ナトリウムゲージ、ButcherSelectのセレクタ
-   - **修正**: より堅牢なセレクタに変更済み ✅
+1. **FirefoxのタイムアウチE*: `page.reload()`ぁE0秒でタイムアウチE
+   - **修正**: `waitUntil: 'domcontentloaded'`に変更済み ✁E
+2. **セレクタの問顁E*: ナトリウムゲージ、ButcherSelectのセレクタ
+   - **修正**: より堁E��なセレクタに変更済み ✁E
 
 ### コード品質
 - Lintエラー: 確認中
 - 型エラー: 確認中
 
-### リリース前チェックリスト
-- [ ] デバッグモードの動作確認
-- [ ] 機能の動作確認
-- [ ] UI/UXの確認
-- [ ] パフォーマンスの確認
-- [ ] セキュリティの確認
-- [ ] ブラウザ互換性の確認
-- [ ] テストの確認
-- [ ] ドキュメントの確認
+### リリース前チェチE��リスチE
+- [ ] チE��チE��モード�E動作確誁E
+- [ ] 機�Eの動作確誁E
+- [ ] UI/UXの確誁E
+- [ ] パフォーマンスの確誁E
+- [ ] セキュリチE��の確誁E
+- [ ] ブラウザ互換性の確誁E
+- [ ] チE��ト�E確誁E
+- [ ] ドキュメント�E確誁E
 
 ---
 
-## 🚀 優先順位
+## 🚀 優先頁E��E
 
-1. **最優先**: コード品質チェック（Lint、型チェック）
-2. **高優先**: Visual Regression Testの失敗修正
-3. **中優先**: iOS版テストの実行
-4. **中優先**: リリース前チェックリストの確認
-5. **低優先**: ドキュメント更新
+1. **最優允E*: コード品質チェチE���E�Eint、型チェチE���E�E
+2. **高優允E*: Visual Regression Testの失敗修正
+3. **中優允E*: iOS版テスト�E実衁E
+4. **中優允E*: リリース前チェチE��リスト�E確誁E
+5. **低優允E*: ドキュメント更新
 
 ---
 
 最終更新: 2026-01-03
+
 

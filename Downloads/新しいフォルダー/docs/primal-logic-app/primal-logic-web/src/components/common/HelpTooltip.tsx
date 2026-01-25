@@ -1,8 +1,7 @@
 /**
- * Primal Logic - Help Tooltip Component
+ * CarnivoreOS - Help Tooltip Component
  *
- * スマホ対応のツールチップコンポーネント
- */
+ * スマ�E対応�EチE�Eルチップコンポ�EネンチE */
 
 import { useState } from 'react';
 import './HelpTooltip.css';
@@ -92,3 +91,4 @@ export default function HelpTooltip({ text, children, position = 'bottom' }: Hel
     </span>
   );
 }
+

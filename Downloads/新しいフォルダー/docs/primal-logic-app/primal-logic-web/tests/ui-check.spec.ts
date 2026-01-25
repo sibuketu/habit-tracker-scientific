@@ -1,103 +1,113 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Primal Logic UI Tests', () => {
-  test('Zone 1とZone 2が正しく表示される', async ({ page }) => {
+test.describe('CarnivOS UI Tests', () => {
+  // 同意・オンボ�EチE��ングをスキチE�Eするヘルパ�E関数
+  async function skipConsentAndOnboarding(page: any) {
+    await page.evaluate(() => {
+      localStorage.setItem('primal_logic_consent_accepted', 'true');
+      localStorage.setItem('primal_logic_onboarding_completed', 'true');
+    });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(500);
+  }
+
+  test.beforeEach(async ({ page }) => {
     await page.goto('/');
+    await skipConsentAndOnboarding(page);
+  });
+
+  test('Zone 1とZone 2が正しく表示されめE, async ({ page }) => {
     
-    // ページが読み込まれるまで待つ
-    await page.waitForLoadState('networkidle');
-    
-    // キャッチフレーズバナーが表示されていないことを確認
+    // キャチE��フレーズバナーが表示されてぁE��ぁE��とを確誁E
     const catchphraseBanner = page.locator('.catchphrase-banner');
     await expect(catchphraseBanner).toHaveCount(0);
     
-    // Zone 1が表示されていることを確認（Zone 1というテキストがない場合は、栄養素ゲージで確認）
+    // Zone 1が表示されてぁE��ことを確認！Eone 1とぁE��チE��ストがなぁE��合�E、栁E��素ゲージで確認！E
     await expect(page.getByText('ナトリウム')).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('カリウム')).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('マグネシウム')).toBeVisible({ timeout: 10000 });
     
-    // Zone 2が表示されていることを確認（Zone 2というテキストがない場合は、栄養素ゲージで確認）
+    // Zone 2が表示されてぁE��ことを確認！Eone 2とぁE��チE��ストがなぁE��合�E、栁E��素ゲージで確認！E
     await expect(page.getByText('タンパク質', { exact: false }).first()).toBeVisible({ timeout: 10000 });
-    // 「脂質」は複数箇所にあるため、Zone 2内の特定の要素を確認
+    // 「脂質」�E褁E��箁E��にあるため、Zone 2冁E�E特定�E要素を確誁E
     await expect(page.getByText('脂質', { exact: true }).first()).toBeVisible({ timeout: 10000 });
     
-    // スクリーンショットを撮る
+    // スクリーンショチE��を撮めE
     await page.screenshot({ path: 'tests/screenshots/zones.png', fullPage: true });
   });
 
-  test('ButcherSelectのNutrients Breakdownにグリシンなどが表示される', async ({ page }) => {
-    await page.goto('/');
-    // networkidleの代わりに、より具体的な要素を待つ
-    await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
-    await page.waitForTimeout(500);
+  test('ButcherSelectのNutrients Breakdownにグリシンなどが表示されめE, async ({ page }) => {
+    // beforeEachで既にペ�Eジを開き、同意画面・オンボ�EチE��ングをスキチE�E済み
     
-    // 食品追加ボタンをクリック
+    // 食品追加ボタンをクリチE��
     const addFoodButton = page.getByText(/\+.*食品を追加|\+.*Add Food/i);
     await expect(addFoodButton).toBeVisible({ timeout: 10000 });
     await addFoodButton.click();
     await page.waitForTimeout(2000);
     
-    // ButcherSelectが表示されるまで待つ（動物タブ🐄を探す）
+    // ButcherSelectが表示されるまで征E���E�動物タブ🐁E��探す！E
     const beefTab = page.locator('button').filter({ hasText: /🐄|牛肉/ });
     await expect(beefTab.first()).toBeVisible({ timeout: 15000 });
     
-    // 牛肉のRibeyeを選択
+    // 牛肉のRibeyeを選抁E
     const ribeyeButton = page.getByText('Ribeye');
     await expect(ribeyeButton).toBeVisible({ timeout: 10000 });
     await ribeyeButton.click();
     
-    // 数量入力が表示されるまで待つ
+    // 数量�E力が表示されるまで征E��
     await page.waitForSelector('text=QUANTITY', { timeout: 10000 });
     
-    // Nutrients Breakdownが表示されるまで待つ
+    // Nutrients Breakdownが表示されるまで征E��
     await page.waitForSelector('text=Nutrients Breakdown', { timeout: 10000 });
     
-    // グリシン、メチオニン、カルシウム、リン、ヨウ素が表示されていることを確認
+    // グリシン、メチオニン、カルシウム、リン、ヨウ素が表示されてぁE��ことを確誁E
     await expect(page.getByText('グリシン', { exact: true })).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('メチオニン', { exact: true })).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('カルシウム', { exact: true })).toBeVisible({ timeout: 10000 });
-    // 「リン」は「コリン」と区別するため、exact: trueを使用
+    // 「リン」�E「コリン」と区別するため、exact: trueを使用
     await expect(page.getByText('リン', { exact: true })).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('ヨウ素', { exact: true })).toBeVisible({ timeout: 10000 });
     
-    // スクリーンショットを撮る
+    // スクリーンショチE��を撮めE
     await page.screenshot({ path: 'tests/screenshots/nutrients-breakdown.png', fullPage: true });
   });
 
-  test('オメガ3/6比率が正しく表示される', async ({ page }) => {
+  test('オメガ3/6比率が正しく表示されめE, async ({ page }) => {
     await page.goto('/');
-    // networkidleの代わりに、より具体的な要素を待つ
+    // networkidleの代わりに、より�E体的な要素を征E��
     await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
     await page.waitForTimeout(500);
     
-    // 食品追加ボタンをクリック
+    // 食品追加ボタンをクリチE��
     const addFoodButton = page.getByText(/\+.*食品を追加|\+.*Add Food/i);
     await expect(addFoodButton).toBeVisible({ timeout: 10000 });
     await addFoodButton.click();
     await page.waitForTimeout(2000);
     
-    // ButcherSelectが表示されるまで待つ（動物タブ🐄を探す）
+    // ButcherSelectが表示されるまで征E���E�動物タブ🐁E��探す！E
     const beefTab = page.locator('button').filter({ hasText: /🐄|牛肉/ });
     await expect(beefTab.first()).toBeVisible({ timeout: 15000 });
     
-    // 牛肉のRibeyeを選択
+    // 牛肉のRibeyeを選抁E
     const ribeyeButton = page.getByText('Ribeye');
     await expect(ribeyeButton).toBeVisible({ timeout: 10000 });
     await ribeyeButton.click();
     
-    // 数量入力が表示されるまで待つ
+    // 数量�E力が表示されるまで征E��
     await page.waitForSelector('text=QUANTITY', { timeout: 10000 });
     
-    // Nutrients Breakdownが表示されるまで待つ
+    // Nutrients Breakdownが表示されるまで征E��
     await page.waitForSelector('text=Nutrients Breakdown', { timeout: 10000 });
     
-    // オメガ3/6比率が表示されるまで待つ（テキストが含まれる要素を探す）
-    // OmegaRatioDisplayコンポーネントが表示するテキストを確認
+    // オメガ3/6比率が表示されるまで征E���E�テキストが含まれる要素を探す！E
+    // OmegaRatioDisplayコンポ�Eネントが表示するチE��ストを確誁E
     const omegaRatioText = page.getByText(/オメガ|Omega|Ω/, { exact: false });
     await expect(omegaRatioText.first()).toBeVisible({ timeout: 10000 });
     
-    // スクリーンショットを撮る
+    // スクリーンショチE��を撮めE
     await page.screenshot({ path: 'tests/screenshots/omega-ratio.png', fullPage: true });
   });
 });
+
 

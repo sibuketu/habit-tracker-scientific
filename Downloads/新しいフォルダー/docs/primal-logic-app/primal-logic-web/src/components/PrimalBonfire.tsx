@@ -7,15 +7,13 @@ interface PrimalBonfireProps {
 }
 
 export default function PrimalBonfire({ score, label }: PrimalBonfireProps) {
-  // スコアに基づいて強度クラスを決定
-  const intensityClass = useMemo(() => {
+  // スコアに基づぁE��強度クラスを決宁E  const intensityClass = useMemo(() => {
     if (score < 30) return 'intensity-low';
     if (score < 70) return 'intensity-medium';
     return 'intensity-high';
   }, [score]);
 
-  // スパークの数を決定
-  const sparks = useMemo(() => {
+  // スパ�Eクの数を決宁E  const sparks = useMemo(() => {
     const count = score < 30 ? 2 : score < 70 ? 5 : 8;
     return Array.from({ length: count }).map((_, i) => ({
       id: i,
@@ -35,7 +33,7 @@ export default function PrimalBonfire({ score, label }: PrimalBonfireProps) {
           <div className="flame inner"></div>
         </div>
 
-        {/* 火の粉 */}
+        {/* 火の粁E*/}
         {sparks.map((spark) => (
           <div
             key={spark.id}
@@ -48,7 +46,7 @@ export default function PrimalBonfire({ score, label }: PrimalBonfireProps) {
           />
         ))}
 
-        {/* 煙（スコアが低い時のみ） */}
+        {/* 煙（スコアが低い時�Eみ�E�E*/}
         {score < 40 && (
           <>
             <div className="smoke" style={{ animationDelay: '0s' }}></div>
@@ -84,3 +82,4 @@ export default function PrimalBonfire({ score, label }: PrimalBonfireProps) {
     </div>
   );
 }
+

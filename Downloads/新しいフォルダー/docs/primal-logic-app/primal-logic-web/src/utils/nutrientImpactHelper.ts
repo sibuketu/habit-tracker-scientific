@@ -1,8 +1,8 @@
 /**
- * 栄養素変動の説明を生成するヘルパー関数
+ * 栁E��素変動の説明を生�Eするヘルパ�E関数
  */
 
-import type { UserProfile } from '../types';
+import type { UserProfile } from '../types/index';
 import { getCarnivoreTargets } from '../data/carnivoreTargets';
 
 export interface NutrientImpact {
@@ -14,8 +14,7 @@ export interface NutrientImpact {
 }
 
 /**
- * 設定変更による栄養素の変動を計算
- */
+ * 設定変更による栁E��素の変動を計箁E */
 export function calculateNutrientImpact(
   currentProfile: Partial<UserProfile>,
   changedField: keyof UserProfile,
@@ -23,8 +22,7 @@ export function calculateNutrientImpact(
 ): NutrientImpact[] {
   const impacts: NutrientImpact[] = [];
 
-  // 変更前の目標値を計算
-  const beforeTargets = getCarnivoreTargets(
+  // 変更前�E目標値を計箁E  const beforeTargets = getCarnivoreTargets(
     currentProfile.gender,
     currentProfile.age,
     currentProfile.activityLevel,
@@ -34,11 +32,10 @@ export function calculateNutrientImpact(
     currentProfile.stressLevel
   );
 
-  // 変更後のプロファイルを作成
+  // 変更後�Eプロファイルを作�E
   const afterProfile = { ...currentProfile, [changedField]: newValue };
 
-  // 変更後の目標値を計算
-  const afterTargets = getCarnivoreTargets(
+  // 変更後�E目標値を計箁E  const afterTargets = getCarnivoreTargets(
     afterProfile.gender,
     afterProfile.age,
     afterProfile.activityLevel,
@@ -48,11 +45,11 @@ export function calculateNutrientImpact(
     afterProfile.stressLevel
   );
 
-  // 変動した栄養素を検出
+  // 変動した栁E��素を検�E
   const nutrients: Array<{ key: keyof typeof beforeTargets; name: string; unit: string }> = [
     { key: 'protein', name: 'タンパク質', unit: 'g' },
     { key: 'fat', name: '脂質', unit: 'g' },
-    { key: 'iron', name: '鉄分', unit: 'mg' },
+    { key: 'iron', name: '鉁E�E', unit: 'mg' },
     { key: 'magnesium', name: 'マグネシウム', unit: 'mg' },
     { key: 'vitamin_d', name: 'ビタミンD', unit: 'IU' },
   ];
@@ -66,7 +63,7 @@ export function calculateNutrientImpact(
         before,
         after,
         unit,
-        description: `${name}が${before}${unit} → ${after}${unit}に${after > before ? '増加' : '減少'}します`,
+        description: `${name}が${before}${unit}から${after}${unit}に${after > before ? '増加' : '減少'}します`,
       });
     }
   });
@@ -75,8 +72,7 @@ export function calculateNutrientImpact(
 }
 
 /**
- * フィールドごとの栄養素変動説明を取得
- */
+ * フィールドごとの栁E��素変動説明を取征E */
 export function getFieldImpactDescription(
   field: keyof UserProfile,
   value: UserProfile[keyof UserProfile]
@@ -84,50 +80,50 @@ export function getFieldImpactDescription(
   const descriptions: Record<string, string | Record<string, string>> = {
     age:
       typeof value === 'number' && value > 50
-        ? '高齢者はビタミンDとタンパク質の必要量が増加します'
+        ? '高齢老E�EビタミンDとタンパク質の忁E��E��が増加しまぁE
         : '',
     activityLevel: {
-      active: '活動的な人はタンパク質・脂質・マグネシウムの必要量が増加します',
-      moderate: '中程度の活動量では、タンパク質と脂質がやや増加します',
-      sedentary: '低活動量では、標準的な必要量が適用されます',
+      active: '活動的な人はタンパク質・脂質・マグネシウムの忁E��E��が増加しまぁE,
+      moderate: '中程度の活動量では、タンパク質と脂質がやめE��加しまぁE,
+      sedentary: '低活動量では、標準的な忁E��E��が適用されまぁE,
     },
     isPregnant:
       typeof value === 'boolean' && value
-        ? '妊娠中はタンパク質・鉄分・マグネシウムの必要量が増加します'
+        ? '妊娠中はタンパク質・鉁E�E・マグネシウムの忁E��E��が増加しまぁE
         : '',
     isBreastfeeding:
       typeof value === 'boolean' && value
-        ? '授乳中はタンパク質・マグネシウムの必要量が増加します'
+        ? '授乳中はタンパク質・マグネシウムの忁E��E��が増加しまぁE
         : '',
     isPostMenopause:
       typeof value === 'boolean' && value
-        ? '閉経後は鉄分の必要量が8mgに減少します（月経がないため）'
+        ? '閉経後�E鉁E�Eの忁E��E��ぁEmgに減少します（月経がなぁE��めE��E
         : '',
     stressLevel: {
-      high: '高ストレス時はマグネシウムの必要量が増加します',
-      moderate: '中程度のストレスでは、標準的な必要量が適用されます',
-      low: '低ストレスでは、標準的な必要量が適用されます',
+      high: '高ストレス時�Eマグネシウムの忁E��E��が増加しまぁE,
+      moderate: '中程度のストレスでは、標準的な忁E��E��が適用されまぁE,
+      low: '低ストレスでは、標準的な忁E��E��が適用されまぁE,
     },
     sleepHours:
       typeof value === 'number' && value < 7
-        ? '睡眠不足はマグネシウムとコルチゾールに影響します'
+        ? '睡眠不足はマグネシウムとコルチゾールに影響しまぁE
         : '',
     exerciseIntensity: {
-      intense: '激しい運動ではタンパク質・脂質・マグネシウムの必要量が増加します',
-      moderate: '中程度の運動では、タンパク質と脂質がやや増加します',
-      light: '軽い運動では、標準的な必要量が適用されます',
-      none: '運動なしでは、標準的な必要量が適用されます',
+      intense: '激しい運動ではタンパク質・脂質・マグネシウムの忁E��E��が増加しまぁE,
+      moderate: '中程度の運動では、タンパク質と脂質がやめE��加しまぁE,
+      light: '軽ぁE��動では、標準的な忁E��E��が適用されまぁE,
+      none: '運動なしでは、標準的な忁E��E��が適用されまぁE,
     },
     thyroidFunction: {
-      hypothyroid: '甲状腺機能低下症ではヨウ素とセレンの必要量が増加します',
-      hyperthyroid: '甲状腺機能亢進症ではヨウ素とセレンの必要量が増加します',
+      hypothyroid: '甲状腺機�E低下症ではヨウ素とセレンの忁E��E��が増加しまぁE,
+      hyperthyroid: '甲状腺機�E亢進痁E��はヨウ素とセレンの忁E��E��が増加しまぁE,
       normal: '',
     },
     sunExposureFrequency: {
-      none: '日光暴露なしではビタミンDサプリメントが必要になる可能性があります',
-      rare: 'まれな日光暴露ではビタミンDの必要量が増加します',
-      occasional: '時々の日光暴露では、標準的な必要量が適用されます',
-      daily: '毎日の日光暴露では、ビタミンD合成が十分な可能性があります',
+      none: '日光暴露なしではビタミンDサプリメントが忁E��になる可能性がありまぁE,
+      rare: 'まれな日光暴露ではビタミンDの忁E��E��が増加しまぁE,
+      occasional: '時、E�E日光暴露では、標準的な忁E��E��が適用されまぁE,
+      daily: '毎日の日光暴露では、ビタミンD合�Eが十刁E��可能性がありまぁE,
     },
   };
 
@@ -140,3 +136,4 @@ export function getFieldImpactDescription(
   }
   return '';
 }
+

@@ -1,0 +1,1 @@
+gcloud run services describe video-editor --region asia-northeast1 --format "value(status.url)"

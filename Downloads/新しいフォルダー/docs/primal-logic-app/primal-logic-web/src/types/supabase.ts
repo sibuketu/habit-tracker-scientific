@@ -1,11 +1,11 @@
 /**
- * Primal Logic - Supabase Database Types
+ * CarnivoreOS - Supabase Database Types
  *
- * Supabaseデータベースのテーブル型定義
+ * SupabaseチE�Eタベ�EスのチE�Eブル型定義
  */
 
 /**
- * daily_logs テーブルの型定義
+ * daily_logs チE�Eブルの型定義
  */
 export interface DailyLogRow {
   id?: string;
@@ -26,7 +26,7 @@ export interface DailyLogRow {
   fuel: Array<{
     item: string;
     amount: number;
-    unit: 'g' | 'serving' | 'piece' | '個';
+    unit: 'g' | 'serving' | 'piece' | '倁E;
     type: 'animal' | 'plant' | 'trash' | 'ruminant' | 'dairy';
     nutrients?: Record<string, number>;
   }>;
@@ -58,15 +58,14 @@ export interface DailyLogRow {
     protocol_id?: string;
     target_fast_end?: string;
   };
-  diary?: string; // 日記（自由入力）
-  weight?: number; // 体重（kg）- 日次記録
-  body_fat_percentage?: number; // 体脂肪率（%）- 日次記録
+  diary?: string; // 日記（�E由入力！E  weight?: number; // 体重�E�Eg�E�E 日次記録
+  body_fat_percentage?: number; // 体脂肪玁E��E�E�E 日次記録
   created_at?: string;
   updated_at?: string;
 }
 
 /**
- * profiles テーブルの型定義
+ * profiles チE�Eブルの型定義
  */
 export interface ProfileRow {
   id?: string;
@@ -105,7 +104,7 @@ export interface ProfileRow {
 }
 
 /**
- * streaks テーブルの型定義
+ * streaks チE�Eブルの型定義
  */
 export interface StreakRow {
   id?: string;
@@ -118,8 +117,7 @@ export interface StreakRow {
 }
 
 /**
- * tips_history テーブルの型定義（オプション）
- */
+ * tips_history チE�Eブルの型定義�E�オプション�E�E */
 export interface TipHistoryRow {
   id?: string;
   user_id: string;
@@ -130,3 +128,4 @@ export interface TipHistoryRow {
   viewed_at: string; // ISO timestamp
   created_at?: string;
 }
+

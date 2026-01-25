@@ -1,16 +1,14 @@
 /**
- * Primal Logic - Saved Tips (お気に入りTips)
+ * CarnivoreOS - Saved Tips (お気に入りTips)
  *
- * ユーザーが星で保存したTipsを管理
- */
+ * ユーザーが星で保存したTipsを管琁E */
 
 import { logError } from './errorHandler';
 
 const STORAGE_KEY = 'primal_logic_saved_tips';
 
 /**
- * 保存されたTipsのIDリストを取得
- */
+ * 保存されたTipsのIDリストを取征E */
 export function getSavedTipIds(): string[] {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -25,8 +23,7 @@ export function getSavedTipIds(): string[] {
 }
 
 /**
- * Tipsを保存（お気に入りに追加）
- */
+ * Tipsを保存（お気に入りに追加�E�E */
 export function saveTip(tipId: string): void {
   try {
     const saved = getSavedTipIds();
@@ -40,8 +37,7 @@ export function saveTip(tipId: string): void {
 }
 
 /**
- * Tipsの保存を解除（お気に入りから削除）
- */
+ * Tipsの保存を解除�E�お気に入りから削除�E�E */
 export function unsaveTip(tipId: string): void {
   try {
     const saved = getSavedTipIds();
@@ -53,9 +49,10 @@ export function unsaveTip(tipId: string): void {
 }
 
 /**
- * Tipsが保存されているかチェック
+ * Tipsが保存されてぁE��かチェチE��
  */
 export function isTipSaved(tipId: string): boolean {
   const saved = getSavedTipIds();
   return saved.includes(tipId);
 }
+

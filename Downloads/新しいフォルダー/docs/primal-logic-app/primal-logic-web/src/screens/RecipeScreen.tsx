@@ -1,8 +1,7 @@
 /**
- * Primal Logic - Recipe Screen
+ * CarnivoreOS - Recipe Screen
  *
- * レシピ登録・保存画面（CustomFoodScreenをベースに実装）
- * 2段階UI: 材料登録 → レシピ登録
+ * レシピ登録・保存画面�E�EustomFoodScreenを�Eースに実裁E��E * 2段階UI: 材料登録 ↁEレシピ登録
  */
 
 import { useState, useEffect, useMemo } from 'react';
@@ -22,20 +21,22 @@ import { useTranslation } from '../utils/i18n';
 import MiniNutrientGauge from '../components/MiniNutrientGauge';
 import { calculateAllMetrics } from '../utils/nutrientCalculator';
 import { getCarnivoreTargets } from '../data/carnivoreTargets';
-import type { FoodItem } from '../types';
+import { getNutrientColor } from '../utils/gaugeUtils';
+import { useSettings } from '../hooks/useSettings';
+import { isNutrientVisibleInMode, TIER1_CATEGORIES, NUTRIENT_TIERS } from '../utils/nutrientPriority';
+import type { FoodItem } from '../types/index';
 import './RecipeScreen.css';
 
 interface RecipeScreenProps {
   onBack: () => void;
 }
 
-// 材料登録用の状態
-interface IngredientState {
+// 材料登録用の状慁Einterface IngredientState {
   foodName: string;
   displayName: string;
   type: 'animal' | 'trash' | 'ruminant' | 'dairy';
   amount: number;
-  unit: 'g' | '個';
+  unit: 'g' | 'piece';
   nutrients: Record<string, number>;
   isAnalyzing: boolean;
   error: string | null;
@@ -60,11 +61,9 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
   const [recipeDescription, setRecipeDescription] = useState('');
   const [recipeFoods, setRecipeFoods] = useState<FoodItem[]>([]);
 
-  // 材料登録モード（true: 材料登録中, false: レシピ登録中）
-  const [isIngredientMode, setIsIngredientMode] = useState(true);
+  // 材料登録モード！Erue: 材料登録中, false: レシピ登録中�E�E  const [isIngredientMode, setIsIngredientMode] = useState(true);
 
-  // 現在の材料登録状態
-  const [currentIngredient, setCurrentIngredient] = useState<IngredientState>({
+  // 現在の材料登録状慁E  const [currentIngredient, setCurrentIngredient] = useState<IngredientState>({
     foodName: '',
     displayName: '',
     type: 'animal',
@@ -81,11 +80,9 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     isTipSavedState: false,
   });
 
-  // 抗栄養素詳細表示用の状態
-  const [showAdvancedAntiNutrients, setShowAdvancedAntiNutrients] = useState(false);
+  // 抗栁E��素詳細表示用の状慁E  const [showAdvancedAntiNutrients, setShowAdvancedAntiNutrients] = useState(false);
 
-  // Tips履歴管理
-  const [previousTips, setPreviousTips] = useState<Tip[]>([]);
+  // Tips履歴管琁E  const [previousTips, setPreviousTips] = useState<Tip[]>([]);
 
   useEffect(() => {
     loadRecipes();
@@ -147,8 +144,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     setShowEditModal(true);
   };
 
-  // 食品名から栄養素を推測（CustomFoodScreenと同じ）
-  const handleAnalyze = async () => {
+  // 食品名から栁E��素を推測�E�EustomFoodScreenと同じ�E�E  const handleAnalyze = async () => {
     if (!currentIngredient.foodName.trim()) {
       setCurrentIngredient((prev) => ({ ...prev, error: t('customFood.enterFoodName') }));
       return;
@@ -156,7 +152,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
 
     setCurrentIngredient((prev) => ({ ...prev, isAnalyzing: true, error: null }));
 
-    // ローディング中のTipsを表示
+    // ローチE��ング中のTipsを表示
     const randomTip = currentIngredient.loadingTip
       ? getRandomTipExcluding(currentIngredient.loadingTip.id)
       : getRandomTip();
@@ -207,8 +203,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     }
   };
 
-  // 材料を追加（連続登録可能）
-  const handleAddIngredient = () => {
+  // 材料を追加�E�連続登録可能�E�E  const handleAddIngredient = () => {
     if (!currentIngredient.foodName.trim()) {
       setCurrentIngredient((prev) => ({ ...prev, error: t('customFood.enterFoodName') }));
       return;
@@ -230,8 +225,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
 
     setRecipeFoods([...recipeFoods, food]);
 
-    // 材料登録状態をリセット（連続登録のため）
-    setCurrentIngredient({
+    // 材料登録状態をリセチE���E�連続登録のため�E�E    setCurrentIngredient({
       foodName: '',
       displayName: '',
       type: 'animal',
@@ -249,8 +243,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     });
   };
 
-  // 材料登録を完了してレシピ登録モードに移行
-  const handleFinishIngredients = () => {
+  // 材料登録を完亁E��てレシピ登録モードに移衁E  const handleFinishIngredients = () => {
     if (recipeFoods.length === 0) {
       alert(t('recipe.addFood'));
       return;
@@ -317,7 +310,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     onBack();
   };
 
-  // 栄養素の値を更新
+  // 栁E��素の値を更新
   const updateNutrient = (key: string, value: number | undefined) => {
     setCurrentIngredient((prev) => ({
       ...prev,
@@ -328,14 +321,12 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     }));
   };
 
-  // レシピの栄養素を計算
-  const recipeMetrics = useMemo(() => {
+  // レシピ�E栁E��素を計箁E  const recipeMetrics = useMemo(() => {
     if (recipeFoods.length === 0) return null;
     return calculateAllMetrics(recipeFoods, userProfile);
   }, [recipeFoods, userProfile]);
 
-  // 動的目標値を取得
-  const dynamicTargets = useMemo(() => {
+  // 動的目標値を取征E  const dynamicTargets = useMemo(() => {
     return getCarnivoreTargets(
       userProfile?.gender,
       userProfile?.age,
@@ -374,75 +365,91 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     );
   }, [userProfile]);
 
-  // 栄養素ゲージの設定
-  const nutrientGauges = useMemo(() => {
+  // 栁E��素ゲージの設定！EistoryScreenの実裁E��基準に統一�E�E  const nutrientGauges = useMemo(() => {
     if (!recipeMetrics || !dynamicTargets) return [];
 
-    const getNutrientColor = (key: string): string => {
-      const colors: Record<string, string> = {
-        protein: '#ef4444',
-        fat: '#f97316',
-        iron: '#dc2626',
-        magnesium: '#3b82f6',
-        vitamin_d: '#fbbf24',
-        sodium: '#10b981',
-        potassium: '#8b5cf6',
-        zinc: '#6366f1',
-      };
-      return colors[key] || '#78716c';
-    };
-
-    return [
-      {
-        key: 'protein',
-        label: 'タンパク質',
-        current: recipeMetrics.effectiveProtein || 0,
-        target: dynamicTargets.protein,
-        unit: 'g',
-        color: getNutrientColor('protein'),
-      },
-      {
-        key: 'fat',
-        label: '脂質',
-        current: recipeMetrics.fatTotal || 0,
-        target: dynamicTargets.fat,
-        unit: 'g',
-        color: getNutrientColor('fat'),
-      },
-      {
-        key: 'iron',
-        label: '鉄分',
-        current: recipeMetrics.effectiveIron || 0,
-        target: dynamicTargets.iron,
-        unit: 'mg',
-        color: getNutrientColor('iron'),
-      },
-      {
-        key: 'magnesium',
-        label: 'マグネシウム',
-        current: recipeMetrics.magnesiumTotal || 0,
-        target: dynamicTargets.magnesium,
-        unit: 'mg',
-        color: getNutrientColor('magnesium'),
-      },
+    const allGauges = [
+      // Tier1: Electrolytes
       {
         key: 'sodium',
-        label: 'ナトリウム',
+        label: t('nutrient.sodium'),
         current: recipeMetrics.sodiumTotal || 0,
-        target: dynamicTargets.sodium || 5000,
+        target: dynamicTargets.sodium,
         unit: 'mg',
         color: getNutrientColor('sodium'),
+        tier: 1,
+        category: 'electrolyte' as const,
       },
       {
         key: 'potassium',
-        label: 'カリウム',
+        label: t('nutrient.potassium'),
         current: recipeMetrics.potassiumTotal || 0,
         target: dynamicTargets.potassium,
         unit: 'mg',
         color: getNutrientColor('potassium'),
+        tier: 1,
+        category: 'electrolyte' as const,
       },
-    ].filter((config) => config.target > 0);
-  }, [recipeMetrics, dynamicTargets]);
+      {
+        key: 'magnesium',
+        label: t('nutrient.magnesium'),
+        current: recipeMetrics.magnesiumTotal || 0,
+        target: dynamicTargets.magnesium,
+        unit: 'mg',
+        color: getNutrientColor('magnesium'),
+        tier: 1,
+        category: 'electrolyte' as const,
+      },
+      // Tier1: Macros
+      {
+        key: 'fat',
+        label: t('nutrient.fat'),
+        current: recipeMetrics.fatTotal || 0,
+        target: dynamicTargets.fat,
+        unit: 'g',
+        color: getNutrientColor('fat'),
+        tier: 1,
+        category: 'macro' as const,
+      },
+      {
+        key: 'protein',
+        label: t('nutrient.protein'),
+        current: recipeMetrics.effectiveProtein || 0,
+        target: dynamicTargets.protein,
+        unit: 'g',
+        color: getNutrientColor('protein'),
+        tier: 1,
+        category: 'macro' as const,
+      },
+      // Tier2: Other nutrients
+      {
+        key: 'iron',
+        label: t('nutrient.iron'),
+        current: recipeMetrics.effectiveIron || 0,
+        target: dynamicTargets.iron,
+        unit: 'mg',
+        color: getNutrientColor('iron'),
+        tier: 2,
+        category: 'other' as const,
+      },
+      {
+        key: 'zinc',
+        label: t('nutrient.zinc'),
+        current: recipeMetrics.effectiveZinc || 0,
+        target: dynamicTargets.zinc,
+        unit: 'mg',
+        color: getNutrientColor('zinc'),
+        tier: 2,
+        category: 'other' as const,
+      },
+    ];
+
+    // Filter by nutrientDisplayMode (HistoryScreenと同じロジチE��)
+    return allGauges.filter((gauge) => {
+      if (gauge.target <= 0) return false;
+      return isNutrientVisibleInMode(gauge.key, nutrientDisplayMode);
+    });
+  }, [recipeMetrics, dynamicTargets, nutrientDisplayMode, t]);
 
   const handleRemoveFoodFromRecipe = (index: number) => {
     const newFoods = recipeFoods.filter((_, i) => i !== index);
@@ -518,7 +525,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
           )}
         </div>
 
-        {/* 作成/編集モーダル */}
+        {/* 作�E/編雁E��ーダル */}
         {(showCreateModal || showEditModal) && (
           <div
             className="recipe-screen-modal-overlay"
@@ -540,7 +547,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
               </h2>
 
               {isIngredientMode ? (
-                /* 材料登録モード */
+                /* 材料登録モーチE*/
                 <div className="recipe-screen-modal-form">
                   <div
                     style={{
@@ -552,11 +559,9 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                     }}
                   >
                     <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.5rem' }}>
-                      📝 材料登録モード（{recipeFoods.length}個の材料を登録済み）
-                    </p>
+                      📝 材料登録モード！ErecipeFoods.length}個�E材料を登録済み�E�E                    </p>
                     <p style={{ fontSize: '12px', color: '#6b7280' }}>
-                      材料を追加したら「材料登録を完了」ボタンを押して、レシピ情報を入力してください。
-                    </p>
+                      材料を追加したら「材料登録を完亁E���Eタンを押して、レシピ情報を�E力してください、E                    </p>
                   </div>
 
                   {currentIngredient.error && (
@@ -574,7 +579,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                     </div>
                   )}
 
-                  {/* 食品名入力とAI推測（CustomFoodScreenと同じ） */}
+                  {/* 食品名�E力とAI推測�E�EustomFoodScreenと同じ�E�E*/}
                   <div className="custom-food-section">
                     <label>
                       <strong>{t('customFood.foodName')}</strong>
@@ -661,9 +666,9 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                       />
                     </label>
 
-                    {/* 数量入力 */}
+                    {/* 数量�E劁E*/}
                     <label style={{ marginTop: '1rem', display: 'block' }}>
-                      <strong>数量</strong>
+                      <strong>数釁E/strong>
                       <div
                         style={{
                           display: 'flex',
@@ -695,7 +700,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           onChange={(e) =>
                             setCurrentIngredient((prev) => ({
                               ...prev,
-                              unit: e.target.value as 'g' | '個',
+                              unit: e.target.value as 'g' | 'piece',
                             }))
                           }
                           style={{
@@ -705,12 +710,12 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           }}
                         >
                           <option value="g">g</option>
-                          <option value="個">個</option>
+                          <option value="piece">piece</option>
                         </select>
                       </div>
                     </label>
 
-                    {/* AIローディング中のTips表示 */}
+                    {/* AIローチE��ング中のTips表示 */}
                     {currentIngredient.isAnalyzing && currentIngredient.loadingTip && (
                       <div
                         style={{
@@ -758,8 +763,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                               height: '32px',
                             }}
                           >
-                            ⭐
-                          </button>
+                            ⭁E                          </button>
                         </div>
                         <div
                           style={{
@@ -794,8 +798,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                                 cursor: 'pointer',
                               }}
                             >
-                              戻る
-                            </button>
+                              戻めE                            </button>
                           )}
                           <button
                             onClick={() => {
@@ -830,7 +833,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                     )}
                   </div>
 
-                  {/* 食品タイプ */}
+                  {/* 食品タイチE*/}
                   <div
                     className="custom-food-section"
                     style={{
@@ -899,7 +902,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                     </div>
                   </div>
 
-                  {/* ステップ3: 栄養素（必須） */}
+                  {/* スチE��チE: 栁E��素�E�忁E��！E*/}
                   <div
                     className="custom-food-section"
                     style={{
@@ -959,7 +962,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           currentDailyTotal={currentIngredient.nutrients?.protein || 0}
                           previewAmount={0}
                           target={100}
-                          color="#64748b"
+                          color={getNutrientColor('protein')}
                           unit="g/100g"
                           nutrientKey="protein"
                         />
@@ -991,7 +994,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           currentDailyTotal={currentIngredient.nutrients?.fat || 0}
                           previewAmount={0}
                           target={100}
-                          color="#64748b"
+                          color={getNutrientColor('fat')}
                           unit="g/100g"
                           nutrientKey="fat"
                         />
@@ -1023,8 +1026,9 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           currentDailyTotal={currentIngredient.nutrients?.carbs || 0}
                           previewAmount={0}
                           target={100}
-                          color="#64748b"
+                          color={getNutrientColor('netCarbs')}
                           unit="g/100g"
+                          nutrientKey="netCarbs"
                         />
                         <input
                           type="number"
@@ -1049,7 +1053,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                     </div>
                   </div>
 
-                  {/* ステップ4: 栄養素（詳細） */}
+                  {/* スチE��チE: 栁E��素�E�詳細�E�E*/}
                   <div
                     className="custom-food-section"
                     style={{
@@ -1121,7 +1125,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           gap: '1rem',
                         }}
                       >
-                        {/* CustomFoodScreenと同じ詳細栄養素フィールドを追加 */}
+                        {/* CustomFoodScreenと同じ詳細栁E��素フィールドを追加 */}
                         <label>
                           {t('customFood.sodium')} (mg/100g)
                           <MiniNutrientGauge
@@ -1129,7 +1133,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.sodium || 0}
                             previewAmount={0}
                             target={5000}
-                            color="#64748b"
+                            color={getNutrientColor('sodium')}
                             unit="mg/100g"
                             nutrientKey="sodium"
                           />
@@ -1160,7 +1164,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.magnesium || 0}
                             previewAmount={0}
                             target={600}
-                            color="#64748b"
+                            color={getNutrientColor('magnesium')}
                             unit="mg/100g"
                             nutrientKey="magnesium"
                           />
@@ -1191,7 +1195,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.potassium || 0}
                             previewAmount={0}
                             target={4500}
-                            color="#64748b"
+                            color={getNutrientColor('potassium')}
                             unit="mg/100g"
                             nutrientKey="potassium"
                           />
@@ -1222,7 +1226,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.zinc || 0}
                             previewAmount={0}
                             target={11}
-                            color="#64748b"
+                            color={getNutrientColor('zinc')}
                             unit="mg/100g"
                             nutrientKey="zinc"
                           />
@@ -1256,7 +1260,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             }
                             previewAmount={0}
                             target={8}
-                            color="#64748b"
+                            color={getNutrientColor('iron')}
                             unit="mg/100g"
                             nutrientKey="iron"
                           />
@@ -1289,7 +1293,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.vitaminA || 0}
                             previewAmount={0}
                             target={5000}
-                            color="#64748b"
+                            color={getNutrientColor('vitaminA')}
                             unit="IU/100g"
                             nutrientKey="vitamin_a"
                           />
@@ -1320,7 +1324,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.vitaminD || 0}
                             previewAmount={0}
                             target={2000}
-                            color="#64748b"
+                            color={getNutrientColor('vitaminD')}
                             unit="IU/100g"
                             nutrientKey="vitamin_d"
                           />
@@ -1351,7 +1355,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.vitaminK2 || 0}
                             previewAmount={0}
                             target={200}
-                            color="#64748b"
+                            color={getNutrientColor('vitaminK2')}
                             unit="μg/100g"
                             nutrientKey="vitamin_k2"
                           />
@@ -1382,7 +1386,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.vitaminB12 || 0}
                             previewAmount={0}
                             target={2.4}
-                            color="#64748b"
+                            color={getNutrientColor('vitaminB12')}
                             unit="μg/100g"
                             nutrientKey="vitamin_b12"
                           />
@@ -1413,7 +1417,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.omega3 || 0}
                             previewAmount={0}
                             target={2}
-                            color="#64748b"
+                            color={getNutrientColor('omega3')}
                             unit="g/100g"
                             nutrientKey="omega3"
                           />
@@ -1444,7 +1448,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.omega6 || 0}
                             previewAmount={0}
                             target={5}
-                            color="#64748b"
+                            color={getNutrientColor('omega6')}
                             unit="g/100g"
                             nutrientKey="omega6"
                           />
@@ -1475,7 +1479,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.calcium || 0}
                             previewAmount={0}
                             target={1000}
-                            color="#64748b"
+                            color={getNutrientColor('calcium')}
                             unit="mg/100g"
                             nutrientKey="calcium"
                           />
@@ -1506,7 +1510,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.phosphorus || 0}
                             previewAmount={0}
                             target={700}
-                            color="#64748b"
+                            color={getNutrientColor('phosphorus')}
                             unit="mg/100g"
                             nutrientKey="phosphorus"
                           />
@@ -1537,7 +1541,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.glycine || 0}
                             previewAmount={0}
                             target={10}
-                            color="#64748b"
+                            color={getNutrientColor('glycine')}
                             unit="g/100g"
                             nutrientKey="glycine"
                           />
@@ -1568,7 +1572,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.methionine || 0}
                             previewAmount={0}
                             target={2}
-                            color="#64748b"
+                            color={getNutrientColor('methionine')}
                             unit="g/100g"
                             nutrientKey="methionine"
                           />
@@ -1599,7 +1603,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                             currentDailyTotal={currentIngredient.nutrients?.taurine || 0}
                             previewAmount={0}
                             target={500}
-                            color="#64748b"
+                          color={getNutrientColor('taurine')}
                             unit="mg/100g"
                             nutrientKey="taurine"
                           />
@@ -1627,7 +1631,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                     )}
                   </div>
 
-                  {/* ステップ5: 抗栄養素 */}
+                  {/* スチE��チE: 抗栁E��素 */}
                   {
                     <div
                       className="custom-food-section"
@@ -1770,7 +1774,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                     </div>
                   }
 
-                  {/* ステップ6: 抗栄養素（詳細） */}
+                  {/* スチE��チE: 抗栁E��素�E�詳細�E�E*/}
                   {
                     <div
                       className="custom-food-section"
@@ -1806,7 +1810,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                           >
                             6
                           </span>
-                          <strong style={{ fontSize: '16px' }}>抗栄養素（詳細）</strong>
+                          <strong style={{ fontSize: '16px' }}>抗栁E��素�E�詳細�E�E/strong>
                         </div>
                         <button
                           onClick={() => setShowAdvancedAntiNutrients(!showAdvancedAntiNutrients)}
@@ -1990,8 +1994,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                                 fontSize: '12px',
                               }}
                             >
-                              ×
-                            </button>
+                              ÁE                            </button>
                           </li>
                         ))}
                       </ul>
@@ -2053,12 +2056,11 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                         fontWeight: '600',
                       }}
                     >
-                      材料登録を完了
-                    </button>
+                      材料登録を完亁E                    </button>
                   </div>
                 </div>
               ) : (
-                /* レシピ登録モード */
+                /* レシピ登録モーチE*/
                 <div className="recipe-screen-modal-form">
                   <div
                     style={{
@@ -2070,11 +2072,9 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                     }}
                   >
                     <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '0.5rem' }}>
-                      ✅ レシピ登録モード（{recipeFoods.length}個の材料を登録済み）
-                    </p>
+                      ✁Eレシピ登録モード！ErecipeFoods.length}個�E材料を登録済み�E�E                    </p>
                     <p style={{ fontSize: '12px', color: '#6b7280' }}>
-                      レシピ名と説明を入力して、レシピを保存してください。
-                    </p>
+                      レシピ名と説明を入力して、レシピを保存してください。                    </p>
                   </div>
 
                   <label className="recipe-screen-modal-label">
@@ -2140,14 +2140,13 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                               fontSize: '12px',
                             }}
                           >
-                            ×
-                          </button>
+                            ÁE                          </button>
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  {/* 栄養素ゲージ */}
+                  {/* 栁E��素ゲージ */}
                   {nutrientGauges.length > 0 && (
                     <div
                       style={{
@@ -2158,7 +2157,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                       }}
                     >
                       <p style={{ fontSize: '14px', fontWeight: '600', marginBottom: '8px' }}>
-                        栄養素プレビュー
+                        栁E��素プレビュー
                       </p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {nutrientGauges.map((config) => (
@@ -2183,8 +2182,7 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
                       onClick={() => setIsIngredientMode(true)}
                       className="recipe-screen-modal-cancel"
                     >
-                      材料に戻る
-                    </button>
+                      材料に戻めE                    </button>
                     <button
                       onClick={() => {
                         setShowCreateModal(false);
@@ -2208,3 +2206,4 @@ export default function RecipeScreen({ onBack }: RecipeScreenProps) {
     </div>
   );
 }
+

@@ -1,144 +1,144 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Primal Logic - テスト項目29以降の自動テスト', () => {
+test.describe('CarnivOS - チE��ト頁E��29以降�E自動テスチE, () => {
   
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     
-    // 同意画面とオンボーディングをスキップ（既に同意済みの場合）
+    // 同意画面とオンボ�EチE��ングをスキチE�E�E�既に同意済みの場合！E
     const consentAccepted = await page.evaluate(() => {
       return localStorage.getItem('primal_logic_consent_accepted');
     });
     
     if (!consentAccepted) {
-      // 同意画面が表示されている場合、同意する
+      // 同意画面が表示されてぁE��場合、同意すめE
       const privacyCheckbox = page.locator('input[type="checkbox"]').first();
       const termsCheckbox = page.locator('input[type="checkbox"]').nth(1);
       
       if (await privacyCheckbox.isVisible()) {
         await privacyCheckbox.check();
         await termsCheckbox.check();
-        await page.getByText('同意して続ける').click();
+        await page.getByText('同意して続けめE).click();
         await page.waitForLoadState('networkidle');
       }
     }
   });
 
   // ============================================
-  // AIチャット機能（29-30）
+  // AIチャチE��機�E�E�E9-30�E�E
   // ============================================
 
-  test('29: Todoアクションが動作する（あれば）', async ({ page }) => {
-    // AIチャットを開く
+  test('29: Todoアクションが動作する（あれ�E�E�E, async ({ page }) => {
+    // AIチャチE��を開ぁE
     const aiChatButton = page.locator('.ai-chat-fab-button');
     await expect(aiChatButton).toBeVisible();
     await aiChatButton.click();
     
-    // チャットUIが表示されるまで待つ
+    // チャチE��UIが表示されるまで征E��
     await page.waitForSelector('.ai-chat-modal, .ai-chat-bubble', { timeout: 5000 });
     
-    // メッセージを送信（Todoが返される可能性があるメッセージ）
+    // メチE��ージを送信�E�Eodoが返される可能性があるメチE��ージ�E�E
     const chatInput = page.locator('#chat-input-field, .ai-chat-textarea');
     if (await chatInput.isVisible()) {
-      await chatInput.fill('牛肉を200g追加してください');
+      await chatInput.fill('牛肉めE00g追加してください');
       await page.getByText('送信').click();
       
-      // AI応答を待つ（最大10秒）
+      // AI応答を征E���E�最大10秒！E
       await page.waitForTimeout(10000);
       
-      // Todoカードが表示されるか確認
+      // Todoカードが表示されるか確誁E
       const todoCard = page.locator('.ai-chat-todo-card');
       if (await todoCard.isVisible({ timeout: 5000 }).catch(() => false)) {
-        // Todoアクションボタンが存在するか確認
+        // Todoアクションボタンが存在するか確誁E
         const todoActionButton = page.locator('.ai-chat-todo-action-button');
         if (await todoActionButton.isVisible({ timeout: 2000 }).catch(() => false)) {
-          // Todoアクションボタンがクリック可能か確認
+          // TodoアクションボタンがクリチE��可能か確誁E
           await expect(todoActionButton.first()).toBeVisible();
         }
       }
     }
   });
 
-  test('30: チャットを閉じられる', async ({ page }) => {
-    // AIチャットを開く
+  test('30: チャチE��を閉じられる', async ({ page }) => {
+    // AIチャチE��を開ぁE
     const aiChatButton = page.locator('.ai-chat-fab-button');
     await expect(aiChatButton).toBeVisible();
     await aiChatButton.click();
     
-    // チャットUIが表示されるまで待つ
+    // チャチE��UIが表示されるまで征E��
     await page.waitForSelector('.ai-chat-modal, .ai-chat-bubble', { timeout: 5000 });
     
-    // 閉じるボタンをクリック
+    // 閉じる�EタンをクリチE��
     const closeButton = page.locator('.ai-chat-close-button, .ai-chat-bubble-close-button');
     await expect(closeButton).toBeVisible();
     await closeButton.click();
     
-    // チャットUIが非表示になることを確認
+    // チャチE��UIが非表示になることを確誁E
     await expect(page.locator('.ai-chat-modal, .ai-chat-bubble')).not.toBeVisible({ timeout: 3000 });
   });
 
   // ============================================
-  // その他画面機能（31-45）
+  // そ�E他画面機�E�E�E1-45�E�E
   // ============================================
 
-  test('31: その他画面（Labs）に遷移できる', async ({ page }) => {
-    // 下部ナビゲーションの「その他」ボタンをクリック
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+  test('31: そ�E他画面�E�Eabs�E�に遷移できる', async ({ page }) => {
+    // 下部ナビゲーションの「その他」�EタンをクリチE��
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
     
-    // Labs画面が表示されることを確認
+    // Labs画面が表示されることを確誁E
     await expect(page.locator('.labs-screen-container, [class*="labs"], [class*="Labs"]').first()).toBeVisible({ timeout: 10000 });
   });
 
-  test('32: Bio-Tunerボタンが表示される', async ({ page }) => {
+  test('32: Bio-Tunerボタンが表示されめE, async ({ page }) => {
     // Labs画面に遷移
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForSelector('.labs-screen-container, [class*="labs"]', { timeout: 10000 });
     
-    // Bio-Tunerボタンが表示されることを確認
+    // Bio-Tunerボタンが表示されることを確誁E
     await expect(page.getByText(/Bio-Tuner/i)).toBeVisible({ timeout: 10000 });
   });
 
-  test('33: Bio-Tunerボタンをタップして入力画面に遷移できる', async ({ page }) => {
+  test('33: Bio-TunerボタンをタチE�Eして入力画面に遷移できる', async ({ page }) => {
     // Labs画面に遷移
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForSelector('.labs-screen-container, [class*="labs"]', { timeout: 10000 });
     
-    // Bio-Tunerボタンをクリック
+    // Bio-TunerボタンをクリチE��
     const bioTunerButton = page.getByText(/Bio-Tuner/i);
     await bioTunerButton.click();
     
-    // 入力画面に遷移することを確認（画面遷移のイベントを待つ）
+    // 入力画面に遷移することを確認（画面遷移のイベントを征E���E�E
     await page.waitForTimeout(1000);
-    // 入力画面の要素が表示されることを確認（実際の要素に合わせて調整が必要）
+    // 入力画面の要素が表示されることを確認（実際の要素に合わせて調整が忁E��E��E
   });
 
-  test('34-36: 日記機能が表示・入力・保存できる', async ({ page }) => {
+  test('34-36: 日記機�Eが表示・入力�E保存できる', async ({ page }) => {
     // Labs画面に遷移
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForSelector('.labs-screen-container, [class*="labs"]', { timeout: 10000 });
     
-    // 日記機能が表示されることを確認
-    const diarySection = page.getByText(/日記/i);
+    // 日記機�Eが表示されることを確誁E
+    const diarySection = page.getByText(/日訁Ei);
     if (await diarySection.isVisible({ timeout: 5000 }).catch(() => false)) {
-      // 日記入力ができることを確認
-      const diaryInput = page.locator('textarea, input[type="text"]').filter({ hasText: /日記|diary/i });
+      // 日記�E力ができることを確誁E
+      const diaryInput = page.locator('textarea, input[type="text"]').filter({ hasText: /日訁Ediary/i });
       if (await diaryInput.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await diaryInput.fill('テスト日記');
-        // 保存ボタンをクリック
-        const saveButton = page.getByText(/保存|Save/i);
+        await diaryInput.fill('チE��ト日訁E);
+        // 保存�EタンをクリチE��
+        const saveButton = page.getByText(/保孁ESave/i);
         if (await saveButton.isVisible({ timeout: 2000 }).catch(() => false)) {
           await saveButton.click();
         }
@@ -146,73 +146,73 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
     }
   });
 
-  test('37-38: 習慣トラッカーが表示・動作する', async ({ page }) => {
+  test('37-38: 習�EトラチE��ーが表示・動作すめE, async ({ page }) => {
     // Labs画面に遷移
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForSelector('.labs-screen-container, [class*="labs"]', { timeout: 10000 });
     
-    // 習慣トラッカーが表示されることを確認
-    const streakTracker = page.getByText(/習慣トラッカー|Streak/i);
+    // 習�EトラチE��ーが表示されることを確誁E
+    const streakTracker = page.getByText(/習�EトラチE��ー|Streak/i);
     if (await streakTracker.isVisible({ timeout: 5000 }).catch(() => false)) {
-      // 習慣トラッカーが動作することを確認
+      // 習�EトラチE��ーが動作することを確誁E
       await expect(streakTracker).toBeVisible();
     }
   });
 
-  test('39-40: Doctor Defenseが表示・動作する', async ({ page }) => {
+  test('39-40: Doctor Defenseが表示・動作すめE, async ({ page }) => {
     // Labs画面に遷移
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForSelector('.labs-screen-container, [class*="labs"]', { timeout: 10000 });
     
-    // Doctor Defenseが表示されることを確認
-    const doctorDefense = page.getByText(/Doctor Defense|医者への説明/i);
+    // Doctor Defenseが表示されることを確誁E
+    const doctorDefense = page.getByText(/Doctor Defense|医老E��の説昁Ei);
     if (await doctorDefense.isVisible({ timeout: 5000 }).catch(() => false)) {
       await doctorDefense.click();
       
-      // 血液検査値入力が表示されることを確認
+      // 血液検査値入力が表示されることを確誁E
       await page.waitForTimeout(1000);
-      // 実際の要素に合わせて調整が必要
+      // 実際の要素に合わせて調整が忁E��E
     }
   });
 
-  test('41-42: Logic Armorが表示・動作する', async ({ page }) => {
+  test('41-42: Logic Armorが表示・動作すめE, async ({ page }) => {
     // Labs画面に遷移
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForSelector('.labs-screen-container, [class*="labs"]', { timeout: 10000 });
     
-    // Logic Armorが表示されることを確認
-    const logicArmor = page.getByText(/Logic Armor|理論武装/i);
+    // Logic Armorが表示されることを確誁E
+    const logicArmor = page.getByText(/Logic Armor|琁E��武裁Ei);
     if (await logicArmor.isVisible({ timeout: 5000 }).catch(() => false)) {
       await logicArmor.click();
       await page.waitForTimeout(1000);
     }
   });
 
-  test('43-45: Tips機能が表示・保存できる', async ({ page }) => {
+  test('43-45: Tips機�Eが表示・保存できる', async ({ page }) => {
     // Labs画面に遷移
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForSelector('.labs-screen-container, [class*="labs"]', { timeout: 10000 });
     
-    // Tips機能が表示されることを確認
-    const tips = page.getByText(/Tips|ヒント/i);
+    // Tips機�Eが表示されることを確誁E
+    const tips = page.getByText(/Tips|ヒンチEi);
     if (await tips.isVisible({ timeout: 5000 }).catch(() => false)) {
-      // Tipsが表示されることを確認
+      // Tipsが表示されることを確誁E
       await expect(tips).toBeVisible();
       
-      // Tips保存ボタンが存在するか確認
-      const saveButton = page.locator('button').filter({ hasText: /保存|お気に入り/i });
+      // Tips保存�Eタンが存在するか確誁E
+      const saveButton = page.locator('button').filter({ hasText: /保孁Eお気に入めEi });
       if (await saveButton.isVisible({ timeout: 2000 }).catch(() => false)) {
         await expect(saveButton.first()).toBeVisible();
       }
@@ -220,50 +220,50 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
   });
 
   // ============================================
-  // 設定画面機能（46-60）
+  // 設定画面機�E�E�E6-60�E�E
   // ============================================
 
   test('46: 設定画面に遷移できる', async ({ page }) => {
-    // 下部ナビゲーションの「設定」ボタンをクリック
-    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙️/ });
+    // 下部ナビゲーションの「設定」�EタンをクリチE��
+    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙︁E });
     await expect(settingsButton).toBeVisible();
     await settingsButton.click();
     
-    // 設定画面が表示されることを確認
+    // 設定画面が表示されることを確誁E
     await expect(page.locator('.settings-screen-container, [class*="settings"]')).toBeVisible({ timeout: 5000 });
   });
 
-  test('47-49: プロフィール設定が表示・入力・保存できる', async ({ page }) => {
+  test('47-49: プロフィール設定が表示・入力�E保存できる', async ({ page }) => {
     // 設定画面に遷移
-    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙️/ });
+    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙︁E });
     await expect(settingsButton).toBeVisible({ timeout: 10000 });
     await settingsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForTimeout(1000);
     
-    // プロフィール設定が表示されることを確認
+    // プロフィール設定が表示されることを確誁E
     const profileLink = page.getByText(/プロフィール|Profile/i);
     if (await profileLink.isVisible({ timeout: 5000 }).catch(() => false)) {
       await profileLink.click();
       await page.waitForTimeout(1000);
       
-      // 基本情報入力ができることを確認
+      // 基本惁E��入力ができることを確誁E
       const genderSelect = page.locator('select, button').filter({ hasText: /性別|Gender/i });
       if (await genderSelect.isVisible({ timeout: 2000 }).catch(() => false)) {
         await expect(genderSelect).toBeVisible();
       }
       
-      // 保存ボタンが存在するか確認
-      const saveButton = page.getByText(/保存|Save/i);
+      // 保存�Eタンが存在するか確誁E
+      const saveButton = page.getByText(/保孁ESave/i);
       if (await saveButton.isVisible({ timeout: 2000 }).catch(() => false)) {
         await expect(saveButton).toBeVisible();
       }
     }
   });
 
-  test('50: プロフィール保存後、ホーム画面の目標値が更新される', async ({ page }) => {
+  test('50: プロフィール保存後、�Eーム画面の目標値が更新されめE, async ({ page }) => {
     // プロフィール設定で性別を変更
-    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙️/ });
+    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙︁E });
     await expect(settingsButton).toBeVisible({ timeout: 10000 });
     await settingsButton.click();
     await page.waitForTimeout(2000);
@@ -274,39 +274,39 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
       await profileLink.click();
       await page.waitForTimeout(1000);
       
-      // 設定を変更して保存（実際の実装に合わせて調整が必要）
-      const saveButton = page.getByText(/保存|Save/i);
+      // 設定を変更して保存（実際の実裁E��合わせて調整が忁E��E��E
+      const saveButton = page.getByText(/保孁ESave/i);
       if (await saveButton.isVisible({ timeout: 2000 }).catch(() => false)) {
         await saveButton.click();
         await page.waitForTimeout(1000);
         
-        // ホーム画面に戻る
-        const homeButton = page.locator('button.app-nav-button').filter({ hasText: /ホーム|Home|🏠/ });
+        // ホ�Eム画面に戻めE
+        const homeButton = page.locator('button.app-nav-button').filter({ hasText: /ホ�Eム|Home|🏠/ });
         await expect(homeButton).toBeVisible({ timeout: 10000 });
         await homeButton.click();
         await page.waitForTimeout(2000);
         await page.waitForTimeout(1000);
         
-        // 目標値が更新されていることを確認（実際の実装に合わせて調整が必要）
+        // 目標値が更新されてぁE��ことを確認（実際の実裁E��合わせて調整が忁E��E��E
       }
     }
   });
 
-  test('51-52: 栄養素目標値設定が表示・変更できる', async ({ page }) => {
+  test('51-52: 栁E��素目標値設定が表示・変更できる', async ({ page }) => {
     // 設定画面に遷移
-    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙️/ });
+    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙︁E });
     await expect(settingsButton).toBeVisible({ timeout: 10000 });
     await settingsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForTimeout(1000);
     
-    // 栄養素目標値設定が表示されることを確認
-    const nutrientTargetLink = page.getByText(/栄養素目標値|Nutrient Target/i);
+    // 栁E��素目標値設定が表示されることを確誁E
+    const nutrientTargetLink = page.getByText(/栁E��素目標値|Nutrient Target/i);
     if (await nutrientTargetLink.isVisible({ timeout: 5000 }).catch(() => false)) {
       await nutrientTargetLink.click();
       await page.waitForTimeout(1000);
       
-      // 栄養素目標値を変更できることを確認
+      // 栁E��素目標値を変更できることを確誁E
       const targetInput = page.locator('input[type="number"]').first();
       if (await targetInput.isVisible({ timeout: 2000 }).catch(() => false)) {
         await expect(targetInput).toBeVisible();
@@ -314,76 +314,76 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
     }
   });
 
-  test('53-55: 表示設定が表示・変更・反映される', async ({ page }) => {
+  test('53-55: 表示設定が表示・変更・反映されめE, async ({ page }) => {
     // 設定画面に遷移
-    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙️/ });
+    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|⚙︁E });
     await expect(settingsButton).toBeVisible({ timeout: 10000 });
     await settingsButton.click();
     await page.waitForTimeout(2000);
     await page.waitForTimeout(1000);
     
-    // 表示設定が表示されることを確認
+    // 表示設定が表示されることを確誁E
     const displaySettings = page.getByText(/表示設定|Display/i);
     if (await displaySettings.isVisible({ timeout: 5000 }).catch(() => false)) {
       await displaySettings.click();
       await page.waitForTimeout(1000);
       
-      // 栄養素の表示/非表示を切り替えられることを確認
+      // 栁E��素の表示/非表示を�Eり替えられることを確誁E
       const toggleButton = page.locator('input[type="checkbox"], button[role="switch"]').first();
       if (await toggleButton.isVisible({ timeout: 2000 }).catch(() => false)) {
         const initialState = await toggleButton.isChecked();
         await toggleButton.click();
         await page.waitForTimeout(500);
         
-        // ホーム画面に戻って反映を確認
-        const homeButton = page.locator('button.app-nav-button').filter({ hasText: /ホーム|Home|🏠/ });
+        // ホ�Eム画面に戻って反映を確誁E
+        const homeButton = page.locator('button.app-nav-button').filter({ hasText: /ホ�Eム|Home|🏠/ });
         await expect(homeButton).toBeVisible({ timeout: 10000 });
         await homeButton.click();
         await page.waitForTimeout(2000);
         await page.waitForTimeout(1000);
         
-        // 表示設定が反映されていることを確認（実際の実装に合わせて調整が必要）
+        // 表示設定が反映されてぁE��ことを確認（実際の実裁E��合わせて調整が忁E��E��E
       }
     }
   });
 
   // ============================================
-  // データ保存・読み込み（61-70）
+  // チE�Eタ保存�E読み込み�E�E1-70�E�E
   // ============================================
 
-  test('61: データ保存 - 食品追加後、リロードしてもデータが残っている', async ({ page }) => {
-    // ホーム画面で食品を追加
+  test('61: チE�Eタ保孁E- 食品追加後、リロードしてもデータが残ってぁE��', async ({ page }) => {
+    // ホ�Eム画面で食品を追加
     const addFoodButton = page.getByText('+ 食品を追加');
     if (await addFoodButton.isVisible({ timeout: 5000 }).catch(() => false)) {
       await addFoodButton.click();
       await page.waitForTimeout(1000);
       
-      // 食品を選択して追加（簡易版、実際の実装に合わせて調整が必要）
-      // ここではデータが保存されることを前提とする
+      // 食品を選択して追加�E�簡易版、実際の実裁E��合わせて調整が忁E��E��E
+      // ここではチE�Eタが保存されることを前提とする
     }
     
-    // ページをリロード
+    // ペ�EジをリローチE
     await page.reload();
     await page.waitForLoadState('networkidle');
     
-    // データが残っていることを確認（実際の実装に合わせて調整が必要）
-    // 例: 追加した食品が表示されることを確認
+    // チE�Eタが残ってぁE��ことを確認（実際の実裁E��合わせて調整が忁E��E��E
+    // 侁E 追加した食品が表示されることを確誁E
   });
 
-  test('62: データ読み込み - アプリを閉じて再度開いた時、データが読み込まれる', async ({ page, context }) => {
-    // データを追加（簡易版）
+  test('62: チE�Eタ読み込み - アプリを閉じて再度開いた時、データが読み込まれる', async ({ page, context }) => {
+    // チE�Eタを追加�E�簡易版�E�E
     // ...
     
-    // 新しいページで開く（アプリを閉じて再度開くシミュレーション）
+    // 新しいペ�Eジで開く�E�アプリを閉じて再度開くシミュレーション�E�E
     const newPage = await context.newPage();
     await newPage.goto('/');
     await newPage.waitForLoadState('networkidle');
     
-    // データが読み込まれることを確認（実際の実装に合わせて調整が必要）
+    // チE�Eタが読み込まれることを確認（実際の実裁E��合わせて調整が忁E��E��E
     await newPage.close();
   });
 
-  test('65-66: 期間選択が動作し、期間別データが表示される', async ({ page }) => {
+  test('65-66: 期間選択が動作し、期間別チE�Eタが表示されめE, async ({ page }) => {
     // 履歴画面に遷移
     const historyButton = page.locator('button.app-nav-button').filter({ hasText: /履歴|History|📊/ });
     await expect(historyButton).toBeVisible({ timeout: 10000 });
@@ -391,35 +391,35 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
     await page.waitForTimeout(2000);
     await page.waitForTimeout(2000);
     
-    // 期間選択が表示されることを確認
-    const periodSelect = page.locator('button, select').filter({ hasText: /今日|週|月|全期間/i });
+    // 期間選択が表示されることを確誁E
+    const periodSelect = page.locator('button, select').filter({ hasText: /今日|週|朁E全期間/i });
     if (await periodSelect.isVisible({ timeout: 5000 }).catch(() => false)) {
-      // 期間を選択
+      // 期間を選抁E
       await periodSelect.first().click();
       await page.waitForTimeout(1000);
       
-      // 期間別データが表示されることを確認（実際の実装に合わせて調整が必要）
+      // 期間別チE�Eタが表示されることを確認（実際の実裁E��合わせて調整が忁E��E��E
     }
   });
 
   // ============================================
-  // UI/UX（71-85）
+  // UI/UX�E�E1-85�E�E
   // ============================================
 
-  test('71: レスポンシブ表示 - iPhoneの画面サイズに適切に表示される', async ({ page }) => {
-    // iPhone 15の画面サイズに設定
+  test('71: レスポンシブ表示 - iPhoneの画面サイズに適刁E��表示されめE, async ({ page }) => {
+    // iPhone 15の画面サイズに設宁E
     await page.setViewportSize({ width: 393, height: 852 });
     await page.reload();
     await page.waitForLoadState('networkidle');
     
-    // ホーム画面が適切に表示されることを確認
+    // ホ�Eム画面が適刁E��表示されることを確誁E
     await expect(page.locator('.home-screen-container, [class*="home"]')).toBeVisible();
     
-    // 要素が画面からはみ出していないことを確認（スクロール可能な場合はOK）
+    // 要素が画面からはみ出してぁE��ぁE��とを確認（スクロール可能な場合�EOK�E�E
   });
 
-  test('72: タッチターゲット - ボタンがタッチしやすいサイズ（44px以上）である', async ({ page }) => {
-    // ボタンのサイズを確認
+  test('72: タチE��ターゲチE�� - ボタンがタチE��しやすいサイズ�E�E4px以上）である', async ({ page }) => {
+    // ボタンのサイズを確誁E
     const buttons = page.locator('button.app-nav-button');
     const count = await buttons.count();
     
@@ -427,40 +427,40 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
       const button = buttons.nth(i);
       const box = await button.boundingBox();
       if (box) {
-        // タッチターゲットが44px以上であることを確認
+        // タチE��ターゲチE��ぁE4px以上であることを確誁E
         expect(box.height).toBeGreaterThanOrEqual(44);
         expect(box.width).toBeGreaterThanOrEqual(44);
       }
     }
   });
 
-  test('73-74: スクロールができる・スムーズに動作する', async ({ page }) => {
-    // 長いコンテンツがある画面に遷移
+  test('73-74: スクロールができる・スムーズに動作すめE, async ({ page }) => {
+    // 長ぁE��ンチE��チE��ある画面に遷移
     const historyButton = page.locator('button.app-nav-button').filter({ hasText: /履歴|History|📊/ });
     await expect(historyButton).toBeVisible({ timeout: 10000 });
     await historyButton.click();
     await page.waitForTimeout(2000);
     await page.waitForTimeout(1000);
     
-    // スクロールができることを確認
+    // スクロールができることを確誁E
     await page.evaluate(() => {
       window.scrollTo(0, 500);
     });
     await page.waitForTimeout(500);
     
-    // スクロール位置が変更されていることを確認
+    // スクロール位置が変更されてぁE��ことを確誁E
     const scrollY = await page.evaluate(() => window.scrollY);
     expect(scrollY).toBeGreaterThan(0);
   });
 
-  test('75: ローディング表示が適切', async ({ page }) => {
-    // データ読み込み中のローディング表示を確認
-    // 実際の実装に合わせて調整が必要
-    // 例: データを読み込む際にローディング表示が表示されることを確認
+  test('75: ローチE��ング表示が適刁E, async ({ page }) => {
+    // チE�Eタ読み込み中のローチE��ング表示を確誁E
+    // 実際の実裁E��合わせて調整が忁E��E
+    // 侁E チE�Eタを読み込む際にローチE��ング表示が表示されることを確誁E
   });
 
-  test('76: 空データ表示が適切', async ({ page }) => {
-    // データがない状態で画面を確認
+  test('76: 空チE�Eタ表示が適刁E, async ({ page }) => {
+    // チE�EタがなぁE��態で画面を確誁E
     // localStorageをクリア
     await page.evaluate(() => {
       localStorage.clear();
@@ -468,25 +468,25 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
     await page.reload();
     await page.waitForLoadState('networkidle');
     
-    // 空データ表示が適切に表示されることを確認（実際の実装に合わせて調整が必要）
-    // 例: 「データがありません」などのメッセージが表示されることを確認
+    // 空チE�Eタ表示が適刁E��表示されることを確認（実際の実裁E��合わせて調整が忁E��E��E
+    // 侁E 「データがありません」などのメチE��ージが表示されることを確誁E
   });
 
   // ============================================
-  // パフォーマンス（86-95）
+  // パフォーマンス�E�E6-95�E�E
   // ============================================
 
-  test('86: 初回読み込み速度 - 3秒以内', async ({ page }) => {
+  test('86: 初回読み込み速度 - 3秒以冁E, async ({ page }) => {
     const startTime = Date.now();
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     const loadTime = Date.now() - startTime;
     
-    // 初回読み込みが3秒以内であることを確認
+    // 初回読み込みぁE秒以冁E��あることを確誁E
     expect(loadTime).toBeLessThan(3000);
   });
 
-  test('87: 画面遷移速度 - 1秒以内', async ({ page }) => {
+  test('87: 画面遷移速度 - 1秒以冁E, async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     
@@ -498,11 +498,11 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
     await page.waitForSelector('[class*="history"]', { timeout: 5000 });
     const transitionTime = Date.now() - startTime;
     
-    // 画面遷移が1秒以内であることを確認
+    // 画面遷移ぁE秒以冁E��あることを確誁E
     expect(transitionTime).toBeLessThan(1000);
   });
 
-  test('88: 食品検索速度 - 2秒以内に完了', async ({ page }) => {
+  test('88: 食品検索速度 - 2秒以冁E��完亁E, async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
     
@@ -513,52 +513,52 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
       await page.waitForTimeout(2000);
       await page.waitForTimeout(1000);
       
-      // 食品検索を実行
+      // 食品検索を実衁E
       const searchInput = page.locator('input[type="search"], input[placeholder*="検索"]');
       if (await searchInput.isVisible({ timeout: 5000 }).catch(() => false)) {
         const startTime = Date.now();
         await searchInput.fill('牛肉');
-        await page.waitForTimeout(2000); // 検索結果が表示されるまで待つ
+        await page.waitForTimeout(2000); // 検索結果が表示されるまで征E��
         const searchTime = Date.now() - startTime;
         
-        // 食品検索が2秒以内に完了することを確認
+        // 食品検索ぁE秒以冁E��完亁E��ることを確誁E
         expect(searchTime).toBeLessThan(2000);
       }
     }
   });
 
   // ============================================
-  // Safari特有（96-100）
+  // Safari特有！E6-100�E�E
   // ============================================
 
-  test('98: ホーム画面に追加機能が動作する（PWA対応）', async ({ page }) => {
-    // PWAのmanifestが存在することを確認
+  test('98: ホ�Eム画面に追加機�Eが動作する！EWA対応！E, async ({ page }) => {
+    // PWAのmanifestが存在することを確誁E
     const manifestLink = page.locator('link[rel="manifest"]');
     await expect(manifestLink).toHaveAttribute('href', /manifest/);
     
-    // Apple Touch Iconが存在することを確認
+    // Apple Touch Iconが存在することを確誁E
     const appleTouchIcon = page.locator('link[rel="apple-touch-icon"]');
     await expect(appleTouchIcon).toHaveCount(1);
   });
 
   // ============================================
-  // エラーハンドリング（101-110）
+  // エラーハンドリング�E�E01-110�E�E
   // ============================================
 
-  test('103: 入力検証 - 不正な入力（負の数、空文字）が拒否される', async ({ page }) => {
-    // 入力画面で不正な入力を試す
+  test('103: 入力検証 - 不正な入力（負の数、空斁E��）が拒否されめE, async ({ page }) => {
+    // 入力画面で不正な入力を試ぁE
     const addFoodButton = page.getByText('+ 食品を追加');
     if (await addFoodButton.isVisible({ timeout: 5000 }).catch(() => false)) {
       await addFoodButton.click();
       await page.waitForTimeout(1000);
       
-      // 数量入力に負の数を入力
+      // 数量�E力に負の数を�E劁E
       const amountInput = page.locator('input[type="number"]').filter({ hasText: /量|amount/i });
       if (await amountInput.isVisible({ timeout: 5000 }).catch(() => false)) {
         await amountInput.fill('-100');
         await page.waitForTimeout(500);
         
-        // エラーメッセージが表示されるか、値が拒否されることを確認
+        // エラーメチE��ージが表示されるか、値が拒否されることを確誁E
         const value = await amountInput.inputValue();
         expect(parseFloat(value)).toBeGreaterThanOrEqual(0);
       }
@@ -566,17 +566,17 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
   });
 
   // ============================================
-  // 特殊機能（111-120）
+  // 特殊機�E�E�E11-120�E�E
   // ============================================
 
-  test('111: 手動入力機能が動作する', async ({ page }) => {
+  test('111: 手動入力機�Eが動作すめE, async ({ page }) => {
     // 入力画面に遷移
     const addFoodButton = page.getByText('+ 食品を追加');
     if (await addFoodButton.isVisible({ timeout: 5000 }).catch(() => false)) {
       await addFoodButton.click();
       await page.waitForTimeout(1000);
       
-      // 手動入力ボタンが表示されることを確認
+      // 手動入力�Eタンが表示されることを確誁E
       const manualInputButton = page.getByText(/手動入力|Manual/i);
       if (await manualInputButton.isVisible({ timeout: 5000 }).catch(() => false)) {
         await expect(manualInputButton).toBeVisible();
@@ -584,11 +584,12 @@ test.describe('Primal Logic - テスト項目29以降の自動テスト', () => 
     }
   });
 
-  test('114-116: Recovery Protocolが表示・生成・設定できる', async ({ page }) => {
-    // Recovery Protocolが表示されることを確認
-    // 実際の実装に合わせて調整が必要
-    // 例: 違反食品を追加した際にRecovery Protocolが自動生成されることを確認
+  test('114-116: Recovery Protocolが表示・生�E・設定できる', async ({ page }) => {
+    // Recovery Protocolが表示されることを確誁E
+    // 実際の実裁E��合わせて調整が忁E��E
+    // 侁E 違反食品を追加した際にRecovery Protocolが�E動生成されることを確誁E
   });
 
 });
+
 

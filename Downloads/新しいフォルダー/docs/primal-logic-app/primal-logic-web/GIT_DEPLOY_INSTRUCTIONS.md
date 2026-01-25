@@ -1,25 +1,25 @@
-# Gitデプロイ手順
+# GitチE�Eロイ手頁E
 
-## エクスプローラーからPowerShellを起動
+## エクスプローラーからPowerShellを起勁E
 
-1. エクスプローラーを開く（Windowsキー + E）
-2. 以下のパスに移動：
+1. エクスプローラーを開く！Eindowsキー + E�E�E
+2. 以下�Eパスに移動！E
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-3. アドレスバーに上記のパスを貼り付けてEnter
-4. ディレクトリ内で、Shiftキーを押しながら右クリック
-5. 「PowerShellウィンドウをここで開く」を選択
+3. アドレスバ�Eに上記�Eパスを貼り付けてEnter
+4. チE��レクトリ冁E��、Shiftキーを押しながら右クリチE��
+5. 「PowerShellウィンドウをここで開く」を選抁E
 
-## Git操作
+## Git操佁E
 
-### 1. Gitリポジトリの確認
+### 1. Gitリポジトリの確誁E
 
 ```powershell
 git status
 ```
 
-### 2. Gitリポジトリでない場合（初回のみ）
+### 2. GitリポジトリでなぁE��合（�E回�Eみ�E�E
 
 ```powershell
 git init
@@ -27,7 +27,7 @@ git add .
 git commit -m "Update: UI improvements and AI chat enhancements"
 ```
 
-### 3. リモートリポジトリがある場合
+### 3. リモートリポジトリがある場吁E
 
 ```powershell
 git add .
@@ -35,9 +35,9 @@ git commit -m "Update: UI improvements and AI chat enhancements"
 git push
 ```
 
-### 4. リモートリポジトリがない場合
+### 4. リモートリポジトリがなぁE��吁E
 
-GitHubなどにリポジトリを作成してから：
+GitHubなどにリポジトリを作�Eしてから�E�E
 
 ```powershell
 git remote add origin <リポジトリのURL>
@@ -47,5 +47,6 @@ git push -u origin main
 
 ## Netlify自動デプロイ
 
-NetlifyがGitリポジトリと連携している場合、`git push`を実行すると自動的にデプロイが開始されます。
+NetlifyがGitリポジトリと連携してぁE��場合、`git push`を実行すると自動的にチE�Eロイが開始されます、E
+
 

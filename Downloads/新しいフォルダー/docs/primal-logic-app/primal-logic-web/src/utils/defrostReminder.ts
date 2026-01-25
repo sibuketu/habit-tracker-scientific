@@ -1,11 +1,11 @@
 /**
- * Primal Logic - Defrost Reminder Utility (Web版)
+ * CarnivoreOS - Defrost Reminder Utility (Web牁E
  *
  * Phase 5: Defrost Reminder (Inventory Lite)
  * Browser Notification APIを使用
  */
 
-import type { RecoveryProtocol, FoodItem, DefrostReminder } from '../types';
+import type { RecoveryProtocol, FoodItem, DefrostReminder } from '../types/index';
 import { logError } from './errorHandler';
 
 /**
@@ -140,3 +140,4 @@ export async function getScheduledDefrostReminders(): Promise<DefrostReminder[]>
     return [];
   }
 }
+

@@ -1,8 +1,6 @@
 /**
- * 画像生成サービス（自動化版 - 無料API使用）
- *
- * Replicate API（Stable Diffusion）を使用して自動生成
- * 無料枠あり、API経由で完全自動化可能
+ * 画像生成サービス�E��E動化牁E- 無料API使用�E�E *
+ * Replicate API�E�Etable Diffusion�E�を使用して自動生戁E * 無料枠あり、API経由で完�E自動化可能
  */
 
 import { logError } from '../utils/errorHandler';
@@ -10,19 +8,18 @@ import { logError } from '../utils/errorHandler';
 const REPLICATE_API_TOKEN = import.meta.env.VITE_REPLICATE_API_TOKEN;
 
 /**
- * Replicate API（Stable Diffusion）で画像を自動生成
- *
- * @param prompt 画像生成プロンプト
- * @returns 生成された画像のURL
+ * Replicate API�E�Etable Diffusion�E�で画像を自動生戁E *
+ * @param prompt 画像生成�Eロンプト
+ * @returns 生�Eされた画像�EURL
  */
 export async function generateImageAuto(prompt: string): Promise<string> {
   if (!REPLICATE_API_TOKEN) {
     throw new Error(
-      'Replicate APIトークンが設定されていません。\n' +
-        'VITE_REPLICATE_API_TOKEN を .env ファイルに設定してください。\n\n' +
-        '取得方法:\n' +
-        '1. https://replicate.com/ でアカウント作成（無料）\n' +
-        '2. https://replicate.com/account/api-tokens でAPIトークンを取得\n' +
+      'Replicate APIト�Eクンが設定されてぁE��せん、En' +
+        'VITE_REPLICATE_API_TOKEN めE.env ファイルに設定してください、En\n' +
+        '取得方況E\n' +
+        '1. https://replicate.com/ でアカウント作�E�E�無料）\n' +
+        '2. https://replicate.com/account/api-tokens でAPIト�Eクンを取得\n' +
         '3. .envファイルに追加: VITE_REPLICATE_API_TOKEN=r8_...'
     );
   }
@@ -32,8 +29,7 @@ export async function generateImageAuto(prompt: string): Promise<string> {
       console.log('Generating image with Replicate API:', prompt);
     }
 
-    // Replicate APIでStable Diffusionを実行
-    const response = await fetch('https://api.replicate.com/v1/predictions', {
+    // Replicate APIでStable Diffusionを実衁E    const response = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -61,11 +57,9 @@ export async function generateImageAuto(prompt: string): Promise<string> {
     const prediction = await response.json();
     const predictionId = prediction.id;
 
-    // 生成が完了するまで待機（ポーリング）
-    let result = prediction;
+    // 生�Eが完亁E��るまで征E��（�Eーリング�E�E    let result = prediction;
     while (result.status === 'starting' || result.status === 'processing') {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1秒待機
-
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // 1秒征E��E
       const statusResponse = await fetch(
         `https://api.replicate.com/v1/predictions/${predictionId}`,
         {
@@ -85,7 +79,7 @@ export async function generateImageAuto(prompt: string): Promise<string> {
       }
       return imageUrl;
     } else {
-      throw new Error(`画像生成に失敗しました: ${result.error || '不明なエラー'}`);
+      throw new Error(`画像生成に失敗しました: ${result.error || '不�Eなエラー'}`);
     }
   } catch (error) {
     logError(error, { component: 'imageGenerationServiceAuto', action: 'generateImageAuto' });
@@ -94,8 +88,7 @@ export async function generateImageAuto(prompt: string): Promise<string> {
 }
 
 /**
- * アプリアイコンを自動生成（Replicate API使用）
- */
+ * アプリアイコンを�E動生成！Eeplicate API使用�E�E */
 export async function generateAppIconAuto(
   style: 1 | 2 | 3,
   variation: 1 | 2 | 3 | 4 = 1
@@ -105,8 +98,7 @@ export async function generateAppIconAuto(
 }
 
 /**
- * 複数のアプリアイコンを一括自動生成（10個）
- */
+ * 褁E��のアプリアイコンを一括自動生成！E0個！E */
 export async function generateMultipleAppIconsAuto(): Promise<
   Array<{ style: number; variation: number; url: string }>
 > {
@@ -117,8 +109,7 @@ export async function generateMultipleAppIconsAuto(): Promise<
     try {
       const url = await generateAppIconAuto(1, v as 1 | 2 | 3 | 4);
       results.push({ style: 1, variation: v, url });
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // APIレート制限対策
-    } catch (error) {
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // APIレート制限対筁E    } catch (error) {
       logError(error, {
         component: 'imageGenerationServiceAuto',
         action: 'generateMultipleAppIconsAuto',
@@ -164,8 +155,7 @@ export async function generateMultipleAppIconsAuto(): Promise<
 }
 
 /**
- * アプリアイコンのプロンプトを取得（共通関数）
- */
+ * アプリアイコンのプロンプトを取得（�E通関数�E�E */
 function getAppIconPrompt(style: 1 | 2 | 3, variation: 1 | 2 | 3 | 4): string {
   const prompts = {
     1: [
@@ -190,3 +180,4 @@ function getAppIconPrompt(style: 1 | 2 | 3, variation: 1 | 2 | 3 | 4): string {
   const index = Math.min(variation - 1, stylePrompts.length - 1);
   return stylePrompts[index];
 }
+

@@ -1,49 +1,42 @@
 /**
- * 画像生成サービス（無料版 - プロンプト生成のみ）
- *
- * 実際の画像生成は外部サービスで手動実行
- * 将来的に無料API（Replicate等）を統合可能
+ * 画像生成サービス�E�無料版 - プロンプト生�Eのみ�E�E *
+ * 実際の画像生成�E外部サービスで手動実衁E * 封E��皁E��無料API�E�Eeplicate等）を統合可能
  */
 
 import { logError } from '../utils/errorHandler';
 
-// 注意: DALL·E 3は有料のため、現在はプロンプト生成のみ
-// 実際の画像生成は手動で行うか、無料APIを使用
+// 注愁E DALL·E 3は有料のため、現在はプロンプト生�Eのみ
+// 実際の画像生成�E手動で行うか、無料APIを使用
 
 /**
- * 画像生成プロンプトを生成（無料版）
+ * 画像生成�Eロンプトを生成（無料版�E�E *
+ * 実際の画像生成�E手動で行うか、無料APIサービスを使用してください
  *
- * 実際の画像生成は手動で行うか、無料APIサービスを使用してください
- *
- * @param prompt 画像生成プロンプト
- * @param size 画像サイズ（デフォルト: "1024x1024"）
- * @returns プロンプト文字列（画像URLではない）
- */
+ * @param prompt 画像生成�Eロンプト
+ * @param size 画像サイズ�E�デフォルチE "1024x1024"�E�E * @returns プロンプト斁E���E�E�画像URLではなぁE��E */
 export async function generateImage(
   prompt: string,
   size: '1024x1024' | '1792x1024' | '1024x1792' = '1024x1024'
 ): Promise<string> {
-  // 無料版: プロンプトを返すだけ
-  // 実際の画像生成は以下のサービスで手動実行:
+  // 無料版: プロンプトを返すだぁE  // 実際の画像生成�E以下�Eサービスで手動実衁E
   // - https://replicate.com/ (Stable Diffusion - 無料枠あり)
-  // - https://huggingface.co/spaces/stabilityai/stable-diffusion (完全無料)
-  // - https://www.craiyon.com/ (無料)
+  // - https://huggingface.co/spaces/stabilityai/stable-diffusion (完�E無斁E
+  // - https://www.craiyon.com/ (無斁E
 
   if (import.meta.env.DEV) {
-    console.log('画像生成プロンプト:', prompt);
+    console.log('画像生成�Eロンプト:', prompt);
     console.log('サイズ:', size);
-    console.log('\nこのプロンプトを以下の無料サービスで使用してください:');
+    console.log('\nこ�Eプロンプトを以下�E無料サービスで使用してください:');
     console.log('- Replicate: https://replicate.com/');
     console.log('- Hugging Face: https://huggingface.co/spaces/stabilityai/stable-diffusion');
     console.log('- Craiyon: https://www.craiyon.com/');
   }
 
-  // プロンプトをクリップボードにコピーする機能を提供
-  if (navigator.clipboard) {
+  // プロンプトをクリチE�Eボ�Eドにコピ�Eする機�Eを提侁E  if (navigator.clipboard) {
     try {
       await navigator.clipboard.writeText(prompt);
       if (import.meta.env.DEV) {
-        console.log('プロンプトをクリップボードにコピーしました');
+        console.log('プロンプトをクリチE�Eボ�Eドにコピ�Eしました');
       }
     } catch (err) {
       logError(err, {
@@ -54,24 +47,21 @@ export async function generateImage(
     }
   }
 
-  // エラーをスローして、UI側で手動生成を案内
+  // エラーをスローして、UI側で手動生�Eを案�E
   throw new Error(
-    `💰 画像生成は有料APIのため、現在は自動生成できません。\n\n` +
-      `📋 生成されたプロンプト: ${prompt}\n\n` +
-      `✅ 以下の無料サービスで手動生成してください:\n` +
+    `💰 画像生成�E有料APIのため、現在は自動生成できません、En\n` +
+      `📋 生�Eされた�Eロンプト: ${prompt}\n\n` +
+      `✁E以下�E無料サービスで手動生�Eしてください:\n` +
       `- Replicate (Stable Diffusion): https://replicate.com/\n` +
       `- Hugging Face: https://huggingface.co/spaces/stabilityai/stable-diffusion\n` +
       `- Craiyon: https://www.craiyon.com/\n\n` +
-      `（プロンプトはクリップボードにコピーされています）`
+      `�E��EロンプトはクリチE�Eボ�Eドにコピ�EされてぁE��す）`
   );
 }
 
 /**
- * アプリアイコンを生成
- *
- * @param style アイコンのスタイル（1: ミートアイコン、2: 論理+肉、3: C文字+肉）
- * @param variation バリエーション番号（1-4）
- * @returns 生成された画像のURL
+ * アプリアイコンを生戁E *
+ * @param style アイコンのスタイル�E�E: ミ�Eトアイコン、E: 論理+肉、E: C斁E��E肉！E * @param variation バリエーション番号�E�E-4�E�E * @returns 生�Eされた画像�EURL
  */
 export async function generateAppIcon(
   style: 1 | 2 | 3,
@@ -82,8 +72,7 @@ export async function generateAppIcon(
 }
 
 /**
- * アプリアイコンのプロンプトを取得（内部関数）
- */
+ * アプリアイコンのプロンプトを取得（�E部関数�E�E */
 function getAppIconPrompt(style: 1 | 2 | 3, variation: 1 | 2 | 3 | 4): string {
   const prompts = {
     1: [
@@ -110,12 +99,10 @@ function getAppIconPrompt(style: 1 | 2 | 3, variation: 1 | 2 | 3 | 4): string {
 }
 
 /**
- * 複数のアプリアイコンプロンプトを一括生成（10個程度）
+ * 褁E��のアプリアイコンプロンプトを一括生�E�E�E0個程度�E�E *
+ * 無料版: プロンプトを生成するだけ。実際の画像生成�E手動で行う
  *
- * 無料版: プロンプトを生成するだけ。実際の画像生成は手動で行う
- *
- * @returns プロンプトの配列（エラーをスローしてプロンプトを表示）
- */
+ * @returns プロンプトの配�E�E�エラーをスローしてプロンプトを表示�E�E */
 export async function generateMultipleAppIcons(): Promise<
   Array<{ style: number; variation: number; url: string }>
 > {
@@ -140,7 +127,7 @@ export async function generateMultipleAppIcons(): Promise<
     allPrompts.push({ style: 3, variation: v, prompt });
   }
 
-  // すべてのプロンプトをクリップボードにコピー
+  // すべてのプロンプトをクリチE�Eボ�Eドにコピ�E
   const promptsText = allPrompts
     .map(
       (p, idx) => `${idx + 1}. スタイル${p.style} - バリエーション${p.variation}:\n${p.prompt}\n`
@@ -159,29 +146,29 @@ export async function generateMultipleAppIcons(): Promise<
     }
   }
 
-  // エラーとしてプロンプトを返す（UI側で表示）
-  throw new Error(
-    `💰 画像生成は有料APIのため、現在は自動生成できません。\n\n` +
-      `📋 以下の10個のプロンプトがクリップボードにコピーされました:\n\n` +
+  // エラーとしてプロンプトを返す�E�EI側で表示�E�E  throw new Error(
+    `💰 画像生成�E有料APIのため、現在は自動生成できません、En\n` +
+      `📋 以下�E10個�EプロンプトがクリチE�Eボ�Eドにコピ�Eされました:\n\n` +
       promptsText +
-      `\n✅ 無料で画像生成する方法:\n` +
+      `\n✁E無料で画像生成する方況E\n` +
       `1. Replicate (Stable Diffusion): https://replicate.com/\n` +
-      `   - 無料枠あり、高品質\n` +
+      `   - 無料枠あり、E��品質\n` +
       `2. Hugging Face: https://huggingface.co/spaces/stabilityai/stable-diffusion\n` +
-      `   - 完全無料\n` +
+      `   - 完�E無料\n` +
       `3. Craiyon: https://www.craiyon.com/\n` +
-      `   - 完全無料\n\n` +
-      `上記のサービスにプロンプトを貼り付けて、10個の画像を生成してください。`
+      `   - 完�E無料\n\n` +
+      `上記�Eサービスにプロンプトを貼り付けて、E0個�E画像を生�Eしてください。`
   );
 }
 
 /**
- * SNS投稿用の画像を生成
+ * SNS投稿用の画像を生�E
  *
- * @param prompt 画像生成プロンプト
- * @returns 生成された画像のURL
+ * @param prompt 画像生成�Eロンプト
+ * @returns 生�Eされた画像�EURL
  */
 export async function generateSNSImage(prompt: string): Promise<string> {
   const enhancedPrompt = `Create a social media post image for a carnivore diet app. ${prompt} Style: Modern, engaging, Instagram/Twitter optimized, 1024x1024px, high quality, vibrant colors.`;
   return generateImage(enhancedPrompt, '1024x1024');
 }
+

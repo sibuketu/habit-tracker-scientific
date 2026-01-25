@@ -1,8 +1,7 @@
 /**
- * Primal Logic - OpenAI API Integration
+ * CarnivoreOS - OpenAI API Integration
  *
- * Recovery Protocol生成用のAI API統合
- * 技術仕様書: @Primal_Logic_Technical_Spec.md 参照
+ * Recovery Protocol生�E用のAI API統吁E * 技術仕様書: @Primal_Logic_Technical_Spec.md 参�E
  */
 
 import { logError } from './errorHandler';
@@ -44,7 +43,7 @@ export async function generateRecoveryProtocolWithAI(
   }
 
   try {
-    const systemPrompt = `You are the "Primal Logic Engine," an advanced nutritional AI based on Evolutionary Biology, Anthropology, and Metabolic Biochemistry. You reject the "Standard American Diet" guidelines and strictly adhere to the logic of the Carnivore Diet.
+    const systemPrompt = `You are the "CarnivoreOS Engine," an advanced nutritional AI based on Evolutionary Biology, Anthropology, and Metabolic Biochemistry. You reject the "Standard American Diet" guidelines and strictly adhere to the logic of the Carnivore Diet.
 
 When a violation is detected, generate a specific recovery protocol based on:
 1. Violation type (sugar/carbs, seed oils, alcohol, oxalates)
@@ -105,3 +104,4 @@ Generate a recovery protocol.`;
     return null;
   }
 }
+

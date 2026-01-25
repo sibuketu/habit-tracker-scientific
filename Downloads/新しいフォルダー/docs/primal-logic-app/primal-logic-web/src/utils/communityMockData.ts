@@ -1,5 +1,5 @@
 /**
- * Community Mock Data - コミュニティのデバッグ用モックデータ
+ * Community Mock Data - コミュニティのチE��チE��用モチE��チE�Eタ
  */
 
 export interface CommunityInsight {
@@ -21,36 +21,36 @@ export interface CommunityPattern {
 export const mockCommunityInsights: CommunityInsight[] = [
   {
     id: '1',
-    title: '下痢の改善',
-    description: '下痢を経験したユーザーの80%が、塩分を増やすことで3日以内に改善',
+    title: '下痢の改喁E,
+    description: '下痢を経験したユーザーの80%が、塩刁E��増やすことで3日以冁E��改喁E,
     stat: '80%',
     category: 'symptom',
   },
   {
     id: '2',
-    title: '便秘の改善',
-    description: '便秘を経験したユーザーの75%が、マグネシウムを600mg以上摂取することで改善',
+    title: '便秘�E改喁E,
+    description: '便秘を経験したユーザーの75%が、�EグネシウムめE00mg以上摂取することで改喁E,
     stat: '75%',
     category: 'symptom',
   },
   {
     id: '3',
     title: '違反からの回復',
-    description: '違反後、16時間ファスティングを実施したユーザーの90%が1日以内に回復',
+    description: '違反後、E6時間ファスチE��ングを実施したユーザーの90%ぁE日以冁E��回復',
     stat: '90%',
     category: 'recovery',
   },
   {
     id: '4',
-    title: 'タンパク質摂取量',
-    description: 'コミュニティ全体の平均タンパク質摂取量は120g/日',
+    title: 'タンパク質摂取釁E,
+    description: 'コミュニティ全体�E平坁E��ンパク質摂取量�E120g/日',
     stat: '120g/日',
     category: 'nutrition',
   },
   {
     id: '5',
-    title: '頭痛の改善',
-    description: '頭痛を経験したユーザーの70%が、ナトリウムを5000mg以上摂取することで改善',
+    title: '頭痛�E改喁E,
+    description: '頭痛を経験したユーザーの70%が、ナトリウムめE000mg以上摂取することで改喁E,
     stat: '70%',
     category: 'symptom',
   },
@@ -59,37 +59,38 @@ export const mockCommunityInsights: CommunityInsight[] = [
 export const mockCommunityPatterns: CommunityPattern[] = [
   {
     id: '1',
-    pattern: '下痢 → 塩分増加',
-    description: '下痢を経験した人の80%が、塩分を増やすことで3日以内に改善',
+    pattern: '下痢 ↁE塩刁E��加',
+    description: '下痢を経験した人の80%が、塩刁E��増やすことで3日以冁E��改喁E,
     percentage: 80,
     sampleSize: 1250,
   },
   {
     id: '2',
-    pattern: '便秘 → マグネシウム増加',
-    description: '便秘を経験した人の75%が、マグネシウムを600mg以上摂取することで改善',
+    pattern: '便私EↁEマグネシウム増加',
+    description: '便秘を経験した人の75%が、�EグネシウムめE00mg以上摂取することで改喁E,
     percentage: 75,
     sampleSize: 980,
   },
   {
     id: '3',
-    pattern: '頭痛 → ナトリウム増加',
-    description: '頭痛を経験した人の70%が、ナトリウムを5000mg以上摂取することで改善',
+    pattern: '頭痁EↁEナトリウム増加',
+    description: '頭痛を経験した人の70%が、ナトリウムめE000mg以上摂取することで改喁E,
     percentage: 70,
     sampleSize: 650,
   },
   {
     id: '4',
-    pattern: '違反 → 16時間ファスティング',
-    description: '違反後、16時間ファスティングを実施した人の90%が1日以内に回復',
+    pattern: '違反 ↁE16時間ファスチE��ング',
+    description: '違反後、E6時間ファスチE��ングを実施した人の90%ぁE日以冁E��回復',
     percentage: 90,
     sampleSize: 2100,
   },
   {
     id: '5',
-    pattern: 'こむら返り → マグネシウム増加',
-    description: 'こむら返りを経験した人の85%が、マグネシウムを増やすことで改善',
+    pattern: 'こ�Eら返り ↁEマグネシウム増加',
+    description: 'こ�Eら返りを経験した人の85%が、�Eグネシウムを増やすことで改喁E,
     percentage: 85,
     sampleSize: 420,
   },
 ];
+

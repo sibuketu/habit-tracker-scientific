@@ -1,7 +1,6 @@
 /**
- * ButcherSelect専用の栄養素並び順管理
- *
- * Nutrients Breakdownセクションの栄養素の表示順序と並び替え機能
+ * ButcherSelect専用の栁E��素並び頁E��琁E *
+ * Nutrients Breakdownセクションの栁E��素の表示頁E��と並び替え機�E
  */
 
 import { logError } from './errorHandler';
@@ -38,14 +37,14 @@ export const DEFAULT_BUTCHER_NUTRIENT_ORDER: ButcherNutrientOrderConfig[] = [
   { key: 'fat', label: '脂質', priority: 2 },
   { key: 'zinc', label: '亜鉛', priority: 3 },
   { key: 'magnesium', label: 'マグネシウム', priority: 4 },
-  { key: 'iron', label: '鉄分', priority: 5 },
+  { key: 'iron', label: '鉁E�E', priority: 5 },
   { key: 'potassium', label: 'カリウム', priority: 6 },
   { key: 'sodium', label: 'ナトリウム', priority: 7 },
   { key: 'vitaminA', label: 'ビタミンA', priority: 8 },
   { key: 'vitaminD', label: 'ビタミンD', priority: 9 },
   { key: 'vitaminK2', label: 'ビタミンK2', priority: 10 },
   { key: 'vitaminB12', label: 'ビタミンB12', priority: 11 },
-  { key: 'vitaminB7', label: 'ビタミンB7（ビオチン）', priority: 12 },
+  { key: 'vitaminB7', label: 'ビタミンB7�E�ビオチン�E�E, priority: 12 },
   { key: 'choline', label: 'コリン', priority: 13 },
   { key: 'iodine', label: 'ヨウ素', priority: 14 },
   { key: 'calcium', label: 'カルシウム', priority: 15 },
@@ -101,8 +100,7 @@ export function moveButcherNutrientDown(
   return newOrder;
 }
 
-export type SortMode = 'default' | 'deficiency'; // 優先度順 | 不足順
-
+export type SortMode = 'default' | 'deficiency'; // 優先度頁E| 不足頁E
 export function sortNutrientsByMode(
   order: ButcherNutrientOrderConfig[],
   mode: SortMode,
@@ -112,31 +110,27 @@ export function sortNutrientsByMode(
   >
 ): ButcherNutrientOrderConfig[] {
   if (mode === 'default') {
-    // 優先度順（priority順）でソート
-    return [...order].sort((a, b) => a.priority - b.priority);
+    // 優先度頁E��Eriority頁E��でソーチE    return [...order].sort((a, b) => a.priority - b.priority);
   } else if (mode === 'deficiency') {
-    // 達成率が低い順（不足順）
-    return [...order].sort((a, b) => {
+    // 達�E玁E��低い頁E��不足頁E��E    return [...order].sort((a, b) => {
       const dataA = nutrientDataMap[a.key];
       const dataB = nutrientDataMap[b.key];
 
       if (!dataA || !dataB) return 0;
 
-      // targetが0以下の場合は除外（最後に配置）
-      if (dataA.target <= 0 && dataB.target <= 0) return 0;
+      // targetぁE以下�E場合�E除外（最後に配置�E�E      if (dataA.target <= 0 && dataB.target <= 0) return 0;
       if (dataA.target <= 0) return 1; // Aを後ろに
       if (dataB.target <= 0) return -1; // Bを後ろに
 
-      // 合計値（currentDailyTotal + previewAmount）で達成率を計算
-      const totalA = dataA.currentDailyTotal + dataA.previewAmount;
+      // 合計値�E�EurrentDailyTotal + previewAmount�E�で達�E玁E��計箁E      const totalA = dataA.currentDailyTotal + dataA.previewAmount;
       const totalB = dataB.currentDailyTotal + dataB.previewAmount;
 
       const ratioA = totalA / dataA.target;
       const ratioB = totalB / dataB.target;
 
-      return ratioA - ratioB; // 小さい順（不足している順）
-    });
+      return ratioA - ratioB; // 小さぁE��E��不足してぁE��頁E��E    });
   }
 
   return order;
 }
+

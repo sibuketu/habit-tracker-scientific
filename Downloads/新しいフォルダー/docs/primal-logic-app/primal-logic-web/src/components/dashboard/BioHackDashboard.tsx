@@ -4,8 +4,7 @@ import { useApp } from '../../context/AppContext';
 export default function BioHackDashboard() {
   const { dailyLog, userProfile } = useApp();
 
-  // dailyLogから栄養素を計算
-  const metrics = dailyLog?.calculatedMetrics || {
+  // dailyLogから栁E��素を計箁E  const metrics = dailyLog?.calculatedMetrics || {
     protein: 0,
     fat: 0,
     carbs: 0,
@@ -35,18 +34,21 @@ export default function BioHackDashboard() {
     omegaRatio: 0,
   };
 
-  // 目標値（プロファイルがない場合はデフォルト値）
-  const proteinTarget = userProfile?.weight ? userProfile.weight * 1.6 : 110;
+  // 目標値�E��EロファイルがなぁE��合�EチE��ォルト値�E�E  const proteinTarget = userProfile?.weight ? userProfile.weight * 1.6 : 110;
   const fatTarget = proteinTarget * 1.2; // 1.2:1 ratio default
 
-  // 達成率（NaNを防ぐ）
-  const proteinCurrent = metrics.effectiveProtein || metrics.protein || 0;
+  // 達�E玁E��EaNを防ぐ！E  const proteinCurrent = metrics.effectiveProtein || metrics.protein || 0;
   const fatCurrent = metrics.fatTotal || metrics.fat || 0;
   const proteinPercent =
-    proteinTarget > 0 ? Math.min((proteinCurrent / proteinTarget) * 100, 150) : 0;
-  const fatPercent = fatTarget > 0 ? Math.min((fatCurrent / fatTarget) * 100, 150) : 0;
+    proteinTarget > 0 && !isNaN(proteinCurrent) && !isNaN(proteinTarget)
+      ? Math.min((proteinCurrent / proteinTarget) * 100, 150)
+      : 0;
+  const fatPercent =
+    fatTarget > 0 && !isNaN(fatCurrent) && !isNaN(fatTarget)
+      ? Math.min((fatCurrent / fatTarget) * 100, 150)
+      : 0;
 
-  // 円形ゲージの描画ヘルパー
+  // 冁E��ゲージの描画ヘルパ�E
   const renderGauge = (
     title: string,
     current: number,
@@ -109,21 +111,21 @@ export default function BioHackDashboard() {
           >
             <div style={{ fontSize: '24px', marginBottom: '4px' }}>{icon}</div>
             <div style={{ fontSize: '18px', fontWeight: 'bold', textShadow: `0 0 10px ${color}` }}>
-              {Math.round(percent)}%
+              {isNaN(percent) ? '0' : Math.round(percent)}%
             </div>
           </div>
         </div>
         <div style={{ marginTop: '4px', textAlign: 'center' }}>
           <div style={{ fontSize: '12px', color: '#9ca3af', fontWeight: 'bold' }}>{title}</div>
           <div style={{ fontSize: '10px', color: '#6b7280' }}>
-            {Math.round(current)}g / {Math.round(target)}g
+            {isNaN(current) ? '0' : Math.round(current)}g / {isNaN(target) ? '0' : Math.round(target)}g
           </div>
         </div>
       </div>
     );
   };
 
-  // 六角形ステータス描画ヘルパー
+  // 六角形スチE�Eタス描画ヘルパ�E
   const renderHex = (label: string, value: string, color: string, subLabel?: string) => (
     <div
       style={{
@@ -135,15 +137,14 @@ export default function BioHackDashboard() {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        border: `2px solid ${color}`, // clip-pathでborderは効かないため、擬似要素やドロップシャドウで代用するが、簡易版としてbox-shadowを使う
-        position: 'relative',
+        border: `2px solid ${color}`, // clip-pathでborderは効かなぁE��め、擬似要素めE��ロチE�Eシャドウで代用するが、簡易版としてbox-shadowを使ぁE        position: 'relative',
         marginBottom: '8px',
         marginLeft: '4px',
         marginRight: '4px',
         boxShadow: `0 0 5px ${color} inset`,
       }}
     >
-      {/* 枠線風の装飾 (SVG overlay could be better, simplified here) */}
+      {/* 枠線風の裁E�� (SVG overlay could be better, simplified here) */}
       <div style={{ fontSize: '10px', color: '#9ca3af', fontWeight: '600' }}>{label}</div>
       <div
         style={{
@@ -153,7 +154,7 @@ export default function BioHackDashboard() {
           textShadow: `0 0 5px ${color}`,
         }}
       >
-        {value}
+        {value === 'NaN' || value === 'NaN%' ? '-' : value}
       </div>
       {subLabel && <div style={{ fontSize: '8px', color: '#6b7280' }}>{subLabel}</div>}
     </div>
@@ -175,7 +176,7 @@ export default function BioHackDashboard() {
         marginBottom: 0,
       }}
     >
-      {/* 背景グリッド装飾 */}
+      {/* 背景グリチE��裁E�� */}
       <div
         style={{
           position: 'absolute',
@@ -252,7 +253,7 @@ export default function BioHackDashboard() {
           {renderGauge('DAILY FAT', fatCurrent, fatTarget, fatPercent, '#3b82f6', '💧')}
         </div>
 
-        {/* 中央カラム: 心臓/コア */}
+        {/* 中央カラム: 忁E��/コア */}
         <div
           style={{
             flex: '1 1 140px',
@@ -274,7 +275,7 @@ export default function BioHackDashboard() {
             METABOLIC STATE
           </div>
 
-          {/* 心臓/エンジンのビジュアル（CSSアニメーション） */}
+          {/* 忁E��/エンジンのビジュアル�E�ESSアニメーション�E�E*/}
           <div
             style={{
               width: '100px',
@@ -327,7 +328,7 @@ export default function BioHackDashboard() {
           }}
         >
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '4px' }}>
-            {/* ヘックスグリッド配置 */}
+            {/* ヘックスグリチE��配置 */}
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {renderHex('B12', '120%', '#ef4444', 'STATUS')}
               {renderHex('IRON', '95%', '#ef4444', 'HEME')}
@@ -340,7 +341,7 @@ export default function BioHackDashboard() {
         </div>
       </div>
 
-      {/* フッター情報 */}
+      {/* フッター惁E�� */}
       <div
         style={{
           marginTop: '20px',
@@ -356,7 +357,7 @@ export default function BioHackDashboard() {
       >
         <span>BLOOD GLUCOSE: 85 mg/dL</span>
         <span>KETONES: 2.8 mmol/L</span>
-        <span style={{ color: '#ef4444', animation: 'blink 1s infinite' }}>● LIVE</span>
+        <span style={{ color: '#ef4444', animation: 'blink 1s infinite' }}>◁ELIVE</span>
       </div>
 
       <style>{`
@@ -373,3 +374,4 @@ export default function BioHackDashboard() {
     </div>
   );
 }
+

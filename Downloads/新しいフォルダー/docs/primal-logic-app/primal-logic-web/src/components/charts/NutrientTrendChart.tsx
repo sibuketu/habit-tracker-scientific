@@ -1,8 +1,7 @@
 /**
  * Nutrient Trend Chart Component
  *
- * 栄養素の推移グラフを表示するコンポーネント
- * rechartsを使用して日次・週次・月次の推移を表示
+ * 栁E��素の推移グラフを表示するコンポ�EネンチE * rechartsを使用して日次・週次・月次の推移を表示
  */
 
 import { useMemo } from 'react';
@@ -16,15 +15,12 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import type { DailyLog, CalculatedMetrics } from '../../types';
+import type { DailyLog, CalculatedMetrics } from '../../types/index';
 
 interface NutrientTrendChartProps {
   logs: DailyLog[];
   nutrientKey: string; // 'proteinTotal', 'fatTotal', 'sodiumTotal', 'magnesiumTotal', etc.
-  nutrientLabel: string; // 表示用ラベル（例: 'タンパク質', '脂質'）
-  unit: string; // 単位（例: 'g', 'mg'）
-  targetValue?: number; // 目標値（オプション）
-  period: 'daily' | 'weekly' | 'monthly'; // 表示期間
+  nutrientLabel: string; // 表示用ラベル�E�侁E 'タンパク質', '脂質'�E�E  unit: string; // 単位（侁E 'g', 'mg'�E�E  targetValue?: number; // 目標値�E�オプション�E�E  period: 'daily' | 'weekly' | 'monthly'; // 表示期間
 }
 
 export default function NutrientTrendChart({
@@ -35,34 +31,28 @@ export default function NutrientTrendChart({
   targetValue,
   period = 'daily',
 }: NutrientTrendChartProps) {
-  // データを期間ごとに集計
-  const chartData = useMemo(() => {
+  // チE�Eタを期間ごとに雁E��E  const chartData = useMemo(() => {
     if (logs.length === 0) return [];
 
-    // 日付順にソート（古い順）
-    const sortedLogs = [...logs].sort((a, b) => a.date.localeCompare(b.date));
+    // 日付頁E��ソート（古ぁE��E��E    const sortedLogs = [...logs].sort((a, b) => a.date.localeCompare(b.date));
 
     if (period === 'daily') {
-      // 日次データ（最大30日分）
-      const recentLogs = sortedLogs.slice(-30);
+      // 日次チE�Eタ�E�最大30日刁E��E      const recentLogs = sortedLogs.slice(-30);
       return recentLogs.map((log) => {
         const value =
           (log.calculatedMetrics as CalculatedMetrics & Record<string, number>)[nutrientKey] || 0;
         return {
-          date: log.date.split('T')[0].split('-').slice(1).join('/'), // MM/DD形式
-          value: Math.round(value * 10) / 10, // 小数点第1位まで
+          date: log.date.split('T')[0].split('-').slice(1).join('/'), // MM/DD形弁E          value: Math.round(value * 10) / 10, // 小数点第1位まで
           target: targetValue,
         };
       });
     } else if (period === 'weekly') {
-      // 週次データ（最大12週分）
-      const weeklyData: Record<string, { total: number; count: number }> = {};
+      // 週次チE�Eタ�E�最大12週刁E��E      const weeklyData: Record<string, { total: number; count: number }> = {};
 
       sortedLogs.forEach((log) => {
         const date = new Date(log.date);
         const weekStart = new Date(date);
-        weekStart.setDate(date.getDate() - date.getDay()); // 週の開始日（日曜日）
-        const weekKey = weekStart.toISOString().split('T')[0];
+        weekStart.setDate(date.getDate() - date.getDay()); // 週の開始日�E�日曜日�E�E        const weekKey = weekStart.toISOString().split('T')[0];
 
         if (!weeklyData[weekKey]) {
           weeklyData[weekKey] = { total: 0, count: 0 };
@@ -86,8 +76,7 @@ export default function NutrientTrendChart({
           };
         });
     } else {
-      // 月次データ（最大12ヶ月分）
-      const monthlyData: Record<string, { total: number; count: number }> = {};
+      // 月次チE�Eタ�E�最大12ヶ月�E�E�E      const monthlyData: Record<string, { total: number; count: number }> = {};
 
       sortedLogs.forEach((log) => {
         const date = new Date(log.date);
@@ -120,7 +109,7 @@ export default function NutrientTrendChart({
   if (chartData.length === 0) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center', color: '#78716c' }}>
-        データがありません
+        チE�Eタがありません
       </div>
     );
   }
@@ -151,7 +140,7 @@ export default function NutrientTrendChart({
             formatter={(value: number | undefined) =>
               value !== undefined ? [`${value}${unit}`, nutrientLabel] : ['', '']
             }
-            labelFormatter={(label) => `日付: ${label}`}
+            labelFormatter={(label) => `日仁E ${label}`}
             contentStyle={{
               backgroundColor: '#18181b',
               border: '1px solid #27272a',
@@ -187,3 +176,4 @@ export default function NutrientTrendChart({
     </div>
   );
 }
+

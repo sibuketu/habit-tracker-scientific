@@ -1,32 +1,32 @@
-# Capacitorクイックスタート（2026-01-03）
+# CapacitorクイチE��スタート！E026-01-03�E�E
 
-> Webアプリをネイティブアプリ化する簡単な手順
-
----
-
-## ✅ 完了した作業
-
-1. **Capacitorのインストール**: 完了 ✅
-2. **Capacitorの初期化**: 完了 ✅
+> WebアプリをネイチE��ブアプリ化する簡単な手頁E
 
 ---
 
-## 🚀 次のステップ（簡単な方法）
+## ✁E完亁E��た作業
 
-### 方法1: バッチファイルを使用（推奨）
+1. **Capacitorのインスト�Eル**: 完亁E✁E
+2. **Capacitorの初期匁E*: 完亁E✁E
+
+---
+
+## 🚀 次のスチE��プ（簡単な方法！E
+
+### 方況E: バッチファイルを使用�E�推奨�E�E
 
 **Windows:**
-1. `setup-capacitor.bat` をダブルクリック
-2. 自動的にビルド、Androidプラットフォーム追加、同期が実行されます
+1. `setup-capacitor.bat` をダブルクリチE��
+2. 自動的にビルド、AndroidプラチE��フォーム追加、同期が実行されまぁE
 
-### 方法2: 手動で実行
+### 方況E: 手動で実衁E
 
-**1. Webアプリをビルド**
+**1. WebアプリをビルチE*
 ```bash
 npm run build
 ```
 
-**2. Androidプラットフォームを追加**
+**2. AndroidプラチE��フォームを追加**
 ```bash
 npx cap add android
 ```
@@ -43,14 +43,14 @@ npx cap open android
 
 ---
 
-## 📱 iOS対応について
+## 📱 iOS対応につぁE��
 
-**注意**: WindowsではiOSプラットフォームの追加はできません。
+**注愁E*: WindowsではiOSプラチE��フォームの追加はできません、E
 
-**iOS対応が必要な場合:**
-1. macOSが必要です
-2. Xcodeが必要です
-3. 以下のコマンドを実行:
+**iOS対応が忁E��な場吁E**
+1. macOSが忁E��でぁE
+2. Xcodeが忁E��でぁE
+3. 以下�Eコマンドを実衁E
    ```bash
    npx cap add ios
    npx cap sync
@@ -59,45 +59,46 @@ npx cap open android
 
 ---
 
-## 🎯 実機でテスト
+## 🎯 実機でチE��チE
 
 ### Android
 
 1. Android Studioで開く: `npx cap open android`
-2. 実機をUSBで接続
-3. Android Studioで「Run」ボタンをクリック
-4. 実機でアプリが起動します
+2. 実機をUSBで接綁E
+3. Android Studioで「Run」�EタンをクリチE��
+4. 実機でアプリが起動しまぁE
 
-### iOS（macOSが必要）
+### iOS�E�EacOSが忁E��E��E
 
 1. Xcodeで開く: `npx cap open ios`
-2. 実機をUSBで接続
-3. Xcodeで「Run」ボタンをクリック
-4. 実機でアプリが起動します
+2. 実機をUSBで接綁E
+3. Xcodeで「Run」�EタンをクリチE��
+4. 実機でアプリが起動しまぁE
 
 ---
 
-## 🔍 Recovery Protocolの確認
+## 🔍 Recovery Protocolの確誁E
 
-**Webアプリ版に実装されている機能:**
-- ✅ Recovery Protocol表示
-- ✅ Recovery Protocol生成
-- ✅ Recovery Protocol設定
-- ✅ 「明日のログに追加」機能
+**Webアプリ版に実裁E��れてぁE��機�E:**
+- ✁ERecovery Protocol表示
+- ✁ERecovery Protocol生�E
+- ✁ERecovery Protocol設宁E
+- ✁E「�E日のログに追加」機�E
 
-**Capacitorでネイティブ化した場合:**
-- ✅ 全ての機能がそのまま動作します
-- ✅ Recovery Protocolも動作します（心配なし）
+**CapacitorでネイチE��ブ化した場吁E**
+- ✁E全ての機�Eがそのまま動作しまぁE
+- ✁ERecovery Protocolも動作します（忁E�Eなし！E
 
 ---
 
-## 📝 注意事項
+## 📝 注意事頁E
 
-1. **ビルド**: ネイティブアプリを実行する前に、必ず`npm run build`を実行してください
+1. **ビルチE*: ネイチE��ブアプリを実行する前に、忁E��`npm run build`を実行してください
 2. **同期**: コードを変更したら、`npx cap sync`を実行してください
-3. **iOS**: WindowsではiOS開発はできません（macOSが必要）
+3. **iOS**: WindowsではiOS開発はできません�E�EacOSが忁E��E��E
 
 ---
 
 最終更新: 2026-01-03
+
 

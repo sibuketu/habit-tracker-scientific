@@ -1,79 +1,73 @@
 import { test, expect } from '@playwright/test';
 
 /**
- * Visual Regression Tests - UIの見た目をテスト
- * 
- * スクリーンショットを比較して、UIの変更を検出します
- */
+ * Visual Regression Tests - UIの見た目をテスチE * 
+ * スクリーンショチE��を比輁E��て、UIの変更を検�EしまぁE */
 
-test.describe('Visual Regression Tests - UI見た目テスト', () => {
+test.describe('Visual Regression Tests - UI見た目チE��チE, () => {
   
-  // 同意・オンボーディングをスキップするヘルパー関数
+  // 同意・オンボ�EチE��ングをスキチE�Eするヘルパ�E関数
   async function skipConsentAndOnboarding(page: any) {
     await page.evaluate(() => {
       localStorage.setItem('primal_logic_consent_accepted', 'true');
       localStorage.setItem('primal_logic_onboarding_completed', 'true');
     });
     await page.reload({ waitUntil: 'domcontentloaded' });
-    // networkidleの代わりに、より具体的な要素を待つ
+    // networkidleの代わりに、より�E体的な要素を征E��
     await page.waitForSelector('.app-navigation, [class*="home"], [class*="Home"]', { timeout: 10000 }).catch(() => {});
     await page.waitForTimeout(500);
   }
 
-  test('ホーム画面 - デスクトップ表示', async ({ page }) => {
+  test('ホ�Eム画面 - チE��クトップ表示', async ({ page }) => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // ホーム画面が表示されるまで待つ
+    // ホ�Eム画面が表示されるまで征E��
     await page.waitForSelector('.home-screen-container, [class*="home"]', { timeout: 10000 });
-    await page.waitForTimeout(2000); // アニメーション待ち
+    await page.waitForTimeout(2000); // アニメーション征E��
     
-    // スクリーンショットを撮影（デスクトップサイズ）
-    await expect(page).toHaveScreenshot('home-screen-desktop.png', {
+    // スクリーンショチE��を撮影�E�デスクトップサイズ�E�E    await expect(page).toHaveScreenshot('home-screen-desktop.png', {
       fullPage: true,
-      maxDiffPixels: 100, // 許容する差分ピクセル数
+      maxDiffPixels: 100, // 許容する差刁E��クセル数
     });
   });
 
-  test('ホーム画面 - モバイル表示（iPhone 12）', async ({ page }) => {
-    // iPhone 12のビューポートサイズに設定
-    await page.setViewportSize({ width: 390, height: 844 });
+  test('ホ�Eム画面 - モバイル表示�E�EPhone 12�E�E, async ({ page }) => {
+    // iPhone 12のビューポ�Eトサイズに設宁E    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
     await page.waitForSelector('.home-screen-container, [class*="home"]', { timeout: 10000 });
     await page.waitForTimeout(2000);
     
-    // スクリーンショットを撮影（モバイルサイズ）
-    await expect(page).toHaveScreenshot('home-screen-mobile-iphone12.png', {
+    // スクリーンショチE��を撮影�E�モバイルサイズ�E�E    await expect(page).toHaveScreenshot('home-screen-mobile-iphone12.png', {
       fullPage: true,
       maxDiffPixels: 100,
     });
   });
 
-  test('入力画面（ButcherSelect） - デスクトップ表示', async ({ page }) => {
+  test('入力画面�E�EutcherSelect�E�E- チE��クトップ表示', async ({ page }) => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // 食品追加ボタンをクリック
+    // 食品追加ボタンをクリチE��
     const addFoodButton = page.getByText(/\+.*食品を追加|\+.*Add Food/i);
     await expect(addFoodButton).toBeVisible({ timeout: 10000 });
     await addFoodButton.click();
     await page.waitForTimeout(2000);
     
-    // ButcherSelectが表示されるまで待つ（動物タブ🐄を探す）
-    const beefTab = page.locator('button').filter({ hasText: /🐄|牛肉/ });
+    // ButcherSelectが表示されるまで征E���E�動物タブ🐁E��探す！E    const beefTab = page.locator('button').filter({ hasText: /🐄|牛肉/ });
     await expect(beefTab.first()).toBeVisible({ timeout: 15000 });
     await page.waitForTimeout(2000);
     
-    // スクリーンショットを撮影
+    // スクリーンショチE��を撮影
     await expect(page).toHaveScreenshot('butcher-select-desktop.png', {
       fullPage: true,
       maxDiffPixels: 100,
     });
   });
 
-  test('入力画面（ButcherSelect） - モバイル表示', async ({ page }) => {
+  test('入力画面�E�EutcherSelect�E�E- モバイル表示', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     await skipConsentAndOnboarding(page);
@@ -83,8 +77,7 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     await addFoodButton.click();
     await page.waitForTimeout(2000);
     
-    // ButcherSelectが表示されるまで待つ（動物タブ🐄を探す）
-    const beefTab = page.locator('button').filter({ hasText: /🐄|牛肉/ });
+    // ButcherSelectが表示されるまで征E���E�動物タブ🐁E��探す！E    const beefTab = page.locator('button').filter({ hasText: /🐄|牛肉/ });
     await expect(beefTab.first()).toBeVisible({ timeout: 15000 });
     await page.waitForTimeout(2000);
     
@@ -94,11 +87,11 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     });
   });
 
-  test('履歴画面 - デスクトップ表示', async ({ page }) => {
+  test('履歴画面 - チE��クトップ表示', async ({ page }) => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // 履歴タブをクリック
+    // 履歴タブをクリチE��
     const historyButton = page.locator('button.app-nav-button').filter({ hasText: /履歴|History|📊/ });
     await expect(historyButton).toBeVisible({ timeout: 10000 });
     await historyButton.click();
@@ -132,11 +125,11 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     });
   });
 
-  test('Labs画面 - デスクトップ表示', async ({ page }) => {
+  test('Labs画面 - チE��クトップ表示', async ({ page }) => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
@@ -155,7 +148,7 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /その他|🧪/ });
+    const labsButton = page.locator('button.app-nav-button').filter({ hasText: /そ�E他|🧪/ });
     await expect(labsButton).toBeVisible({ timeout: 10000 });
     await labsButton.click();
     await page.waitForTimeout(2000);
@@ -169,11 +162,11 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     });
   });
 
-  test('設定画面 - デスクトップ表示', async ({ page }) => {
+  test('設定画面 - チE��クトップ表示', async ({ page }) => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|Settings|⚙️/ });
+    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|Settings|⚙︁E });
     await expect(settingsButton).toBeVisible({ timeout: 10000 });
     await settingsButton.click();
     await page.waitForTimeout(2000);
@@ -192,7 +185,7 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|Settings|⚙️/ });
+    const settingsButton = page.locator('button.app-nav-button').filter({ hasText: /設定|Settings|⚙︁E });
     await expect(settingsButton).toBeVisible({ timeout: 10000 });
     await settingsButton.click();
     await page.waitForTimeout(2000);
@@ -206,17 +199,17 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     });
   });
 
-  test('AIチャットモーダル - デスクトップ表示', async ({ page }) => {
+  test('AIチャチE��モーダル - チE��クトップ表示', async ({ page }) => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // AIチャットボタンをクリック
+    // AIチャチE��ボタンをクリチE��
     const aiChatButton = page.locator('.ai-chat-fab-button');
     await expect(aiChatButton).toBeVisible({ timeout: 10000 });
     await aiChatButton.click();
     await page.waitForTimeout(2000);
     
-    // チャットUIが表示されるまで待つ
+    // チャチE��UIが表示されるまで征E��
     await page.waitForSelector('.ai-chat-modal, .ai-chat-bubble', { timeout: 10000 });
     await page.waitForTimeout(2000);
     
@@ -226,18 +219,18 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     });
   });
 
-  test('AIチャットモーダル - モバイル表示', async ({ page }) => {
+  test('AIチャチE��モーダル - モバイル表示', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // AIチャットボタンをクリック
+    // AIチャチE��ボタンをクリチE��
     const aiChatButton = page.locator('.ai-chat-fab-button');
     await expect(aiChatButton).toBeVisible({ timeout: 10000 });
     await aiChatButton.click();
     await page.waitForTimeout(2000);
     
-    // チャットUIが表示されるまで待つ
+    // チャチE��UIが表示されるまで征E��
     await page.waitForSelector('.ai-chat-modal, .ai-chat-bubble', { timeout: 10000 });
     await page.waitForTimeout(2000);
     
@@ -247,15 +240,13 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     });
   });
 
-  test('栄養素ゲージ - 詳細表示', async ({ page }) => {
+  test('栁E��素ゲージ - 詳細表示', async ({ page }) => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // 栄養素ゲージが表示されるまで待つ（ナトリウムのラベルを探す）
-    const sodiumLabel = page.getByText(/ナトリウム|Sodium/i).first();
+    // 栁E��素ゲージが表示されるまで征E���E�ナトリウムのラベルを探す！E    const sodiumLabel = page.getByText(/ナトリウム|Sodium/i).first();
     await expect(sodiumLabel).toBeVisible({ timeout: 10000 }).catch(async () => {
-      // ナトリウムが見つからない場合は、他の栄養素ゲージを探す
-      const anyGauge = page.locator('[class*="gauge"], [class*="Gauge"]').first();
+      // ナトリウムが見つからなぁE��合�E、他�E栁E��素ゲージを探ぁE      const anyGauge = page.locator('[class*="gauge"], [class*="Gauge"]').first();
       await expect(anyGauge).toBeVisible({ timeout: 10000 });
       await page.waitForTimeout(2000);
       await expect(page).toHaveScreenshot('nutrient-gauge-section.png', {
@@ -267,8 +258,7 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     if (await sodiumLabel.isVisible().catch(() => false)) {
       await page.waitForTimeout(2000);
       
-      // 栄養素ゲージ部分のスクリーンショット（ナトリウムゲージを含むセクション）
-      const gaugeSection = sodiumLabel.locator('..').locator('..').first();
+      // 栁E��素ゲージ部刁E�EスクリーンショチE���E�ナトリウムゲージを含むセクション�E�E      const gaugeSection = sodiumLabel.locator('..').locator('..').first();
       await expect(gaugeSection).toHaveScreenshot('nutrient-gauge-section.png', {
         maxDiffPixels: 100,
       });
@@ -279,11 +269,10 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // P:F比率ゲージが表示されるまで待つ
+    // P:F比率ゲージが表示されるまで征E��
     const pfGauge = page.locator('[class*="pf-ratio"], [class*="PFRatio"]').first();
     await expect(pfGauge).toBeVisible({ timeout: 10000 }).catch(() => {
-      // P:F比率ゲージが見つからない場合は、テキストで探す
-      return page.getByText(/P:F|P\/F|タンパク質.*脂質/i).first();
+      // P:F比率ゲージが見つからなぁE��合�E、テキストで探ぁE      return page.getByText(/P:F|P\/F|タンパク質.*脂質/i).first();
     });
     await page.waitForTimeout(2000);
     
@@ -297,11 +286,10 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // オメガ比率ゲージが表示されるまで待つ
+    // オメガ比率ゲージが表示されるまで征E��
     const omegaGauge = page.locator('[class*="omega"], [class*="Omega"]').first();
     await expect(omegaGauge).toBeVisible({ timeout: 10000 }).catch(() => {
-      // オメガ比率ゲージが見つからない場合は、テキストで探す
-      return page.getByText(/オメガ|Omega|ω3.*ω6/i).first();
+      // オメガ比率ゲージが見つからなぁE��合�E、テキストで探ぁE      return page.getByText(/オメガ|Omega|ρE.*ρE/i).first();
     });
     await page.waitForTimeout(2000);
     
@@ -315,9 +303,8 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // 栄養素ゲージをクリックしてArgument Cardを表示
-    // まず、表示されている栄養素ゲージを探す（ナトリウム、亜鉛、マグネシウムなど）
-    const nutrientLabels = [
+    // 栁E��素ゲージをクリチE��してArgument Cardを表示
+    // まず、表示されてぁE��栁E��素ゲージを探す（ナトリウム、亜鉛、�Eグネシウムなど�E�E    const nutrientLabels = [
       page.getByText(/ナトリウム|Sodium/i).first(),
       page.getByText(/亜鉛|Zinc/i).first(),
       page.getByText(/マグネシウム|Magnesium/i).first(),
@@ -336,14 +323,13 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     }
     
     if (!clicked) {
-      // 栄養素ゲージが見つからない場合は、ゲージコンテナを直接探す
-      const gaugeContainer = page.locator('[class*="gauge"], [class*="Gauge"]').first();
+      // 栁E��素ゲージが見つからなぁE��合�E、ゲージコンチE��を直接探ぁE      const gaugeContainer = page.locator('[class*="gauge"], [class*="Gauge"]').first();
       await expect(gaugeContainer).toBeVisible({ timeout: 10000 });
       await gaugeContainer.click();
       await page.waitForTimeout(2000);
     }
     
-    // Argument Cardが表示されるまで待つ
+    // Argument Cardが表示されるまで征E��
     await page.waitForSelector('[class*="argument-card"], [class*="ArgumentCard"]', { timeout: 10000 });
     await page.waitForTimeout(2000);
     
@@ -358,7 +344,7 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // 栄養素ゲージをクリックしてArgument Cardを表示
+    // 栁E��素ゲージをクリチE��してArgument Cardを表示
     const nutrientLabels = [
       page.getByText(/ナトリウム|Sodium/i).first(),
       page.getByText(/亜鉛|Zinc/i).first(),
@@ -384,7 +370,7 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
       await page.waitForTimeout(2000);
     }
     
-    // Argument Cardが表示されるまで待つ
+    // Argument Cardが表示されるまで征E��
     await page.waitForSelector('[class*="argument-card"], [class*="ArgumentCard"]', { timeout: 10000 });
     await page.waitForTimeout(2000);
     
@@ -394,26 +380,53 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     });
   });
 
-  test('ButcherSelect - 部位選択状態', async ({ page }) => {
+  test('ButcherSelect - 部位選択状慁E, async ({ page }) => {
     await page.goto('/');
     await skipConsentAndOnboarding(page);
     
-    // 食品追加ボタンをクリック
+    // 食品追加ボタンをクリチE��
     const addFoodButton = page.getByText(/\+.*食品を追加|\+.*Add Food/i);
     await expect(addFoodButton).toBeVisible({ timeout: 10000 });
     await addFoodButton.click();
     await page.waitForTimeout(2000);
     
-    // ButcherSelectが表示されるまで待つ
+    // ButcherSelectが表示されるまで征E��
     const beefTab = page.locator('button').filter({ hasText: /🐄|牛肉/ });
     await expect(beefTab.first()).toBeVisible({ timeout: 15000 });
     await page.waitForTimeout(1000);
     
-    // 最初の部位を選択
-    const firstPart = page.locator('button').filter({ hasText: /ロース|リブロース|サーロイン/i }).first();
-    if (await firstPart.isVisible().catch(() => false)) {
-      await firstPart.click();
-      await page.waitForTimeout(2000);
+    // 部位�Eタンが表示されるまで征E��
+    await page.waitForSelector('button[class*="rounded-md"]', { timeout: 10000 });
+    await page.waitForTimeout(1000);
+    
+    // 最初�E部位�Eタンを探す（褁E��のパターンを試す！E    const partPatterns = [
+      /Ribeye|リブアイ|ロース/i,
+      /Sirloin|サーロイン/i,
+      /Ground|ひき肉/i,
+      /Brisket|ブリスケチE��/i,
+      /Chuck|チャチE��/i,
+    ];
+    
+    let partSelected = false;
+    for (const pattern of partPatterns) {
+      const partButton = page.locator('button').filter({ hasText: pattern }).first();
+      const isVisible = await partButton.isVisible().catch(() => false);
+      if (isVisible) {
+        await partButton.click();
+        await page.waitForTimeout(2000);
+        partSelected = true;
+        break;
+      }
+    }
+    
+    // 部位が見つからなぁE��合�E、最初�E部位�EタンをクリチE��
+    if (!partSelected) {
+      const firstPartButton = page.locator('button[class*="rounded-md"]').first();
+      const isVisible = await firstPartButton.isVisible().catch(() => false);
+      if (isVisible) {
+        await firstPartButton.click();
+        await page.waitForTimeout(2000);
+      }
     }
     
     await expect(page).toHaveScreenshot('butcher-select-part-selected.png', {
@@ -422,3 +435,4 @@ test.describe('Visual Regression Tests - UI見た目テスト', () => {
     });
   });
 });
+

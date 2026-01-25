@@ -1,42 +1,42 @@
-# 全タスク実行指示（一気に色々やる）
+# 全タスク実行指示�E�一気に色、E��る！E
 
-> 作成日: 2026-01-03
-> **Cursorが指示しない限り、ユーザーは新しいターミナルから実行する前提でやる**
-
----
-
-## 🎯 全タスク（Cursorが実行中）
-
-### ✅ 1. コード品質チェック（Cursorが実行中）
-- Lintチェック: 実行中
-- 型チェック: 実行中
-- エラーがあれば修正
-
-### ✅ 2. Visual Regression Test（Cursorが実行中）
-- テスト実行中（バックグラウンド）
-- 失敗したテストの修正
-
-### ✅ 3. E2Eテスト（Cursorが実行中）
-- 全テスト実行中（バックグラウンド）
-- 結果確認
+> 作�E日: 2026-01-03
+> **Cursorが指示しなぁE��り、ユーザーは新しいターミナルから実行する前提でめE��**
 
 ---
 
-## 📋 ユーザーが実行するタスク（エクスプローラーから）
+## 🎯 全タスク�E�Eursorが実行中�E�E
 
-### 1. iOS版テスト（Maestro）
+### ✁E1. コード品質チェチE���E�Eursorが実行中�E�E
+- LintチェチE��: 実行中
+- 型チェチE��: 実行中
+- エラーがあれ�E修正
 
-**方法1: エクスプローラーから実行（推奨・一番簡単）**
-1. エクスプローラーを開く（Windowsキー+E）
-2. アドレスバーに以下を貼り付けてEnter:
+### ✁E2. Visual Regression Test�E�Eursorが実行中�E�E
+- チE��ト実行中�E�バチE��グラウンド！E
+- 失敗したテスト�E修正
+
+### ✁E3. E2EチE��ト！Eursorが実行中�E�E
+- 全チE��ト実行中�E�バチE��グラウンド！E
+- 結果確誁E
+
+---
+
+## 📋 ユーザーが実行するタスク�E�エクスプローラーから�E�E
+
+### 1. iOS版テスト！Eaestro�E�E
+
+**方況E: エクスプローラーから実行（推奨・一番簡単！E*
+1. エクスプローラーを開く！Eindowsキー+E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app
    ```
-3. `run-all-tests-ios-simple.bat` をダブルクリック
+3. `run-all-tests-ios-simple.bat` をダブルクリチE��
 
-**注意**: `.ps1`ファイルをダブルクリックするとメモ帳で開いてしまいます。必ず`.bat`ファイルをダブルクリックしてください。
+**注愁E*: `.ps1`ファイルをダブルクリチE��するとメモ帳で開いてしまぁE��す。忁E��`.bat`ファイルをダブルクリチE��してください、E
 
-**方法2: PowerShellから実行**
+**方況E: PowerShellから実衁E*
 ```powershell
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 .\start-ios-app.bat
@@ -44,61 +44,62 @@ cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app"
 .\run-ios-test.bat
 ```
 
-### 2. コードチェック確認（オプション）
+### 2. コードチェチE��確認（オプション�E�E
 
-**方法1: エクスプローラーから実行（推奨）**
-1. エクスプローラーを開く（Windowsキー+E）
-2. アドレスバーに以下を貼り付けてEnter:
+**方況E: エクスプローラーから実行（推奨�E�E*
+1. エクスプローラーを開く！Eindowsキー+E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-3. `run-code-check.bat` をダブルクリック
+3. `run-code-check.bat` をダブルクリチE��
 
-### 3. Visual Regression Test確認（オプション）
+### 3. Visual Regression Test確認（オプション�E�E
 
-**方法1: エクスプローラーから実行（推奨）**
-1. エクスプローラーを開く（Windowsキー+E）
-2. アドレスバーに以下を貼り付けてEnter:
+**方況E: エクスプローラーから実行（推奨�E�E*
+1. エクスプローラーを開く！Eindowsキー+E�E�E
+2. アドレスバ�Eに以下を貼り付けてEnter:
    ```
    C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web
    ```
-3. `run-visual-test.bat` をダブルクリック
+3. `run-visual-test.bat` をダブルクリチE��
 
 ---
 
 ## 🔍 Cursorが実行中のタスク
 
-1. ✅ **コード品質チェック**: Lint + 型チェック実行中
-2. ✅ **Visual Regression Test**: テスト実行中（バックグラウンド）
-3. ✅ **E2Eテスト**: 全テスト実行中（バックグラウンド）
-4. ⏳ **リリース前チェックリストの確認**: 実行中
+1. ✁E**コード品質チェチE��**: Lint + 型チェチE��実行中
+2. ✁E**Visual Regression Test**: チE��ト実行中�E�バチE��グラウンド！E
+3. ✁E**E2EチE��チE*: 全チE��ト実行中�E�バチE��グラウンド！E
+4. ⏳ **リリース前チェチE��リスト�E確誁E*: 実行中
 5. ⏳ **ドキュメント更新**: 実行中
 
 ---
 
 ## 🚀 次に何するか
 
-### 最優先（Cursorが実行中）
-1. **コード品質チェック結果の確認** - エラーがあれば修正
-2. **Visual Regression Test結果の確認** - 失敗したテストの修正
-3. **E2Eテスト結果の確認** - 失敗したテストの修正
+### 最優先！Eursorが実行中�E�E
+1. **コード品質チェチE��結果の確誁E* - エラーがあれ�E修正
+2. **Visual Regression Test結果の確誁E* - 失敗したテスト�E修正
+3. **E2EチE��ト結果の確誁E* - 失敗したテスト�E修正
 
-### 中優先（ユーザーが実行）
-4. **iOS版テスト（Maestro）** - エクスプローラーから実行
+### 中優先（ユーザーが実行！E
+4. **iOS版テスト！Eaestro�E�E* - エクスプローラーから実衁E
 
-### 低優先（Cursorが実行中）
-5. **リリース前チェックリストの確認** - 各項目の確認
-6. **ドキュメント更新** - README、実装状況の更新
+### 低優先！Eursorが実行中�E�E
+5. **リリース前チェチE��リスト�E確誁E* - 吁E��E��の確誁E
+6. **ドキュメント更新** - README、実裁E��況�E更新
 
 ---
 
-## 📝 前提の確認
+## 📝 前提の確誁E
 
-- ✅ **Cursorはターミナル操作できる**（`run_terminal_cmd`ツール使用）
-- ✅ **Cursorが指示しない限り、ユーザーは新しいターミナルから実行する前提でやる**
-- ✅ **エクスプローラーから実行する方法が一番簡単**（バッチファイルをダブルクリック）
+- ✁E**Cursorはターミナル操作できる**�E�Erun_terminal_cmd`チE�Eル使用�E�E
+- ✁E**Cursorが指示しなぁE��り、ユーザーは新しいターミナルから実行する前提でめE��**
+- ✁E**エクスプローラーから実行する方法が一番簡十E*�E�バチE��ファイルをダブルクリチE���E�E
 
 ---
 
 最終更新: 2026-01-03
+
 

@@ -1,42 +1,42 @@
-# Cursor × Obsidian 連携スクリプト
+# Cursor ÁEObsidian 連携スクリプト
 
-## 概要
+## 概要E
 
-CursorのTODOリストをObsidianに自動記録するためのスクリプトです。
+CursorのTODOリストをObsidianに自動記録するためのスクリプトです、E
 
-## セットアップ
+## セチE��アチE�E
 
-### 1. ObsidianのVaultパスを確認
+### 1. ObsidianのVaultパスを確誁E
 
-Obsidianを開き、Vaultの場所を確認してください。
-- 設定（Settings）→ ファイルとリンク（Files & Links）
-- 「Vaultの場所」を確認
+Obsidianを開き、Vaultの場所を確認してください、E
+- 設定！Eettings�E��E ファイルとリンク�E�Eiles & Links�E�E
+- 「Vaultの場所」を確誁E
 
-### 2. シンボリックリンクの作成（推奨）
+### 2. シンボリチE��リンクの作�E�E�推奨�E�E
 
 ```powershell
-# プロジェクトルートに移動
+# プロジェクトルートに移勁E
 cd "C:\Users\susam\Downloads\新しいフォルダー\docs\primal-logic-app\primal-logic-web"
 
-# シンボリックリンクを作成
+# シンボリチE��リンクを作�E
 New-Item -ItemType SymbolicLink -Path ".\obsidian-vault" -Target "C:\Users\susam\Documents\ObsidianVault"
 ```
 
 ### 3. スクリプトのパスを更新
 
-`scripts/saveTodoToObsidian.ts` の `getObsidianVaultPath()` 関数内のパスを、実際のObsidian Vaultパスに更新してください。
+`scripts/saveTodoToObsidian.ts` の `getObsidianVaultPath()` 関数冁E�Eパスを、実際のObsidian Vaultパスに更新してください、E
 
-### 4. Obsidianのフォルダ構造を作成
+### 4. Obsidianのフォルダ構造を作�E
 
-ObsidianのVault内に以下のフォルダを作成してください：
-- `Daily/` - 日付ごとのTODOリストを保存
+ObsidianのVault冁E��以下�Eフォルダを作�Eしてください�E�E
+- `Daily/` - 日付ごとのTODOリストを保孁E
 
-## 使用方法
+## 使用方況E
 
-### 手動実行
+### 手動実衁E
 
 ```bash
-# TypeScriptを実行（tsxが必要）
+# TypeScriptを実行！Esxが忁E��E��E
 npx tsx scripts/saveTodoToObsidian.ts
 ```
 
@@ -50,15 +50,16 @@ npx tsx scripts/saveTodoToObsidian.ts
 }
 ```
 
-実行:
+実衁E
 ```bash
 npm run save-todo
 ```
 
-## 今後の改善
+## 今後�E改喁E
 
-- [ ] CursorのTODOリストを実際に取得する機能
-- [ ] 自動実行（GitHub Actions、cron等）
-- [ ] 既存のTODOリストとのマージ機能
-- [ ] 完了したタスクのアーカイブ機能
+- [ ] CursorのTODOリストを実際に取得する機�E
+- [ ] 自動実行！EitHub Actions、cron等！E
+- [ ] 既存�ETODOリストとのマ�Eジ機�E
+- [ ] 完亁E��たタスクのアーカイブ機�E
+
 

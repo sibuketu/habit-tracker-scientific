@@ -1,8 +1,8 @@
 /**
- * Primal Logic - Deep Nutrition Data (Seed Data)
+ * CarnivoreOS - Deep Nutrition Data (Seed Data)
  *
- * カーニボアにとっての「Tier 1（最重要）」データ
- * APIを使用せず、ローカルのマスターデータとして保持
+ * カーニ�Eアにとっての「Tier 1�E�最重要E��」データ
+ * APIを使用せず、ローカルのマスターチE�Eタとして保持
  */
 
 export type NutritionTier = 'Tier 1' | 'Tier 2' | 'Tier 3';
@@ -12,43 +12,37 @@ export type PartLocation = 'rib' | 'belly' | 'leg' | 'internal' | 'body' | 'whol
 export interface DeepFoodItem {
   id: string;
   name_ja: string; // 日本語名
-  part_location: PartLocation; // UI上の部位
-  animal_type: AnimalType;
+  part_location: PartLocation; // UI上�E部佁E  animal_type: AnimalType;
 
-  // マクロ (100gあたり)
+  // マクロ (100gあためE
   protein: number;
   fat: number;
   carbs: number;
 
-  // Primal Metrics (詳細データ)
-  saturated_fat: number; // 重要なエネルギー源
-  omega_6: number; // 低いほど良い
-  zinc: number; // 亜鉛 (mg)
+  // Primal Metrics (詳細チE�Eタ)
+  saturated_fat: number; // 重要なエネルギー溁E  omega_6: number; // 低いほど良ぁE  zinc: number; // 亜鉛 (mg)
   vitamin_b12: number; // B12 (μg)
 
-  // UI用メッセージ
-  primal_verdict: string; // 一言コメント
-
-  // 追加栄養素（既存システムとの互換性のため）
-  hemeIron?: number;
+  // UI用メチE��ージ
+  primal_verdict: string; // 一言コメンチE
+  // 追加栁E��素�E�既存シスチE��との互換性のため�E�E  hemeIron?: number;
   vitaminC?: number;
   vitaminK?: number;
   sodium?: number;
   magnesium?: number;
   potassium?: number;
-  // 脂溶性ビタミン（カーニボア重要：牛脂・卵黄・レバー等）
-  vitamin_a?: number; // IU
+  // 脂溶性ビタミン�E�カーニ�Eア重要E��牛脂�E卵黁E�Eレバ�E等！E  vitamin_a?: number; // IU
   vitamin_d?: number; // IU
   vitamin_k2?: number; // μg (MK-4)
   omega_3?: number; // g
   choline?: number; // mg
 }
 
-// 初期マスターデータ
+// 初期マスターチE�Eタ
 export const MASTER_FOODS: DeepFoodItem[] = [
   {
     id: 'beef_ribeye',
-    name_ja: '牛リブアイ (牧草牛想定)',
+    name_ja: '牛リブアイ (牧草牛想宁E',
     part_location: 'rib',
     animal_type: 'beef',
     protein: 22.0,
@@ -58,7 +52,7 @@ export const MASTER_FOODS: DeepFoodItem[] = [
     omega_6: 0.4,
     zinc: 4.5,
     vitamin_b12: 2.8,
-    primal_verdict: 'カーニボアの王様。脂質とタンパク質のバランスが神。',
+    primal_verdict: 'カーニ�Eアの王様。脂質とタンパク質のバランスが神、E,
     hemeIron: 2.3,
     vitaminC: 0,
     vitaminK: 1.1,
@@ -68,7 +62,7 @@ export const MASTER_FOODS: DeepFoodItem[] = [
   },
   {
     id: 'beef_belly',
-    name_ja: '牛バラ / ブリスケット',
+    name_ja: '牛バラ / ブリスケチE��',
     part_location: 'belly',
     animal_type: 'beef',
     protein: 14.0,
@@ -78,7 +72,7 @@ export const MASTER_FOODS: DeepFoodItem[] = [
     omega_6: 0.8,
     zinc: 3.2,
     vitamin_b12: 2.0,
-    primal_verdict: '強力なエネルギー源。塩を多めに振ること。',
+    primal_verdict: '強力なエネルギー源。塩を多めに振ること、E,
     hemeIron: 2.0,
     vitaminC: 0,
     vitaminK: 1.0,
@@ -95,10 +89,10 @@ export const MASTER_FOODS: DeepFoodItem[] = [
     fat: 34.6,
     carbs: 0.1,
     saturated_fat: 11.0,
-    omega_6: 3.5, // ※ここが高いのが豚の特徴
+    omega_6: 3.5, // ※ここが高いのが豚�E特徴
     zinc: 1.5,
     vitamin_b12: 0.6,
-    primal_verdict: '美味しいがオメガ6が高め。食べ過ぎたら魚でバランスを。',
+    primal_verdict: '美味しいがオメガ6が高め。食べ過ぎたら魚でバランスを、E,
     hemeIron: 0.7,
     vitaminC: 0,
     vitaminK: 0,
@@ -108,7 +102,7 @@ export const MASTER_FOODS: DeepFoodItem[] = [
   },
   {
     id: 'chicken_liver',
-    name_ja: '鶏レバー',
+    name_ja: '鶏レバ�E',
     part_location: 'internal',
     animal_type: 'chicken',
     protein: 18.9,
@@ -117,23 +111,21 @@ export const MASTER_FOODS: DeepFoodItem[] = [
     saturated_fat: 1.0,
     omega_6: 0.5,
     zinc: 3.3,
-    vitamin_b12: 44.4, // ※爆発的に高い
-    primal_verdict: '天然のマルチビタミン。週に数回で十分。',
+    vitamin_b12: 44.4, // ※爁E��皁E��高い
+    primal_verdict: '天然のマルチビタミン。週に数回で十�E、E,
     hemeIron: 9.0,
     vitaminC: 13.0,
     vitaminK: 0,
     sodium: 69,
     magnesium: 18,
     potassium: 220,
-    // レバーは脂溶性ビタミンの宝庫
-    vitamin_a: 49678, // IU/100g（非常に高い）
-    vitamin_d: 49, // IU/100g
-    vitamin_k2: 0, // レバーにはK1はあるがK2は少ない
-    omega_3: 0.1,
+    // レバ�Eは脂溶性ビタミンの宝庫
+    vitamin_a: 49678, // IU/100g�E�非常に高い�E�E    vitamin_d: 49, // IU/100g
+    vitamin_k2: 0, // レバ�EにはK1はあるがK2は少なぁE    omega_3: 0.1,
   },
   {
     id: 'salmon',
-    name_ja: 'サーモン (アトランティック)',
+    name_ja: 'サーモン (アトランチE��チE��)',
     part_location: 'body',
     animal_type: 'fish',
     protein: 20.0,
@@ -143,7 +135,7 @@ export const MASTER_FOODS: DeepFoodItem[] = [
     omega_6: 0.1,
     zinc: 0.5,
     vitamin_b12: 3.2,
-    primal_verdict: 'オメガ3の宝庫。豚肉を食べた日の調整役に最適。',
+    primal_verdict: 'オメガ3の宝庫。豚肉を食べた日の調整役に最適、E,
     hemeIron: 0.8,
     vitaminC: 0,
     vitaminK: 0.1,
@@ -170,8 +162,8 @@ export function getFoodsByAnimal(animalType: AnimalType): DeepFoodItem[] {
 }
 
 /**
- * IDで食品を取得
- */
+ * IDで食品を取征E */
 export function getDeepFoodById(id: string): DeepFoodItem | undefined {
   return MASTER_FOODS.find((food) => food.id === id);
 }
+

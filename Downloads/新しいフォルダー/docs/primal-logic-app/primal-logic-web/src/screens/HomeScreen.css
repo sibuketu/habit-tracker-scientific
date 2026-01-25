@@ -2,6 +2,10 @@
   flex: 1;
   background-color: var(--color-bg-primary);
   transition: background-color 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding-bottom: 80px; /* Space for navigation */
 }
 
 .home-screen-content {
@@ -163,4 +167,217 @@
 
 .home-screen-secondary-button:active {
   transform: scale(0.95);
+}
+
+/* Nutrient Breakdown Styles */
+.nutrients-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 24px auto;
+  padding: 16px;
+  background-color: var(--color-bg-secondary);
+  border-radius: 12px;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.nutrients-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  color: var(--color-text-primary);
+}
+
+.nutrient-group {
+  margin-bottom: 24px;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.nutrient-group-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding-bottom: 8px;
+}
+
+.nutrient-group-icon {
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+.nutrient-group-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.minigauge-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  width: 100%;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 50px;
+}
+
+/* Logged Foods Section */
+.logged-foods-section {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 24px;
+}
+
+.food-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: var(--color-bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.food-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.food-name {
+  font-weight: 500;
+}
+
+.food-macros {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* Header Styles */
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.home-title-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.home-date {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+
+.home-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.streak-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.streak-icon {
+  font-size: 20px;
+}
+
+.streak-count {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Dashboard Section */
+.dashboard-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 16px auto;
+  padding: 0 16px;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 600px;
+  margin: 16px auto;
+  padding: 0 16px;
+}
+
+.main-metric-card {
+  background-color: var(--color-bg-secondary);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+}
+
+/* Nutrients Section - Full Width */
+.nutrients-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 24px auto;
+  padding: 16px;
+  background-color: var(--color-bg-secondary);
+  border-radius: 12px;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Logged Foods Section - Full Width */
+.logged-foods-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.logged-foods-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  color: var(--color-text-primary);
+}
+
+.no-logs-msg {
+  color: var(--color-text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 24px;
+}
+
+.food-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

@@ -32,13 +32,13 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   
-  /* Visual Regression Test用の設定 */
+  /* Visual Regression Test用の設宁E*/
   expect: {
-    /* スクリーンショット比較の許容誤差 */
-    threshold: 0.2, // 20%の差分まで許容
-    /* スクリーンショットの保存先 */
+    /* スクリーンショチE��比輁E�E許容誤差 */
+    threshold: 0.2, // 20%の差刁E��で許容
+    /* スクリーンショチE��の保存�E */
     toHaveScreenshot: {
-      maxDiffPixels: 500, // ブラウザ間の描画の違いを考慮して500ピクセルまで許容
+      maxDiffPixels: 500, // ブラウザ間�E描画の違いを老E�Eして500ピクセルまで許容
     },
   },
 
@@ -77,4 +77,5 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
   },
 });
+
 

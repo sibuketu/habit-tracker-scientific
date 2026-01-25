@@ -11,3 +11,4 @@ declare class BarcodeDetector {
   detect(image: ImageBitmapSource): Promise<Array<{ rawValue: string; format: string }>>;
   static getSupportedFormats(): Promise<string[]>;
 }
+

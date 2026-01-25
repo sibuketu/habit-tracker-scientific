@@ -1,0 +1,334 @@
+mkdir -p scripts && cat > Dockerfile << 'EOF'
+FROM python:3.11-slim
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
+RUN pip install flask flask-cors
+WORKDIR /app
+COPY scripts/cloud-run-api-server.py /app/app.py
+EXPOSE 8080
+CMD ["python3", "/app/app.py"]
+EOF
+
+cat > scripts/cloud-run-api-server.py << 'ENDOFFILE'
+#!/usr/bin/env python3
+import os
+import sys
+import json
+import subprocess
+import tempfile
+from pathlib import Path
+from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+def check_ffmpeg():
+    try:
+        subprocess.run(['ffmpeg', '-version'], capture_output=True, check=True)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+def create_video_with_images(
+    audio_path: str,
+    images: list,
+    output_path: str,
+    subtitles: list = None,
+    width: int = 1080,
+    height: int = 1920,
+    fps: int = 30
+):
+    if not check_ffmpeg():
+        raise RuntimeError("FFmpeg is not installed")
+    filter_complex_parts = []
+    inputs = []
+    
+    for i, img_info in enumerate(images):
+        img_path = img_info['path']
+        start_time = img_info.get('start', 0)
+        img_duration = img_info.get('duration', 3)
+        filter_complex_parts.append(
+            f"[{i}:v]scale={width}:{height}:force_original_aspect_ratio=decrease,"
+            f"pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,"
+            f"setpts=PTS-STARTPTS,"
+            f"fps={fps}[v{i}]"
+        )
+        inputs.extend(['-loop', '1', '-t', str(img_duration), '-i', img_path])
+    
+    if len(images) > 1:
+        concat_parts = []
+        for i in range(len(images)):
+            concat_parts.append(f"[v{i}]")
+        filter_complex_parts.append(f"{''.join(concat_parts)}concat=n={len(images)}:v=1:a=0[outv]")
+    else:
+        filter_complex_parts.append("[v0]copy[outv]")
+    inputs.extend(['-i', audio_path])
+    if subtitles:
+        srt_path = output_path.replace('.mp4', '.srt')
+        with open(srt_path, 'w', encoding='utf-8') as f:
+            for i, sub in enumerate(subtitles, 1):
+                start = sub['start']
+                duration = sub.get('duration', 3)
+                end = start + duration
+                text = sub['text']
+                
+                start_str = format_time(start)
+                end_str = format_time(end)
+                
+                f.write(f"{i}\n")
+                f.write(f"{start_str} --> {end_str}\n")
+                f.write(f"{text}\n\n")
+        filter_complex_parts.append(
+            f"[outv]subtitles={srt_path}:force_style='FontName=Arial,FontSize=24,PrimaryColour=&Hffffff,OutlineColour=&H000000,Outline=2'[outv_sub]"
+        )
+        filter_complex_parts.append("[outv_sub][{}:a]concat=n=1:v=1:a=1[out]".format(len(images)))
+    else:
+        filter_complex_parts.append("[outv][{}:a]concat=n=1:v=1:a=1[out]".format(len(images)))
+    filter_complex = ";".join(filter_complex_parts)
+    cmd = [
+        'ffmpeg',
+        '-y',
+        *inputs,
+        '-filter_complex', filter_complex,
+        '-map', '[out]',
+        '-c:v', 'libx264',
+        '-preset', 'medium',
+        '-crf', '23',
+        '-c:a', 'aac',
+        '-b:a', '192k',
+        '-shortest',
+        output_path
+    ]
+    
+    subprocess.run(cmd, check=True)
+    
+    if subtitles:
+        os.remove(srt_path)
+
+def format_time(seconds: float) -> str:
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    secs = int(seconds % 60)
+    millis = int((seconds % 1) * 1000)
+    return f"{hours:02d}:{minutes:02d}:{secs:02d},{millis:03d}"
+
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 'ok', 'ffmpeg': check_ffmpeg()})
+
+@app.route('/generate', methods=['POST'])
+def generate_video():
+    try:
+        data = request.json
+        if not data.get('audio') and not data.get('audioUrl'):
+            return jsonify({'error': 'audio or audioUrl is required'}), 400
+        
+        if not data.get('images') or len(data['images']) == 0:
+            return jsonify({'error': 'images is required'}), 400
+        with tempfile.TemporaryDirectory() as temp_dir:
+            audio_path = os.path.join(temp_dir, 'audio.mp3')
+            if data.get('audio'):
+                import base64
+                audio_bytes = base64.b64decode(data['audio'])
+                with open(audio_path, 'wb') as f:
+                    f.write(audio_bytes)
+            else:
+                import urllib.request
+                urllib.request.urlretrieve(data['audioUrl'], audio_path)
+            for img_info in data['images']:
+                img_url = img_info['path']
+                img_filename = os.path.basename(img_url)
+                img_path = os.path.join(temp_dir, img_filename)
+                import urllib.request
+                urllib.request.urlretrieve(img_url, img_path)
+                img_info['path'] = img_path
+            output_path = os.path.join(temp_dir, 'output.mp4')
+            create_video_with_images(
+                audio_path=audio_path,
+                images=data['images'],
+                output_path=output_path,
+                subtitles=data.get('subtitles'),
+                width=data.get('width', 1080),
+                height=data.get('height', 1920),
+                fps=data.get('fps', 30)
+            )
+            return send_file(
+                output_path,
+                mimetype='video/mp4',
+                as_attachment=True,
+                download_name='video.mp4'
+            )
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
+ENDOFFILE
+
+cat > scripts/auto_video_editor.py << 'ENDOFFILE2'
+#!/usr/bin/env python3
+import os
+import sys
+import json
+import subprocess
+from pathlib import Path
+from typing import Dict, List, Optional
+import argparse
+
+def check_ffmpeg():
+    try:
+        subprocess.run(['ffmpeg', '-version'], capture_output=True, check=True)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        print("FFmpeg is not installed")
+        return False
+
+def create_video_with_images(
+    audio_path: str,
+    images: List[Dict[str, any]],
+    output_path: str,
+    duration: Optional[float] = None,
+    fps: int = 30,
+    resolution: tuple = (1080, 1920)
+):
+    if not check_ffmpeg():
+        sys.exit(1)
+    if duration is None:
+        result = subprocess.run(
+            ['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', audio_path],
+            capture_output=True,
+            text=True
+        )
+        duration = float(result.stdout.strip())
+    filter_complex_parts = []
+    inputs = []
+    
+    for i, img_info in enumerate(images):
+        img_path = img_info['path']
+        start_time = img_info.get('start', 0)
+        img_duration = img_info.get('duration', 3)
+        filter_complex_parts.append(
+            f"[{i}:v]scale={resolution[0]}:{resolution[1]}:force_original_aspect_ratio=decrease,"
+            f"pad={resolution[0]}:{resolution[1]}:(ow-iw)/2:(oh-ih)/2,"
+            f"setpts=PTS-STARTPTS,"
+            f"fps={fps}[v{i}]"
+        )
+        inputs.extend(['-loop', '1', '-t', str(img_duration), '-i', img_path])
+    
+    if len(images) > 1:
+        concat_parts = []
+        for i in range(len(images)):
+            concat_parts.append(f"[v{i}]")
+        filter_complex_parts.append(f"{''.join(concat_parts)}concat=n={len(images)}:v=1:a=0[outv]")
+    else:
+        filter_complex_parts.append("[v0]copy[outv]")
+    inputs.extend(['-i', audio_path])
+    filter_complex_parts.append("[outv][{}:a]concat=n=1:v=1:a=1[out]".format(len(images)))
+    filter_complex = ";".join(filter_complex_parts)
+    cmd = [
+        'ffmpeg',
+        '-y',
+        *inputs,
+        '-filter_complex', filter_complex,
+        '-map', '[out]',
+        '-c:v', 'libx264',
+        '-preset', 'medium',
+        '-crf', '23',
+        '-c:a', 'aac',
+        '-b:a', '192k',
+        '-shortest',
+        output_path
+    ]
+    try:
+        subprocess.run(cmd, check=True)
+        return True
+    except subprocess.CalledProcessError as e:
+        return False
+
+def add_subtitles(
+    video_path: str,
+    subtitles: List[Dict[str, any]],
+    output_path: str
+):
+    if not check_ffmpeg():
+        sys.exit(1)
+    srt_path = output_path.replace('.mp4', '.srt')
+    with open(srt_path, 'w', encoding='utf-8') as f:
+        for i, sub in enumerate(subtitles, 1):
+            start = sub['start']
+            duration = sub.get('duration', 3)
+            end = start + duration
+            text = sub['text']
+            start_str = format_time(start)
+            end_str = format_time(end)
+            
+            f.write(f"{i}\n")
+            f.write(f"{start_str} --> {end_str}\n")
+            f.write(f"{text}\n\n")
+    cmd = [
+        'ffmpeg',
+        '-y',
+        '-i', video_path,
+        '-vf', f"subtitles={srt_path}:force_style='FontName=Arial,FontSize=24,PrimaryColour=&Hffffff,OutlineColour=&H000000,Outline=2'",
+        '-c:a', 'copy',
+        output_path
+    ]
+    try:
+        subprocess.run(cmd, check=True)
+        os.remove(srt_path)
+        return True
+    except subprocess.CalledProcessError as e:
+        return False
+
+def format_time(seconds: float) -> str:
+    hours = int(seconds // 3600)
+    minutes = int((seconds % 3600) // 60)
+    secs = int(seconds % 60)
+    millis = int((seconds % 1) * 1000)
+    return f"{hours:02d}:{minutes:02d}:{secs:02d},{millis:03d}"
+
+def main():
+    parser = argparse.ArgumentParser(description='Auto video editor')
+    parser.add_argument('--audio', required=True, help='Audio file path')
+    parser.add_argument('--images', required=True, help='Images JSON file')
+    parser.add_argument('--subtitles', help='Subtitles JSON file')
+    parser.add_argument('--output', required=True, help='Output video path')
+    parser.add_argument('--duration', type=float, help='Video duration')
+    parser.add_argument('--fps', type=int, default=30, help='Frame rate')
+    parser.add_argument('--width', type=int, default=1080, help='Video width')
+    parser.add_argument('--height', type=int, default=1920, help='Video height')
+    
+    args = parser.parse_args()
+    with open(args.images, 'r', encoding='utf-8') as f:
+        images = json.load(f)
+    success = create_video_with_images(
+        args.audio,
+        images,
+        args.output,
+        args.duration,
+        args.fps,
+        (args.width, args.height)
+    )
+    
+    if not success:
+        sys.exit(1)
+    if args.subtitles:
+        with open(args.subtitles, 'r', encoding='utf-8') as f:
+            subtitles = json.load(f)
+        
+        temp_output = args.output.replace('.mp4', '_temp.mp4')
+        os.rename(args.output, temp_output)
+        
+        add_subtitles(temp_output, subtitles, args.output)
+        os.remove(temp_output)
+
+if __name__ == '__main__':
+    main()
+ENDOFFILE2
+
+ls -la
+ls -la scripts/

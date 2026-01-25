@@ -1,6 +1,6 @@
 {
-  "name": "Primal Logic Web App",
-  "description": "カーニボアダイエット管理アプリ - 世界一のCarnivoreアプリを目指す",
+  "name": "CarnivOS Web App",
+  "description": "カーニ�EアダイエチE��管琁E��プリ - 世界一のCarnivoreアプリを目持E��",
   "version": "1.0.0",
   "scripts": {
     "dev": "npm run dev",
@@ -18,4 +18,5 @@
     "publishDirectory": "dist"
   }
 }
+
 

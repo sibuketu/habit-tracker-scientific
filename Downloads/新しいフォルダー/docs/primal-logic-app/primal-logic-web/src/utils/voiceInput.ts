@@ -1,8 +1,7 @@
 /**
- * Primal Logic - Voice Input (Web Speech API)
+ * CarnivoreOS - Voice Input (Web Speech API)
  *
- * WindowsHキーでの音声入力対応
- * Web Speech APIを使用した音声認識機能
+ * WindowsHキーでの音声入力対忁E * Web Speech APIを使用した音声認識機�E
  */
 
 import { logError } from './errorHandler';
@@ -51,8 +50,7 @@ interface SpeechRecognitionAlternative {
 
 export interface VoiceInputOptions {
   language?: string; // 'ja-JP', 'en-US', 'fr-FR', 'de-DE'
-  continuous?: boolean; // 連続認識
-  interimResults?: boolean; // 中間結果を返す
+  continuous?: boolean; // 連続認譁E  interimResults?: boolean; // 中間結果を返す
   maxAlternatives?: number; // 候補数
 }
 
@@ -70,8 +68,7 @@ export class VoiceInputManager {
   private onEndCallback: (() => void) | null = null;
 
   constructor(options: VoiceInputOptions = {}) {
-    // Web Speech APIのサポート確認
-    const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+    // Web Speech APIのサポ�Eト確誁E    const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognitionClass) {
       console.warn('Web Speech API is not supported in this browser.');
@@ -117,8 +114,7 @@ export class VoiceInputManager {
   }
 
   /**
-   * 音声認識を開始
-   */
+   * 音声認識を開姁E   */
   start(): void {
     if (!this.recognition) {
       logError(new Error('Speech Recognition is not available.'), {
@@ -158,29 +154,25 @@ export class VoiceInputManager {
   }
 
   /**
-   * 結果コールバックを設定
-   */
+   * 結果コールバックを設宁E   */
   onResult(callback: (result: VoiceInputResult) => void): void {
     this.onResultCallback = callback;
   }
 
   /**
-   * エラーコールバックを設定
-   */
+   * エラーコールバックを設宁E   */
   onError(callback: (error: string) => void): void {
     this.onErrorCallback = callback;
   }
 
   /**
-   * 終了コールバックを設定
-   */
+   * 終亁E��ールバックを設宁E   */
   onEnd(callback: () => void): void {
     this.onEndCallback = callback;
   }
 
   /**
-   * 現在の言語を設定
-   */
+   * 現在の言語を設宁E   */
   setLanguage(language: string): void {
     if (this.recognition) {
       this.recognition.lang = language;
@@ -188,7 +180,7 @@ export class VoiceInputManager {
   }
 
   /**
-   * 音声認識が利用可能かどうか
+   * 音声認識が利用可能かどぁE��
    */
   static isAvailable(): boolean {
     interface WindowWithSpeechRecognition {
@@ -202,14 +194,11 @@ export class VoiceInputManager {
 }
 
 /**
- * WindowsHキーでの音声入力（ブラウザの制約により完全対応は困難だが、可能な範囲で実装）
- *
- * 注意: WindowsHキーはOSレベルのショートカットのため、ブラウザから直接制御することはできません。
- * 代わりに、マイクボタンをクリックするか、カスタムショートカットキー（例: Ctrl+Shift+V）を使用します。
- */
+ * WindowsHキーでの音声入力（ブラウザの制紁E��より完�E対応�E困難だが、可能な篁E��で実裁E��E *
+ * 注愁E WindowsHキーはOSレベルのショートカチE��のため、ブラウザから直接制御することはできません、E * 代わりに、�EイクボタンをクリチE��するか、カスタムショートカチE��キー�E�侁E Ctrl+Shift+V�E�を使用します、E */
 export function setupVoiceInputShortcut(
   onStart: () => void,
-  shortcutKey: string = 'v', // デフォルト: Ctrl+Shift+V
+  shortcutKey: string = 'v', // チE��ォルチE Ctrl+Shift+V
   modifiers: { ctrl?: boolean; shift?: boolean; alt?: boolean } = { ctrl: true, shift: true }
 ): void {
   document.addEventListener('keydown', (event) => {
@@ -225,3 +214,4 @@ export function setupVoiceInputShortcut(
     }
   });
 }
+

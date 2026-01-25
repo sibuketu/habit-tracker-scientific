@@ -1,0 +1,6 @@
+$gcloudPath = "$env:LOCALAPPDATA\Google\Cloud SDK\google-cloud-sdk\bin"
+$dockerPath = "C:\Program Files\Docker\Docker\resources\bin"
+$env:Path += ";$gcloudPath"
+$env:Path += ";$dockerPath"
+gcloud --version
+docker --version

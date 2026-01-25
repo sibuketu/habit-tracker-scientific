@@ -98,6 +98,43 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* 推奨食品のスタイル */
+.butcher-chart-food-button.recommended {
+  border: 2px solid #10b981;
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+.butcher-chart-food-button.recommended-high {
+  border: 2px solid #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+
+.butcher-chart-food-button.recommended-medium {
+  border: 2px solid #f59e0b;
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+.butcher-chart-food-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: #10b981;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.butcher-chart-food-button.recommended-high .butcher-chart-food-badge {
+  background-color: #ef4444;
+}
+
+.butcher-chart-food-button.recommended-medium .butcher-chart-food-badge {
+  background-color: #f59e0b;
+}
+
 .butcher-chart-food-name {
   font-size: 18px;
   font-weight: 600;

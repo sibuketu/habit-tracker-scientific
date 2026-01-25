@@ -1,82 +1,71 @@
 /**
- * Primal Logic - Coffee Caffeine Calculator
+ * CarnivoreOS - Coffee Caffeine Calculator
  *
- * コーヒー入力からカフェイン量を自動計算
- */
+ * コーヒ�E入力からカフェイン量を自動計箁E */
 
-// スタバのサイズ別カフェイン含有量（mg）
-const STARBUCKS_CAFFEINE: Record<string, number> = {
+// スタバ�Eサイズ別カフェイン含有量�E�Eg�E�Econst STARBUCKS_CAFFEINE: Record<string, number> = {
   short: 155, // 240ml
   tall: 220, // 350ml
   grande: 330, // 470ml
   venti: 415, // 590ml
-  trenta: 475, // 920ml（コールドドリンクのみ）
-};
+  trenta: 475, // 920ml�E�コールドドリンクのみ�E�E};
 
-// 一般的なコーヒーのカフェイン含有量（mg/100ml）
-const COFFEE_CAFFEINE_PER_100ML = 60; // ドリップコーヒー
+// 一般皁E��コーヒ�Eのカフェイン含有量�E�Eg/100ml�E�Econst COFFEE_CAFFEINE_PER_100ML = 60; // ドリチE�Eコーヒ�E
 
 /**
- * コーヒー入力からカフェイン量を計算
- *
- * @param input コーヒー入力（例: "スタバのコーヒーShort", "コーヒー2杯", "コーヒー300ml"）
- * @returns カフェイン量（mg）と説明
- */
+ * コーヒ�E入力からカフェイン量を計箁E *
+ * @param input コーヒ�E入力（侁E "スタバ�Eコーヒ�EShort", "コーヒ�E2杯", "コーヒ�E300ml"�E�E * @returns カフェイン量！Eg�E�と説昁E */
 export function calculateCaffeineFromCoffee(input: string): {
   caffeineMg: number;
   description: string;
 } {
   const lowerInput = input.toLowerCase().trim();
 
-  // スタバのサイズを検出
+  // スタバ�Eサイズを検�E
   for (const [size, caffeine] of Object.entries(STARBUCKS_CAFFEINE)) {
     if (lowerInput.includes(`スタバ`) || lowerInput.includes(`starbucks`)) {
       if (lowerInput.includes(size)) {
         return {
           caffeineMg: caffeine,
-          description: `スタバ ${size}サイズ: ${caffeine}mg`,
+          description: `スタチE${size}サイズ: ${caffeine}mg`,
         };
       }
     }
   }
 
-  // 杯数を検出（例: "コーヒー2杯"）
-  const cupMatch = lowerInput.match(/(\d+)\s*杯/);
+  // 杯数を検�E�E�侁E "コーヒ�E2杯"�E�E  const cupMatch = lowerInput.match(/(\d+)\s*杯/);
   if (cupMatch) {
     const cups = parseInt(cupMatch[1], 10);
-    // 1杯 = 200ml（日本の一般的なコーヒーカップ）
-    const ml = cups * 200;
+    // 1杯 = 200ml�E�日本の一般皁E��コーヒ�EカチE�E�E�E    const ml = cups * 200;
     const caffeine = (ml / 100) * COFFEE_CAFFEINE_PER_100ML;
     return {
       caffeineMg: Math.round(caffeine),
-      description: `コーヒー${cups}杯（${ml}ml）: 約${Math.round(caffeine)}mg`,
+      description: `コーヒ�E${cups}杯�E�E{ml}ml�E�E 紁E{Math.round(caffeine)}mg`,
     };
   }
 
-  // ml数を検出（例: "コーヒー300ml"）
-  const mlMatch = lowerInput.match(/(\d+)\s*ml/);
+  // ml数を検�E�E�侁E "コーヒ�E300ml"�E�E  const mlMatch = lowerInput.match(/(\d+)\s*ml/);
   if (mlMatch) {
     const ml = parseInt(mlMatch[1], 10);
     const caffeine = (ml / 100) * COFFEE_CAFFEINE_PER_100ML;
     return {
       caffeineMg: Math.round(caffeine),
-      description: `コーヒー${ml}ml: 約${Math.round(caffeine)}mg`,
+      description: `コーヒ�E${ml}ml: 紁E{Math.round(caffeine)}mg`,
     };
   }
 
-  // デフォルト: 1杯と仮定
-  return {
+  // チE��ォルチE 1杯と仮宁E  return {
     caffeineMg: Math.round((200 / 100) * COFFEE_CAFFEINE_PER_100ML),
-    description: `コーヒー1杯（200ml）: 約${Math.round((200 / 100) * COFFEE_CAFFEINE_PER_100ML)}mg（推定）`,
+    description: `コーヒ�E1杯�E�E00ml�E�E 紁E{Math.round((200 / 100) * COFFEE_CAFFEINE_PER_100ML)}mg�E�推定）`,
   };
 }
 
 /**
- * カフェイン量から摂取レベルを判定
- */
+ * カフェイン量から摂取レベルを判宁E */
 export function getCaffeineIntakeLevel(caffeineMg: number): 'none' | 'low' | 'moderate' | 'high' {
   if (caffeineMg === 0) return 'none';
   if (caffeineMg < 100) return 'low';
   if (caffeineMg < 300) return 'moderate';
   return 'high';
 }
+
